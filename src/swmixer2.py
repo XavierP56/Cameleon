@@ -185,7 +185,8 @@ class Channel:
         z = self.src.get_samples(sz)
         if self.src.done:
             self.done = True
-            stopHandler(self)
+            if (self.src.loops == 0):
+                stopHandler(self)
         return z * v
 
 

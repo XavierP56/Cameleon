@@ -11,10 +11,10 @@ app.config ($stateProvider) ->
 # Directive
 app.directive 'soundButton', ->
   restrict : 'E'
-  scope : { songName : '@', id : '@', songFile : '@'}
+  scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '='}
 
   controller: ($scope, $resource, $q) ->
-    SoundPlay =  $resource('/sounds/play/:id/:name')
+    SoundPlay =  $resource('/sounds/play/:id/:loop/:name')
     SoundStop =  $resource('/sounds/stop/:id')
     Query = $resource('/sounds/query/:id')
 
@@ -24,7 +24,8 @@ app.directive 'soundButton', ->
       $scope.classstyle = 'stopStyle' if $scope.playing == false
 
     $scope.playSong = () ->
-       SoundPlay.get {id: $scope.id, name:$scope.songFile}, ->
+       $scope.loop = false if $scope.loop == undefined
+       SoundPlay.get {id: $scope.id, loop: $scope.loop, name:$scope.songFile}, ->
          return
 
     $scope.stopSong = () ->

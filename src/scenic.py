@@ -11,15 +11,20 @@ eventq = None
 sounds = {}
 sndchannels = {}
 
+
 @app.route('/sceniq/<filepath:path>')
 def server_static(filepath):
 	return static_file(filepath, root='./../Files/')
 
 def sound_finished(id, chn):
     global eventq
+    global sounds
+    global sndchannels
+
     # Remove from dictionnary
     del sounds[id]
     del sndchannels[chn]
+
     evt = {'evt': 'stop', 'id': id}
     eventq.put(evt)
 
@@ -35,22 +40,25 @@ def sounds_query(id):
 @app.route('/sounds/stop/:id', method='GET')
 def sounds_stop(id):
     global sounds
-    global sndchannels
 
     print 'Stopping sound'+ str(id)
     chn = sounds[id]
     chn.stop()
     sound_finished(id,chn)
 
-@app.route('/sounds/play/:id/:name', method='GET')
-def sounds_play(id, name):
+@app.route('/sounds/play/:id/:repeat/:name', method='GET')
+def sounds_play(id, repeat, name):
     global eventq
     global sounds
     global sndchannels
+
     print 'Playing sound' + str(id) + " " + name
     filepath = './../Files/waves/' + name
     snd = swmixer2.Sound(filepath)
-    sndchan = snd.play()
+    if (repeat == 'true'):
+        sndchan = snd.play(loops=-1)
+    else:
+        sndchan = snd.play()
     # Store in dictionnary
     sounds[id] = sndchan
     sndchannels[sndchan] = id
@@ -71,6 +79,7 @@ def sounds_events():
 
 def sound_stopped(sndchan):
     global sndchannels
+
     print "Sound stopped !"
     print sndchan
     id = sndchannels[sndchan]

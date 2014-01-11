@@ -20,11 +20,13 @@
       scope: {
         songName: '@',
         id: '@',
-        songFile: '@'
+        songFile: '@',
+        height: '@',
+        loop: '='
       },
       controller: function($scope, $resource, $q) {
         var Query, SoundPlay, SoundStop;
-        SoundPlay = $resource('/sounds/play/:id/:name');
+        SoundPlay = $resource('/sounds/play/:id/:loop/:name');
         SoundStop = $resource('/sounds/stop/:id');
         Query = $resource('/sounds/query/:id');
         $scope.started = Query.get({
@@ -39,8 +41,12 @@
           }
         });
         $scope.playSong = function() {
+          if ($scope.loop === void 0) {
+            $scope.loop = false;
+          }
           return SoundPlay.get({
             id: $scope.id,
+            loop: $scope.loop,
             name: $scope.songFile
           }, function() {});
         };
