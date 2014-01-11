@@ -16,6 +16,8 @@ app.directive 'soundButton', ->
   controller: ($scope, $resource, $q) ->
     SoundPlay =  $resource('/sounds/play/:id/:loop/:name')
     SoundStop =  $resource('/sounds/stop/:id')
+    SoundLevel = $resource('/sounds/level/:id/:power')
+
     Query = $resource('/sounds/query/:id')
 
     $scope.started = Query.get {id: $scope.id}, (res) ->
@@ -36,6 +38,10 @@ app.directive 'soundButton', ->
       # Send request to server
       $scope.playSong() if $scope.playing == false
       $scope.stopSong() if $scope.playing == true
+
+    $scope.level = () ->
+      SoundLevel.get {id: $scope.id, power: $scope.power}, ->
+        return
 
     $scope.started.$promise.then () ->
       $scope.$on 'play', (sender, evt) ->

@@ -1,2 +1,5 @@
     <button style='height:{{height}}px' class="{{classstyle}}" ng-click="doit()"> {{songName}} </button>
-    Volume comes next.
+    <input type="radio" ng-change="level()" ng-model="power" value=0>  0%
+    <input type="radio" ng-change="level()" ng-model="power" value=30>  30%
+    <input type="radio" ng-change="level()" ng-model="power" value=60>  60%
+    <input type="radio" ng-change="level()" ng-model="power" value=100>  100%

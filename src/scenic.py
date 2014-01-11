@@ -66,6 +66,10 @@ def sounds_play(id, repeat, name):
     evt = {'evt': 'play', 'id': id}
     eventq.put(evt)
 
+@app.route('/sounds/level/:id/:power', method='GET')
+def sounds_level(id, power):
+    print "Power" + str(id) + " " + str(power)
+
 @app.route('/sounds/events')
 def sounds_events():
     global eventq

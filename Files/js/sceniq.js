@@ -25,9 +25,10 @@
         loop: '='
       },
       controller: function($scope, $resource, $q) {
-        var Query, SoundPlay, SoundStop;
+        var Query, SoundLevel, SoundPlay, SoundStop;
         SoundPlay = $resource('/sounds/play/:id/:loop/:name');
         SoundStop = $resource('/sounds/stop/:id');
+        SoundLevel = $resource('/sounds/level/:id/:power');
         Query = $resource('/sounds/query/:id');
         $scope.started = Query.get({
           id: $scope.id
@@ -62,6 +63,12 @@
           if ($scope.playing === true) {
             return $scope.stopSong();
           }
+        };
+        $scope.level = function() {
+          return SoundLevel.get({
+            id: $scope.id,
+            power: $scope.power
+          }, function() {});
         };
         return $scope.started.$promise.then(function() {
           $scope.$on('play', function(sender, evt) {
