@@ -4,9 +4,10 @@
 app = angular.module 'myApp', ['ngResource','ui.router']
 
 app.config ($stateProvider) ->
-  room1 = {url: "/Intro", templateUrl: "/sceniq/room1.html",  controller: RoomCtrl}
-
+  room1 = {url: "/Room1", templateUrl: "/sceniq/room1.html",  controller: RoomCtrl}
+  room2 = {url: "/Room2", templateUrl: "/sceniq/room2.html",  controller: RoomCtrl}
   $stateProvider.state('room1', room1)
+  $stateProvider.state('room2', room2)
 
 # Directive
 app.directive 'soundButton', ->

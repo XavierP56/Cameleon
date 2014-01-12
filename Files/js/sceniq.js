@@ -5,13 +5,19 @@
   app = angular.module('myApp', ['ngResource', 'ui.router']);
 
   app.config(function($stateProvider) {
-    var room1;
+    var room1, room2;
     room1 = {
-      url: "/Intro",
+      url: "/Room1",
       templateUrl: "/sceniq/room1.html",
       controller: RoomCtrl
     };
-    return $stateProvider.state('room1', room1);
+    room2 = {
+      url: "/Room2",
+      templateUrl: "/sceniq/room2.html",
+      controller: RoomCtrl
+    };
+    $stateProvider.state('room1', room1);
+    return $stateProvider.state('room2', room2);
   });
 
   app.directive('soundButton', function() {
