@@ -26,7 +26,11 @@
       },
       controller: function($scope, $resource, $q) {
         var Query, SoundLevel, SoundPlay, SoundStop;
-        SoundPlay = $resource('/sounds/play/:id/:loop/:name');
+        SoundPlay = $resource('/sounds/play/:id', {}, {
+          "do": {
+            method: 'POST'
+          }
+        });
         SoundStop = $resource('/sounds/stop/:id');
         SoundLevel = $resource('/sounds/level/:id/:power');
         Query = $resource('/sounds/query/:id');
@@ -48,10 +52,11 @@
           if ($scope.loop === void 0) {
             $scope.loop = false;
           }
-          return SoundPlay.get({
+          return SoundPlay["do"]({
             id: $scope.id,
-            loop: $scope.loop,
-            name: $scope.songFile
+            repeat: $scope.loop,
+            name: $scope.songFile,
+            power: $scope.power
           }, function() {});
         };
         $scope.stopSong = function() {

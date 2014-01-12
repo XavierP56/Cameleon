@@ -61,24 +61,26 @@ def sounds_stop(id):
     sound_finished(id, chn)
 
 
-@app.route('/sounds/play/:id/:repeat/:name', method='GET')
-def sounds_play(id, repeat, name):
+@app.route('/sounds/play', method='POST')
+def sounds_play():
     global eventq
     global sounds
     global sndchannels
     global levels
 
+    id = request.json['id']
+    repeat = request.json['repeat']
+    name = request.json['name']
+    power = request.json['power']
+
     print 'Playing sound' + str(id) + " " + name
     filepath = './../Files/waves/' + name
     snd = swmixer2.Sound(filepath)
 
-    if id in levels:
-        sndlevel = levels[id]
-    else:
-        sndlevel = 1.0
-        levels[id] = sndlevel
+    sndlevel = int(power) / 100.0
+    levels[id] = sndlevel
 
-    if (repeat == 'true'):
+    if (repeat == True):
         sndchan = snd.play(loops=-1,volume=sndlevel)
     else:
         sndchan = snd.play(volume=sndlevel)

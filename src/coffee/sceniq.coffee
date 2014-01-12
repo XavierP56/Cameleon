@@ -14,7 +14,7 @@ app.directive 'soundButton', ->
   scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '='}
 
   controller: ($scope, $resource, $q) ->
-    SoundPlay =  $resource('/sounds/play/:id/:loop/:name')
+    SoundPlay =  $resource('/sounds/play/:id',{},{do:{method:'POST'}})
     SoundStop =  $resource('/sounds/stop/:id')
     SoundLevel = $resource('/sounds/level/:id/:power')
 
@@ -29,7 +29,7 @@ app.directive 'soundButton', ->
 
     $scope.playSong = () ->
        $scope.loop = false if $scope.loop == undefined
-       SoundPlay.get {id: $scope.id, loop: $scope.loop, name:$scope.songFile}, ->
+       SoundPlay.do {id: $scope.id, repeat: $scope.loop, name:$scope.songFile, power:$scope.power}, ->
          return
 
     $scope.stopSong = () ->
