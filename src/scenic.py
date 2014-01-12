@@ -10,23 +10,27 @@ app = bottle.Bottle()
 eventq = None
 sounds = {}
 sndchannels = {}
-
+levels = {}
 
 @app.route('/sceniq/<filepath:path>')
 def server_static(filepath):
-	return static_file(filepath, root='./../Files/')
+    return static_file(filepath, root='./../Files/')
+
 
 def sound_finished(id, chn):
     global eventq
     global sounds
     global sndchannels
+    global levels
 
     # Remove from dictionnary
     del sounds[id]
+    #del levels[id]
     del sndchannels[chn]
 
     evt = {'evt': 'stop', 'id': id}
     eventq.put(evt)
+
 
 @app.route('/sounds/query/:id', method='GET')
 def sounds_query(id):
@@ -37,49 +41,70 @@ def sounds_query(id):
     else:
         return {'res': False}
 
+
 @app.route('/sounds/stop/:id', method='GET')
 def sounds_stop(id):
     global sounds
 
-    print 'Stopping sound'+ str(id)
+    print 'Stopping sound' + str(id)
     chn = sounds[id]
     chn.stop()
-    sound_finished(id,chn)
+    sound_finished(id, chn)
+
 
 @app.route('/sounds/play/:id/:repeat/:name', method='GET')
 def sounds_play(id, repeat, name):
     global eventq
     global sounds
     global sndchannels
+    global levels
 
     print 'Playing sound' + str(id) + " " + name
     filepath = './../Files/waves/' + name
     snd = swmixer2.Sound(filepath)
-    if (repeat == 'true'):
-        sndchan = snd.play(loops=-1)
+
+    if id in levels:
+        sndlevel = levels[id]
     else:
-        sndchan = snd.play()
-    # Store in dictionnary
+        sndlevel = 1.0
+        levels[id] = sndlevel
+
+    if (repeat == 'true'):
+        sndchan = snd.play(loops=-1,volume=sndlevel)
+    else:
+        sndchan = snd.play(volume=sndlevel)
+        # Store in dictionnary
     sounds[id] = sndchan
     sndchannels[sndchan] = id
     # Send event.
     evt = {'evt': 'play', 'id': id}
     eventq.put(evt)
 
+
 @app.route('/sounds/level/:id/:power', method='GET')
 def sounds_level(id, power):
+    global sounds
+    global levels
+
     print "Power" + str(id) + " " + str(power)
+    sndlevel = (int(power) / 100.0)
+    if id in sounds:
+        sndchn = sounds[id]
+        sndchn.set_volume(sndlevel)
+    else:
+        levels[id] = sndlevel
 
 @app.route('/sounds/events')
 def sounds_events():
     global eventq
-    print "En attente !"
+    #print "En attente !"
     try:
         evt = eventq.get(timeout=1)
     except:
         evt = None
-    print evt
+    #print evt
     return evt
+
 
 def sound_stopped(sndchan):
     global sndchannels
@@ -88,7 +113,7 @@ def sound_stopped(sndchan):
     print sndchan
     id = sndchannels[sndchan]
     print id
-    sound_finished(id,sndchan)
+    sound_finished(id, sndchan)
 
 # Create a queue to notify a song has finished
 eventq = Queue.Queue(0)
