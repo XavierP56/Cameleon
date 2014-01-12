@@ -33,13 +33,16 @@
         $scope.started = Query.get({
           id: $scope.id
         }, function(res) {
-          $scope.playing = res.res;
+          var snd;
+          $scope.playing = res.playing;
           if ($scope.playing === true) {
             $scope.classstyle = 'playStyle';
           }
           if ($scope.playing === false) {
-            return $scope.classstyle = 'stopStyle';
+            $scope.classstyle = 'stopStyle';
           }
+          snd = res.level * 100;
+          return $scope.power = snd;
         });
         $scope.playSong = function() {
           if ($scope.loop === void 0) {

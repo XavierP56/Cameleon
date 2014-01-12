@@ -35,11 +35,20 @@ def sound_finished(id, chn):
 @app.route('/sounds/query/:id', method='GET')
 def sounds_query(id):
     global sounds
+    global levels
 
     if id in sounds:
-        return {'res': True}
+        playing = True
     else:
-        return {'res': False}
+        playing = False
+
+    sndlevel = 1.0
+    if id in levels:
+        sndlevel = levels[id]
+
+    print sndlevel
+
+    return {'playing':playing, 'level':sndlevel}
 
 
 @app.route('/sounds/stop/:id', method='GET')
@@ -91,8 +100,8 @@ def sounds_level(id, power):
     if id in sounds:
         sndchn = sounds[id]
         sndchn.set_volume(sndlevel)
-    else:
-        levels[id] = sndlevel
+
+    levels[id] = sndlevel
 
 @app.route('/sounds/events')
 def sounds_events():

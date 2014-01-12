@@ -21,9 +21,11 @@ app.directive 'soundButton', ->
     Query = $resource('/sounds/query/:id')
 
     $scope.started = Query.get {id: $scope.id}, (res) ->
-      $scope.playing = res.res
+      $scope.playing = res.playing
       $scope.classstyle = 'playStyle' if $scope.playing == true
       $scope.classstyle = 'stopStyle' if $scope.playing == false
+      snd = res.level * 100
+      $scope.power = snd
 
     $scope.playSong = () ->
        $scope.loop = false if $scope.loop == undefined
