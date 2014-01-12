@@ -12,7 +12,7 @@ app.config ($stateProvider) ->
 # Directive
 app.directive 'soundButton', ->
   restrict : 'E'
-  scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '='}
+  scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '=?'}
 
   controller: ($scope, $resource, $q) ->
     SoundPlay =  $resource('/sounds/play/:id',{},{do:{method:'POST'}})
@@ -20,6 +20,7 @@ app.directive 'soundButton', ->
     SoundLevel = $resource('/sounds/level/:id/:power')
 
     Query = $resource('/sounds/query/:id')
+    $scope.loop = $scope.loop || false
 
     $scope.started = Query.get {id: $scope.id}, (res) ->
       $scope.playing = res.playing
@@ -29,7 +30,6 @@ app.directive 'soundButton', ->
       $scope.power = snd
 
     $scope.playSong = () ->
-       $scope.loop = false if $scope.loop == undefined
        SoundPlay.do {id: $scope.id, repeat: $scope.loop, name:$scope.songFile, power:$scope.power}, ->
          return
 
