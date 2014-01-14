@@ -42,7 +42,7 @@ def sounds_query(id):
     else:
         playing = False
 
-    sndlevel = 1.0
+    sndlevel = None
     if id in levels:
         sndlevel = levels[id]
 

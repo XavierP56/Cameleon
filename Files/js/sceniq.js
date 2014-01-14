@@ -28,7 +28,8 @@
         id: '@',
         songFile: '@',
         height: '@',
-        loop: '=?'
+        loop: '=?',
+        defLevel: '=?'
       },
       controller: function($scope, $resource, $q) {
         var Query, SoundLevel, SoundPlay, SoundStop;
@@ -41,6 +42,7 @@
         SoundLevel = $resource('/sounds/level/:id/:power');
         Query = $resource('/sounds/query/:id');
         $scope.loop = $scope.loop || false;
+        $scope.defLevel = $scope.defLevel || 100;
         $scope.started = Query.get({
           id: $scope.id
         }, function(res) {
@@ -52,7 +54,12 @@
           if ($scope.playing === false) {
             $scope.classstyle = 'stopStyle';
           }
-          snd = res.level * 100;
+          if (res.level != null) {
+            snd = res.level * 100;
+          }
+          if (res.level == null) {
+            snd = $scope.defLevel;
+          }
           return $scope.power = snd;
         });
         $scope.playSong = function() {
