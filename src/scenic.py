@@ -46,8 +46,6 @@ def sounds_query(id):
     if id in levels:
         sndlevel = levels[id]
 
-    print sndlevel
-
     return {'playing':playing, 'level':sndlevel}
 
 
@@ -55,7 +53,6 @@ def sounds_query(id):
 def sounds_stop(id):
     global sounds
 
-    print 'Stopping sound' + str(id)
     chn = sounds[id]
     chn.stop()
     sound_finished(id, chn)
@@ -73,7 +70,6 @@ def sounds_play():
     name = request.json['name']
     power = request.json['power']
 
-    print 'Playing sound' + str(id) + " " + name
     filepath = './../Files/waves/' + name
     snd = swmixer2.Sound(filepath)
 
@@ -97,7 +93,6 @@ def sounds_level(id, power):
     global sounds
     global levels
 
-    print "Power" + str(id) + " " + str(power)
     sndlevel = (int(power) / 100.0)
     if id in sounds:
         sndchn = sounds[id]
@@ -120,10 +115,7 @@ def sounds_events():
 def sound_stopped(sndchan):
     global sndchannels
 
-    print "Sound stopped !"
-    print sndchan
     id = sndchannels[sndchan]
-    print id
     sound_finished(id, sndchan)
 
 # Create a queue to notify a song has finished
