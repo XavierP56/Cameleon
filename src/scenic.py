@@ -5,6 +5,7 @@ import Queue
 import bottle
 import swmixer2
 import platform
+import threading
 from bottle import route, run, request, abort, static_file
 
 app = bottle.Bottle()
@@ -23,40 +24,50 @@ def sound_finished(id, chn):
     global sounds
     global sndchannels
     global levels
+    global lock
 
-    # Remove from dictionnary
-    del sounds[id]
-    #del levels[id]
-    del sndchannels[chn]
+    with lock:
+        # Remove from dictionnary
+        del sounds[id]
+        # Keep the level in case we leave / come back in the browser.
+        #del levels[id]
+        del sndchannels[chn]
 
-    evt = {'evt': 'stop', 'id': id}
-    eventq.put(evt)
+        evt = {'evt': 'stop', 'id': id}
+        eventq.put(evt)
 
 
 @app.route('/sounds/query/:id', method='GET')
 def sounds_query(id):
     global sounds
     global levels
+    global lock
 
-    if id in sounds:
-        playing = True
-    else:
-        playing = False
+    with lock:
+        if id in sounds:
+            playing = True
+        else:
+            playing = False
 
-    sndlevel = None
-    if id in levels:
-        sndlevel = levels[id]
+        sndlevel = None
+        if id in levels:
+            sndlevel = levels[id]
 
-    return {'playing':playing, 'level':sndlevel}
+        return {'playing':playing, 'level':sndlevel}
 
 
 @app.route('/sounds/stop/:id', method='GET')
 def sounds_stop(id):
     global sounds
+    global lock
 
-    chn = sounds[id]
-    chn.stop()
-    sound_finished(id, chn)
+    with lock:
+        if not id in sounds:
+            return
+
+        chn = sounds[id]
+        chn.stop()
+        sound_finished(id, chn)
 
 
 @app.route('/sounds/play', method='POST')
@@ -65,41 +76,50 @@ def sounds_play():
     global sounds
     global sndchannels
     global levels
+    global lock
 
-    id = request.json['id']
-    repeat = request.json['repeat']
-    name = request.json['name']
-    power = request.json['power']
+    with lock:
+        id = request.json['id']
+        repeat = request.json['repeat']
+        name = request.json['name']
+        power = request.json['power']
 
-    filepath = './../Files/waves/' + name
-    snd = swmixer2.Sound(filepath)
+        # if already playing, don't start again !
+        if id in sounds:
+            return
 
-    sndlevel = int(power) / 100.0
-    levels[id] = power
+        filepath = './../Files/waves/' + name
+        snd = swmixer2.Sound(filepath)
 
-    if (repeat == True):
-        sndchan = snd.play(loops=-1,volume=sndlevel)
-    else:
-        sndchan = snd.play(volume=sndlevel)
+        sndlevel = int(power) / 100.0
+        levels[id] = power
+
+        if (repeat == True):
+            sndchan = snd.play(loops=-1,volume=sndlevel)
+        else:
+            sndchan = snd.play(volume=sndlevel)
+
         # Store in dictionnary
-    sounds[id] = sndchan
-    sndchannels[sndchan] = id
-    # Send event.
-    evt = {'evt': 'play', 'id': id}
-    eventq.put(evt)
+        sounds[id] = sndchan
+        sndchannels[sndchan] = id
+        # Send event.
+        evt = {'evt': 'play', 'id': id}
+        eventq.put(evt)
 
 
 @app.route('/sounds/level/:id/:power', method='GET')
 def sounds_level(id, power):
     global sounds
     global levels
+    global lock
 
-    sndlevel = (int(power) / 100.0)
-    if id in sounds:
-        sndchn = sounds[id]
-        sndchn.set_volume(sndlevel)
+    with lock:
+        sndlevel = (int(power) / 100.0)
+        if id in sounds:
+            sndchn = sounds[id]
+            sndchn.set_volume(sndlevel)
 
-    levels[id] = power
+        levels[id] = power
 
 @app.route('/sounds/events')
 def sounds_events():
@@ -128,6 +148,7 @@ else:
     swmixer2.init()
 swmixer2.start()
 swmixer2.set_stopHandler(sound_stopped)
+lock = threading.RLock()
 
 # Start the bottle server.
 bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy')
