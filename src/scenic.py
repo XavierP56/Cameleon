@@ -126,5 +126,5 @@ swmixer2.start()
 swmixer2.set_stopHandler(sound_stopped)
 
 # Start the bottle server.
-bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy')
+bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy', output_device_index=0)
 
