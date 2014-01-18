@@ -4,6 +4,7 @@
 import Queue
 import bottle
 import swmixer2
+import platform
 from bottle import route, run, request, abort, static_file
 
 app = bottle.Bottle()
@@ -121,10 +122,13 @@ def sound_stopped(sndchan):
 # Create a queue to notify a song has finished
 eventq = Queue.Queue(0)
 # Start swmixer
-swmixer2.init()
+if (platform.uname()[1] == 'raspberrypi'):
+    swmixer2.init(output_device_index=0)
+else:
+    swmixer2.init()
 swmixer2.start()
 swmixer2.set_stopHandler(sound_stopped)
 
 # Start the bottle server.
-bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy', output_device_index=0)
+bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy')
 
