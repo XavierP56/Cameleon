@@ -78,7 +78,7 @@ def sounds_play():
     snd = swmixer2.Sound(filepath)
 
     sndlevel = int(power) / 100.0
-    levels[id] = sndlevel
+    levels[id] = power
 
     if (repeat == True):
         sndchan = snd.play(loops=-1,volume=sndlevel)
@@ -103,7 +103,7 @@ def sounds_level(id, power):
         sndchn = sounds[id]
         sndchn.set_volume(sndlevel)
 
-    levels[id] = sndlevel
+    levels[id] = power
 
 @app.route('/sounds/events')
 def sounds_events():
@@ -134,5 +134,5 @@ swmixer2.start()
 swmixer2.set_stopHandler(sound_stopped)
 
 # Start the bottle server.
-bottle.run(app, port=8080, server='cherrypy')
+bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy')
 

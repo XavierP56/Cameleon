@@ -55,7 +55,7 @@
             $scope.classstyle = 'stopStyle';
           }
           if (res.level != null) {
-            snd = res.level * 100;
+            snd = res.level;
           }
           if (res.level == null) {
             snd = $scope.defLevel;

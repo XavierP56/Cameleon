@@ -27,7 +27,7 @@ app.directive 'soundButton', ->
       $scope.playing = res.playing
       $scope.classstyle = 'playStyle' if $scope.playing == true
       $scope.classstyle = 'stopStyle' if $scope.playing == false
-      snd = res.level * 100 if res.level?
+      snd = res.level if res.level?
       snd = $scope.defLevel if not res.level?
       $scope.power = snd
 
