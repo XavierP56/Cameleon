@@ -6,6 +6,7 @@ import bottle
 import swmixer2
 import platform
 import threading
+import argparse
 from bottle import route, run, request, abort, static_file
 
 app = bottle.Bottle()
@@ -13,6 +14,7 @@ eventq = None
 sounds = {}
 sndchannels = {}
 levels = {}
+args = {}
 
 @app.route('/sceniq/<filepath:path>')
 def server_static(filepath):
@@ -77,6 +79,7 @@ def sounds_play():
     global sndchannels
     global levels
     global lock
+    global args
 
     with lock:
         id = request.json['id']
@@ -88,7 +91,7 @@ def sounds_play():
         if id in sounds:
             return
 
-        filepath = './../Files/waves/' + name
+        filepath =  args.waves + '/'  + name
         snd = swmixer2.StreamingSound(filepath)
 
         sndlevel = int(power) / 100.0
@@ -142,12 +145,14 @@ def sound_stopped(sndchan):
 # Create a queue to notify a song has finished
 eventq = Queue.Queue(0)
 # Start swmixer
+parser = argparse.ArgumentParser()
+parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
+parser.add_argument("-s", "--snd", help="Sound card index", default=None)
+args = parser.parse_args()
+
 pltf = platform.uname()[1]
-if ((pltf == 'raspberrypi') or
-        (pltf == 'ubuntu')):
-    swmixer2.init(output_device_index=0)
-else:
-    swmixer2.init()
+
+swmixer2.init(output_device_index=args.snd)
 swmixer2.start()
 swmixer2.set_stopHandler(sound_stopped)
 lock = threading.RLock()
