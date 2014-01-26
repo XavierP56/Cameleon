@@ -147,7 +147,7 @@ eventq = Queue.Queue(0)
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
-parser.add_argument("-s", "--snd", help="Sound card index", default=None)
+parser.add_argument("-s", "--snd", help="Sound card index", default=None, type=int)
 args = parser.parse_args()
 
 pltf = platform.uname()[1]
