@@ -408,8 +408,9 @@ def _create_stream(filename, checks):
         # give the stream object a read() method
         stream.read = str_read
         def str_seek_time(t):
-            if t == 0: wf.rewind()
-            assert(False) # unsupported for WAV streams
+            if t == 0:
+                wf.rewind()
+ #           assert(False) # unsupported for WAV streams
         stream.seek_time = str_seek_time
         return stream
     # Here's how to do it for MP3

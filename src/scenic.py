@@ -89,7 +89,7 @@ def sounds_play():
             return
 
         filepath = './../Files/waves/' + name
-        snd = swmixer2.Sound(filepath)
+        snd = swmixer2.StreamingSound(filepath)
 
         sndlevel = int(power) / 100.0
         levels[id] = power
@@ -142,7 +142,9 @@ def sound_stopped(sndchan):
 # Create a queue to notify a song has finished
 eventq = Queue.Queue(0)
 # Start swmixer
-if (platform.uname()[1] == 'raspberrypi'):
+pltf = platform.uname()[1]
+if ((pltf == 'raspberrypi') or
+        (pltf == 'ubuntu')):
     swmixer2.init(output_device_index=0)
 else:
     swmixer2.init()
