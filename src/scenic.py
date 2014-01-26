@@ -1,10 +1,9 @@
-# Copyright Xavier Pouyollon 2013
+# Copyright Xavier Pouyollon 2013-2014
 # GPL v3 License
 
 import Queue
 import bottle
 import swmixer2
-import platform
 import threading
 import argparse
 from bottle import route, run, request, abort, static_file
@@ -149,8 +148,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
 parser.add_argument("-s", "--snd", help="Sound card index", default=None, type=int)
 args = parser.parse_args()
-
-pltf = platform.uname()[1]
 
 swmixer2.init(output_device_index=args.snd)
 swmixer2.start()
