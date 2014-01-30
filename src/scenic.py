@@ -9,150 +9,143 @@ import argparse
 from bottle import route, run, request, abort, static_file
 
 app = bottle.Bottle()
-eventq = None
-sounds = {}
-sndchannels = {}
-levels = {}
 args = {}
+
+class SoundPlayer:
+    sounds = {}
+    sndchannels = {}
+    levels = {}
+    args = None
+    eventq = None
+    lock = None
+
+    def __init__(self, args):
+        self.args = args
+        self.eventq = Queue.Queue(0)
+        self.lock = threading.RLock()
+
+    def sound_finished(self,id, chn):
+        with self.lock:
+            # Remove from dictionnary
+            del self.sounds[id]
+            # Keep the level in case we leave / come back in the browser.
+            #del levels[id]
+            del self.sndchannels[chn]
+
+            evt = {'evt': 'stop', 'id': id}
+            self.eventq.put(evt)
+
+    def sounds_query(self,id):
+        with self.lock:
+            if id in self.sounds:
+                playing = True
+            else:
+                playing = False
+
+            sndlevel = None
+            if id in self.levels:
+                sndlevel = self.levels[id]
+
+            return {'playing':playing, 'level':sndlevel}
+
+    def sounds_stop(self,id):
+        with self.lock:
+            if not id in self.sounds:
+                return
+
+            chn = self.sounds[id]
+            chn.stop()
+            self.sound_finished(id, chn)
+
+    def sounds_play(self,request):
+        with self.lock:
+            id = request.json['id']
+            repeat = request.json['repeat']
+            name = request.json['name']
+            power = request.json['power']
+
+            # if already playing, don't start again !
+            if id in self.sounds:
+                return
+
+            filepath =  self.args.waves + '/'  + name
+            snd = swmixer2.StreamingSound(filepath)
+
+            sndlevel = int(power) / 100.0
+            self.levels[id] = power
+
+            if (repeat == True):
+                sndchan = snd.play(loops=-1,volume=sndlevel)
+            else:
+                sndchan = snd.play(volume=sndlevel)
+
+            # Store in dictionnary
+            self.sounds[id] = sndchan
+            self.sndchannels[sndchan] = id
+            # Send event.
+            evt = {'evt': 'play', 'id': id}
+            self.eventq.put(evt)
+
+    def sounds_level(self, id, power):
+        with self.lock:
+            sndlevel = (int(power) / 100.0)
+            if id in self.sounds:
+                sndchn = self.sounds[id]
+                sndchn.set_volume(sndlevel)
+
+            self.levels[id] = power
+
+    def sounds_events(self):
+        #print "En attente !"
+        try:
+            evt = self.eventq.get(timeout=10)
+        except:
+            evt = None
+        #print evt
+        return evt
+
+    def sound_stopped(self,sndchan):
+        id = self.sndchannels[sndchan]
+        self.sound_finished(id, sndchan)
 
 @app.route('/sceniq/<filepath:path>')
 def server_static(filepath):
     return static_file(filepath, root='./../Files/')
 
-
-def sound_finished(id, chn):
-    global eventq
-    global sounds
-    global sndchannels
-    global levels
-    global lock
-
-    with lock:
-        # Remove from dictionnary
-        del sounds[id]
-        # Keep the level in case we leave / come back in the browser.
-        #del levels[id]
-        del sndchannels[chn]
-
-        evt = {'evt': 'stop', 'id': id}
-        eventq.put(evt)
-
-
 @app.route('/sounds/query/:id', method='GET')
-def sounds_query(id):
-    global sounds
-    global levels
-    global lock
-
-    with lock:
-        if id in sounds:
-            playing = True
-        else:
-            playing = False
-
-        sndlevel = None
-        if id in levels:
-            sndlevel = levels[id]
-
-        return {'playing':playing, 'level':sndlevel}
-
+def sound_query(id):
+    return sndplayer.sounds_query(id)
 
 @app.route('/sounds/stop/:id', method='GET')
 def sounds_stop(id):
-    global sounds
-    global lock
-
-    with lock:
-        if not id in sounds:
-            return
-
-        chn = sounds[id]
-        chn.stop()
-        sound_finished(id, chn)
-
+    return sndplayer.sounds_stop(id)
 
 @app.route('/sounds/play', method='POST')
 def sounds_play():
-    global eventq
-    global sounds
-    global sndchannels
-    global levels
-    global lock
-    global args
-
-    with lock:
-        id = request.json['id']
-        repeat = request.json['repeat']
-        name = request.json['name']
-        power = request.json['power']
-
-        # if already playing, don't start again !
-        if id in sounds:
-            return
-
-        filepath =  args.waves + '/'  + name
-        snd = swmixer2.StreamingSound(filepath)
-
-        sndlevel = int(power) / 100.0
-        levels[id] = power
-
-        if (repeat == True):
-            sndchan = snd.play(loops=-1,volume=sndlevel)
-        else:
-            sndchan = snd.play(volume=sndlevel)
-
-        # Store in dictionnary
-        sounds[id] = sndchan
-        sndchannels[sndchan] = id
-        # Send event.
-        evt = {'evt': 'play', 'id': id}
-        eventq.put(evt)
-
+    return sndplayer.sounds_play(request)
 
 @app.route('/sounds/level/:id/:power', method='GET')
 def sounds_level(id, power):
-    global sounds
-    global levels
-    global lock
-
-    with lock:
-        sndlevel = (int(power) / 100.0)
-        if id in sounds:
-            sndchn = sounds[id]
-            sndchn.set_volume(sndlevel)
-
-        levels[id] = power
+    return sndplayer.sounds_level(id, power)
 
 @app.route('/sounds/events')
 def sounds_events():
-    global eventq
-    #print "En attente !"
-    try:
-        evt = eventq.get(timeout=1)
-    except:
-        evt = None
-    #print evt
-    return evt
+    return sndplayer.sounds_events()
 
 
 def sound_stopped(sndchan):
-    global sndchannels
+    sndplayer.sound_stopped(sndchan)
 
-    id = sndchannels[sndchan]
-    sound_finished(id, sndchan)
-
-# Create a queue to notify a song has finished
-eventq = Queue.Queue(0)
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
 parser.add_argument("-s", "--snd", help="Sound card index", default=None, type=int)
 args = parser.parse_args()
 
+sndplayer = SoundPlayer(args)
 swmixer2.init(output_device_index=args.snd)
 swmixer2.start()
 swmixer2.set_stopHandler(sound_stopped)
-lock = threading.RLock()
 
 # Start the bottle server.
 bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy')
