@@ -10,17 +10,27 @@ app.config ($stateProvider) ->
   $stateProvider.state('room2', room2)
 
 # Directive
-app.directive 'fold', ->
+app.directive "fold", ->
   restrict : 'E'
   templateUrl : '/sceniq/fold.html'
   scope : {foldName : '@'}
   transclude : true
+  controller: ($scope) ->
+      $scope.nb = 0
 
-app.directive 'soundButton', ->
+      $scope.$on 'foldplay', (sender, evt) ->
+        $scope.nb = $scope.nb + 1
+
+      $scope.$on 'foldstop', (sender, evt) ->
+        $scope.nb = $scope.nb - 1
+
+
+app.directive "soundButton", ->
   restrict : 'E'
   scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '=?', defLevel : '=?'}
+  templateUrl : '/sceniq/soundbutton.html'
 
-  controller: ($scope, $resource, $q) ->
+  controller: ($rootScope, $scope, $resource) ->
     SoundPlay =  $resource('/sounds/play/:id',{},{do:{method:'POST'}})
     SoundStop =  $resource('/sounds/stop/:id')
     SoundLevel = $resource('/sounds/level/:id/:power')
@@ -60,14 +70,15 @@ app.directive 'soundButton', ->
           return
         $scope.playing = true
         $scope.classstyle = 'playStyle'
+        $scope.$parent.$$prevSibling.$emit('foldplay')
 
       $scope.$on 'stop', (sender, evt) ->
         if evt.id != $scope.id
           return
         $scope.playing = false
         $scope.classstyle = 'stopStyle'
+        $scope.$parent.$$prevSibling.$emit('foldstop')
 
-  templateUrl : '/sceniq/soundbutton.html'
 
 @RoomCtrl = ($scope, $http, $q, $resource)->
   Events = $resource('/sounds/events')

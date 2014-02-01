@@ -20,18 +20,27 @@
     return $stateProvider.state('room2', room2);
   });
 
-  app.directive('fold', function() {
+  app.directive("fold", function() {
     return {
       restrict: 'E',
       templateUrl: '/sceniq/fold.html',
       scope: {
         foldName: '@'
       },
-      transclude: true
+      transclude: true,
+      controller: function($scope) {
+        $scope.nb = 0;
+        $scope.$on('foldplay', function(sender, evt) {
+          return $scope.nb = $scope.nb + 1;
+        });
+        return $scope.$on('foldstop', function(sender, evt) {
+          return $scope.nb = $scope.nb - 1;
+        });
+      }
     };
   });
 
-  app.directive('soundButton', function() {
+  app.directive("soundButton", function() {
     return {
       restrict: 'E',
       scope: {
@@ -42,7 +51,8 @@
         loop: '=?',
         defLevel: '=?'
       },
-      controller: function($scope, $resource, $q) {
+      templateUrl: '/sceniq/soundbutton.html',
+      controller: function($rootScope, $scope, $resource) {
         var Query, SoundLevel, SoundPlay, SoundStop;
         SoundPlay = $resource('/sounds/play/:id', {}, {
           "do": {
@@ -106,18 +116,19 @@
               return;
             }
             $scope.playing = true;
-            return $scope.classstyle = 'playStyle';
+            $scope.classstyle = 'playStyle';
+            return $scope.$parent.$$prevSibling.$emit('foldplay');
           });
           return $scope.$on('stop', function(sender, evt) {
             if (evt.id !== $scope.id) {
               return;
             }
             $scope.playing = false;
-            return $scope.classstyle = 'stopStyle';
+            $scope.classstyle = 'stopStyle';
+            return $scope.$parent.$$prevSibling.$emit('foldstop');
           });
         });
-      },
-      templateUrl: '/sceniq/soundbutton.html'
+      }
     };
   });
 
