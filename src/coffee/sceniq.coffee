@@ -42,6 +42,8 @@ app.directive "soundButton", ->
     $scope.started = Query.get {id: $scope.id}, (res) ->
       $scope.playing = res.playing
       $scope.classstyle = 'playStyle' if $scope.playing == true
+      # When we are here, fold has been constructed and set to 0.
+      $scope.$parent.$$prevSibling.$emit('foldplay') if $scope.playing == true
       $scope.classstyle = 'stopStyle' if $scope.playing == false
       snd = res.level if res.level?
       snd = $scope.defLevel if not res.level?
