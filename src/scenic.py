@@ -66,6 +66,7 @@ class SoundPlayer:
 
             # if already playing, don't start again !
             if id in self.sounds:
+                print "Already playing !"
                 return
 
             filepath =  self.args.waves + '/'  + name
@@ -98,7 +99,7 @@ class SoundPlayer:
     def sounds_events(self):
         #print "En attente !"
         try:
-            evt = self.eventq.get(timeout=10)
+            evt = self.eventq.get(timeout=1)
         except:
             evt = None
         #print evt
