@@ -10,6 +10,12 @@ app.config ($stateProvider) ->
   $stateProvider.state('room2', room2)
 
 # Directive
+app.directive 'fold', ->
+  restrict : 'E'
+  templateUrl : '/sceniq/fold.html'
+  scope : {foldName : '@'}
+  transclude : true
+
 app.directive 'soundButton', ->
   restrict : 'E'
   scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '=?', defLevel : '=?'}

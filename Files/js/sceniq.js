@@ -20,6 +20,17 @@
     return $stateProvider.state('room2', room2);
   });
 
+  app.directive('fold', function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/sceniq/fold.html',
+      scope: {
+        foldName: '@'
+      },
+      transclude: true
+    };
+  });
+
   app.directive('soundButton', function() {
     return {
       restrict: 'E',
