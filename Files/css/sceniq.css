@@ -67,3 +67,13 @@ button.stopStyle
     height:40px;
     background-color: red;
 }
+
+button.fold
+{
+    height:40px;
+    background-color: lightblue;
+}
+div.fold
+{
+    margin: 10px;
+}
