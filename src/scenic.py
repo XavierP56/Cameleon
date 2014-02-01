@@ -5,6 +5,7 @@
 import bottle
 import argparse
 import soundplayer
+import dmxhandler
 
 from bottle import route, run, request, abort, static_file
 
@@ -38,6 +39,14 @@ def sounds_level(id, power):
 def sounds_events():
     return sndplayer.sounds_events()
 
+# DMX handling
+@app.route('/dmx/entry', method='POST')
+def dmx_entry():
+   return dmxhandler.dmx_entry(request)
+
+@app.route('/dmx/query/:id', method='GET')
+def dmx_query(id):
+    return dmxhandler.dmx_query(id)
 
 # Start swmixer
 parser = argparse.ArgumentParser()
@@ -46,6 +55,7 @@ parser.add_argument("-s", "--snd", help="Sound card index", default=None, type=i
 args = parser.parse_args()
 
 sndplayer = soundplayer.SoundPlayer(args)
+dmxhandler = dmxhandler.DmxHandler(args)
 
 # Start the bottle server.
 bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy')

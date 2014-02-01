@@ -24,18 +24,36 @@ app.directive "fold", ->
       $scope.$on 'foldstop', (sender, evt) ->
         $scope.nb = $scope.nb - 1
 
+app.directive "dmxEntry", ->
+  restrict : 'E'
+  scope : {id : '@', model: '@', channel: '@'}
+  controller: ($scope, $resource) ->
+    DmxEntry =  $resource('/dmx/entry',{},{add:{method:'POST'}})
+
+    DmxEntry.add {id:$scope.id, model:$scope.model, channel:$scope.channel}, ->
+      return
+
+app.directive "dmxFader", ->
+  restrict : 'E'
+  templateUrl : '/sceniq/dmxfader.html'
+  scope : {id : '@', model: '@'}
+  controller: ($scope, $resource) ->
+    Query = $resource('/dmx/query/:id')
+
+    $scope.started = Query.get {id: $scope.id}, (res) ->
+      $scope.dmx = res
 
 app.directive "soundButton", ->
   restrict : 'E'
   scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '=?', defLevel : '=?'}
   templateUrl : '/sceniq/soundbutton.html'
 
-  controller: ($rootScope, $scope, $resource) ->
-    SoundPlay =  $resource('/sounds/play/:id',{},{do:{method:'POST'}})
+  controller: ($scope, $resource) ->
+    SoundPlay =  $resource('/sounds/play',{},{do:{method:'POST'}})
     SoundStop =  $resource('/sounds/stop/:id')
     SoundLevel = $resource('/sounds/level/:id/:power')
-
     Query = $resource('/sounds/query/:id')
+
     $scope.loop = $scope.loop || false
     $scope.defLevel = $scope.defLevel || 100
 

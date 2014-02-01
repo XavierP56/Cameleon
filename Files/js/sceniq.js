@@ -40,6 +40,50 @@
     };
   });
 
+  app.directive("dmxEntry", function() {
+    return {
+      restrict: 'E',
+      scope: {
+        id: '@',
+        model: '@',
+        channel: '@'
+      },
+      controller: function($scope, $resource) {
+        var DmxEntry;
+        DmxEntry = $resource('/dmx/entry', {}, {
+          add: {
+            method: 'POST'
+          }
+        });
+        return DmxEntry.add({
+          id: $scope.id,
+          model: $scope.model,
+          channel: $scope.channel
+        }, function() {});
+      }
+    };
+  });
+
+  app.directive("dmxFader", function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/sceniq/dmxfader.html',
+      scope: {
+        id: '@',
+        model: '@'
+      },
+      controller: function($scope, $resource) {
+        var Query;
+        Query = $resource('/dmx/query/:id');
+        return $scope.started = Query.get({
+          id: $scope.id
+        }, function(res) {
+          return $scope.dmx = res;
+        });
+      }
+    };
+  });
+
   app.directive("soundButton", function() {
     return {
       restrict: 'E',
@@ -52,9 +96,9 @@
         defLevel: '=?'
       },
       templateUrl: '/sceniq/soundbutton.html',
-      controller: function($rootScope, $scope, $resource) {
+      controller: function($scope, $resource) {
         var Query, SoundLevel, SoundPlay, SoundStop;
-        SoundPlay = $resource('/sounds/play/:id', {}, {
+        SoundPlay = $resource('/sounds/play', {}, {
           "do": {
             method: 'POST'
           }
