@@ -43,6 +43,21 @@ class DmxHandler(object):
             else:
                 return None
 
+    def dmx_set(self, request):
+        id = request.json['id']
+        values = request.json['values']
+        if id in self.hardware:
+            obj = self.hardware[id]["obj"]
+            if 'power' in values:
+                obj.setPower(values['power'])
+            if 'red' in values:
+                obj.setRed(values['red'])
+            if 'green' in values:
+                obj.setGreen(values['green'])
+            if 'blue' in values:
+                obj.setBlue(values['blue'])
+
+    # Services routines
     def setData(self, id, rch, value):
         if id in self.hardware:
             rch -= 1
@@ -100,6 +115,7 @@ class Projector(object):
     def getBlue(self):
         return self.getData (self.blue)
 
+# LEDPAR 64 Projector.
 class Ibiza(Projector):
     dimmer = 1
     red = 3

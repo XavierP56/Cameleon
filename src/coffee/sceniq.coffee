@@ -39,9 +39,18 @@ app.directive "dmxFader", ->
   scope : {id : '@', model: '@'}
   controller: ($scope, $resource) ->
     Query = $resource('/dmx/query/:id')
+    Values = $resource('/dmx/set', {}, {set:{method:'POST'}})
 
     $scope.started = Query.get {id: $scope.id}, (res) ->
       $scope.dmx = res
+
+    $scope.send = (what) ->
+      v = {}
+      v[what] = $scope.dmx.power if what == 'power'
+      v[what] = $scope.dmx.red if what == 'red'
+      v[what] = $scope.dmx.green if what == 'green'
+      v[what] = $scope.dmx.green if what == 'blue'
+      Values.set {id:$scope.id, values: v}
 
 app.directive "soundButton", ->
   restrict : 'E'

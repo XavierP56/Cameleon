@@ -48,6 +48,10 @@ def dmx_entry():
 def dmx_query(id):
     return dmxhandler.dmx_query(id)
 
+@app.route('/dmx/set', method='POST')
+def dmx_set():
+    return dmxhandler.dmx_set(request)
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")

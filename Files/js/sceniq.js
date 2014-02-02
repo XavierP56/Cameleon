@@ -73,13 +73,38 @@
         model: '@'
       },
       controller: function($scope, $resource) {
-        var Query;
+        var Query, Values;
         Query = $resource('/dmx/query/:id');
-        return $scope.started = Query.get({
+        Values = $resource('/dmx/set', {}, {
+          set: {
+            method: 'POST'
+          }
+        });
+        $scope.started = Query.get({
           id: $scope.id
         }, function(res) {
           return $scope.dmx = res;
         });
+        return $scope.send = function(what) {
+          var v;
+          v = {};
+          if (what === 'power') {
+            v[what] = $scope.dmx.power;
+          }
+          if (what === 'red') {
+            v[what] = $scope.dmx.red;
+          }
+          if (what === 'green') {
+            v[what] = $scope.dmx.green;
+          }
+          if (what === 'blue') {
+            v[what] = $scope.dmx.green;
+          }
+          return Values.set({
+            id: $scope.id,
+            values: v
+          });
+        };
       }
     };
   });
