@@ -34,9 +34,15 @@ class DmxHandler(object):
             return
         if (self.changed == False):
             return
+        cnt = 0
         for v in self.datas:
-            self.dmxoutput.write(chr(b))
-
+            if v != 0:
+				print str(cnt) +"=" + str(v)
+            self.dmxoutput.write(chr(v))
+            cnt += 1
+        self.changed = False
+        self.dmxoutput.flush()
+        
     def dmx_entry(self, request):
         with self.lock:
             id = request.json['id']
