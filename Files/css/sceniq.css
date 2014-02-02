@@ -73,7 +73,14 @@ button.fold
     height:40px;
     background-color: lightblue;
 }
+
 div.fold
 {
     margin: 10px;
+}
+
+button.dmx
+{
+    height : 40px;
+    background-color: lightsalmon;
 }
