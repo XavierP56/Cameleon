@@ -56,6 +56,7 @@ def dmx_set():
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
 parser.add_argument("-s", "--snd", help="Sound card index", default=None, type=int)
+parser.add_argument('-d', '--dmx', help="Output to /dev/dmx0", default=False, type=bool)
 args = parser.parse_args()
 
 sndplayer = soundplayer.SoundPlayer(args)

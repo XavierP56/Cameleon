@@ -2,19 +2,39 @@ __author__ = 'xavierpouyollon'
 
 import Queue
 import threading
-
+import time
+import thread
 
 class DmxHandler(object):
     args = None
     eventq = None
     lock = None
-    datas = [0]*512
+    datas = [0]*513
     hardware = {}
+    gthread = None
+    changed = False
+    dmxoutput = None
 
     def __init__(self, args):
         self.args = args
         self.eventq = Queue.Queue(0)
         self.lock = threading.RLock()
+
+        if self.args.dmx == True:
+            self.dmxoutput = open ('/dev/dmx0', 'wb')
+
+        def f():
+            while True:
+                self.tick()
+                time.sleep(0.001)
+        self.gthread = thread.start_new_thread(f, ())
+
+    def tick(self):
+        if (self.args.dmx == False):
+            return
+        if (self.changed == False):
+            return
+        self.dmxoutput.write(self.datas)
 
     def dmx_entry(self, request):
         with self.lock:
@@ -61,8 +81,10 @@ class DmxHandler(object):
     def setData(self, id, rch, value):
         if id in self.hardware:
             rch -= 1
-            index = self.hardware[id]['channel'] - 1
+            index = self.hardware[id]['channel']
             self.datas[index + rch] = value
+            # Set to False when datas sent to DMX output.
+            self.changed = True
             return
         else:
             print 'setData: Hardware NOT HERE !'
@@ -70,7 +92,7 @@ class DmxHandler(object):
     def getData(self, id, rch):
         if id in self.hardware:
             rch -= 1
-            index = self.hardware[id]['channel'] - 1
+            index = self.hardware[id]['channel']
             return self.datas[index + rch]
         else:
             print 'getData: Hardware NOT HERE !'
