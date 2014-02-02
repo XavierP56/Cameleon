@@ -52,6 +52,10 @@ def dmx_query(id):
 def dmx_set():
     return dmxhandler.dmx_set(request)
 
+@app.route('/dmx/events')
+def dmx_events():
+    return dmxhandler.dmx_events()
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")

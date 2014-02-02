@@ -85,7 +85,7 @@
         }, function(res) {
           return $scope.dmx = res;
         });
-        return $scope.send = function(what) {
+        $scope.send = function(what) {
           var v;
           v = {};
           if (what === 'power') {
@@ -105,6 +105,12 @@
             values: v
           });
         };
+        return $scope.$on('update', function(sender, evt) {
+          if (evt.id !== $scope.id) {
+            return;
+          }
+          return $scope.dmx = evt.values;
+        });
       }
     };
   });
@@ -225,7 +231,9 @@
             }
             $scope.playing = true;
             $scope.classstyle = 'playStyle';
-            return $scope.$parent.$$prevSibling.$emit('foldplay');
+            if ($scope.$parent.$$prevSibling !== null) {
+              return $scope.$parent.$$prevSibling.$emit('foldplay');
+            }
           });
           return $scope.$on('stop', function(sender, evt) {
             if (evt.id !== $scope.id) {
@@ -233,7 +241,9 @@
             }
             $scope.playing = false;
             $scope.classstyle = 'stopStyle';
-            return $scope.$parent.$$prevSibling.$emit('foldstop');
+            if ($scope.$parent.$$prevSibling !== null) {
+              return $scope.$parent.$$prevSibling.$emit('foldstop');
+            }
           });
         });
       }
@@ -241,21 +251,23 @@
   });
 
   this.RoomCtrl = function($scope, $http, $q, $resource) {
-    var Events, Start;
+    var DmxEvents, Events;
     Events = $resource('/sounds/events');
-    Start = $resource('/sounds/starts');
-    $scope.getEvent = function() {
+    DmxEvents = $resource('/dmx/events');
+    $scope.getSoundEvent = function() {
       return Events.get({}, function(evt) {
-        if (evt.evt === 'play') {
-          $scope.$broadcast('play', evt);
-        }
-        if (evt.evt === 'stop') {
-          $scope.$broadcast('stop', evt);
-        }
-        return $scope.getEvent();
+        $scope.$broadcast(evt.evt, evt);
+        return $scope.getSoundEvent();
       });
     };
-    return $scope.getEvent();
+    $scope.getDmxEvent = function() {
+      return DmxEvents.get({}, function(evt) {
+        $scope.$broadcast(evt.evt, evt);
+        return $scope.getDmxEvent();
+      });
+    };
+    $scope.getSoundEvent();
+    return $scope.getDmxEvent();
   };
 
 }).call(this);

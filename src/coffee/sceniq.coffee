@@ -52,6 +52,11 @@ app.directive "dmxFader", ->
       v[what] = $scope.dmx.blue if what == 'blue'
       Values.set {id:$scope.id, values: v}
 
+    $scope.$on 'update', (sender, evt) ->
+        if evt.id != $scope.id
+          return
+        $scope.dmx = evt.values
+
 app.directive "dmxLight", ->
   restrict : 'E'
   templateUrl : '/sceniq/dmxlight.html'
@@ -110,26 +115,32 @@ app.directive "soundButton", ->
           return
         $scope.playing = true
         $scope.classstyle = 'playStyle'
-        $scope.$parent.$$prevSibling.$emit('foldplay')
+        $scope.$parent.$$prevSibling.$emit('foldplay') if $scope.$parent.$$prevSibling != null
 
       $scope.$on 'stop', (sender, evt) ->
         if evt.id != $scope.id
           return
         $scope.playing = false
         $scope.classstyle = 'stopStyle'
-        $scope.$parent.$$prevSibling.$emit('foldstop')
+        $scope.$parent.$$prevSibling.$emit('foldstop') if $scope.$parent.$$prevSibling != null
 
 
 @RoomCtrl = ($scope, $http, $q, $resource)->
   Events = $resource('/sounds/events')
-  Start = $resource('/sounds/starts')
+  DmxEvents = $resource('/dmx/events')
 
-  # Wait for event, analyze it and broadcast it.
-  $scope.getEvent = () ->
+  # Wait for sound event, analyze it and broadcast it.
+  $scope.getSoundEvent = () ->
     Events.get {}, (evt) ->
-      $scope.$broadcast('play', evt) if evt.evt == 'play'
-      $scope.$broadcast('stop', evt) if evt.evt == 'stop'
-      $scope.getEvent()
+      $scope.$broadcast(evt.evt, evt)
+      $scope.getSoundEvent()
 
-  $scope.getEvent()
+  # Wait DMX events,  analyze it and broadcast it.
+  $scope.getDmxEvent = () ->
+    DmxEvents.get {}, (evt) ->
+      $scope.$broadcast(evt.evt, evt)
+      $scope.getDmxEvent()
 
+  # Trigger them
+  $scope.getSoundEvent()
+  $scope.getDmxEvent()

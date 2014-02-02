@@ -80,6 +80,14 @@ class DmxHandler(object):
             if 'blue' in values:
                 obj.setBlue(values['blue'])
 
+            allvalues = {'power': obj.getPower(),
+                         'red' : obj.getRed(),
+                         'green': obj.getGreen(),
+                         'blue' : obj.getBlue()}
+
+            evt = {'evt': 'update', 'id': id, 'values':allvalues}
+            self.eventq.put(evt)
+
     # Services routines
     def setData(self, id, rch, value):
         if id in self.hardware:
@@ -99,6 +107,17 @@ class DmxHandler(object):
             return self.datas[index + rch]
         else:
             print 'getData: Hardware NOT HERE !'
+
+    def dmx_events(self):
+        #print "En attente !"
+        try:
+            evt = self.eventq.get(timeout=1)
+        except:
+            evt = None
+        #print evt
+        if evt != None:
+            print "Updated !"
+        return evt
 
 class Projector(object):
     dimmer = None
