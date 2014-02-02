@@ -36,8 +36,6 @@ class DmxHandler(object):
             return
         cnt = 0
         for v in self.datas:
-            if v != 0:
-				print str(cnt) +"=" + str(v)
             self.dmxoutput.write(chr(v))
             cnt += 1
         self.changed = False
