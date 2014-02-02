@@ -109,6 +109,42 @@
     };
   });
 
+  app.directive("dmxLight", function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/sceniq/dmxlight.html',
+      scope: {
+        id: '@',
+        preset: '@',
+        power: '@',
+        red: '@',
+        green: '@',
+        blue: '@'
+      },
+      controller: function($scope, $resource) {
+        var Values;
+        Values = $resource('/dmx/set', {}, {
+          set: {
+            method: 'POST'
+          }
+        });
+        return $scope.light = function() {
+          var v;
+          v = {
+            'power': $scope.power,
+            'red': $scope.red,
+            'green': $scope.green,
+            'blue': $scope.blue
+          };
+          return Values.set({
+            id: $scope.id,
+            values: v
+          });
+        };
+      }
+    };
+  });
+
   app.directive("soundButton", function() {
     return {
       restrict: 'E',

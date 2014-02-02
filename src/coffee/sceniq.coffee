@@ -52,6 +52,17 @@ app.directive "dmxFader", ->
       v[what] = $scope.dmx.blue if what == 'blue'
       Values.set {id:$scope.id, values: v}
 
+app.directive "dmxLight", ->
+  restrict : 'E'
+  templateUrl : '/sceniq/dmxlight.html'
+  scope : {id : '@', preset: '@', power:'@', red : '@', green:'@', blue:'@'}
+  controller: ($scope, $resource) ->
+    Values = $resource('/dmx/set', {}, {set:{method:'POST'}})
+
+    $scope.light = () ->
+      v = {'power': $scope.power, 'red':$scope.red, 'green':$scope.green, 'blue':$scope.blue}
+      Values.set {id:$scope.id, values: v}
+
 app.directive "soundButton", ->
   restrict : 'E'
   scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '=?', defLevel : '=?'}
