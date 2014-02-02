@@ -34,10 +34,8 @@ class DmxHandler(object):
             return
         if (self.changed == False):
             return
-        cnt = 0
-        for v in self.datas:
-            self.dmxoutput.write(chr(v))
-            cnt += 1
+
+        self.dmxoutput.write(bytearray(self.datas))
         self.changed = False
         self.dmxoutput.flush()
         
