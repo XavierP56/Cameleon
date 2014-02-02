@@ -34,7 +34,8 @@ class DmxHandler(object):
             return
         if (self.changed == False):
             return
-        self.dmxoutput.write(self.datas)
+        for v in self.datas:
+            self.dmxoutput.write(chr(b))
 
     def dmx_entry(self, request):
         with self.lock:
@@ -82,7 +83,7 @@ class DmxHandler(object):
         if id in self.hardware:
             rch -= 1
             index = self.hardware[id]['channel']
-            self.datas[index + rch] = value
+            self.datas[index + rch] = int(value)
             # Set to False when datas sent to DMX output.
             self.changed = True
             return
@@ -123,7 +124,7 @@ class Projector(object):
         self.setData (self.blue, value)
 
     def setGreen (self, value):
-        self.setData (self.blue, value)
+        self.setData (self.green, value)
 
     def getPower(self):
         return self.getData (self.dimmer)

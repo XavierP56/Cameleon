@@ -98,7 +98,7 @@
             v[what] = $scope.dmx.green;
           }
           if (what === 'blue') {
-            v[what] = $scope.dmx.green;
+            v[what] = $scope.dmx.blue;
           }
           return Values.set({
             id: $scope.id,

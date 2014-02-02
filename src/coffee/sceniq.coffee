@@ -49,7 +49,7 @@ app.directive "dmxFader", ->
       v[what] = $scope.dmx.power if what == 'power'
       v[what] = $scope.dmx.red if what == 'red'
       v[what] = $scope.dmx.green if what == 'green'
-      v[what] = $scope.dmx.green if what == 'blue'
+      v[what] = $scope.dmx.blue if what == 'blue'
       Values.set {id:$scope.id, values: v}
 
 app.directive "soundButton", ->
