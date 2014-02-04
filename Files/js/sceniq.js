@@ -23,7 +23,7 @@
   app.directive("fold", function() {
     return {
       restrict: 'E',
-      templateUrl: '/sceniq/fold.html',
+      templateUrl: '/sceniq/templates/fold.html',
       scope: {
         foldName: '@'
       },
@@ -67,7 +67,7 @@
   app.directive("dmxFader", function() {
     return {
       restrict: 'E',
-      templateUrl: '/sceniq/dmxfader.html',
+      templateUrl: '/sceniq/templates/dmxfader.html',
       scope: {
         id: '@',
         model: '@'
@@ -118,7 +118,7 @@
   app.directive("dmxLight", function() {
     return {
       restrict: 'E',
-      templateUrl: '/sceniq/dmxlight.html',
+      templateUrl: '/sceniq/templates/dmxlight.html',
       scope: {
         id: '@',
         preset: '@',
@@ -162,7 +162,7 @@
         loop: '=?',
         defLevel: '=?'
       },
-      templateUrl: '/sceniq/soundbutton.html',
+      templateUrl: '/sceniq/templates/soundbutton.html',
       controller: function($scope, $resource) {
         var Query, SoundLevel, SoundPlay, SoundStop;
         SoundPlay = $resource('/sounds/play', {}, {

@@ -12,7 +12,7 @@ app.config ($stateProvider) ->
 # Directive
 app.directive "fold", ->
   restrict : 'E'
-  templateUrl : '/sceniq/fold.html'
+  templateUrl : '/sceniq/templates/fold.html'
   scope : {foldName : '@'}
   transclude : true
   controller: ($scope) ->
@@ -35,7 +35,7 @@ app.directive "dmxEntry", ->
 
 app.directive "dmxFader", ->
   restrict : 'E'
-  templateUrl : '/sceniq/dmxfader.html'
+  templateUrl : '/sceniq/templates/dmxfader.html'
   scope : {id : '@', model: '@'}
   controller: ($scope, $resource) ->
     Query = $resource('/dmx/query/:id')
@@ -59,7 +59,7 @@ app.directive "dmxFader", ->
 
 app.directive "dmxLight", ->
   restrict : 'E'
-  templateUrl : '/sceniq/dmxlight.html'
+  templateUrl : '/sceniq/templates/dmxlight.html'
   scope : {id : '@', preset: '@', power:'@', red : '@', green:'@', blue:'@'}
   controller: ($scope, $resource) ->
     Values = $resource('/dmx/set', {}, {set:{method:'POST'}})
@@ -71,7 +71,7 @@ app.directive "dmxLight", ->
 app.directive "soundButton", ->
   restrict : 'E'
   scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '=?', defLevel : '=?'}
-  templateUrl : '/sceniq/soundbutton.html'
+  templateUrl : '/sceniq/templates/soundbutton.html'
 
   controller: ($scope, $resource) ->
     SoundPlay =  $resource('/sounds/play',{},{do:{method:'POST'}})
