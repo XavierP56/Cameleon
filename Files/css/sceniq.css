@@ -4,6 +4,30 @@ display:inline;
 margin:10px;
 }
 
+.bloc {
+    display: inline-block;
+    width: 200px;
+    padding: 35px 20px;
+    margin: 3em 1em;
+    line-height: 1.5em;
+    background: -webkit-linear-gradient(#e5e5e5, #cFcFcF);
+    background: -moz-linear-gradient(#e5e5e5, #cFcFcF);
+    background: linear-gradient(#e5e5e5, #cFcFcF);
+    color: #444;
+}
+
+.shadow {
+    -webkit-box-shadow: 1px 2px 5px 1px rgba(0,0,0,0.5);
+    -moz-box-shadow: 1px 2px 5px 1px rgba(0,0,0,0.5);
+    box-shadow: 1px 2px 5px 1px rgba(0,0,0,0.5);
+}
+
+
+.leftpos
+{
+    float:left;
+}
+
 a
 {
     color : white;
@@ -28,11 +52,17 @@ div.lrback
     overflow: hidden;
 }
 
+.soundbutton {
+    background-color: darkgray;
+    display:table;
+    color: white;
+    text-align: center;
+}
+
 div.leftpos
 {
     float:left;
     background-color: darkgray;
-    width:80%;
 }
 
 div.rightpos
@@ -60,12 +90,14 @@ button.playStyle
 {
     height:40px;
     background-color: green;
+    font-size: 10px;
 }
 
 button.stopStyle
 {
     height:40px;
     background-color: red;
+    font-size: 10px;
 }
 
 button.fold

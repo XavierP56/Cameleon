@@ -21,3 +21,9 @@ MODE="0666"
 
 Get SceniQ
 -----------
+
+sudo apt-get install python-bottle
+sudo apt-get install python-cherrypy3
+sudo apt-get install python-pyaudio
+sudo apt-get install python-numpy
+

@@ -1,3 +1,6 @@
-    <button style='height:{{height}}px' class="{{classstyle}}" ng-click="doit()"> {{songName}} </button>
-    <input type="range" ng-change="level()" ng-model="power" min="0" max="100" step="1">{{power}}%</input>
-
+<div class="soundbutton">
+<input style="-webkit-appearance: slider-vertical;" type="range" ng-change="level()" ng-model="power" min="0" max="100" step="1"></input>
+<br/>
+{{power}}%<br/>
+<button style='height:{{height}}px' class="{{classstyle}}" ng-click="doit()"> {{songName}}</button>
+</div>
