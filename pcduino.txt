@@ -27,3 +27,6 @@ sudo apt-get install python-cherrypy3
 sudo apt-get install python-pyaudio
 sudo apt-get install python-numpy
 
+sudo geany /etc/modprobe.d/alsa-base.conf
+
+options snd-usb-audio index=-2 ==> 0
