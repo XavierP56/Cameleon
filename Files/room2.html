@@ -16,12 +16,26 @@
         <sound-button id="9"  song-file="klaxon_a.wav" song-name="Klaxon"></sound-button>
     </fold>
 
+    <br/><br/>
+
+    <dmx-entry id="1" channel="1">
+       <dmx-value key="dimmer" value="1"></dmx-value>
+       <dmx-value key="red" value="3"></dmx-value>
+       <dmx-value key="green" value="4"></dmx-value>
+       <dmx-value key="blue" value="5"></dmx-value>
+    </dmx-entry>
+
+    <dmx-light id="1" preset="Test">
+        <dmx-value key="dimmer" value="255"></dmx-value>
+        <dmx-value key="red" value="255"></dmx-value>
+        <dmx-value key="green" value="0"></dmx-value>
+        <dmx-value key="blue" value="0"></dmx-value>
+    </dmx-light>
+
     <br/>
 
-    <dmx-entry id="1" model="ibiza" channel="1"></dmx>
-    <dmx-fader id="1"></dmx-fader>
-    <br/>
-    <dmx-light id="1" preset="Vert clair" power="200" red="0" blue="10" green="255"></dmx-light>
-    <dmx-light id="1" preset="Rouge" power="255" red="255" blue="0" green="0"></dmx-light>
-    <dmx-light id="1" preset="Blanc" power="255" red="255" blue="255" green="255"></dmx-light>
+    <dmx-slider class="leftpos" id="1" name="dimmer" key="dimmer" def="200"></dmx-slider>
+    <dmx-slider class="leftpos" id="1" name="red" key="red" def="1"></dmx-slider>
+    <dmx-slider class="leftpos" id="1" name="green" key="green" def="2"></dmx-slider>
+    <dmx-slider id="1" name="blue" key="blue" def="3"></dmx-slider>
 </div>

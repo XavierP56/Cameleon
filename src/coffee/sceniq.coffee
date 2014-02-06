@@ -24,49 +24,74 @@ app.directive "fold", ->
       $scope.$on 'foldstop', (sender, evt) ->
         $scope.nb = $scope.nb - 1
 
-app.directive "dmxEntry", ->
+app.directive "dmxSlider", ->
   restrict : 'E'
-  scope : {id : '@', model: '@', channel: '@'}
+  templateUrl : '/sceniq/templates/dmxslider.html'
+  scope : {id : '@', key:'@', def:'@', name:'@'}
   controller: ($scope, $resource) ->
-    DmxEntry =  $resource('/dmx/entry',{},{add:{method:'POST'}})
+    Query = $resource('/dmx/query/:id/:key')
+    DmxSet = $resource('/dmx/set', {}, {set:{method:'POST'}})
 
-    DmxEntry.add {id:$scope.id, model:$scope.model, channel:$scope.channel}, ->
-      return
+    $scope.started = Query.get {id: $scope.id, key: $scope.key}, (res) ->
+      if res.val?
+        $scope.value = res.val
+      else
+        $scope.value = $scope.def
+        $scope.send()
 
-app.directive "dmxFader", ->
-  restrict : 'E'
-  templateUrl : '/sceniq/templates/dmxfader.html'
-  scope : {id : '@', model: '@'}
-  controller: ($scope, $resource) ->
-    Query = $resource('/dmx/query/:id')
-    Values = $resource('/dmx/set', {}, {set:{method:'POST'}})
-
-    $scope.started = Query.get {id: $scope.id}, (res) ->
-      $scope.dmx = res
-
-    $scope.send = (what) ->
-      v = {}
-      v[what] = $scope.dmx.power if what == 'power'
-      v[what] = $scope.dmx.red if what == 'red'
-      v[what] = $scope.dmx.green if what == 'green'
-      v[what] = $scope.dmx.blue if what == 'blue'
-      Values.set {id:$scope.id, values: v}
+    $scope.send = () ->
+      cmd = {}
+      cmd[$scope.key] = $scope.value
+      DmxSet.set {id:$scope.id, cmds: cmd}, ->
+        return
 
     $scope.$on 'update', (sender, evt) ->
-        if evt.id != $scope.id
+        if (evt.id != $scope.id) or (evt.key != $scope.key)
           return
-        $scope.dmx = evt.values
+        $scope.value = evt.val
+
+app.directive "dmxEntry", ->
+  restrict : 'E'
+  scope : {id : '@', channel: '@'}
+
+  controller: ($scope, $resource) ->
+    $scope.defs = {}
+    $scope.DmxEntry =  $resource('/dmx/entry',{},{add:{method:'POST'}})
+    this.provide = (k,v) ->
+      $scope.defs[k] = v
+    return
+
+  link: (scope, element, attrs, ctrls) ->
+    scope.DmxEntry.add {id:scope.id,  channel:scope.channel, defs:scope.defs}, ->
+      return
 
 app.directive "dmxLight", ->
   restrict : 'E'
   templateUrl : '/sceniq/templates/dmxlight.html'
-  scope : {id : '@', preset: '@', power:'@', red : '@', green:'@', blue:'@'}
+  scope : {id:'@', preset:'@'}
+  transclude : true
+
   controller: ($scope, $resource) ->
-    Values = $resource('/dmx/set', {}, {set:{method:'POST'}})
+    $scope.cmds = {}
+    $scope.DmxSet =  $resource('/dmx/set',{},{set:{method:'POST'}})
+    this.provide = (k,v) ->
+      $scope.cmds[k] = v
 
     $scope.light = () ->
-      v = {'power': $scope.power, 'red':$scope.red, 'green':$scope.green, 'blue':$scope.blue}
-      Values.set {id:$scope.id, values: v}
+      $scope.DmxSet.set {id:$scope.id, cmds:$scope.cmds}, ->
+        return
+
+    return
+
+
+app.directive "dmxValue", ->
+  restrict : 'E'
+  priority: 1
+  require: ['?^dmxLight', '?^dmxEntry']
+
+  link: (scope, element, attrs, ctrls) ->
+    ctrls[0].provide(attrs.key,attrs.value) if ctrls[0] != undefined
+    ctrls[1].provide(attrs.key,attrs.value) if ctrls[1] != undefined
 
 app.directive "soundButton", ->
   restrict : 'E'

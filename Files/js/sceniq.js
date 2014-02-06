@@ -40,77 +40,78 @@
     };
   });
 
-  app.directive("dmxEntry", function() {
+  app.directive("dmxSlider", function() {
     return {
       restrict: 'E',
+      templateUrl: '/sceniq/templates/dmxslider.html',
       scope: {
         id: '@',
-        model: '@',
-        channel: '@'
+        key: '@',
+        def: '@',
+        name: '@'
       },
       controller: function($scope, $resource) {
-        var DmxEntry;
-        DmxEntry = $resource('/dmx/entry', {}, {
-          add: {
-            method: 'POST'
-          }
-        });
-        return DmxEntry.add({
-          id: $scope.id,
-          model: $scope.model,
-          channel: $scope.channel
-        }, function() {});
-      }
-    };
-  });
-
-  app.directive("dmxFader", function() {
-    return {
-      restrict: 'E',
-      templateUrl: '/sceniq/templates/dmxfader.html',
-      scope: {
-        id: '@',
-        model: '@'
-      },
-      controller: function($scope, $resource) {
-        var Query, Values;
-        Query = $resource('/dmx/query/:id');
-        Values = $resource('/dmx/set', {}, {
+        var DmxSet, Query;
+        Query = $resource('/dmx/query/:id/:key');
+        DmxSet = $resource('/dmx/set', {}, {
           set: {
             method: 'POST'
           }
         });
         $scope.started = Query.get({
-          id: $scope.id
+          id: $scope.id,
+          key: $scope.key
         }, function(res) {
-          return $scope.dmx = res;
+          if (res.val != null) {
+            return $scope.value = res.val;
+          } else {
+            $scope.value = $scope.def;
+            return $scope.send();
+          }
         });
-        $scope.send = function(what) {
-          var v;
-          v = {};
-          if (what === 'power') {
-            v[what] = $scope.dmx.power;
-          }
-          if (what === 'red') {
-            v[what] = $scope.dmx.red;
-          }
-          if (what === 'green') {
-            v[what] = $scope.dmx.green;
-          }
-          if (what === 'blue') {
-            v[what] = $scope.dmx.blue;
-          }
-          return Values.set({
+        $scope.send = function() {
+          var cmd;
+          cmd = {};
+          cmd[$scope.key] = $scope.value;
+          return DmxSet.set({
             id: $scope.id,
-            values: v
-          });
+            cmds: cmd
+          }, function() {});
         };
         return $scope.$on('update', function(sender, evt) {
-          if (evt.id !== $scope.id) {
+          if ((evt.id !== $scope.id) || (evt.key !== $scope.key)) {
             return;
           }
-          return $scope.dmx = evt.values;
+          return $scope.value = evt.val;
         });
+      }
+    };
+  });
+
+  app.directive("dmxEntry", function() {
+    return {
+      restrict: 'E',
+      scope: {
+        id: '@',
+        channel: '@'
+      },
+      controller: function($scope, $resource) {
+        $scope.defs = {};
+        $scope.DmxEntry = $resource('/dmx/entry', {}, {
+          add: {
+            method: 'POST'
+          }
+        });
+        this.provide = function(k, v) {
+          return $scope.defs[k] = v;
+        };
+      },
+      link: function(scope, element, attrs, ctrls) {
+        return scope.DmxEntry.add({
+          id: scope.id,
+          channel: scope.channel,
+          defs: scope.defs
+        }, function() {});
       }
     };
   });
@@ -121,32 +122,41 @@
       templateUrl: '/sceniq/templates/dmxlight.html',
       scope: {
         id: '@',
-        preset: '@',
-        power: '@',
-        red: '@',
-        green: '@',
-        blue: '@'
+        preset: '@'
       },
+      transclude: true,
       controller: function($scope, $resource) {
-        var Values;
-        Values = $resource('/dmx/set', {}, {
+        $scope.cmds = {};
+        $scope.DmxSet = $resource('/dmx/set', {}, {
           set: {
             method: 'POST'
           }
         });
-        return $scope.light = function() {
-          var v;
-          v = {
-            'power': $scope.power,
-            'red': $scope.red,
-            'green': $scope.green,
-            'blue': $scope.blue
-          };
-          return Values.set({
-            id: $scope.id,
-            values: v
-          });
+        this.provide = function(k, v) {
+          return $scope.cmds[k] = v;
         };
+        $scope.light = function() {
+          return $scope.DmxSet.set({
+            id: $scope.id,
+            cmds: $scope.cmds
+          }, function() {});
+        };
+      }
+    };
+  });
+
+  app.directive("dmxValue", function() {
+    return {
+      restrict: 'E',
+      priority: 1,
+      require: ['?^dmxLight', '?^dmxEntry'],
+      link: function(scope, element, attrs, ctrls) {
+        if (ctrls[0] !== void 0) {
+          ctrls[0].provide(attrs.key, attrs.value);
+        }
+        if (ctrls[1] !== void 0) {
+          return ctrls[1].provide(attrs.key, attrs.value);
+        }
       }
     };
   });

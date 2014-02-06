@@ -44,9 +44,9 @@ def sounds_events():
 def dmx_entry():
    return dmxhandler.dmx_entry(request)
 
-@app.route('/dmx/query/:id', method='GET')
-def dmx_query(id):
-    return dmxhandler.dmx_query(id)
+@app.route('/dmx/query/:id/:name', method='GET')
+def dmx_query(id,name):
+    return dmxhandler.dmx_query(id,name)
 
 @app.route('/dmx/set', method='POST')
 def dmx_set():
