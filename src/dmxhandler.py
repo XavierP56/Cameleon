@@ -20,7 +20,7 @@ class DmxHandler(object):
         self.eventq = Queue.Queue(0)
         self.lock = threading.RLock()
 
-        if self.args.dmx == True:
+        if self.args.dmx:
             self.dmxoutput = open ('/dev/dmx0', 'wb')
 
         def f():
@@ -35,7 +35,13 @@ class DmxHandler(object):
         if (self.changed == False):
             return
 
-        self.dmxoutput.write(bytearray(self.datas))
+        datas = []
+        for a in self.datas:
+            if a == None:
+                datas.append(0)
+            else:
+                datas.append(a)
+        self.dmxoutput.write(bytearray(datas))
         self.changed = False
         self.dmxoutput.flush()
         
@@ -68,6 +74,7 @@ class DmxHandler(object):
                     self.datas[dstchan] = val
                     evt = {'evt': 'update', 'id': id, 'key':key, 'val':val}
                     self.eventq.put(evt)
+                self.changed = True
 
     # Services routines
     def GetChannel(self, id, key):
