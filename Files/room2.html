@@ -1,19 +1,16 @@
 <div>
-    Bienvenue dans la salle 2!<br/>
+    Bienvenue dans la scene 2!<br/>
     <b>Des bruits et !</b><br/><br/>
     <div>
-    <sound-button id="4" song-file="morse_x.wav" song-name="Du morse"></sound-button>
+    <sound-button class="leftpos" id="4" song-file="08_ Porte se ferme.wav" song-name="La porte !"></sound-button>
+    <sound-button id="8" song-file="Gnomes2 deform.wav" song-name="Fin" loop=false></sound-button>
     </div>
     <br/><br/>
-    <fold fold-name="Sons divers">
-        <sound-button class="leftpos" id="5" song-file="sonar_x.wav" song-name="Sonar (boucle)" loop=true def-level=80></sound-button>
-        <sound-button class="leftpos" id="6" song-file="woow_x.wav" song-name="Whaoou"></sound-button>
-        <sound-button id="7" song-file="typewriter.wav" song-name="Machine ecrire (boucle)" loop=true></sound-button>
-    </fold>
 
-    <fold fold-name="Divers">
-        <sound-button class="leftpos" id="8"  song-file="dot_matrix.wav" song-name="Imprimante"></sound-button>
-        <sound-button id="9"  song-file="klaxon_a.wav" song-name="Klaxon"></sound-button>
+    <fold  fold-name="Sons divers">
+        <sound-button class="leftpos" id="5" song-file="10_ Train.wav" song-name="Train (boucle)" loop=true def-level=80></sound-button>
+        <sound-button class="leftpos" id="6" song-file="09_ Explosion.wav" song-name="Explosion"></sound-button>
+        <sound-button id="7" song-file="12_ rire gnome.wav" song-name="Rire (boucle)" loop=true></sound-button>
     </fold>
 
     <br/><br/>
@@ -25,17 +22,34 @@
        <dmx-value key="blue" value="5"></dmx-value>
     </dmx-entry>
 
-    <dmx-light id="1" preset="Test">
+    <dmx-light class="leftpos" id="1" preset="Rouge">
         <dmx-value key="dimmer" value="255"></dmx-value>
         <dmx-value key="red" value="255"></dmx-value>
         <dmx-value key="green" value="0"></dmx-value>
         <dmx-value key="blue" value="0"></dmx-value>
     </dmx-light>
 
-    <br/>
+    <dmx-light class="leftpos"  id="1" preset="Vert">
+        <dmx-value key="dimmer" value="255"></dmx-value>
+        <dmx-value key="red" value="0"></dmx-value>
+        <dmx-value key="green" value="255"></dmx-value>
+        <dmx-value key="blue" value="0"></dmx-value>
+    </dmx-light>
 
-    <dmx-slider class="leftpos" id="1" name="dimmer" key="dimmer" def="200"></dmx-slider>
-    <dmx-slider class="leftpos" id="1" name="red" key="red" def="1"></dmx-slider>
-    <dmx-slider class="leftpos" id="1" name="green" key="green" def="2"></dmx-slider>
-    <dmx-slider id="1" name="blue" key="blue" def="3"></dmx-slider>
+    <dmx-light   id="1" preset="Vert Clair">
+        <dmx-value key="dimmer" value="85"></dmx-value>
+        <dmx-value key="red" value="111"></dmx-value>
+        <dmx-value key="green" value="174"></dmx-value>
+        <dmx-value key="blue" value="113"></dmx-value>
+    </dmx-light>
+
+    <br/>
+   <fold fold-name="DMX">
+        <dmx-slider class="leftpos" id="1" name="dimmer" key="dimmer" def="200"></dmx-slider>
+        <dmx-slider class="leftpos" id="1" name="red" key="red" def="1"></dmx-slider>
+        <dmx-slider class="leftpos" id="1" name="green" key="green" def="2"></dmx-slider>
+        <dmx-slider id="1" name="blue" key="blue" def="3"></dmx-slider>
+    </fold>
+
 </div>
+
