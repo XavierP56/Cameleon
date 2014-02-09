@@ -33,10 +33,7 @@ app.directive "dmxSlider", ->
     DmxSet = $resource('/dmx/set', {}, {set:{method:'POST'}})
 
     $scope.started = Query.get {id: $scope.id, key: $scope.key}, (res) ->
-      if res.val?
         $scope.value = res.val
-      else
-        $scope.value = $scope.def
         $scope.send()
 
     $scope.send = () ->
@@ -53,16 +50,22 @@ app.directive "dmxSlider", ->
 app.directive "dmxEntry", ->
   restrict : 'E'
   scope : {id : '@', channel: '@'}
-
+  templateUrl : '/sceniq/templates/dmxentry.html'
+  transclude : true
+  priority: 9
   controller: ($scope, $resource) ->
     $scope.defs = {}
+    $scope.inits = {}
     $scope.DmxEntry =  $resource('/dmx/entry',{},{add:{method:'POST'}})
-    this.provide = (k,v) ->
+    this.provide = (k,v,def) ->
       $scope.defs[k] = v
+      $scope.inits[k] = def
+    this.getEntryEdit = () ->
+      return true
     return
 
   link: (scope, element, attrs, ctrls) ->
-    scope.DmxEntry.add {id:scope.id,  channel:scope.channel, defs:scope.defs}, ->
+    scope.DmxEntry.add {id:scope.id,  channel:scope.channel, defs:scope.defs, inits:scope.inits}, ->
       return
 
 app.directive "dmxLight", ->
@@ -83,15 +86,25 @@ app.directive "dmxLight", ->
 
     return
 
-
 app.directive "dmxValue", ->
   restrict : 'E'
-  priority: 1
-  require: ['?^dmxLight', '?^dmxEntry']
+  require: '^dmxLight'
+  scope : { 'key' : '@', 'value' : '@'}
 
-  link: (scope, element, attrs, ctrls) ->
-    ctrls[0].provide(attrs.key,attrs.value) if ctrls[0] != undefined
-    ctrls[1].provide(attrs.key,attrs.value) if ctrls[1] != undefined
+  link: (scope, element, attrs, dmxLightCtrl) ->
+    dmxLightCtrl.provide(attrs.key,attrs.value)
+
+app.directive "dmxDefinition", ->
+  restrict : 'E'
+  priority: 10
+  templateUrl: '/sceniq/templates/dmxdefinition.html'
+  require: '^dmxEntry'
+  scope : { 'key' : '@', 'value' : '@', 'def': '@'}
+
+  link: (scope, element, attrs, dmxEntryCtrl) ->
+    dmxEntryCtrl.provide(scope.key,scope.value,scope.def)
+    scope.entryEdit = dmxEntryCtrl.getEntryEdit()
+
 
 app.directive "soundButton", ->
   restrict : 'E'

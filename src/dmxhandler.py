@@ -26,7 +26,7 @@ class DmxHandler(object):
         def f():
             while True:
                 self.tick()
-                time.sleep(0.001)
+                time.sleep(0.01)
         self.gthread = thread.start_new_thread(f, ())
 
     def tick(self):
@@ -49,12 +49,22 @@ class DmxHandler(object):
         with self.lock:
             id = request.json['id']
             defs = request.json['defs']
+            inits = request.json['inits']
             channel = int(request.json['channel'])
 
             params = { "channel": channel, "defs": defs}
-            if not id in self.hardware:
-                self.hardware[id] = params
-                print "Added new hardware"
+            # If we got it, delete it first.
+            if  id in self.hardware:
+                del self.hardware[id]
+                print "Deleted current config !"
+            # Store it with it's default values.
+            self.hardware[id] = params
+            # Init to the default values.
+            for key in inits:
+                dstchan = self.GetChannel(id, key)
+                val = int(inits[key])
+                self.datas[dstchan] = val
+            print "Added new hardware"
             return
 
     def dmx_query(self, id, key):

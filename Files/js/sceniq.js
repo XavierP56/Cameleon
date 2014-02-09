@@ -62,12 +62,8 @@
           id: $scope.id,
           key: $scope.key
         }, function(res) {
-          if (res.val != null) {
-            return $scope.value = res.val;
-          } else {
-            $scope.value = $scope.def;
-            return $scope.send();
-          }
+          $scope.value = res.val;
+          return $scope.send();
         });
         $scope.send = function() {
           var cmd;
@@ -95,22 +91,31 @@
         id: '@',
         channel: '@'
       },
+      templateUrl: '/sceniq/templates/dmxentry.html',
+      transclude: true,
+      priority: 9,
       controller: function($scope, $resource) {
         $scope.defs = {};
+        $scope.inits = {};
         $scope.DmxEntry = $resource('/dmx/entry', {}, {
           add: {
             method: 'POST'
           }
         });
-        this.provide = function(k, v) {
-          return $scope.defs[k] = v;
+        this.provide = function(k, v, def) {
+          $scope.defs[k] = v;
+          return $scope.inits[k] = def;
+        };
+        this.getEntryEdit = function() {
+          return true;
         };
       },
       link: function(scope, element, attrs, ctrls) {
         return scope.DmxEntry.add({
           id: scope.id,
           channel: scope.channel,
-          defs: scope.defs
+          defs: scope.defs,
+          inits: scope.inits
         }, function() {});
       }
     };
@@ -148,15 +153,31 @@
   app.directive("dmxValue", function() {
     return {
       restrict: 'E',
-      priority: 1,
-      require: ['?^dmxLight', '?^dmxEntry'],
-      link: function(scope, element, attrs, ctrls) {
-        if (ctrls[0] !== void 0) {
-          ctrls[0].provide(attrs.key, attrs.value);
-        }
-        if (ctrls[1] !== void 0) {
-          return ctrls[1].provide(attrs.key, attrs.value);
-        }
+      require: '^dmxLight',
+      scope: {
+        'key': '@',
+        'value': '@'
+      },
+      link: function(scope, element, attrs, dmxLightCtrl) {
+        return dmxLightCtrl.provide(attrs.key, attrs.value);
+      }
+    };
+  });
+
+  app.directive("dmxDefinition", function() {
+    return {
+      restrict: 'E',
+      priority: 10,
+      templateUrl: '/sceniq/templates/dmxdefinition.html',
+      require: '^dmxEntry',
+      scope: {
+        'key': '@',
+        'value': '@',
+        'def': '@'
+      },
+      link: function(scope, element, attrs, dmxEntryCtrl) {
+        dmxEntryCtrl.provide(scope.key, scope.value, scope.def);
+        return scope.entryEdit = dmxEntryCtrl.getEntryEdit();
       }
     };
   });
