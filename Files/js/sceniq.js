@@ -47,7 +47,13 @@
       scope: {
         id: '@'
       },
-      controller: function($scope, $resource) {}
+      controller: function($scope, $resource) {
+        var Query;
+        Query = $resource('/dmx/query/:id/ALL');
+        return Query.get({
+          id: $scope.id
+        }, function(res) {});
+      }
     };
   });
 
