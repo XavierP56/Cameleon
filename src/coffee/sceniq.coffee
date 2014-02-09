@@ -30,9 +30,10 @@ app.directive "dmxEntry", ->
   templateUrl : '/sceniq/templates/dmxentry.html'
   scope : {id : '@'}
   controller: ($scope, $resource) ->
-    Query = $resource('/dmx/query/:id/ALL')
+    Query = $resource('/dmx/getdefs/:id')
 
     Query.get {id: $scope.id}, (res) ->
+      $scope.entries = res
       return
 
 app.directive "dmxSlider", ->

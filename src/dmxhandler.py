@@ -6,7 +6,7 @@ import time
 import thread
 
 # This is where the DMX lighting setup is defined.
-# Never define a channel name (dimmer,red) as ALL
+
 dmx_model = {
     "1": {"channel": 1,
           "defs": {
@@ -97,18 +97,19 @@ class DmxHandler(object):
             print "Added new hardware"
             return
 
+    def dmx_getdefs (self,id):
+        if id in self.hardware:
+            with self.lock:
+                res = {}
+                for k in self.hardware[id]['defs']:
+                    res[k] = self.hardware[id]['defs'][k]
+                return res
+
     def dmx_query(self, id, key):
         if id in self.hardware:
             with self.lock:
-                if (key == 'ALL'):
-                    res = {}
-                    for k in self.hardware[id]['defs']:
-                        dstchan = self.GetChannel(id, k)
-                        res[k] = self.datas[dstchan]
-                    return res
-                else:
-                    dstchan = self.GetChannel(id, key)
-                    return {key: self.datas[dstchan]}
+                dstchan = self.GetChannel(id, key)
+                return {key: self.datas[dstchan]}
 
     def dmx_set(self, request):
         id = request.json['id']

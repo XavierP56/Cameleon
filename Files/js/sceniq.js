@@ -49,10 +49,12 @@
       },
       controller: function($scope, $resource) {
         var Query;
-        Query = $resource('/dmx/query/:id/ALL');
+        Query = $resource('/dmx/getdefs/:id');
         return Query.get({
           id: $scope.id
-        }, function(res) {});
+        }, function(res) {
+          $scope.entries = res;
+        });
       }
     };
   });

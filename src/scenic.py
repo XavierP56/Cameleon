@@ -52,6 +52,10 @@ def dmx_query(id,name):
 def dmx_set():
     return dmxhandler.dmx_set(request)
 
+@app.route('/dmx/getdefs/:id')
+def dmx_getdefs(id):
+    return dmxhandler.dmx_getdefs(id)
+
 @app.route('/dmx/events')
 def dmx_events():
     return dmxhandler.dmx_events()
