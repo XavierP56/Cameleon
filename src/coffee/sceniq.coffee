@@ -31,13 +31,14 @@ app.directive "dmxEntry", ->
   scope : {id : '@'}
   controller: ($scope, $resource) ->
     Query = $resource('/dmx/getdefs/:id')
+    Update = $resource('/dmx/setdefs', {}, {set:{method:'POST'}})
 
     Query.get {id: $scope.id}, (res) ->
       $scope.entries = res.res
       return
 
     $scope.update = () ->
-      alert("Mise a jour !")
+      Update.set {'id': $scope.id, 'entries':$scope.entries}
       return
 
 app.directive "dmxSlider", ->

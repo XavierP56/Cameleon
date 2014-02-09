@@ -56,7 +56,6 @@ class DmxHandler(object):
                 dstchan = self.GetChannel(id, key)
                 val = int(dmx_model[id]['inits'][key])
                 self.datas[dstchan] = val
-                print "Key " + key + " has " + str(val)
 
     def tick(self):
         if (self.args.dmx == False):
@@ -68,32 +67,18 @@ class DmxHandler(object):
         self.changed = False
         self.dmxoutput.flush()
 
-    def dmx_entry(self, request):
+    def dmx_setdefs(self, request):
         with self.lock:
             id = request.json['id']
-            defs = request.json['defs']
-            inits = request.json['inits']
-            channel = int(request.json['channel'])
-            update = request.json['update']
-
-            params = {"channel": channel, "defs": defs}
-            # If we got it, delete it first.
-            if (id in self.hardware) and (update == True):
-                del self.hardware[id]
-                print "Deleted current config !"
-            if (id in self.hardware) and (update == False):
-                print "Already defined !"
+            if id not in self.hardware:
                 return
 
-            # Store it with it's default values.
-            self.hardware[id] = params
-            # Init to the default values.
-            for key in inits:
-                dstchan = self.GetChannel(id, key)
-                val = int(inits[key])
-                self.datas[dstchan] = val
-                print "Key " + key + " has " + inits[key]
-            print "Added new hardware"
+            entries = request.json['entries']
+
+            for entry in entries:
+                key = entry['key']
+                val = entry['val']
+                self.hardware[id]['defs'][key]=int(val)
             return
 
     def dmx_getdefs (self,id):

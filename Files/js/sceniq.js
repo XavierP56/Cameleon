@@ -48,15 +48,23 @@
         id: '@'
       },
       controller: function($scope, $resource) {
-        var Query;
+        var Query, Update;
         Query = $resource('/dmx/getdefs/:id');
+        Update = $resource('/dmx/setdefs', {}, {
+          set: {
+            method: 'POST'
+          }
+        });
         Query.get({
           id: $scope.id
         }, function(res) {
           $scope.entries = res.res;
         });
         return $scope.update = function() {
-          alert("Mise a jour !");
+          Update.set({
+            'id': $scope.id,
+            'entries': $scope.entries
+          });
         };
       }
     };
