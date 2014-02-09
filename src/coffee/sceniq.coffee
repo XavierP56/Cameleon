@@ -28,7 +28,7 @@ app.directive "fold", ->
 app.directive "dmxEntry", ->
   restrict : 'E'
   templateUrl : '/sceniq/templates/dmxentry.html'
-  scope : {id : '@'}
+  scope : {id : '@', show:'='}
   controller: ($scope, $resource) ->
     Query = $resource('/dmx/getdefs/:id')
     Update = $resource('/dmx/setdefs', {}, {set:{method:'POST'}})

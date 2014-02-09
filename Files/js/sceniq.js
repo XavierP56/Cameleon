@@ -45,7 +45,8 @@
       restrict: 'E',
       templateUrl: '/sceniq/templates/dmxentry.html',
       scope: {
-        id: '@'
+        id: '@',
+        show: '='
       },
       controller: function($scope, $resource) {
         var Query, Update;
