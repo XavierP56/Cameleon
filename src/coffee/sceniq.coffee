@@ -9,6 +9,7 @@ app.config ($stateProvider) ->
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
 
+
 # Directive
 app.directive "fold", ->
   restrict : 'E'
@@ -65,7 +66,7 @@ app.directive "dmxEntry", ->
     return
 
   link: (scope, element, attrs, ctrls) ->
-    scope.DmxEntry.add {id:scope.id,  channel:scope.channel, defs:scope.defs, inits:scope.inits}, ->
+    scope.DmxEntry.add {id:scope.id,  channel:scope.channel, defs:scope.defs, inits:scope.inits, update:false}, ->
       return
 
 app.directive "dmxLight", ->

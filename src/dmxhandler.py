@@ -51,12 +51,17 @@ class DmxHandler(object):
             defs = request.json['defs']
             inits = request.json['inits']
             channel = int(request.json['channel'])
+            update = request.json['update']
 
             params = { "channel": channel, "defs": defs}
             # If we got it, delete it first.
-            if  id in self.hardware:
+            if  (id in self.hardware) and (update == True):
                 del self.hardware[id]
                 print "Deleted current config !"
+            if  (id in self.hardware) and (update == False):
+                print "Already defined !"
+                return
+
             # Store it with it's default values.
             self.hardware[id] = params
             # Init to the default values.
@@ -64,6 +69,7 @@ class DmxHandler(object):
                 dstchan = self.GetChannel(id, key)
                 val = int(inits[key])
                 self.datas[dstchan] = val
+                print "Key " + key + " has " + inits[key]
             print "Added new hardware"
             return
 

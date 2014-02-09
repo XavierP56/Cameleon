@@ -115,7 +115,8 @@
           id: scope.id,
           channel: scope.channel,
           defs: scope.defs,
-          inits: scope.inits
+          inits: scope.inits,
+          update: false
         }, function() {});
       }
     };
