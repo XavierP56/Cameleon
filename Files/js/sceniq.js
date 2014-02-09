@@ -40,6 +40,17 @@
     };
   });
 
+  app.directive("dmxEntry", function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/sceniq/templates/dmxentry.html',
+      scope: {
+        id: '@'
+      },
+      controller: function($scope, $resource) {}
+    };
+  });
+
   app.directive("dmxSlider", function() {
     return {
       restrict: 'E',
@@ -62,7 +73,7 @@
           id: $scope.id,
           key: $scope.key
         }, function(res) {
-          $scope.value = res.val;
+          $scope.value = res[$scope.key];
           return $scope.send();
         });
         $scope.send = function() {

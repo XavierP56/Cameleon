@@ -25,6 +25,13 @@ app.directive "fold", ->
       $scope.$on 'foldstop', (sender, evt) ->
         $scope.nb = $scope.nb - 1
 
+app.directive "dmxEntry", ->
+  restrict : 'E'
+  templateUrl : '/sceniq/templates/dmxentry.html'
+  scope : {id : '@'}
+  controller: ($scope, $resource) ->
+    return
+
 app.directive "dmxSlider", ->
   restrict : 'E'
   templateUrl : '/sceniq/templates/dmxslider.html'
@@ -34,7 +41,7 @@ app.directive "dmxSlider", ->
     DmxSet = $resource('/dmx/set', {}, {set:{method:'POST'}})
 
     $scope.started = Query.get {id: $scope.id, key: $scope.key}, (res) ->
-        $scope.value = res.val
+        $scope.value = res[$scope.key]
         $scope.send()
 
     $scope.send = () ->

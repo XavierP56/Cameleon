@@ -99,7 +99,7 @@ class DmxHandler(object):
         if id in self.hardware:
             with self.lock:
                 dstchan = self.GetChannel(id, key)
-                return {'val': self.datas[dstchan]}
+                return {key: self.datas[dstchan]}
 
     def dmx_set(self, request):
         id = request.json['id']
