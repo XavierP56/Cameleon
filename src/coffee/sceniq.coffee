@@ -38,7 +38,8 @@ app.directive "dmxEntry", ->
       return
 
     $scope.update = () ->
-      Update.set {'id': $scope.id, 'entries':$scope.entries}
+      Update.set {'id': $scope.id, 'entries':$scope.entries}, ()->
+        alert('Channels updated !')
       return
 
 app.directive "dmxSlider", ->

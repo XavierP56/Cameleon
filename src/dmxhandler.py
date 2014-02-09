@@ -85,7 +85,7 @@ class DmxHandler(object):
         if id in self.hardware:
             with self.lock:
                 datas = []
-                for k in self.hardware[id]['defs']:
+                for k in sorted(self.hardware[id]['defs']):
                     res = {"key":k, "val":self.hardware[id]['defs'][k]}
                     datas.append(res)
                 return {"res":datas}

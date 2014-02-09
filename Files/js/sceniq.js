@@ -64,6 +64,8 @@
           Update.set({
             'id': $scope.id,
             'entries': $scope.entries
+          }, function() {
+            return alert('Channels updated !');
           });
         };
       }
