@@ -60,6 +60,10 @@ def dmx_getdefs(id):
 def dmx_setdefs():
     return dmxhandler.dmx_setdefs(request)
 
+@app.route('/dmx/transition', method='POST')
+def dmx_transition():
+    return dmxhandler.dmx_transition(request)
+
 @app.route('/dmx/events')
 def dmx_events():
     return dmxhandler.dmx_events()

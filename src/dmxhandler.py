@@ -24,15 +24,19 @@ dmx_model = {
     }
 }
 
+PERIOD = 10
+
 class DmxHandler(object):
     args = None
     eventq = None
     lock = None
     datas = [0] * 513
     hardware = {}
+    transition = {}
     gthread = None
     changed = False
     dmxoutput = None
+
 
     def __init__(self, args):
         self.args = args
@@ -45,7 +49,7 @@ class DmxHandler(object):
         def f():
             while True:
                 self.tick()
-                time.sleep(0.01)
+                time.sleep(float(PERIOD) / 1000)
 
         self.gthread = thread.start_new_thread(f, ())
         # Init the model
@@ -57,7 +61,42 @@ class DmxHandler(object):
                 val = int(dmx_model[id]['inits'][key])
                 self.datas[dstchan] = val
 
+    def handle_transition(self):
+        for t in self.transition:
+            v=self.transition[t]
+            remain = v['delay']
+            remain -= PERIOD
+            if (remain == 0):
+                print "Removing transition !"
+                del self.transition[t]
+                return
+
+            v['delay'] = remain
+            newvals = v['vals']
+            cmds = v['cmds']
+            vals = v['vals']
+            id = t
+
+            for key in cmds:
+                dstchan = self.GetChannel(id, key)
+                curval = self.datas[dstchan]
+                if key not in vals:
+                    vals[key] = curval
+
+                divider = remain / PERIOD
+                dstval = int(cmds[key])
+                incr = float(dstval - curval) / float(divider)
+                vals[key] = curval + incr
+                val = int(vals[key])
+                self.datas[dstchan] = val
+                evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
+                self.eventq.put(evt)
+                self.changed = True
+
     def tick(self):
+        # Handle the DMX transition.
+        self.handle_transition()
+
         if (self.args.dmx == False):
             return
         if (self.changed == False):
@@ -108,6 +147,15 @@ class DmxHandler(object):
                     evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
                     self.eventq.put(evt)
                 self.changed = True
+
+    def dmx_transition(self,request):
+        id = request.json['id']
+        cmds = request.json['cmds']
+        delay = int(request.json['delay']) * 1000
+
+        v= {'cmds':cmds, 'delay':delay, 'vals': {}}
+
+        self.transition[id] = v
 
     # Services routines
     def GetChannel(self, id, key):

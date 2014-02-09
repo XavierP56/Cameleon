@@ -152,6 +152,12 @@ app.directive "soundButton", ->
   Events = $resource('/sounds/events')
   DmxEvents = $resource('/dmx/events')
 
+  $scope.transition = () ->
+    DmxTransition = $resource('/dmx/transition',{},{do:{method:'POST'}})
+
+    DmxTransition.do {delay:2, id:'1', cmds: {'red':0, 'green':0, 'blue':0, 'dimmer':0}},  ->
+      return
+
   # Wait for sound event, analyze it and broadcast it.
   $scope.getSoundEvent = () ->
     Events.get {}, (evt) ->

@@ -263,6 +263,24 @@
     var DmxEvents, Events;
     Events = $resource('/sounds/events');
     DmxEvents = $resource('/dmx/events');
+    $scope.transition = function() {
+      var DmxTransition;
+      DmxTransition = $resource('/dmx/transition', {}, {
+        "do": {
+          method: 'POST'
+        }
+      });
+      return DmxTransition["do"]({
+        delay: 2,
+        id: '1',
+        cmds: {
+          'red': 0,
+          'green': 0,
+          'blue': 0,
+          'dimmer': 0
+        }
+      }, function() {});
+    };
     $scope.getSoundEvent = function() {
       return Events.get({}, function(evt) {
         $scope.$broadcast(evt.evt, evt);
