@@ -48,27 +48,6 @@ app.directive "dmxSlider", ->
           return
         $scope.value = evt.val
 
-app.directive "dmxEntry", ->
-  restrict : 'E'
-  scope : {id : '@', channel: '@'}
-  templateUrl : '/sceniq/templates/dmxentry.html'
-  transclude : true
-  priority: 9
-  controller: ($scope, $resource) ->
-    $scope.defs = {}
-    $scope.inits = {}
-    $scope.DmxEntry =  $resource('/dmx/entry',{},{add:{method:'POST'}})
-    this.provide = (k,v,def) ->
-      $scope.defs[k] = v
-      $scope.inits[k] = def
-    this.getEntryEdit = () ->
-      return true
-    return
-
-  link: (scope, element, attrs, ctrls) ->
-    scope.DmxEntry.add {id:scope.id,  channel:scope.channel, defs:scope.defs, inits:scope.inits, update:false}, ->
-      return
-
 app.directive "dmxLight", ->
   restrict : 'E'
   templateUrl : '/sceniq/templates/dmxlight.html'
@@ -94,18 +73,6 @@ app.directive "dmxValue", ->
 
   link: (scope, element, attrs, dmxLightCtrl) ->
     dmxLightCtrl.provide(attrs.key,attrs.value)
-
-app.directive "dmxDefinition", ->
-  restrict : 'E'
-  priority: 10
-  templateUrl: '/sceniq/templates/dmxdefinition.html'
-  require: '^dmxEntry'
-  scope : { 'key' : '@', 'value' : '@', 'def': '@'}
-
-  link: (scope, element, attrs, dmxEntryCtrl) ->
-    dmxEntryCtrl.provide(scope.key,scope.value,scope.def)
-    scope.entryEdit = dmxEntryCtrl.getEntryEdit()
-
 
 app.directive "soundButton", ->
   restrict : 'E'

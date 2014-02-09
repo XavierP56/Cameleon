@@ -84,44 +84,6 @@
     };
   });
 
-  app.directive("dmxEntry", function() {
-    return {
-      restrict: 'E',
-      scope: {
-        id: '@',
-        channel: '@'
-      },
-      templateUrl: '/sceniq/templates/dmxentry.html',
-      transclude: true,
-      priority: 9,
-      controller: function($scope, $resource) {
-        $scope.defs = {};
-        $scope.inits = {};
-        $scope.DmxEntry = $resource('/dmx/entry', {}, {
-          add: {
-            method: 'POST'
-          }
-        });
-        this.provide = function(k, v, def) {
-          $scope.defs[k] = v;
-          return $scope.inits[k] = def;
-        };
-        this.getEntryEdit = function() {
-          return true;
-        };
-      },
-      link: function(scope, element, attrs, ctrls) {
-        return scope.DmxEntry.add({
-          id: scope.id,
-          channel: scope.channel,
-          defs: scope.defs,
-          inits: scope.inits,
-          update: false
-        }, function() {});
-      }
-    };
-  });
-
   app.directive("dmxLight", function() {
     return {
       restrict: 'E',
@@ -161,24 +123,6 @@
       },
       link: function(scope, element, attrs, dmxLightCtrl) {
         return dmxLightCtrl.provide(attrs.key, attrs.value);
-      }
-    };
-  });
-
-  app.directive("dmxDefinition", function() {
-    return {
-      restrict: 'E',
-      priority: 10,
-      templateUrl: '/sceniq/templates/dmxdefinition.html',
-      require: '^dmxEntry',
-      scope: {
-        'key': '@',
-        'value': '@',
-        'def': '@'
-      },
-      link: function(scope, element, attrs, dmxEntryCtrl) {
-        dmxEntryCtrl.provide(scope.key, scope.value, scope.def);
-        return scope.entryEdit = dmxEntryCtrl.getEntryEdit();
       }
     };
   });

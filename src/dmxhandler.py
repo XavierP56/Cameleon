@@ -5,11 +5,29 @@ import threading
 import time
 import thread
 
+dmx_model = {
+    "1": {"channel": 1,
+          "defs": {
+              "dimmer": 1,
+              "red": 3,
+              "green": 4,
+              "blue": 5
+          },
+          "inits": {
+              "dimmer": 255,
+              "red": 255,
+              "green": 254,
+              "blue": 253
+          }
+    }
+}
+
+
 class DmxHandler(object):
     args = None
     eventq = None
     lock = None
-    datas = [None]*513
+    datas = [0] * 513
     hardware = {}
     gthread = None
     changed = False
@@ -21,13 +39,23 @@ class DmxHandler(object):
         self.lock = threading.RLock()
 
         if self.args.dmx:
-            self.dmxoutput = open ('/dev/dmx0', 'wb')
+            self.dmxoutput = open('/dev/dmx0', 'wb')
 
         def f():
             while True:
                 self.tick()
                 time.sleep(0.01)
+
         self.gthread = thread.start_new_thread(f, ())
+        # Init the model
+        global dmx_model
+        for id in dmx_model:
+            self.hardware[id] = dmx_model[id]
+            for key in dmx_model[id]['inits']:
+                dstchan = self.GetChannel(id, key)
+                val = int(dmx_model[id]['inits'][key])
+                self.datas[dstchan] = val
+                print "Key " + key + " has " + str(val)
 
     def tick(self):
         if (self.args.dmx == False):
@@ -35,16 +63,10 @@ class DmxHandler(object):
         if (self.changed == False):
             return
 
-        datas = []
-        for a in self.datas:
-            if a == None:
-                datas.append(0)
-            else:
-                datas.append(a)
-        self.dmxoutput.write(bytearray(datas))
+        self.dmxoutput.write(bytearray(self.datas))
         self.changed = False
         self.dmxoutput.flush()
-        
+
     def dmx_entry(self, request):
         with self.lock:
             id = request.json['id']
@@ -53,12 +75,12 @@ class DmxHandler(object):
             channel = int(request.json['channel'])
             update = request.json['update']
 
-            params = { "channel": channel, "defs": defs}
+            params = {"channel": channel, "defs": defs}
             # If we got it, delete it first.
-            if  (id in self.hardware) and (update == True):
+            if (id in self.hardware) and (update == True):
                 del self.hardware[id]
                 print "Deleted current config !"
-            if  (id in self.hardware) and (update == False):
+            if (id in self.hardware) and (update == False):
                 print "Already defined !"
                 return
 
@@ -77,7 +99,7 @@ class DmxHandler(object):
         if id in self.hardware:
             with self.lock:
                 dstchan = self.GetChannel(id, key)
-                return {'val':self.datas[dstchan]}
+                return {'val': self.datas[dstchan]}
 
     def dmx_set(self, request):
         id = request.json['id']
@@ -88,7 +110,7 @@ class DmxHandler(object):
                     dstchan = self.GetChannel(id, key)
                     val = int(cmds[key])
                     self.datas[dstchan] = val
-                    evt = {'evt': 'update', 'id': id, 'key':key, 'val':val}
+                    evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
                     self.eventq.put(evt)
                 self.changed = True
 
