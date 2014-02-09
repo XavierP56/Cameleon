@@ -50,11 +50,14 @@
       controller: function($scope, $resource) {
         var Query;
         Query = $resource('/dmx/getdefs/:id');
-        return Query.get({
+        Query.get({
           id: $scope.id
         }, function(res) {
-          $scope.entries = res;
+          $scope.entries = res.res;
         });
+        return $scope.update = function() {
+          alert("Mise a jour !");
+        };
       }
     };
   });

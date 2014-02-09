@@ -24,7 +24,6 @@ dmx_model = {
     }
 }
 
-
 class DmxHandler(object):
     args = None
     eventq = None
@@ -100,10 +99,11 @@ class DmxHandler(object):
     def dmx_getdefs (self,id):
         if id in self.hardware:
             with self.lock:
-                res = {}
+                datas = []
                 for k in self.hardware[id]['defs']:
-                    res[k] = self.hardware[id]['defs'][k]
-                return res
+                    res = {"key":k, "val":self.hardware[id]['defs'][k]}
+                    datas.append(res)
+                return {"res":datas}
 
     def dmx_query(self, id, key):
         if id in self.hardware:

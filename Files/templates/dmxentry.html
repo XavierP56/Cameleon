@@ -1,4 +1,5 @@
 <button ng-click="update()">Update channels for {{id}}</button><br/>
-<li ng-repeat="(k,v) in entries">
-    {{k}} {{v}}
+<li ng-repeat="item in entries">
+    {{item.key}}
+    <input type="text" ng-model="item.val"></input>
 </li>

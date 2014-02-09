@@ -33,7 +33,11 @@ app.directive "dmxEntry", ->
     Query = $resource('/dmx/getdefs/:id')
 
     Query.get {id: $scope.id}, (res) ->
-      $scope.entries = res
+      $scope.entries = res.res
+      return
+
+    $scope.update = () ->
+      alert("Mise a jour !")
       return
 
 app.directive "dmxSlider", ->
