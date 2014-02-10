@@ -68,7 +68,7 @@ app.directive "dmxSlider", ->
 app.directive "dmxLight", ->
   restrict : 'E'
   templateUrl : '/sceniq/templates/dmxlight.html'
-  scope : {id:'@', preset:'@', transition:'=?'}
+  scope : {id:'@', preset:'@', transition:'=?', 'delay':'@'}
   transclude : true
 
   controller: ($scope, $resource) ->
@@ -77,12 +77,16 @@ app.directive "dmxLight", ->
     $scope.dmxstyle='dmx' if $scope.transition == false
     $scope.dmxstyle='transit' if $scope.transition == true
     $scope.DmxSet =  $resource('/dmx/set',{},{set:{method:'POST'}})
+    $scope.DmxTransition = $resource('/dmx/transition',{},{do:{method:'POST'}})
     this.provide = (k,v) ->
       $scope.cmds[k] = v
 
     $scope.light = () ->
       if $scope.transition == false
         $scope.DmxSet.set {id:$scope.id, cmds:$scope.cmds}, ->
+          return
+      else
+        $scope.DmxTransition.do {delay:$scope.delay, id:$scope.id, cmds:$scope.cmds},  ->
           return
 
     return
@@ -155,12 +159,6 @@ app.directive "soundButton", ->
 @RoomCtrl = ($scope, $http, $q, $resource)->
   Events = $resource('/sounds/events')
   DmxEvents = $resource('/dmx/events')
-
-  $scope.transition = () ->
-    DmxTransition = $resource('/dmx/transition',{},{do:{method:'POST'}})
-
-    DmxTransition.do {delay:2, id:'1', cmds: {'red':0, 'green':0, 'blue':0, 'dimmer':0}},  ->
-      return
 
   # Wait for sound event, analyze it and broadcast it.
   $scope.getSoundEvent = () ->

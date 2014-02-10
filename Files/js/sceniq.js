@@ -124,7 +124,8 @@
       scope: {
         id: '@',
         preset: '@',
-        transition: '=?'
+        transition: '=?',
+        'delay': '@'
       },
       transclude: true,
       controller: function($scope, $resource) {
@@ -141,12 +142,23 @@
             method: 'POST'
           }
         });
+        $scope.DmxTransition = $resource('/dmx/transition', {}, {
+          "do": {
+            method: 'POST'
+          }
+        });
         this.provide = function(k, v) {
           return $scope.cmds[k] = v;
         };
         $scope.light = function() {
           if ($scope.transition === false) {
             return $scope.DmxSet.set({
+              id: $scope.id,
+              cmds: $scope.cmds
+            }, function() {});
+          } else {
+            return $scope.DmxTransition["do"]({
+              delay: $scope.delay,
               id: $scope.id,
               cmds: $scope.cmds
             }, function() {});
@@ -273,24 +285,6 @@
     var DmxEvents, Events;
     Events = $resource('/sounds/events');
     DmxEvents = $resource('/dmx/events');
-    $scope.transition = function() {
-      var DmxTransition;
-      DmxTransition = $resource('/dmx/transition', {}, {
-        "do": {
-          method: 'POST'
-        }
-      });
-      return DmxTransition["do"]({
-        delay: 2,
-        id: '1',
-        cmds: {
-          'red': 0,
-          'green': 0,
-          'blue': 0,
-          'dimmer': 0
-        }
-      }, function() {});
-    };
     $scope.getSoundEvent = function() {
       return Events.get({}, function(evt) {
         $scope.$broadcast(evt.evt, evt);
