@@ -66,11 +66,6 @@ class DmxHandler(object):
             v=self.transition[t]
             remain = v['delay']
             remain -= PERIOD
-            if (remain == 0):
-                print "Removing transition !"
-                del self.transition[t]
-                return
-
             v['delay'] = remain
             newvals = v['vals']
             cmds = v['cmds']
@@ -85,13 +80,22 @@ class DmxHandler(object):
 
                 divider = remain / PERIOD
                 dstval = int(cmds[key])
-                incr = float(dstval - curval) / float(divider)
+                if divider != 0:
+                    incr = float(dstval - curval) / float(divider)
+                else:
+                    incr = 0
                 vals[key] = curval + incr
                 val = int(vals[key])
                 self.datas[dstchan] = val
-                evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
-                self.eventq.put(evt)
+                if (remain % 500) == 0:
+                    evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
+                    self.eventq.put(evt)
                 self.changed = True
+
+            if (remain == 0):
+                print "Removing transition !"
+                del self.transition[t]
+                return
 
     def tick(self):
         # Handle the DMX transition.
