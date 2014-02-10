@@ -68,18 +68,22 @@ app.directive "dmxSlider", ->
 app.directive "dmxLight", ->
   restrict : 'E'
   templateUrl : '/sceniq/templates/dmxlight.html'
-  scope : {id:'@', preset:'@'}
+  scope : {id:'@', preset:'@', transition:'=?'}
   transclude : true
 
   controller: ($scope, $resource) ->
     $scope.cmds = {}
+    $scope.transition = $scope.transition || false
+    $scope.dmxstyle='dmx' if $scope.transition == false
+    $scope.dmxstyle='transit' if $scope.transition == true
     $scope.DmxSet =  $resource('/dmx/set',{},{set:{method:'POST'}})
     this.provide = (k,v) ->
       $scope.cmds[k] = v
 
     $scope.light = () ->
-      $scope.DmxSet.set {id:$scope.id, cmds:$scope.cmds}, ->
-        return
+      if $scope.transition == false
+        $scope.DmxSet.set {id:$scope.id, cmds:$scope.cmds}, ->
+          return
 
     return
 

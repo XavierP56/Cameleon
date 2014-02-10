@@ -123,11 +123,19 @@
       templateUrl: '/sceniq/templates/dmxlight.html',
       scope: {
         id: '@',
-        preset: '@'
+        preset: '@',
+        transition: '=?'
       },
       transclude: true,
       controller: function($scope, $resource) {
         $scope.cmds = {};
+        $scope.transition = $scope.transition || false;
+        if ($scope.transition === false) {
+          $scope.dmxstyle = 'dmx';
+        }
+        if ($scope.transition === true) {
+          $scope.dmxstyle = 'transit';
+        }
         $scope.DmxSet = $resource('/dmx/set', {}, {
           set: {
             method: 'POST'
@@ -137,10 +145,12 @@
           return $scope.cmds[k] = v;
         };
         $scope.light = function() {
-          return $scope.DmxSet.set({
-            id: $scope.id,
-            cmds: $scope.cmds
-          }, function() {});
+          if ($scope.transition === false) {
+            return $scope.DmxSet.set({
+              id: $scope.id,
+              cmds: $scope.cmds
+            }, function() {});
+          }
         };
       }
     };

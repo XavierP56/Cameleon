@@ -116,3 +116,9 @@ button.dmx
     height : 40px;
     background-color: lightsalmon;
 }
+
+button.transit
+{
+    height : 40px;
+    background-color: orange;
+}
