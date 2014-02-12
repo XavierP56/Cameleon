@@ -1,5 +1,14 @@
 """Advanced Realtime Software Mixer
 
+Based on swmixer.
+Copyright 2008, Nathan Whitehead
+Released under the LGPL
+
+Modified  by Xavier Pouyollon to
+ - provide a callback when song ends.
+ - give the ability to put on song on a left, right channel
+ - remove unneeded classes for our usage
+
 This module implements an advanced realtime sound mixer suitable for
 use in games or other audio applications.  It supports loading sounds
 in uncompressed WAV format.  It can mix several sounds together during
@@ -12,7 +21,7 @@ will play seamlessly.  Also supports sound recording during playback.
 Copyright 2008, Nathan Whitehead
 Released under the LGPL
 
-Modified a bit by Xavier Pouyollon to provide a callback when song ends.
+
 """
 
 
@@ -79,13 +88,12 @@ class _SoundSourceData:
         return z
 
 class _SoundSourceStream:
-    def __init__(self, fileobj, loops,where):
+    def __init__(self, fileobj, streamingsound):
         self.fileobj = fileobj
         self.pos = 0
-        self.loops = loops
+        self.streamingsound = streamingsound
         self.done = False
         self.buf = ''
-        self.where = where
 
     def set_position(self, pos):
         self.pos = pos
@@ -97,18 +105,25 @@ class _SoundSourceStream:
             if s is None or s == '': break
             self.buf += s[:]
         zo = numpy.fromstring(self.buf[:szb], dtype=numpy.int16)
-        # Consider this z as stereo file. Mix it, make it mono and put in on left channel
-        left, right = uninterleave(zo)
-        mix = stereo_to_mono(left, right)
-        zero = numpy.array([0]*left.size, dtype=numpy.int16)
-        z = interleave(mix,zero)
+        # If we have a stero file and ask to position it either on left or right channel
+        # mix it and put in on the channel.
+        if ((self.fileobj.nchannels ==2) and (self.streamingsound.position != 's')):
+            left, right = uninterleave(zo)
+            mix = stereo_to_mono(left, right)
+            zero = numpy.array([0]*left.size, dtype=numpy.int16)
+            if (self.streamingsound.position == 'l'):
+                z = interleave(mix,zero)
+            else:
+                z = interleave(zero,mix)
+        else:
+            z = zo
 
         if len(z) < sz:
             # In this case we ran out of stream data
             # append zeros (don't try to be sample accurate for streams)
             z = numpy.append(z, numpy.zeros(sz - len(z), numpy.int16))
-            if self.loops != 0:
-                self.loops -= 1
+            if self.streamingsound.loops != 0:
+                self.streamingsound.loops -= 1
                 self.pos = 0
                 self.fileobj.seek_time(0)
                 self.buf = ''
@@ -193,7 +208,7 @@ class Channel:
         z = self.src.get_samples(sz)
         if self.src.done:
             self.done = True
-            if (self.src.loops == 0):
+            if (self.src.streamingsound.loops == 0):
                 stopHandler(self)
         return z * v
 
@@ -255,154 +270,13 @@ def stereo_to_mono(left, right):
     """Return mono array from left and right sound stream arrays"""
     return (0.5 * left + 0.5 * right).astype(numpy.int16)
 
-
-class Sound:
-    """Represents a playable sound"""
-
-    def __init__(self, filename=None, data=None):
-        """Create new sound from a WAV file, MP3 file, or explicit sample data"""
-        assert(ginit == True)
-        # Three ways to construct Sound
-        # First is by passing data directly
-        if data is not None:
-            self.data = data
-            return
-        if filename is None:
-            assert False
-        # Second is through a file
-        self.data = None
-        # Load data from file into self.data
-        # Here's how to do it for WAV
-        # (Both of the loaders set nc to channels and fr to framerate
-        if filename[-3:] in ['wav','WAV']:
-            wf = wave.open(filename, 'rb')
-            #assert(wf.getsampwidth() == 2)
-            nc = wf.getnchannels()
-            self.framerate = wf.getframerate()
-            fr = wf.getframerate()
-            # read data
-            data = []
-            r = ' '
-            while r != '':
-                r = wf.readframes(4096)
-                data.append(r)
-            if wf.getsampwidth() == 2:
-                self.data = numpy.fromstring(''.join(data),
-                                             dtype=numpy.int16)
-            if wf.getsampwidth() == 4:
-                self.data = numpy.fromstring(''.join(data),
-                                             dtype=numpy.int32)
-                self.data = self.data / 65536.0
-            if wf.getsampwidth() == 1:
-                self.data = numpy.fromstring(''.join(data),
-                                             dtype=numpy.uint8)
-                self.data = self.data * 256.0
-            wf.close()
-        # Here's how to do it for MP3
-        if filename[-3:] in ['mp3','MP3']:
-            mf = mad.MadFile(filename)
-            # HACK ALERT
-            # Looks like MAD always gives us stereo
-            ##nc = mf.mode()
-            ##if nc == 0: nc = 1
-            nc = 2
-            self.framerate = mf.samplerate()
-            fr = mf.samplerate()
-            # read data
-            data = []
-            while True:
-                r = mf.read()
-                if r is None: break
-                data.append(r[:])
-            self.data = numpy.fromstring(''.join(data), dtype=numpy.int16)
-            del(mf)
-        if self.data is None:
-            assert False
-        # Resample if needed
-        if fr != gsamplerate:
-            scale = gsamplerate * 1.0 / fr
-            if nc == 1:
-                self.data = resample(self.data, scale)
-            if nc == 2:
-                # for stereo resample independently
-                left, right = uninterleave(self.data)
-                nleft = resample(left, scale)
-                nright = resample(right, scale)
-                self.data = interleave(nleft, nright)
-        # Stereo convert if necessary
-        if nc != gchannels:
-            # oops, stereo-ness differs
-            # convert to match init parameters
-            if nc == 1:
-                # came in mono, need stereo
-                self.data = interleave(self.data, self.data)
-            if nc == 2:
-                # came in stereo, need mono
-                # first make it a 2d array
-                left, right = uninterleave(self.data)
-                self.data = stereo_to_mono(left, right)
-        return
-
-    def get_length(self):
-        """Return the length of the sound in samples
-
-        To convert to seconds, divide by the samplerate and then divide
-        by 2 if in stereo.
-
-        """
-        return len(self.data)
-
-    def play(self, volume=1.0, offset=0, fadein=0, envelope=None, loops=0):
-        """Play the sound
-
-        Keyword arguments:
-        volume - volume to play sound at
-        offset - sample to start playback
-        fadein - number of samples to slowly fade in volume
-        envelope - a list of [offset, volume] pairs defining
-                   a linear volume envelope
-        loops - how many times to play the sound (-1 is infinite)
-
-        """
-        if envelope != None:
-            env = envelope
-        else:
-            if volume == 1.0 and fadein == 0:
-                env = []
-            else:
-                if fadein == 0:
-                    env = [[0, volume]]
-                else:
-                    env = [[offset, 0.0], [offset + fadein, volume]]
-        src = _SoundSourceData(self.data, loops)
-        src.pos = offset
-        sndevent = Channel(src, env)
-        glock.acquire()
-        gmixer_srcs.append(sndevent)
-        glock.release()
-        return sndevent
-
-    def scale(self, vol):
-        """Scale a sound sample
-
-        vol is 0.0 to 1.0, amount to scale by
-        """
-        self.data = (self.data * vol).astype(numpy.int16)
-
-    def resample(self, scale):
-         """Resample a sound
-
-         scale = 1.0 means original sound
-         scale = 0.5 is half as long (up an octave)
-         scale = 2.0 is twice as long (down an octave)
-
-         """
-         self.data = resample(self.data, scale)
-
 class _Stream:
     pass
 
-def _create_stream(filename, checks):
+def _create_stream(streamingsound):
+    filename = streamingsound.filename
+    checks = streamingsound.checks
+
     if filename[-3:] in ['wav','WAV']:
         wf = wave.open(filename, 'rb')
         if checks:
@@ -415,6 +289,8 @@ def _create_stream(filename, checks):
             return wf.readframes(4096)
         # give the stream object a read() method
         stream.read = str_read
+        stream.nchannels = wf.getnchannels()
+
         def str_seek_time(t):
             if t == 0:
                 wf.rewind()
@@ -434,20 +310,25 @@ def _create_stream(filename, checks):
 class StreamingSound:
     """Represents a playable sound stream"""
 
-    def __init__(self, filename, checks=True, where=0):
+    def __init__(self, filename, checks=True, position='s'):
         """Create new streaming sound from a WAV file or an MP3 file
 
         The new streaming sound must match the output samplerate
         and stereo-ness.  You can turn off these checks by setting
         the keyword checks=False, but the sound will be distorted.
 
+        if position is s it means stereo
+        if position is l it means left
+        if position is r it means right
+
         """
         assert(ginit == True)
         if filename is None:
             assert False
+
         self.filename = filename
         self.checks = checks
-        self.where = where
+        self.position = position
 
     def get_length(self):
         """Return the length of the sound stream in samples
@@ -457,7 +338,7 @@ class StreamingSound:
         2.
 
         """
-        stream = _create_stream(self.filename, self.checks)
+        stream = _create_stream(self)
         t = stream.total_time() * gsamplerate * 2 / 1000
         del(stream)
         return t
@@ -474,7 +355,8 @@ class StreamingSound:
         loops - how many times to play the sound (-1 is infinite)
 
         """
-        stream = _create_stream(self.filename, self.checks)
+        stream = _create_stream(self)
+        self.loops = loops
 
         if envelope != None:
             env = envelope
@@ -486,7 +368,7 @@ class StreamingSound:
                     env = [[0, volume]]
                 else:
                     env = [[offset, 0.0], [offset + fadein, volume]]
-        src = _SoundSourceStream(stream, loops,self.where)
+        src = _SoundSourceStream(stream, self)
         src.pos = offset
         sndevent = Channel(src, env)
         glock.acquire()

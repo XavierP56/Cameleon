@@ -1,7 +1,7 @@
 __author__ = 'xavierpouyollon'
 
 import Queue
-import swmixer2
+import soundmixer
 import threading
 
 class SoundPlayer:
@@ -16,9 +16,9 @@ class SoundPlayer:
         self.args = args
         self.eventq = Queue.Queue(0)
         self.lock = threading.RLock()
-        swmixer2.init(output_device_index=args.snd)
-        swmixer2.start()
-        swmixer2.set_stopHandler(self.sound_stopped)
+        soundmixer.init(output_device_index=args.snd)
+        soundmixer.start()
+        soundmixer.set_stopHandler(self.sound_stopped)
 
     def sound_finished(self,id, chn):
         with self.lock:
@@ -66,7 +66,7 @@ class SoundPlayer:
                 return
 
             filepath =  self.args.waves + '/'  + name
-            snd = swmixer2.StreamingSound(filepath)
+            snd = soundmixer.StreamingSound(filepath)
 
             sndlevel = int(power) / 100.0
             self.levels[id] = power
