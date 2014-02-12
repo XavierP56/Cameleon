@@ -192,7 +192,7 @@
         height: '@',
         loop: '=?',
         defLevel: '=?',
-        position: '=?'
+        position: '@?'
       },
       templateUrl: '/sceniq/templates/soundbutton.html',
       controller: function($scope, $resource) {
@@ -207,7 +207,6 @@
         Query = $resource('/sounds/query/:id');
         $scope.loop = $scope.loop || false;
         $scope.defLevel = $scope.defLevel || 100;
-        $scope.position = $scope.position || 's';
         $scope.started = Query.get({
           id: $scope.id
         }, function(res) {
@@ -231,12 +230,14 @@
           return $scope.power = snd;
         });
         $scope.playSong = function() {
+          var position;
+          position = $scope.position || 's';
           return SoundPlay["do"]({
             id: $scope.id,
             repeat: $scope.loop,
             name: $scope.songFile,
             power: $scope.power,
-            position: $scope.position
+            position: position
           }, function() {});
         };
         $scope.stopSong = function() {
