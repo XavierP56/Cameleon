@@ -191,7 +191,8 @@
         songFile: '@',
         height: '@',
         loop: '=?',
-        defLevel: '=?'
+        defLevel: '=?',
+        position: '=?'
       },
       templateUrl: '/sceniq/templates/soundbutton.html',
       controller: function($scope, $resource) {
@@ -206,6 +207,7 @@
         Query = $resource('/sounds/query/:id');
         $scope.loop = $scope.loop || false;
         $scope.defLevel = $scope.defLevel || 100;
+        $scope.position = $scope.position || 's';
         $scope.started = Query.get({
           id: $scope.id
         }, function(res) {
@@ -233,7 +235,8 @@
             id: $scope.id,
             repeat: $scope.loop,
             name: $scope.songFile,
-            power: $scope.power
+            power: $scope.power,
+            position: $scope.position
           }, function() {});
         };
         $scope.stopSong = function() {

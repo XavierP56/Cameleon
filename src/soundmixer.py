@@ -8,6 +8,7 @@ Modified  by Xavier Pouyollon to
  - provide a callback when song ends.
  - give the ability to put on song on a left, right channel
  - remove unneeded classes for our usage
+ - handle several sound cards
 
 This module implements an advanced realtime sound mixer suitable for
 use in games or other audio applications.  It supports loading sounds

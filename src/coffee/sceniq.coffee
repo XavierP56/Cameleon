@@ -101,7 +101,7 @@ app.directive "dmxValue", ->
 
 app.directive "soundButton", ->
   restrict : 'E'
-  scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '=?', defLevel : '=?'}
+  scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '=?', defLevel : '=?', position:'=?'}
   templateUrl : '/sceniq/templates/soundbutton.html'
 
   controller: ($scope, $resource) ->
@@ -112,6 +112,7 @@ app.directive "soundButton", ->
 
     $scope.loop = $scope.loop || false
     $scope.defLevel = $scope.defLevel || 100
+    $scope.position = $scope.position || 's'
 
     $scope.started = Query.get {id: $scope.id}, (res) ->
       $scope.playing = res.playing
@@ -124,7 +125,8 @@ app.directive "soundButton", ->
       $scope.power = snd
 
     $scope.playSong = () ->
-       SoundPlay.do {id: $scope.id, repeat: $scope.loop, name:$scope.songFile, power:$scope.power}, ->
+       SoundPlay.do {id: $scope.id, repeat: $scope.loop, name:$scope.songFile, power:$scope.power,
+       position:$scope.position}, ->
          return
 
     $scope.stopSong = () ->
