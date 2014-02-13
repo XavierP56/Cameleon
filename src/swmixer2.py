@@ -35,7 +35,7 @@ gsamplerate = 44100
 gchannels = 1
 gsamplewidth = 2
 gpyaudio = None
-gstream = None
+gstreams = None
 gmicstream = None
 gmic = False
 gmicdata = None
@@ -43,7 +43,7 @@ gmixer_srcs = []
 gid = 1
 glock = thread.allocate_lock()
 ginput_device_index = None
-goutput_device_index = None
+goutput_device_indexes = None
 stopHandler = None
 
 class _SoundSourceData:
@@ -523,7 +523,7 @@ def microphone_on():
     Schedule audio input during main mixer tick.
 
     """
-    global gstream, gmicstream, gmic
+    global gstreams, gmicstream, gmic
     glock.acquire()
     if gmicstream is not None:
         gmicstream.close()
@@ -539,14 +539,14 @@ def microphone_on():
         format = pyaudio.paInt16,
         channels = gchannels,
         rate = gsamplerate,
-        output_device_index = goutput_device_index,
+        output_device_index = goutput_device_indexes,
         output = True)
     gmic = True
     glock.release()
 
 def microphone_off():
     """Turn off microphone"""
-    global gstream, gmicstream, gmic
+    global gstreams, gmicstream, gmic
     glock.acquire()
     if gmicstream is not None:
         gmicstream.close()
@@ -556,7 +556,7 @@ def microphone_off():
         format = pyaudio.paInt16,
         channels = gchannels,
         rate = gsamplerate,
-        output_device_index = goutput_device_index,
+        output_device_index = goutput_device_indexes,
         output = True)
     gmic = False
     glock.release()
@@ -610,8 +610,8 @@ def tick(extra=None):
     glock.release()
     odata = (b.astype(numpy.int16)).tostring()
     # yield rather than block, pyaudio doesn't release GIL
-    while gstream.get_write_available() < gchunksize: time.sleep(0.001)
-    gstream.write(odata, gchunksize)
+    while gstreams.get_write_available() < gchunksize: time.sleep(0.001)
+    gstreams.write(odata, gchunksize)
 
 def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_device_index=None, output_device_index=None):
     """Initialize mixer
@@ -640,11 +640,11 @@ def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_
     else:
         gchannels = 1
     gsamplewidth = 2
-    global gpyaudio, gstream
+    global gpyaudio, gstreams
     gpyaudio = pyaudio.PyAudio()
     # It's important to open Input, then Output (not sure why)
     # Other direction gives very annoying sound errors (1/2 rate?)
-    global ginput_device_index, goutput_device_index
+    global ginput_device_index, goutput_device_indexes
     ginput_device_index = input_device_index
     goutput_device_index = output_device_index
     if microphone:
@@ -678,8 +678,8 @@ def quit():
     global ginit
     glock.acquire()
     ginit = False
-    if gstream is not None:
-        gstream.close()
+    if gstreams is not None:
+        gstreams.close()
     if gmicstream is not None:
         gmicstream.close()
     gpyaudio.terminate()

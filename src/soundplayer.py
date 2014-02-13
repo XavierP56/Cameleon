@@ -16,7 +16,7 @@ class SoundPlayer:
         self.args = args
         self.eventq = Queue.Queue(0)
         self.lock = threading.RLock()
-        soundmixer.init(output_device_index=args.snd)
+        soundmixer.init(output_device_indexes=args.snd)
         soundmixer.start()
         soundmixer.set_stopHandler(self.sound_stopped)
 

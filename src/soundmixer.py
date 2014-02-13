@@ -45,7 +45,7 @@ gsamplerate = 44100
 gchannels = 1
 gsamplewidth = 2
 gpyaudio = None
-gstream = None
+gstreams = []
 gmicstream = None
 gmic = False
 gmicdata = None
@@ -53,7 +53,7 @@ gmixer_srcs = []
 gid = 1
 glock = thread.allocate_lock()
 ginput_device_index = None
-goutput_device_index = None
+goutput_device_indexes = None
 stopHandler = None
 
 class _SoundSourceData:
@@ -409,62 +409,62 @@ def calc_vol(t, env):
     # volume is linear interpolation between points
     return env[n - 1][1] * (1.0 - f) + env[n][1] * f
 
-def microphone_on():
-    """Turn on microphone
-
-    Schedule audio input during main mixer tick.
-
-    """
-    global gstream, gmicstream, gmic
-    glock.acquire()
-    if gmicstream is not None:
-        gmicstream.close()
-    if gstream is not None:
-        gstream.close()
-    gmicstream = gpyaudio.open(
-        format = pyaudio.paInt16,
-        channels = gchannels,
-        rate = gsamplerate,
-        input_device_index = ginput_device_index,
-        input = True)
-    gstream = gpyaudio.open(
-        format = pyaudio.paInt16,
-        channels = gchannels,
-        rate = gsamplerate,
-        output_device_index = goutput_device_index,
-        output = True)
-    gmic = True
-    glock.release()
-
-def microphone_off():
-    """Turn off microphone"""
-    global gstream, gmicstream, gmic
-    glock.acquire()
-    if gmicstream is not None:
-        gmicstream.close()
-    if gstream is not None:
-        gstream.close()
-    gstream = gpyaudio.open(
-        format = pyaudio.paInt16,
-        channels = gchannels,
-        rate = gsamplerate,
-        output_device_index = goutput_device_index,
-        output = True)
-    gmic = False
-    glock.release()
-
-def get_microphone():
-    """Return raw data from microphone as Numpy array
-
-    Default format will be 16-bit signed mono.  Format will match
-    audio playback.  You must call tick() every frame to update the
-    results from this function.
-
-    """
-    glock.acquire()
-    d = gmicdata
-    glock.release()
-    return numpy.fromstring(gmicdata, dtype=numpy.int16)
+# def microphone_on():
+#     """Turn on microphone
+#
+#     Schedule audio input during main mixer tick.
+#
+#     """
+#     global gstreams, gmicstream, gmic
+#     glock.acquire()
+#     if gmicstream is not None:
+#         gmicstream.close()
+#     if gstreams is not None:
+#         gstreams.close()
+#     gmicstream = gpyaudio.open(
+#         format = pyaudio.paInt16,
+#         channels = gchannels,
+#         rate = gsamplerate,
+#         input_device_index = ginput_device_index,
+#         input = True)
+#     gstreams = gpyaudio.open(
+#         format = pyaudio.paInt16,
+#         channels = gchannels,
+#         rate = gsamplerate,
+#         output_device_index = goutput_device_indexes,
+#         output = True)
+#     gmic = True
+#     glock.release()
+#
+# def microphone_off():
+#     """Turn off microphone"""
+#     global gstreams, gmicstream, gmic
+#     glock.acquire()
+#     if gmicstream is not None:
+#         gmicstream.close()
+#     if gstreams is not None:
+#         gstreams.close()
+#     gstreams = gpyaudio.open(
+#         format = pyaudio.paInt16,
+#         channels = gchannels,
+#         rate = gsamplerate,
+#         output_device_index = goutput_device_indexes,
+#         output = True)
+#     gmic = False
+#     glock.release()
+#
+# def get_microphone():
+#     """Return raw data from microphone as Numpy array
+#
+#     Default format will be 16-bit signed mono.  Format will match
+#     audio playback.  You must call tick() every frame to update the
+#     results from this function.
+#
+#     """
+#     glock.acquire()
+#     d = gmicdata
+#     glock.release()
+#     return numpy.fromstring(gmicdata, dtype=numpy.int16)
 
 def tick(extra=None):
     """Main loop of mixer, mix and do audio IO
@@ -502,10 +502,11 @@ def tick(extra=None):
     glock.release()
     odata = (b.astype(numpy.int16)).tostring()
     # yield rather than block, pyaudio doesn't release GIL
-    while gstream.get_write_available() < gchunksize: time.sleep(0.001)
-    gstream.write(odata, gchunksize)
+    for gstream in gstreams:
+        while gstream.get_write_available() < gchunksize: time.sleep(0.001)
+        gstream.write(odata, gchunksize)
 
-def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_device_index=None, output_device_index=None):
+def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_device_index=None, output_device_indexes=None):
     """Initialize mixer
 
     Must be called before any sounds can be played or loaded.
@@ -532,13 +533,13 @@ def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_
     else:
         gchannels = 1
     gsamplewidth = 2
-    global gpyaudio, gstream
+    global gpyaudio, gstreams
     gpyaudio = pyaudio.PyAudio()
     # It's important to open Input, then Output (not sure why)
     # Other direction gives very annoying sound errors (1/2 rate?)
-    global ginput_device_index, goutput_device_index
+    global ginput_device_index, goutput_device_indexes
     ginput_device_index = input_device_index
-    goutput_device_index = output_device_index
+    goutput_device_indexes = output_device_indexes
     if microphone:
         global gmicstream, gmic
         gmicstream = gpyaudio.open(
@@ -548,12 +549,14 @@ def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_
             input_device_index = input_device_index,
             input = True)
         gmic = True
-    gstream = gpyaudio.open(
-        format = pyaudio.paInt16,
-        channels = gchannels,
-        rate = gsamplerate,
-        output_device_index = output_device_index,
-        output = True)
+
+    for output_device_index in output_device_indexes:
+        gstreams.append (gpyaudio.open(
+            format = pyaudio.paInt16,
+            channels = gchannels,
+            rate = gsamplerate,
+            output_device_index = output_device_index,
+            output = True))
     ginit = True
 
 def start():
@@ -570,7 +573,7 @@ def quit():
     global ginit
     glock.acquire()
     ginit = False
-    if gstream is not None:
+    for gstream in gstreams:
         gstream.close()
     if gmicstream is not None:
         gmicstream.close()
