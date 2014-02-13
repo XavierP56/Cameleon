@@ -60,6 +60,7 @@ class SoundPlayer:
             name = request.json['name']
             power = request.json['power']
             position = request.json['position']
+            card = request.json['card']
 
             # if already playing, don't start again !
             if id in self.sounds:
@@ -67,7 +68,7 @@ class SoundPlayer:
                 return
 
             filepath =  self.args.waves + '/'  + name
-            snd = soundmixer.StreamingSound(filepath,position=position)
+            snd = soundmixer.StreamingSound(filepath,position=position,card=card)
 
             sndlevel = int(power) / 100.0
             self.levels[id] = power
