@@ -311,7 +311,7 @@ def _create_stream(streamingsound):
 class StreamingSound:
     """Represents a playable sound stream"""
 
-    def __init__(self, filename, checks=True, position='s'):
+    def __init__(self, filename, checks=True, position='s', card=0):
         """Create new streaming sound from a WAV file or an MP3 file
 
         The new streaming sound must match the output samplerate
@@ -330,6 +330,7 @@ class StreamingSound:
         self.filename = filename
         self.checks = checks
         self.position = position
+        self.card = card
 
     def get_length(self):
         """Return the length of the sound stream in samples
@@ -485,7 +486,10 @@ def tick(extra=None):
     b = numpy.zeros(sz, numpy.float)
     if glock is None: return # this can happen if main thread quit first
     glock.acquire()
+    gstream = None
     for sndevt in gmixer_srcs:
+        card = sndevt.src.streamingsound.card
+        gstream = gstreams[card]
         s = sndevt._get_samples(sz)
         if s is not None:
             b += s
@@ -502,7 +506,7 @@ def tick(extra=None):
     glock.release()
     odata = (b.astype(numpy.int16)).tostring()
     # yield rather than block, pyaudio doesn't release GIL
-    for gstream in gstreams:
+    if (gstream != None):
         while gstream.get_write_available() < gchunksize: time.sleep(0.001)
         gstream.write(odata, gchunksize)
 
