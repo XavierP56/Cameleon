@@ -111,7 +111,7 @@ class _SoundSourceStream:
         if ((self.fileobj.nchannels ==2) and (self.streamingsound.position != 's')):
             left, right = uninterleave(zo)
             mix = stereo_to_mono(left, right)
-            zero = numpy.array([0]*left.size, dtype=numpy.int16)
+            zero = numpy.zeros(mix.size, dtype=numpy.int16)
             if (self.streamingsound.position == 'l'):
                 z = interleave(mix,zero)
             else:
@@ -323,6 +323,7 @@ class StreamingSound:
         if position is r it means right
 
         """
+        global gstreams
         assert(ginit == True)
         if filename is None:
             assert False
@@ -330,7 +331,10 @@ class StreamingSound:
         self.filename = filename
         self.checks = checks
         self.position = position
-        self.card = card
+        if (card < len(gstreams)):
+            self.card = card
+        else:
+            self.card = 0
 
     def get_length(self):
         """Return the length of the sound stream in samples
@@ -482,33 +486,39 @@ def tick(extra=None):
     rmlist = []
     if not ginit:
         return
-    sz = gchunksize * gchannels
-    b = numpy.zeros(sz, numpy.float)
-    if glock is None: return # this can happen if main thread quit first
-    glock.acquire()
-    gstream = None
-    for sndevt in gmixer_srcs:
-        card = sndevt.src.streamingsound.card
-        gstream = gstreams[card]
-        s = sndevt._get_samples(sz)
-        if s is not None:
-            b += s
-        if sndevt.done:
-            rmlist.append(sndevt)
-    if extra is not None:
-        b += extra
-    b = b.clip(-32767.0, 32767.0)
-    for e in rmlist:
-        gmixer_srcs.remove(e)
-    global gmicdata
-    if gmic:
-        gmicdata = gmicstream.read(sz)
-    glock.release()
-    odata = (b.astype(numpy.int16)).tostring()
-    # yield rather than block, pyaudio doesn't release GIL
-    if (gstream != None):
-        while gstream.get_write_available() < gchunksize: time.sleep(0.001)
-        gstream.write(odata, gchunksize)
+    for ix in range(len(gstreams)):
+        gstream = gstreams[ix]
+
+        sz = gchunksize * gchannels
+        b = numpy.zeros(sz, numpy.float)
+        if glock is None: return # this can happen if main thread quit first
+        glock.acquire()
+        for sndevt in gmixer_srcs:
+            card = sndevt.src.streamingsound.card
+            if (card != ix):
+                continue
+            s = sndevt._get_samples(sz)
+            if s is not None:
+                b += s
+            if sndevt.done:
+                rmlist.append(sndevt)
+        if extra is not None:
+            b += extra
+        b = b.clip(-32767.0, 32767.0)
+        for e in rmlist:
+            card = e.src.streamingsound.card
+            if (card != ix):
+                continue
+            gmixer_srcs.remove(e)
+        global gmicdata
+        if gmic:
+            gmicdata = gmicstream.read(sz)
+        glock.release()
+        odata = (b.astype(numpy.int16)).tostring()
+        # yield rather than block, pyaudio doesn't release GIL
+        if (gstream != None):
+            while gstream.get_write_available() < gchunksize: time.sleep(0.001)
+            gstream.write(odata, gchunksize)
 
 def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_device_index=None, output_device_indexes=None):
     """Initialize mixer
