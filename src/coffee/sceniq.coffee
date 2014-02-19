@@ -6,9 +6,10 @@ app = angular.module 'myApp', ['ngResource','ui.router']
 app.config ($stateProvider) ->
   room1 = {url: "/Room1", templateUrl: "/sceniq/room1.html",  controller: RoomCtrl}
   room2 = {url: "/Room2", templateUrl: "/sceniq/room2.html",  controller: RoomCtrl}
+  config = {url: "/Config", templateUrl: "/sceniq/config.html"}
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
-
+  $stateProvider.state('config', config)
 
 # Directive
 app.directive "fold", ->
