@@ -68,36 +68,20 @@ app.directive "dmxSlider", ->
 app.directive "dmxLight", ->
   restrict : 'E'
   templateUrl : '/sceniq/templates/dmxlight.html'
-  scope : {id:'@', preset:'@', transition:'=?', 'delay':'@'}
+  scope : {id:'@', preset:'@', transition:'=?', 'delay':'@', setting:'@'}
   transclude : true
 
   controller: ($scope, $resource) ->
-    $scope.cmds = {}
     $scope.transition = $scope.transition || false
     $scope.dmxstyle='dmx' if $scope.transition == false
     $scope.dmxstyle='transit' if $scope.transition == true
     $scope.DmxSet =  $resource('/dmx/set',{},{set:{method:'POST'}})
-    $scope.DmxTransition = $resource('/dmx/transition',{},{do:{method:'POST'}})
-    this.provide = (k,v) ->
-      $scope.cmds[k] = v
 
     $scope.light = () ->
-      if $scope.transition == false
-        $scope.DmxSet.set {id:$scope.id, cmds:$scope.cmds}, ->
-          return
-      else
-        $scope.DmxTransition.do {delay:$scope.delay, id:$scope.id, cmds:$scope.cmds},  ->
-          return
+      $scope.DmxSet.set {id:$scope.id, setting:$scope.setting, transition:$scope.transition, delay:$scope.delay}, ->
+        return
 
     return
-
-app.directive "dmxValue", ->
-  restrict : 'E'
-  require: '^dmxLight'
-  scope : { 'key' : '@', 'value' : '@'}
-
-  link: (scope, element, attrs, dmxLightCtrl) ->
-    dmxLightCtrl.provide(attrs.key,attrs.value)
 
 app.directive "soundButton", ->
   restrict : 'E'

@@ -4,25 +4,13 @@ import Queue
 import threading
 import time
 import thread
+import models
+
+dmx_model = models.dmx_model
+dmx_setting = models.dmx_setting
 
 # This is where the DMX lighting setup is defined.
 
-dmx_model = {
-    "1": {"channel": 1,
-          "defs": {
-              "dimmer": 1,
-              "red": 3,
-              "green": 4,
-              "blue": 5
-          },
-          "inits": {
-              "dimmer": 255,
-              "red": 255,
-              "green": 254,
-              "blue": 253
-          }
-    }
-}
 
 PERIOD = 10
 
@@ -140,26 +128,36 @@ class DmxHandler(object):
                 return {key: self.datas[dstchan]}
 
     def dmx_set(self, request):
+        global dmx_setting
         id = request.json['id']
-        cmds = request.json['cmds']
+        if 'setting' in request.json:
+            setting = request.json['setting']
+            cmds = dmx_setting[setting]
+        if 'cmds' in request.json:
+            cmds = request.json['cmds']
+        if 'transition' in request.json:
+            transition = request.json['transition']
+        else:
+            transition = False
+        if 'delay' in request.json:
+            delay = int(request.json['delay']) * 1000
+        else:
+            delay = 0
+
         if id in self.hardware:
             with self.lock:
-                for key in cmds:
-                    dstchan = self.GetChannel(id, key)
-                    val = int(cmds[key])
-                    self.datas[dstchan] = val
-                    evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
-                    self.eventq.put(evt)
-                self.changed = True
-
-    def dmx_transition(self,request):
-        id = request.json['id']
-        cmds = request.json['cmds']
-        delay = int(request.json['delay']) * 1000
-
-        v= {'cmds':cmds, 'delay':delay, 'vals': {}}
-
-        self.transition[id] = v
+                if (transition == False):
+                    for key in cmds:
+                        dstchan = self.GetChannel(id, key)
+                        val = int(cmds[key])
+                        self.datas[dstchan] = val
+                        evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
+                        self.eventq.put(evt)
+                    self.changed = True
+                else:
+                    cmds=dmx_setting[setting]
+                    v= {'cmds':cmds, 'delay':delay, 'vals': {}}
+                    self.transition[id] = v
 
     # Services routines
     def GetChannel(self, id, key):

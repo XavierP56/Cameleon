@@ -125,11 +125,11 @@
         id: '@',
         preset: '@',
         transition: '=?',
-        'delay': '@'
+        'delay': '@',
+        setting: '@'
       },
       transclude: true,
       controller: function($scope, $resource) {
-        $scope.cmds = {};
         $scope.transition = $scope.transition || false;
         if ($scope.transition === false) {
           $scope.dmxstyle = 'dmx';
@@ -142,42 +142,14 @@
             method: 'POST'
           }
         });
-        $scope.DmxTransition = $resource('/dmx/transition', {}, {
-          "do": {
-            method: 'POST'
-          }
-        });
-        this.provide = function(k, v) {
-          return $scope.cmds[k] = v;
-        };
         $scope.light = function() {
-          if ($scope.transition === false) {
-            return $scope.DmxSet.set({
-              id: $scope.id,
-              cmds: $scope.cmds
-            }, function() {});
-          } else {
-            return $scope.DmxTransition["do"]({
-              delay: $scope.delay,
-              id: $scope.id,
-              cmds: $scope.cmds
-            }, function() {});
-          }
+          return $scope.DmxSet.set({
+            id: $scope.id,
+            setting: $scope.setting,
+            transition: $scope.transition,
+            delay: $scope.delay
+          }, function() {});
         };
-      }
-    };
-  });
-
-  app.directive("dmxValue", function() {
-    return {
-      restrict: 'E',
-      require: '^dmxLight',
-      scope: {
-        'key': '@',
-        'value': '@'
-      },
-      link: function(scope, element, attrs, dmxLightCtrl) {
-        return dmxLightCtrl.provide(attrs.key, attrs.value);
       }
     };
   });
