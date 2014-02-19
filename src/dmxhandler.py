@@ -112,7 +112,7 @@ class DmxHandler(object):
                 self.hardware[id]['defs'][key]=int(val)
             return
 
-    def dmx_getdefs (self,id):
+    def dmx_orig_getdefs (self,id):
         if id in self.hardware:
             with self.lock:
                 datas = []
@@ -120,6 +120,9 @@ class DmxHandler(object):
                     res = {"key":k, "val":self.hardware[id]['defs'][k]}
                     datas.append(res)
                 return {"res":datas}
+
+    def dmx_getdefs (self,id):
+        return {"res":dmx_model}
 
     def dmx_query(self, id, key):
         if id in self.hardware:

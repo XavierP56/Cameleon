@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['ngResource', 'ui.router']);
+  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit']);
 
   app.config(function($stateProvider) {
     var config, room1, room2;
@@ -18,7 +18,8 @@
     };
     config = {
       url: "/Config",
-      templateUrl: "/sceniq/config.html"
+      templateUrl: "/sceniq/config.html",
+      controller: ConfigCtrl
     };
     $stateProvider.state('room1', room1);
     $stateProvider.state('room2', room2);
@@ -283,6 +284,21 @@
     };
     $scope.getSoundEvent();
     return $scope.getDmxEvent();
+  };
+
+  this.ConfigCtrl = function($scope, $http, $q, $resource) {
+    var Query, Update;
+    Query = $resource('/dmx/getdefs/:id');
+    Update = $resource('/dmx/setdefs', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
+    return Query.get({
+      id: 1
+    }, function(res) {
+      $scope.dmxModel = res.res;
+    });
   };
 
 }).call(this);

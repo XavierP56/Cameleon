@@ -1,12 +1,12 @@
 # Copyright Xavier Pouyollon 2014
 # GPL v3 License
 
-app = angular.module 'myApp', ['ngResource','ui.router']
+app = angular.module 'myApp', ['ngResource','ui.router','JSONedit']
 
 app.config ($stateProvider) ->
   room1 = {url: "/Room1", templateUrl: "/sceniq/room1.html",  controller: RoomCtrl}
   room2 = {url: "/Room2", templateUrl: "/sceniq/room2.html",  controller: RoomCtrl}
-  config = {url: "/Config", templateUrl: "/sceniq/config.html"}
+  config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
   $stateProvider.state('config', config)
@@ -164,3 +164,11 @@ app.directive "soundButton", ->
   # Trigger them
   $scope.getSoundEvent()
   $scope.getDmxEvent()
+
+@ConfigCtrl = ($scope, $http, $q, $resource)->
+    Query = $resource('/dmx/getdefs/:id')
+    Update = $resource('/dmx/setdefs', {}, {set:{method:'POST'}})
+
+    Query.get {id: 1}, (res) ->
+      $scope.dmxModel = res.res
+      return
