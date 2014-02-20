@@ -122,7 +122,8 @@ class DmxHandler(object):
                 return {"res":datas}
 
     def dmx_getdefs (self,id):
-        return {"res":dmx_model}
+        str = "dmx_model"
+        return {"res":eval(str)}
 
     def dmx_query(self, id, key):
         if id in self.hardware:
