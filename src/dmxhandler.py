@@ -1,4 +1,7 @@
 __author__ = 'xavierpouyollon'
+# Copyright Xavier Pouyollon 2013-2014
+# GPL v3 License
+
 
 import Queue
 import threading

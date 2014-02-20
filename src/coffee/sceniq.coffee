@@ -69,8 +69,7 @@ app.directive "dmxLight", ->
 
 app.directive "soundButton", ->
   restrict : 'E'
-  scope : { songName : '@', id : '@', songFile : '@', height : '@', loop : '=?', defLevel : '=?', position:'@?',
-  card:'=?'}
+  scope : { id : '@'}
   templateUrl : '/sceniq/templates/soundbutton.html'
 
   controller: ($scope, $resource) ->
@@ -84,6 +83,12 @@ app.directive "soundButton", ->
     $scope.card = $scope.card || 0
 
     $scope.started = Query.get {id: $scope.id}, (res) ->
+      $scope.songName = res.songName
+      $scope.songFile = res.songFile
+      $scope.loop = res.loop
+      $scope.position = res.position
+      $scope.card = res.card
+
       $scope.playing = res.playing
       $scope.classstyle = 'playStyle' if $scope.playing == true
       # When we are here, fold has been constructed and set to 0.
@@ -92,6 +97,7 @@ app.directive "soundButton", ->
       snd = res.level if res.level?
       snd = $scope.defLevel if not res.level?
       $scope.power = snd
+
 
     $scope.playSong = () ->
        position = $scope.position || 's'

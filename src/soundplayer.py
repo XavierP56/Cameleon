@@ -1,8 +1,12 @@
 __author__ = 'xavierpouyollon'
+# Copyright Xavier Pouyollon 2013-2014
+# GPL v3 License
+
 
 import Queue
 import soundmixer
 import threading
+import models
 
 class SoundPlayer:
     sounds = {}
@@ -42,7 +46,14 @@ class SoundPlayer:
             if id in self.levels:
                 sndlevel = self.levels[id]
 
-            return {'playing':playing, 'level':sndlevel}
+            return {'playing':playing,
+                    'level':sndlevel,
+                    'songFile':models.sounds[id]['song-file'],
+                    'songName':models.sounds[id]['song-name'],
+                    'loop' : models.sounds[id]['loop'],
+                    'position' : models.sounds[id]['position'],
+                    'card' : models.sounds[id]['card']
+                    }
 
     def sounds_stop(self,id):
         with self.lock:

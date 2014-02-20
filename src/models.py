@@ -47,3 +47,22 @@ dmx_setting = {
     }
 }
 
+sounds = {
+    "4" : {
+        'song-file' : "08_ Porte se ferme.wav",
+        'song-name' : "La porte !",
+        'position' : 'l',
+        'loop' : False,
+        'card' : 1
+    },
+    "8" : {
+        'song-file' : "Gnomes2 deform.wav",
+        'song-name' : "Fin",
+        'loop' : False,
+        'position' : 'r',
+        'card' : 1
+    }
+}
+
+
+

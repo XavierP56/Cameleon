@@ -131,14 +131,7 @@
     return {
       restrict: 'E',
       scope: {
-        songName: '@',
-        id: '@',
-        songFile: '@',
-        height: '@',
-        loop: '=?',
-        defLevel: '=?',
-        position: '@?',
-        card: '=?'
+        id: '@'
       },
       templateUrl: '/sceniq/templates/soundbutton.html',
       controller: function($scope, $resource) {
@@ -158,6 +151,11 @@
           id: $scope.id
         }, function(res) {
           var snd;
+          $scope.songName = res.songName;
+          $scope.songFile = res.songFile;
+          $scope.loop = res.loop;
+          $scope.position = res.position;
+          $scope.card = res.card;
           $scope.playing = res.playing;
           if ($scope.playing === true) {
             $scope.classstyle = 'playStyle';
