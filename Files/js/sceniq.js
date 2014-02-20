@@ -46,39 +46,6 @@
     };
   });
 
-  app.directive("dmxEntry", function() {
-    return {
-      restrict: 'E',
-      templateUrl: '/sceniq/templates/dmxentry.html',
-      scope: {
-        id: '@',
-        show: '='
-      },
-      controller: function($scope, $resource) {
-        var Query, Update;
-        Query = $resource('/dmx/getdefs/:id');
-        Update = $resource('/dmx/setdefs', {}, {
-          set: {
-            method: 'POST'
-          }
-        });
-        Query.get({
-          id: $scope.id
-        }, function(res) {
-          $scope.entries = res.res;
-        });
-        return $scope.update = function() {
-          Update.set({
-            'id': $scope.id,
-            'entries': $scope.entries
-          }, function() {
-            return alert('Channels updated !');
-          });
-        };
-      }
-    };
-  });
-
   app.directive("dmxSlider", function() {
     return {
       restrict: 'E',
@@ -288,16 +255,22 @@
 
   this.ConfigCtrl = function($scope, $http, $q, $resource) {
     var Query, Update;
-    Query = $resource('/dmx/getdefs/:id');
+    Query = $resource('/dmx/getdefs');
     Update = $resource('/dmx/setdefs', {}, {
       set: {
         method: 'POST'
       }
     });
-    return Query.get({
-      id: 1
-    }, function(res) {
-      $scope.dmxModel = res.res;
+    $scope.update = function() {
+      Update.set({
+        'dmx_model': $scope.dmxModel,
+        'dmx_setting': $scope.dmxSetting
+      }, function() {});
+      return alert('Settings updated !');
+    };
+    return Query.get({}, function(res) {
+      $scope.dmxModel = res.dmx_model;
+      $scope.dmxSetting = res.dmx_setting;
     });
   };
 

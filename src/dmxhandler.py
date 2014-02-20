@@ -100,30 +100,16 @@ class DmxHandler(object):
 
     def dmx_setdefs(self, request):
         with self.lock:
-            id = request.json['id']
-            if id not in self.hardware:
-                return
+            global dmx_model
+            global dmx_setting
 
-            entries = request.json['entries']
-
-            for entry in entries:
-                key = entry['key']
-                val = entry['val']
-                self.hardware[id]['defs'][key]=int(val)
+            dmx_model = request.json['dmx_model']
+            dmx_setting = request.json['dmx_setting']
             return
 
-    def dmx_orig_getdefs (self,id):
-        if id in self.hardware:
-            with self.lock:
-                datas = []
-                for k in sorted(self.hardware[id]['defs']):
-                    res = {"key":k, "val":self.hardware[id]['defs'][k]}
-                    datas.append(res)
-                return {"res":datas}
-
-    def dmx_getdefs (self,id):
-        str = "dmx_model"
-        return {"res":eval(str)}
+    def dmx_getdefs (self):
+        return {"dmx_model":dmx_model,
+                "dmx_setting": dmx_setting}
 
     def dmx_query(self, id, key):
         if id in self.hardware:

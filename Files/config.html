@@ -1,5 +1,7 @@
 <div>
-    Welcome to the configuration page. <br/>
+    Welcome to the configuration page. <br/><br/>
+    <button ng-click="update()">Update</button>
+    <br/>
     <b>Dmx models : Define the projector and default values</b>
         <div class="jsonView" defocus>
             <json collapse=true child="dmxModel" type="'object'"></json>
@@ -7,4 +9,7 @@
 
     <br/>
     <b>Dmx settings : Define the various DMX buttons</b>
+        <div class="jsonView" defocus>
+            <json collapse=true child="dmxSetting" type="'object'"></json>
+        </div>
 </div>
