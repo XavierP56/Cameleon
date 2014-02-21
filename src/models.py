@@ -47,6 +47,31 @@ dmx_setting = {
     }
 }
 
+dmx_light = {
+    'light1' : {
+        'id' : 1,
+        'name' : 'En rouge',
+        'setting' : 'setting_red'
+    },
+    'light2' : {
+        'id' : 1,
+        'name' : 'En vert',
+        'setting' : 'setting_green'
+    },
+    'light3' : {
+        'id' : 1,
+        'name' : 'Vert clair',
+        'setting' : 'setting_green_clair'
+    },
+    'light4' : {
+        'id' : 1,
+        'name' : 'En bleu',
+        'setting' : 'setting_blue',
+        'transition' : True,
+        'delay' : 2
+    }
+}
+
 sounds = {
     "1" : {
         'songFile' : "Gnomes deform.wav",
