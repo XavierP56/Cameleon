@@ -52,13 +52,18 @@ def dmx_query(id,name):
 def dmx_set():
     return dmxhandler.dmx_set(request)
 
-@app.route('/dmx/getdefs')
+@app.route('/models/getdefs')
 def dmx_getdefs():
-    return dmxhandler.dmx_getdefs()
+    dmx = dmxhandler.dmx_getdefs()
+    snd = sndplayer.snd_getdefs()
+    res = dict(dmx.items() + snd.items())
+    return res
 
-@app.route('/dmx/setdefs', method='POST')
+@app.route('/models/setdefs', method='POST')
 def dmx_setdefs():
-    return dmxhandler.dmx_setdefs(request)
+    dmxhandler.dmx_setdefs(request)
+    sndplayer.dmx_setdefs(request)
+    return
 
 @app.route('/dmx/events')
 def dmx_events():

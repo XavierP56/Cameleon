@@ -113,3 +113,11 @@ class SoundPlayer:
     def sound_stopped(self,sndchan):
         id = self.sndchannels[sndchan]
         self.sound_finished(id, sndchan)
+
+    def snd_getdefs(self):
+        return {"snd_setting": models.sounds}
+
+    def dmx_setdefs(self, request):
+        with self.lock:
+            models.sounds = request.json['snd_setting']
+            return

@@ -244,8 +244,8 @@
 
   this.ConfigCtrl = function($scope, $http, $q, $resource) {
     var Query, Update;
-    Query = $resource('/dmx/getdefs');
-    Update = $resource('/dmx/setdefs', {}, {
+    Query = $resource('/models/getdefs');
+    Update = $resource('/models/setdefs', {}, {
       set: {
         method: 'POST'
       }
@@ -253,13 +253,15 @@
     $scope.update = function() {
       Update.set({
         'dmx_model': $scope.dmxModel,
-        'dmx_setting': $scope.dmxSetting
+        'dmx_setting': $scope.dmxSetting,
+        'snd_setting': $scope.sndSetting
       }, function() {});
       return alert('Settings updated !');
     };
     return Query.get({}, function(res) {
       $scope.dmxModel = res.dmx_model;
       $scope.dmxSetting = res.dmx_setting;
+      $scope.sndSetting = res.snd_setting;
     });
   };
 

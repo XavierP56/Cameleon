@@ -147,14 +147,15 @@ app.directive "soundButton", ->
 
 @ConfigCtrl = ($scope, $http, $q, $resource)->
     # DMX Stuff.
-    Query = $resource('/dmx/getdefs')
-    Update = $resource('/dmx/setdefs', {}, {set:{method:'POST'}})
+    Query = $resource('/models/getdefs')
+    Update = $resource('/models/setdefs', {}, {set:{method:'POST'}})
 
     $scope.update = () ->
-      Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting}, ()->
+      Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting, 'snd_setting':$scope.sndSetting}, ()->
       alert('Settings updated !')
 
     Query.get {}, (res) ->
       $scope.dmxModel = res.dmx_model
       $scope.dmxSetting = res.dmx_setting
+      $scope.sndSetting = res.snd_setting
       return
