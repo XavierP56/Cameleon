@@ -91,7 +91,7 @@ app.directive "soundButton", ->
       $scope.playing = res.playing
       $scope.classstyle = 'playStyle' if $scope.playing == true
       # When we are here, fold has been constructed and set to 0.
-      $scope.$parent.$$prevSibling.$emit('foldplay') if $scope.playing == true
+      $scope.$emit('foldplay') if $scope.playing == true
       $scope.classstyle = 'stopStyle' if $scope.playing == false
       snd = res.level if res.level?
       snd = res.defs.defLevel if not res.level?
@@ -123,7 +123,6 @@ app.directive "soundButton", ->
         $scope.playing = true
         $scope.classstyle = 'playStyle'
         $scope.$emit('foldplay')
-        #$scope.$parent.$$prevSibling.$emit('foldplay') if $scope.$parent.$$prevSibling != null
 
       $scope.$on 'stop', (sender, evt) ->
         if evt.id != $scope.id
@@ -131,8 +130,6 @@ app.directive "soundButton", ->
         $scope.playing = false
         $scope.classstyle = 'stopStyle'
         $scope.$emit('foldstop')
-        #$scope.$parent.$$prevSibling.$emit('foldstop') if $scope.$parent.$$prevSibling != null
-
 
 @RoomCtrl = ($scope, $http, $q, $resource)->
   Events = $resource('/sounds/events')

@@ -163,7 +163,7 @@
             $scope.classstyle = 'playStyle';
           }
           if ($scope.playing === true) {
-            $scope.$parent.$$prevSibling.$emit('foldplay');
+            $scope.$emit('foldplay');
           }
           if ($scope.playing === false) {
             $scope.classstyle = 'stopStyle';
