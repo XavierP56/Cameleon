@@ -144,18 +144,11 @@
         SoundStop = $resource('/sounds/stop/:id');
         SoundLevel = $resource('/sounds/level/:id/:power');
         Query = $resource('/sounds/query/:id');
-        $scope.loop = $scope.loop || false;
-        $scope.defLevel = $scope.defLevel || 100;
-        $scope.card = $scope.card || 0;
         $scope.started = Query.get({
           id: $scope.id
         }, function(res) {
           var snd;
-          $scope.songName = res.songName;
-          $scope.songFile = res.songFile;
-          $scope.loop = res.loop;
-          $scope.position = res.position;
-          $scope.card = res.card;
+          $scope.song = res.defs;
           $scope.playing = res.playing;
           if ($scope.playing === true) {
             $scope.classstyle = 'playStyle';
@@ -170,20 +163,18 @@
             snd = res.level;
           }
           if (res.level == null) {
-            snd = $scope.defLevel;
+            snd = res.defs.defLevel;
           }
           return $scope.power = snd;
         });
         $scope.playSong = function() {
-          var position;
-          position = $scope.position || 's';
           return SoundPlay["do"]({
             id: $scope.id,
-            repeat: $scope.loop,
-            name: $scope.songFile,
+            repeat: $scope.song.loop,
+            name: $scope.song.songFile,
             power: $scope.power,
-            position: position,
-            card: $scope.card
+            position: $scope.song.position,
+            card: $scope.song.card
           }, function() {});
         };
         $scope.stopSong = function() {

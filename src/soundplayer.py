@@ -48,11 +48,7 @@ class SoundPlayer:
 
             return {'playing':playing,
                     'level':sndlevel,
-                    'songFile':models.sounds[id]['song-file'],
-                    'songName':models.sounds[id]['song-name'],
-                    'loop' : models.sounds[id]['loop'],
-                    'position' : models.sounds[id]['position'],
-                    'card' : models.sounds[id]['card']
+                    'defs' : models.sounds[id]
                     }
 
     def sounds_stop(self,id):

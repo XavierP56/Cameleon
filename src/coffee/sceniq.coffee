@@ -78,16 +78,8 @@ app.directive "soundButton", ->
     SoundLevel = $resource('/sounds/level/:id/:power')
     Query = $resource('/sounds/query/:id')
 
-    $scope.loop = $scope.loop || false
-    $scope.defLevel = $scope.defLevel || 100
-    $scope.card = $scope.card || 0
-
     $scope.started = Query.get {id: $scope.id}, (res) ->
-      $scope.songName = res.songName
-      $scope.songFile = res.songFile
-      $scope.loop = res.loop
-      $scope.position = res.position
-      $scope.card = res.card
+      $scope.song = res.defs
 
       $scope.playing = res.playing
       $scope.classstyle = 'playStyle' if $scope.playing == true
@@ -95,14 +87,13 @@ app.directive "soundButton", ->
       $scope.$parent.$$prevSibling.$emit('foldplay') if $scope.playing == true
       $scope.classstyle = 'stopStyle' if $scope.playing == false
       snd = res.level if res.level?
-      snd = $scope.defLevel if not res.level?
+      snd = res.defs.defLevel if not res.level?
       $scope.power = snd
 
 
     $scope.playSong = () ->
-       position = $scope.position || 's'
-       SoundPlay.do {id: $scope.id, repeat: $scope.loop, name:$scope.songFile, power:$scope.power,
-       position:position, card:$scope.card}, ->
+       SoundPlay.do {id: $scope.id, repeat: $scope.song.loop, name:$scope.song.songFile, power:$scope.power,
+       position:$scope.song.position, card:$scope.song.card}, ->
          return
 
     $scope.stopSong = () ->

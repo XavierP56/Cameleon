@@ -49,18 +49,20 @@ dmx_setting = {
 
 sounds = {
     "4" : {
-        'song-file' : "08_ Porte se ferme.wav",
-        'song-name' : "La porte !",
+        'songFile' : "08_ Porte se ferme.wav",
+        'songName' : "La porte !",
         'position' : 'l',
         'loop' : False,
-        'card' : 1
+        'card' : 1,
+        'defLevel' : 100
     },
     "8" : {
-        'song-file' : "Gnomes2 deform.wav",
-        'song-name' : "Fin",
+        'songFile' : "Gnomes2 deform.wav",
+        'songName' : "Fin",
         'loop' : False,
         'position' : 'r',
-        'card' : 1
+        'card' : 1,
+        'defLevel' : 100
     }
 }
 
