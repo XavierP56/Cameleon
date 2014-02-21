@@ -17,6 +17,13 @@ app.directive "fold", ->
   templateUrl : '/sceniq/templates/fold.html'
   scope : {foldName : '@'}
   transclude : true
+
+  compile: (element, attr, linker) ->
+    pre: (scope, element, attr) ->
+      linker scope, (clone) -> #bind the scope your self
+        element.children().eq(1).append clone # add to DOM
+        return
+
   controller: ($scope) ->
       $scope.nb = 0
 
@@ -115,14 +122,16 @@ app.directive "soundButton", ->
           return
         $scope.playing = true
         $scope.classstyle = 'playStyle'
-        $scope.$parent.$$prevSibling.$emit('foldplay') if $scope.$parent.$$prevSibling != null
+        $scope.$emit('foldplay')
+        #$scope.$parent.$$prevSibling.$emit('foldplay') if $scope.$parent.$$prevSibling != null
 
       $scope.$on 'stop', (sender, evt) ->
         if evt.id != $scope.id
           return
         $scope.playing = false
         $scope.classstyle = 'stopStyle'
-        $scope.$parent.$$prevSibling.$emit('foldstop') if $scope.$parent.$$prevSibling != null
+        $scope.$emit('foldstop')
+        #$scope.$parent.$$prevSibling.$emit('foldstop') if $scope.$parent.$$prevSibling != null
 
 
 @RoomCtrl = ($scope, $http, $q, $resource)->

@@ -34,6 +34,15 @@
         foldName: '@'
       },
       transclude: true,
+      compile: function(element, attr, linker) {
+        return {
+          pre: function(scope, element, attr) {
+            return linker(scope, function(clone) {
+              element.children().eq(1).append(clone);
+            });
+          }
+        };
+      },
       controller: function($scope) {
         $scope.nb = 0;
         $scope.$on('foldplay', function(sender, evt) {
@@ -203,9 +212,7 @@
             }
             $scope.playing = true;
             $scope.classstyle = 'playStyle';
-            if ($scope.$parent.$$prevSibling !== null) {
-              return $scope.$parent.$$prevSibling.$emit('foldplay');
-            }
+            return $scope.$emit('foldplay');
           });
           return $scope.$on('stop', function(sender, evt) {
             if (evt.id !== $scope.id) {
@@ -213,9 +220,7 @@
             }
             $scope.playing = false;
             $scope.classstyle = 'stopStyle';
-            if ($scope.$parent.$$prevSibling !== null) {
-              return $scope.$parent.$$prevSibling.$emit('foldstop');
-            }
+            return $scope.$emit('foldstop');
           });
         });
       }
