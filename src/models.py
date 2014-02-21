@@ -56,6 +56,30 @@ sounds = {
         'card' : 1,
         'defLevel' : 100
     },
+    "5" : {
+        'songFile' : "10_ Train.wav",
+        'songName' : "Train (boucle)",
+        'position' : 's',
+        'loop' : True,
+        'card' : 0,
+        'defLevel' : 80
+    },
+    "6" : {
+        'songFile' : "09_ Explosion.wav",
+        'songName' : "Explosion",
+        'position' : 's',
+        'loop' : False,
+        'card' : 0,
+        'defLevel' : 100
+    },
+    "7" : {
+        'songFile' : "12_ rire gnome.wav",
+        'songName' : "Rire (boucle)",
+        'position' : 's',
+        'loop' : True,
+        'card' : 0,
+        'defLevel' : 90
+    },
     "8" : {
         'songFile' : "Gnomes2 deform.wav",
         'songName' : "Fin",
