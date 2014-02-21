@@ -48,6 +48,30 @@ dmx_setting = {
 }
 
 sounds = {
+    "1" : {
+        'songFile' : "Gnomes deform.wav",
+        'songName' : "Visteurs...",
+        'position' : 'l',
+        'loop' : False,
+        'card' : 0,
+        'defLevel' : 100
+    },
+    "2" : {
+        'songFile' : "02_ Hall-Master 16bits.wav",
+        'songName' : "Musique principale",
+        'position' : 's',
+        'loop' : True,
+        'card' : 0,
+        'defLevel' : 100
+    },
+    "3" : {
+        'songFile' : "11_ Taupe.wav",
+        'songName' : "Taupe (boucle)",
+        'position' : 'r',
+        'loop' : True,
+        'card' : 0,
+        'defLevel' : 100
+    },
     "4" : {
         'songFile' : "08_ Porte se ferme.wav",
         'songName' : "La porte !",
@@ -89,6 +113,4 @@ sounds = {
         'defLevel' : 100
     }
 }
-
-
 
