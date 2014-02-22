@@ -134,6 +134,8 @@ class DmxHandler(object):
         if 'setting' in request.json:
             setting = request.json['setting']
             cmds = dmx_setting[setting]
+        else:
+            setting = None
         if 'cmds' in request.json:
             cmds = request.json['cmds']
         if 'transition' in request.json:
@@ -161,6 +163,10 @@ class DmxHandler(object):
                         evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
                         self.eventq.put(evt)
                     self.changed = True
+
+            if (setting != None):
+                evt = { "evt": "activeLight", "id": id, "setting": setting }
+                self.eventq.put(evt)
 
     # Services routines
     def GetChannel(self, id, key):

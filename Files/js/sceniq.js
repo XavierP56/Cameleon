@@ -132,8 +132,17 @@
             setting: $scope.light.setting,
             transition: $scope.light.transition,
             delay: $scope.light.delay
-          }, function() {});
+          }, function() {
+            $scope.active = "running";
+          });
         };
+        $scope.$on('activeLight', function(sender, evt) {
+          if (evt.id === $scope.light.id) {
+            if (evt.setting !== $scope.light.setting) {
+              return $scope.active = null;
+            }
+          }
+        });
       }
     };
   });

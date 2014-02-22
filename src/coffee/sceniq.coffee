@@ -74,8 +74,13 @@ app.directive "dmxLight", ->
 
     $scope.do= () ->
       $scope.DmxSet.set {id:$scope.light.id, setting:$scope.light.setting, transition:$scope.light.transition, delay:$scope.light.delay}, ->
+        $scope.active = "running"
         return
 
+    $scope.$on 'activeLight', (sender, evt) ->
+      if (evt.id == $scope.light.id)
+        if (evt.setting != $scope.light.setting)
+          $scope.active = null
     return
 
 app.directive "soundButton", ->

@@ -122,3 +122,8 @@ button.transit
     height : 40px;
     background-color: orange;
 }
+
+button.running
+{
+    background-color: lightgreen;
+}
