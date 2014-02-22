@@ -259,13 +259,15 @@
       Update.set({
         'dmx_model': $scope.dmxModel,
         'dmx_setting': $scope.dmxSetting,
-        'snd_setting': $scope.sndSetting
+        'snd_setting': $scope.sndSetting,
+        "dmx_light": $scope.dmxLight
       }, function() {});
       return alert('Settings updated !');
     };
     return Query.get({}, function(res) {
       $scope.dmxModel = res.dmx_model;
       $scope.dmxSetting = res.dmx_setting;
+      $scope.dmxLight = res.dmx_light;
       $scope.sndSetting = res.snd_setting;
     });
   };

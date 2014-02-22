@@ -11,6 +11,7 @@ import models
 
 dmx_model = models.dmx_model
 dmx_setting = models.dmx_setting
+dmx_light = models.dmx_light
 
 # This is where the DMX lighting setup is defined.
 
@@ -105,14 +106,17 @@ class DmxHandler(object):
         with self.lock:
             global dmx_model
             global dmx_setting
+            global dmx_light
 
             dmx_model = request.json['dmx_model']
             dmx_setting = request.json['dmx_setting']
+            dmx_light = request.json['dmx_light']
             return
 
     def dmx_getdefs (self):
         return {"dmx_model":dmx_model,
-                "dmx_setting": dmx_setting}
+                "dmx_setting": dmx_setting,
+                "dmx_light": dmx_light}
 
     def dmx_query(self, id, key):
         if id in self.hardware:

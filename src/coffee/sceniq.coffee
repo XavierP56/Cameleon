@@ -157,11 +157,12 @@ app.directive "soundButton", ->
     Update = $resource('/models/setdefs', {}, {set:{method:'POST'}})
 
     $scope.update = () ->
-      Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting, 'snd_setting':$scope.sndSetting}, ()->
+      Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight}, ()->
       alert('Settings updated !')
 
     Query.get {}, (res) ->
       $scope.dmxModel = res.dmx_model
       $scope.dmxSetting = res.dmx_setting
+      $scope.dmxLight = res.dmx_light
       $scope.sndSetting = res.snd_setting
       return
