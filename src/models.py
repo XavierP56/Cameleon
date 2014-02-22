@@ -49,22 +49,28 @@ dmx_setting = {
 
 dmx_light = {
     'light1' : {
-        'id' : 1,
+        'id' : "1",
         'name' : 'En rouge',
-        'setting' : 'setting_red'
+        'setting' : 'setting_red',
+        'transition' : False,
+        'delay' : 0
     },
     'light2' : {
-        'id' : 1,
+        'id' : "1",
         'name' : 'En vert',
-        'setting' : 'setting_green'
+        'setting' : 'setting_green',
+        'transition' : False,
+        'delay' : 0
     },
     'light3' : {
-        'id' : 1,
+        'id' : "1",
         'name' : 'Vert clair',
-        'setting' : 'setting_green_clair'
+        'setting' : 'setting_green_clair',
+        'transition' : False,
+        'delay' : 0
     },
     'light4' : {
-        'id' : 1,
+        'id' : "1",
         'name' : 'En bleu',
         'setting' : 'setting_blue',
         'transition' : True,

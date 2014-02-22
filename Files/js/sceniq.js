@@ -104,32 +104,34 @@
       restrict: 'E',
       templateUrl: '/sceniq/templates/dmxlight.html',
       scope: {
-        id: '@',
-        preset: '@',
-        transition: '=?',
-        'delay': '@',
-        setting: '@'
+        id: '@'
       },
       transclude: true,
       controller: function($scope, $resource) {
-        $scope.transition = $scope.transition || false;
-        if ($scope.transition === false) {
-          $scope.dmxstyle = 'dmx';
-        }
-        if ($scope.transition === true) {
-          $scope.dmxstyle = 'transit';
-        }
-        $scope.DmxSet = $resource('/dmx/set', {}, {
-          set: {
-            method: 'POST'
+        var LightQuery;
+        LightQuery = $resource('/dmx/light/:id');
+        LightQuery.get({
+          id: $scope.id
+        }, function(res) {
+          $scope.light = res.light;
+          if ($scope.light.transition === false) {
+            $scope.dmxstyle = 'dmx';
           }
+          if ($scope.light.transition === true) {
+            $scope.dmxstyle = 'transit';
+          }
+          return $scope.DmxSet = $resource('/dmx/set', {}, {
+            set: {
+              method: 'POST'
+            }
+          });
         });
-        $scope.light = function() {
+        $scope["do"] = function() {
           return $scope.DmxSet.set({
-            id: $scope.id,
-            setting: $scope.setting,
-            transition: $scope.transition,
-            delay: $scope.delay
+            id: $scope.light.id,
+            setting: $scope.light.setting,
+            transition: $scope.light.transition,
+            delay: $scope.light.delay
           }, function() {});
         };
       }

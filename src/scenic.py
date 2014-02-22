@@ -40,9 +40,9 @@ def sounds_events():
     return sndplayer.sounds_events()
 
 # DMX handling
-@app.route('/dmx/entry', method='POST')
-def dmx_entry():
-   return dmxhandler.dmx_entry(request)
+@app.route('/dmx/light/:id')
+def dmx_light(id):
+   return dmxhandler.dmx_light(id)
 
 @app.route('/dmx/query/:id/:name', method='GET')
 def dmx_query(id,name):

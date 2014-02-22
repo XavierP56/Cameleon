@@ -124,6 +124,10 @@ class DmxHandler(object):
                 dstchan = self.GetChannel(id, key)
                 return {key: self.datas[dstchan]}
 
+    def dmx_light(self,id):
+        if id in dmx_light:
+            return {'light':dmx_light[id]}
+
     def dmx_set(self, request):
         global dmx_setting
         id = request.json['id']
