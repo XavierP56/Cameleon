@@ -54,40 +54,41 @@ class DmxHandler(object):
                 self.datas[dstchan] = val
 
     def handle_transition(self):
-        for t in self.transition:
-            v=self.transition[t]
-            remain = v['delay']
-            if (remain > 0):
-                remain -= PERIOD
-            v['delay'] = remain
-            cmds = v['cmds']
-            vals = v['vals']
-            id = t
+        with self.lock:
+            for t in self.transition:
+                v=self.transition[t]
+                remain = v['delay']
+                if (remain > 0):
+                    remain -= PERIOD
+                v['delay'] = remain
+                cmds = v['cmds']
+                vals = v['vals']
+                id = t
 
-            for key in cmds:
-                dstchan = self.GetChannel(id, key)
-                curval = self.datas[dstchan]
-                if key not in vals:
-                    vals[key] = curval
+                for key in cmds:
+                    dstchan = self.GetChannel(id, key)
+                    curval = self.datas[dstchan]
+                    if key not in vals:
+                        vals[key] = curval
 
-                divider = remain / PERIOD
-                dstval = int(cmds[key])
-                if divider != 0:
-                    incr = float(dstval - curval) / float(divider)
-                else:
-                    incr = 0
-                vals[key] = curval + incr
-                val = int(vals[key])
-                self.datas[dstchan] = val
-                if (remain % 500) == 0:
-                    evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
-                    self.eventq.put(evt)
-                self.changed = True
+                    divider = remain / PERIOD
+                    dstval = int(cmds[key])
+                    if divider != 0:
+                        incr = float(dstval - curval) / float(divider)
+                    else:
+                        incr = 0
+                    vals[key] = curval + incr
+                    val = int(vals[key])
+                    self.datas[dstchan] = val
+                    if (remain % 500) == 0:
+                        evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
+                        self.eventq.put(evt)
+                    self.changed = True
 
-            if (remain == 0):
-                print "Removing transition !"
-                del self.transition[t]
-                return
+                if (remain == 0):
+                    print "Removing transition !"
+                    del self.transition[t]
+                    return
 
     def tick(self):
         # Handle the DMX transition.
