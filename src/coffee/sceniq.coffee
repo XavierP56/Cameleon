@@ -170,3 +170,6 @@ app.directive "soundButton", ->
       $scope.dmxLight = res.dmx_light
       $scope.sndSetting = res.snd_setting
       return
+
+    $scope.$on '$stateChangeStart', (event) ->
+     #event.preventDefault()

@@ -152,6 +152,8 @@ class DmxHandler(object):
                     v= {'cmds':cmds, 'delay':delay, 'vals': {}}
                     self.transition[id] = v
                 else:
+                    if id in self.transition:
+                        del self.transition[id]
                     for key in cmds:
                         dstchan = self.GetChannel(id, key)
                         val = int(cmds[key])

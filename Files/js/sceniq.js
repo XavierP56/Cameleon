@@ -266,12 +266,13 @@
       }, function() {});
       return alert('Settings updated !');
     };
-    return Query.get({}, function(res) {
+    Query.get({}, function(res) {
       $scope.dmxModel = res.dmx_model;
       $scope.dmxSetting = res.dmx_setting;
       $scope.dmxLight = res.dmx_light;
       $scope.sndSetting = res.snd_setting;
     });
+    return $scope.$on('$stateChangeStart', function(event) {});
   };
 
 }).call(this);
