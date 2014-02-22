@@ -114,10 +114,10 @@
           id: $scope.id
         }, function(res) {
           $scope.light = res.light;
-          if ($scope.light.transition === false) {
+          if ($scope.light.transition === "False") {
             $scope.dmxstyle = 'dmx';
           }
-          if ($scope.light.transition === true) {
+          if ($scope.light.transition === "True") {
             $scope.dmxstyle = 'transit';
           }
           return $scope.DmxSet = $resource('/dmx/set', {}, {

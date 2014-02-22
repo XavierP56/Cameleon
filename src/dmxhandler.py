@@ -139,7 +139,7 @@ class DmxHandler(object):
         if 'transition' in request.json:
             transition = request.json['transition']
         else:
-            transition = False
+            transition = "False"
         if 'delay' in request.json:
             delay = int(request.json['delay']) * 1000
         else:
@@ -147,7 +147,7 @@ class DmxHandler(object):
 
         if id in self.hardware:
             with self.lock:
-                if (transition == False):
+                if (transition == "False"):
                     for key in cmds:
                         dstchan = self.GetChannel(id, key)
                         val = int(cmds[key])
