@@ -57,9 +57,9 @@ class DmxHandler(object):
         for t in self.transition:
             v=self.transition[t]
             remain = v['delay']
-            remain -= PERIOD
+            if (remain > 0):
+                remain -= PERIOD
             v['delay'] = remain
-            newvals = v['vals']
             cmds = v['cmds']
             vals = v['vals']
             id = t
@@ -147,7 +147,11 @@ class DmxHandler(object):
 
         if id in self.hardware:
             with self.lock:
-                if (transition == "False"):
+                if ((transition == "True") and (delay >0)):
+                    cmds=dmx_setting[setting]
+                    v= {'cmds':cmds, 'delay':delay, 'vals': {}}
+                    self.transition[id] = v
+                else:
                     for key in cmds:
                         dstchan = self.GetChannel(id, key)
                         val = int(cmds[key])
@@ -155,10 +159,6 @@ class DmxHandler(object):
                         evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
                         self.eventq.put(evt)
                     self.changed = True
-                else:
-                    cmds=dmx_setting[setting]
-                    v= {'cmds':cmds, 'delay':delay, 'vals': {}}
-                    self.transition[id] = v
 
     # Services routines
     def GetChannel(self, id, key):
