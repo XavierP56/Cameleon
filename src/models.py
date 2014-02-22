@@ -2,6 +2,7 @@
 # GPL v3 License
 
 # This file contains the model. Will get away in a soon future.
+import json
 
 dmx_model = {
     "1": {"channel": 1,
@@ -145,3 +146,37 @@ sounds = {
     }
 }
 
+def saveModel():
+    fpath = "../Files/dmx_model.json"
+    with open(fpath, "w") as outfile:
+        json.dump(dmx_model, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+    fpath = "../Files/dmx_setting.json"
+    with open(fpath, "w") as outfile:
+        json.dump(dmx_setting, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+    fpath = "../Files/dmx_light.json"
+    with open(fpath, "w") as outfile:
+        json.dump(dmx_light, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+    fpath = "../Files/sounds.json"
+    with open(fpath, "w") as outfile:
+        json.dump(sounds, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+    return
+
+def loadModel():
+    global dmx_model
+    global dmx_setting
+    global dmx_light
+    global sounds
+
+    fpath = "../Files/dmx_model.json"
+    with open(fpath) as datafile:
+        dmx_model = json.load(datafile)
+    fpath = "../Files/dmx_setting.json"
+    with open(fpath) as datafile:
+        dmx_setting = json.load(datafile)
+    fpath = "../Files/dmx_light.json"
+    with open(fpath) as datafile:
+        dmx_light = json.load(datafile)
+    fpath = "../Files/sounds.json"
+    with open(fpath) as datafile:
+        sounds = json.load(datafile)
+    return

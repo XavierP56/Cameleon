@@ -6,6 +6,7 @@ import bottle
 import argparse
 import soundplayer
 import dmxhandler
+import models
 
 from bottle import route, run, request, abort, static_file
 
@@ -75,6 +76,8 @@ parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/wa
 parser.add_argument("-s", "--snd", help="Sound card index", default=None, nargs='+',type=int)
 parser.add_argument('-d', '--dmx', help="Output to /dev/dmx0", default=False, type=bool)
 args = parser.parse_args()
+models.saveModel()
+models.loadModel()
 
 sndplayer = soundplayer.SoundPlayer(args)
 dmxhandler = dmxhandler.DmxHandler(args)
