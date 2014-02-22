@@ -250,13 +250,14 @@
   };
 
   this.ConfigCtrl = function($scope, $http, $q, $resource) {
-    var Query, Update;
+    var Query, Save, Update;
     Query = $resource('/models/getdefs');
     Update = $resource('/models/setdefs', {}, {
       set: {
         method: 'POST'
       }
     });
+    Save = $resource('/models/save');
     $scope.update = function() {
       Update.set({
         'dmx_model': $scope.dmxModel,
@@ -265,6 +266,11 @@
         "dmx_light": $scope.dmxLight
       }, function() {});
       return alert('Settings updated !');
+    };
+    $scope.save = function() {
+      return Save.get({}, function() {
+        return alert('Settings saved !');
+      });
     };
     Query.get({}, function(res) {
       $scope.dmxModel = res.dmx_model;

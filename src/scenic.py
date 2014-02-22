@@ -54,17 +54,21 @@ def dmx_set():
     return dmxhandler.dmx_set(request)
 
 @app.route('/models/getdefs')
-def dmx_getdefs():
+def models_getdefs():
     dmx = dmxhandler.dmx_getdefs()
     snd = sndplayer.snd_getdefs()
     res = dict(dmx.items() + snd.items())
     return res
 
 @app.route('/models/setdefs', method='POST')
-def dmx_setdefs():
+def models_setdefs():
     dmxhandler.dmx_setdefs(request)
     sndplayer.dmx_setdefs(request)
     return
+
+@app.route('/models/save')
+def models_save():
+    models.saveModel()
 
 @app.route('/dmx/events')
 def dmx_events():
@@ -76,7 +80,7 @@ parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/wa
 parser.add_argument("-s", "--snd", help="Sound card index", default=None, nargs='+',type=int)
 parser.add_argument('-d', '--dmx', help="Output to /dev/dmx0", default=False, type=bool)
 args = parser.parse_args()
-models.saveModel()
+#models.saveModel()
 models.loadModel()
 
 sndplayer = soundplayer.SoundPlayer(args)
