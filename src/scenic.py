@@ -80,8 +80,11 @@ parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/wa
 parser.add_argument("-s", "--snd", help="Sound card index", default=None, nargs='+',type=int)
 parser.add_argument('-d', '--dmx', help="Output to /dev/dmx0", default=False, type=bool)
 args = parser.parse_args()
-#models.saveModel()
-models.loadModel()
+
+try:
+    models.loadModel()
+except:
+    models.saveModel()
 
 sndplayer = soundplayer.SoundPlayer(args)
 dmxhandler = dmxhandler.DmxHandler(args)
