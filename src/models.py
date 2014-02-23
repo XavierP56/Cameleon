@@ -80,7 +80,7 @@ dmx_light = {
 }
 
 sounds = {
-    "1" : {
+    "Visiteurs" : {
         'songFile' : "Gnomes deform.wav",
         'songName' : "Visteurs...",
         'position' : 'l',
@@ -88,7 +88,7 @@ sounds = {
         'card' : 0,
         'defLevel' : 100
     },
-    "2" : {
+    "Musique" : {
         'songFile' : "02_ Hall-Master 16bits.wav",
         'songName' : "Musique principale",
         'position' : 's',
@@ -96,7 +96,7 @@ sounds = {
         'card' : 0,
         'defLevel' : 100
     },
-    "3" : {
+    "Taupe" : {
         'songFile' : "11_ Taupe.wav",
         'songName' : "Taupe (boucle)",
         'position' : 'r',
