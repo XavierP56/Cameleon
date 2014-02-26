@@ -47,7 +47,7 @@ class DmxHandler(object):
         # Init the model
         global dmx_model
         for id in dmx_model:
-            self.hardware[id] = dmx_model[id]
+            dmx_model[id] = dmx_model[id]
             for key in dmx_model[id]['inits']:
                 dstchan = self.GetChannel(id, key)
                 val = int(dmx_model[id]['inits'][key])
@@ -120,7 +120,7 @@ class DmxHandler(object):
                 "dmx_light": dmx_light}
 
     def dmx_query(self, id, key):
-        if id in self.hardware:
+        if id in dmx_model:
             with self.lock:
                 dstchan = self.GetChannel(id, key)
                 return {key: self.datas[dstchan]}
@@ -148,7 +148,7 @@ class DmxHandler(object):
         else:
             delay = 0
 
-        if id in self.hardware:
+        if id in dmx_model:
             with self.lock:
                 if ((transition == "True") and (delay >0)):
                     cmds=dmx_setting[setting]
@@ -171,7 +171,7 @@ class DmxHandler(object):
 
     # Services routines
     def GetChannel(self, id, key):
-        hw = self.hardware[id]
+        hw = dmx_model[id]
         channel = int(hw['channel']) - 1
         relch = int(hw['defs'][key])
         dstchan = channel + relch
