@@ -5,7 +5,7 @@
   app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit']);
 
   app.config(function($stateProvider) {
-    var config, room1, room2, room3, room4, room5, room6, room7;
+    var config, room1, room2, room3, room4, room5, room6, room7, room8;
     room1 = {
       url: "/Room1",
       templateUrl: "/sceniq/room1.html",
@@ -41,7 +41,7 @@
       templateUrl: "/sceniq/room7.html",
       controller: RoomCtrl
     };
-    room4 = {
+    room8 = {
       url: "/Room8",
       templateUrl: "/sceniq/room8.html",
       controller: RoomCtrl
@@ -53,6 +53,12 @@
     };
     $stateProvider.state('room1', room1);
     $stateProvider.state('room2', room2);
+    $stateProvider.state('room3', room3);
+    $stateProvider.state('room4', room4);
+    $stateProvider.state('room5', room5);
+    $stateProvider.state('room6', room6);
+    $stateProvider.state('room7', room7);
+    $stateProvider.state('room8', room8);
     return $stateProvider.state('config', config);
   });
 

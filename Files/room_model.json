@@ -1,11 +1,11 @@
 [
     {
         "link": "room1", 
-        "name": "Tableau n.1"
+        "name": "Tableau no1"
     }, 
     {
         "link": "room2", 
-        "name": "Tableau n.2"
+        "name": "Tableau no2"
     }, 
     {
         "link": "config", 
