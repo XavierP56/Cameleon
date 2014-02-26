@@ -70,6 +70,11 @@ def models_setdefs():
 def models_save():
     models.saveModel()
 
+@app.route('/models/scenes')
+def models_scenes():
+    models.loadScenes()
+    return {'scenes':models.scenes}
+
 @app.route('/dmx/events')
 def dmx_events():
     return dmxhandler.dmx_events()
@@ -84,7 +89,6 @@ args = parser.parse_args()
 try:
     models.loadModel()
     models.loadScenes()
-    print models.scenes
 except:
     models.saveModel()
     models.saveScenes()

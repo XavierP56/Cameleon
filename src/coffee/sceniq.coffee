@@ -191,4 +191,7 @@ app.directive "soundButton", ->
      #event.preventDefault()
 
 @MainCtrl = ($scope, $http, $q, $resource)->
-  $scope.entries=[{'link':'room1', 'name':'Tableau 1'}, {'link':'room2','name':'Tableau 2'},{'link':'config','name':'Configuration'}]
+  Query = $resource('/models/scenes')
+
+  Query.get {}, (res)->
+    $scope.entries = res.scenes

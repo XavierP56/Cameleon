@@ -321,18 +321,11 @@
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource) {
-    return $scope.entries = [
-      {
-        'link': 'room1',
-        'name': 'Tableau 1'
-      }, {
-        'link': 'room2',
-        'name': 'Tableau 2'
-      }, {
-        'link': 'config',
-        'name': 'Configuration'
-      }
-    ];
+    var Query;
+    Query = $resource('/models/scenes');
+    return Query.get({}, function(res) {
+      return $scope.entries = res.scenes;
+    });
   };
 
 }).call(this);
