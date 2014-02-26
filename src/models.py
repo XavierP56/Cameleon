@@ -146,6 +146,22 @@ sounds = {
     }
 }
 
+scenes = [
+    {
+     'link':'room1',
+     'name':'Tableau 1'
+    },
+    {
+     'link':'room2',
+     'name':'Tableau 2'
+    },
+    {
+     'link':'config',
+     'name':'Config'
+    }
+]
+
+
 def saveModel():
     fpath = "../Files/dmx_model.json"
     with open(fpath, "w") as outfile:
@@ -180,3 +196,17 @@ def loadModel():
     with open(fpath) as datafile:
         sounds = json.load(datafile)
     return
+
+def loadScenes():
+    global scenes
+
+    fpath = "../Files/room_model.json"
+    with open(fpath) as datafile:
+        scenes = json.load(datafile)
+
+def saveScenes():
+    global scenes
+
+    fpath = "../Files/room_model.json"
+    with open(fpath, "w") as outfile:
+        json.dump(scenes, outfile, sort_keys=True, indent=4,ensure_ascii=False)

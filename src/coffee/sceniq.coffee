@@ -6,6 +6,12 @@ app = angular.module 'myApp', ['ngResource','ui.router','JSONedit']
 app.config ($stateProvider) ->
   room1 = {url: "/Room1", templateUrl: "/sceniq/room1.html",  controller: RoomCtrl}
   room2 = {url: "/Room2", templateUrl: "/sceniq/room2.html",  controller: RoomCtrl}
+  room3 = {url: "/Room3", templateUrl: "/sceniq/room3.html",  controller: RoomCtrl}
+  room4 = {url: "/Room4", templateUrl: "/sceniq/room4.html",  controller: RoomCtrl}
+  room5 = {url: "/Room5", templateUrl: "/sceniq/room5.html",  controller: RoomCtrl}
+  room6 = {url: "/Room6", templateUrl: "/sceniq/room6.html",  controller: RoomCtrl}
+  room7 = {url: "/Room7", templateUrl: "/sceniq/room7.html",  controller: RoomCtrl}
+  room4 = {url: "/Room8", templateUrl: "/sceniq/room8.html",  controller: RoomCtrl}
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)

@@ -83,8 +83,11 @@ args = parser.parse_args()
 
 try:
     models.loadModel()
+    models.loadScenes()
+    print models.scenes
 except:
     models.saveModel()
+    models.saveScenes()
 
 sndplayer = soundplayer.SoundPlayer(args)
 dmxhandler = dmxhandler.DmxHandler(args)
