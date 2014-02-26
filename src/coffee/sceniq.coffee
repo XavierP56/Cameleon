@@ -183,3 +183,6 @@ app.directive "soundButton", ->
 
     $scope.$on '$stateChangeStart', (event) ->
      #event.preventDefault()
+
+@MainCtrl = ($scope, $http, $q, $resource)->
+  $scope.entries=[{'link':'room1', 'name':'Tableau 1'}, {'link':'room2','name':'Tableau 2'},{'link':'config','name':'Configuration'}]

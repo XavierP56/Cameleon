@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html ng-app="myApp">
 <body>
-    <div>
+    <div ng-controller="MainCtrl">
         <h1>
             SceniQ : Trigger your sounds and lights !
         </h1>
         <div >
             <ul>
-                <li class="menuli"><a ui-sref="room1">Scene 1</a></li>
-                <li class="menuli"><a ui-sref="room2">Scene 2</a></li>
-                <li class="menuli"><a ui-sref="config">Configuration</a></li>
+                <li ng-repeat="e in entries" class="menuli">
+                    <a ui-sref="{{e.link}}">{{e.name}}</a>
+                </li>
             </ul>
 
         </div>

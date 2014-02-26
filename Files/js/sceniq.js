@@ -290,6 +290,21 @@
     return $scope.$on('$stateChangeStart', function(event) {});
   };
 
+  this.MainCtrl = function($scope, $http, $q, $resource) {
+    return $scope.entries = [
+      {
+        'link': 'room1',
+        'name': 'Tableau 1'
+      }, {
+        'link': 'room2',
+        'name': 'Tableau 2'
+      }, {
+        'link': 'config',
+        'name': 'Configuration'
+      }
+    ];
+  };
+
 }).call(this);
 
 /*
