@@ -14,8 +14,8 @@
     "tests"
   ],
   "dependencies": {
-    "angular-resource": "~1.2.8",
-    "angular-ui-router": "~0.2.7",
+    "angular-resource": "*",
+    "angular-ui-router": "0.2.8-bowratic-tedium",
     "angularjs": "*"
   }
 }
