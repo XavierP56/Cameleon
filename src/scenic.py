@@ -20,6 +20,10 @@ args = {}
 def server_static(filepath):
     return static_file(filepath, root='./../Files/')
 
+@app.route('/profiles/<filepath:path>')
+def server_static(filepath):
+    return static_file(filepath, root='./../Files/Profiles/'+args.profile)
+
 @app.route('/sounds/query/:id', method='GET')
 def sound_query(id):
     return sndplayer.sounds_query(id)
@@ -68,11 +72,11 @@ def models_setdefs():
 
 @app.route('/models/save')
 def models_save():
-    models.saveModel()
+    models.saveModel(args)
 
 @app.route('/models/scenes')
 def models_scenes():
-    models.loadScenes()
+    models.loadScenes(args)
     return {'scenes':models.scenes}
 
 @app.route('/dmx/events')
@@ -84,14 +88,15 @@ parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
 parser.add_argument("-s", "--snd", help="Sound card index", default=None, nargs='+',type=int)
 parser.add_argument('-d', '--dmx', help="Output to /dev/dmx0", default=False, type=bool)
+parser.add_argument('-p', '--profile', help="Profile subdirectory", default="demo")
 args = parser.parse_args()
 
 try:
-    models.loadModel()
-    models.loadScenes()
+    models.loadModel(args)
+    models.loadScenes(args)
 except:
-    models.saveModel()
-    models.saveScenes()
+    models.saveModel(args)
+    models.saveScenes(args)
 
 sndplayer = soundplayer.SoundPlayer(args)
 dmxhandler = dmxhandler.DmxHandler(args)

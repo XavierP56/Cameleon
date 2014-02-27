@@ -8,42 +8,42 @@
     var config, room1, room2, room3, room4, room5, room6, room7, room8;
     room1 = {
       url: "/Room1",
-      templateUrl: "/sceniq/room1.html",
+      templateUrl: "/profiles/room1.html",
       controller: RoomCtrl
     };
     room2 = {
       url: "/Room2",
-      templateUrl: "/sceniq/room2.html",
+      templateUrl: "/profiles/room2.html",
       controller: RoomCtrl
     };
     room3 = {
       url: "/Room3",
-      templateUrl: "/sceniq/room3.html",
+      templateUrl: "/profiles/room3.html",
       controller: RoomCtrl
     };
     room4 = {
       url: "/Room4",
-      templateUrl: "/sceniq/room4.html",
+      templateUrl: "/profiles/room4.html",
       controller: RoomCtrl
     };
     room5 = {
       url: "/Room5",
-      templateUrl: "/sceniq/room5.html",
+      templateUrl: "/profiles/room5.html",
       controller: RoomCtrl
     };
     room6 = {
       url: "/Room6",
-      templateUrl: "/sceniq/room6.html",
+      templateUrl: "/profiles/room6.html",
       controller: RoomCtrl
     };
     room7 = {
       url: "/Room7",
-      templateUrl: "/sceniq/room7.html",
+      templateUrl: "/profiles/room7.html",
       controller: RoomCtrl
     };
     room8 = {
       url: "/Room8",
-      templateUrl: "/sceniq/room8.html",
+      templateUrl: "/profiles/room8.html",
       controller: RoomCtrl
     };
     config = {
