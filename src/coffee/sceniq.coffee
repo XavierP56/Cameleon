@@ -183,8 +183,11 @@ app.directive "soundButton", ->
       alert('Settings updated !')
 
     $scope.save = () ->
-      Save.get {}, ->
-        alert('Settings saved !')
+      $scope.setDone = Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight}, ()->
+        return
+      $scope.setDone.$promise.then () ->
+        Save.get {}, ->
+          alert('Settings saved !')
 
     Query.get {}, (res) ->
       $scope.dmxModel = res.dmx_model

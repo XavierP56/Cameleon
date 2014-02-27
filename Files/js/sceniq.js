@@ -313,8 +313,16 @@
       return alert('Settings updated !');
     };
     $scope.save = function() {
-      return Save.get({}, function() {
-        return alert('Settings saved !');
+      $scope.setDone = Update.set({
+        'dmx_model': $scope.dmxModel,
+        'dmx_setting': $scope.dmxSetting,
+        'snd_setting': $scope.sndSetting,
+        "dmx_light": $scope.dmxLight
+      }, function() {});
+      return $scope.setDone.$promise.then(function() {
+        return Save.get({}, function() {
+          return alert('Settings saved !');
+        });
       });
     };
     Query.get({}, function(res) {
