@@ -1,0 +1,17 @@
+{
+    "1": {
+        "channel": 12, 
+        "defs": {
+            "blue": 5, 
+            "dimmer": 1, 
+            "green": 4, 
+            "red": 3
+        }, 
+        "inits": {
+            "blue": 253, 
+            "dimmer": 255, 
+            "green": 254, 
+            "red": 255
+        }
+    }
+}

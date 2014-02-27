@@ -1,0 +1,26 @@
+{
+    "setting_blue": {
+        "blue": 255, 
+        "dimmer": 255, 
+        "green": 0, 
+        "red": 0
+    }, 
+    "setting_green": {
+        "blue": 0, 
+        "dimmer": 255, 
+        "green": 255, 
+        "red": 0
+    }, 
+    "setting_green_clair": {
+        "blue": 113, 
+        "dimmer": 85, 
+        "green": 174, 
+        "red": 111
+    }, 
+    "setting_red": {
+        "blue": 0, 
+        "dimmer": 255, 
+        "green": 0, 
+        "red": 255
+    }
+}
