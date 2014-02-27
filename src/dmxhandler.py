@@ -9,12 +9,7 @@ import time
 import thread
 import models
 
-dmx_model = models.dmx_model
-dmx_setting = models.dmx_setting
-dmx_light = models.dmx_light
-
 # This is where the DMX lighting setup is defined.
-
 
 PERIOD = 10
 
@@ -45,12 +40,11 @@ class DmxHandler(object):
 
         self.gthread = thread.start_new_thread(f, ())
         # Init the model
-        global dmx_model
-        for id in dmx_model:
-            dmx_model[id] = dmx_model[id]
-            for key in dmx_model[id]['inits']:
+        for id in models.dmx_model:
+            models.dmx_model[id] = models.dmx_model[id]
+            for key in models.dmx_model[id]['inits']:
                 dstchan = self.GetChannel(id, key)
-                val = int(dmx_model[id]['inits'][key])
+                val = int(models.dmx_model[id]['inits'][key])
                 self.datas[dstchan] = val
 
     def handle_transition(self):
@@ -105,36 +99,31 @@ class DmxHandler(object):
 
     def dmx_setdefs(self, request):
         with self.lock:
-            global dmx_model
-            global dmx_setting
-            global dmx_light
-
-            dmx_model = request.json['dmx_model']
-            dmx_setting = request.json['dmx_setting']
-            dmx_light = request.json['dmx_light']
+            models.dmx_model = request.json['dmx_model']
+            models.dmx_setting = request.json['dmx_setting']
+            models.dmx_light = request.json['dmx_light']
             return
 
     def dmx_getdefs (self):
-        return {"dmx_model":dmx_model,
-                "dmx_setting": dmx_setting,
-                "dmx_light": dmx_light}
+        return {"dmx_model":models.dmx_model,
+                "dmx_setting": models.dmx_setting,
+                "dmx_light": models.dmx_light}
 
     def dmx_query(self, id, key):
-        if id in dmx_model:
+        if id in models.dmx_model:
             with self.lock:
                 dstchan = self.GetChannel(id, key)
                 return {key: self.datas[dstchan]}
 
     def dmx_light(self,id):
-        if id in dmx_light:
-            return {'light':dmx_light[id]}
+        if id in models.dmx_light:
+            return {'light':models.dmx_light[id]}
 
     def dmx_set(self, request):
-        global dmx_setting
         id = request.json['id']
         if 'setting' in request.json:
             setting = request.json['setting']
-            cmds = dmx_setting[setting]
+            cmds = models.dmx_setting[setting]
         else:
             setting = None
         if 'cmds' in request.json:
@@ -148,10 +137,10 @@ class DmxHandler(object):
         else:
             delay = 0
 
-        if id in dmx_model:
+        if id in models.dmx_model:
             with self.lock:
                 if ((transition == "True") and (delay >0)):
-                    cmds=dmx_setting[setting]
+                    cmds=models.dmx_setting[setting]
                     v= {'cmds':cmds, 'delay':delay, 'vals': {}}
                     self.transition[id] = v
                 else:
@@ -171,7 +160,7 @@ class DmxHandler(object):
 
     # Services routines
     def GetChannel(self, id, key):
-        hw = dmx_model[id]
+        hw = models.dmx_model[id]
         channel = int(hw['channel']) - 1
         relch = int(hw['defs'][key])
         dstchan = channel + relch
