@@ -57,6 +57,10 @@ def dmx_query(id,name):
 def dmx_set():
     return dmxhandler.dmx_set(request)
 
+@app.route('/dmx/faders/:id')
+def dmx_faders(id):
+    return dmxhandler.dmx_faders(id)
+
 @app.route('/models/getdefs')
 def models_getdefs():
     dmx = dmxhandler.dmx_getdefs()

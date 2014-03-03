@@ -97,6 +97,17 @@ app.directive "dmxLight", ->
           $scope.active = null
     return
 
+app.directive "dmxFader", ->
+  restrict : 'E'
+  scope : { id : '@'}
+  templateUrl : '/sceniq/templates/dmxfader.html'
+
+  controller: ($scope, $resource) ->
+    Sliders = $resource('/dmx/faders/:id')
+
+    Sliders.get {id:$scope.id}, (res)->
+      $scope.sliders = res.res
+
 app.directive "soundButton", ->
   restrict : 'E'
   scope : { id : '@'}

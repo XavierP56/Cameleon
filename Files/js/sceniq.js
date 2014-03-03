@@ -186,6 +186,25 @@
     };
   });
 
+  app.directive("dmxFader", function() {
+    return {
+      restrict: 'E',
+      scope: {
+        id: '@'
+      },
+      templateUrl: '/sceniq/templates/dmxfader.html',
+      controller: function($scope, $resource) {
+        var Sliders;
+        Sliders = $resource('/dmx/faders/:id');
+        return Sliders.get({
+          id: $scope.id
+        }, function(res) {
+          return $scope.sliders = res.res;
+        });
+      }
+    };
+  });
+
   app.directive("soundButton", function() {
     return {
       restrict: 'E',

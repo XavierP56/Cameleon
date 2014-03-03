@@ -124,6 +124,14 @@ class DmxHandler(object):
                 setting = None
             return {'light':models.dmx_light[id], 'setting':setting}
 
+    def dmx_faders(self,id):
+        l = []
+        defs = models.dmx_model[id]["defs"]
+        sort = sorted(defs.items(), key=lambda x: x[1])
+        for e in sort:
+            l.append({"id" : id, "name" : e[0], "key" : e[0]})
+        return  {"res":l}
+
     def dmx_set(self, request):
         id = request.json['id']
         if 'setting' in request.json:
