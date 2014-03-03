@@ -156,11 +156,14 @@
           if ($scope.light.transition === "True") {
             $scope.dmxstyle = 'transit';
           }
-          return $scope.DmxSet = $resource('/dmx/set', {}, {
+          $scope.DmxSet = $resource('/dmx/set', {}, {
             set: {
               method: 'POST'
             }
           });
+          if ($scope.light['setting'] === res.setting) {
+            return $scope.active = "running";
+          }
         });
         $scope["do"] = function() {
           return $scope.DmxSet.set({

@@ -83,6 +83,8 @@ app.directive "dmxLight", ->
       $scope.dmxstyle='dmx' if $scope.light.transition == "False"
       $scope.dmxstyle='transit' if $scope.light.transition == "True"
       $scope.DmxSet =  $resource('/dmx/set',{},{set:{method:'POST'}})
+      if $scope.light['setting'] == res.setting
+        $scope.active = "running"
 
     $scope.do= () ->
       $scope.DmxSet.set {id:$scope.light.id, setting:$scope.light.setting, transition:$scope.light.transition, delay:$scope.light.delay}, ->

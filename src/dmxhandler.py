@@ -23,7 +23,7 @@ class DmxHandler(object):
     gthread = None
     changed = False
     dmxoutput = None
-
+    activeSetting = {}
 
     def __init__(self, args):
         self.args = args
@@ -117,13 +117,19 @@ class DmxHandler(object):
 
     def dmx_light(self,id):
         if id in models.dmx_light:
-            return {'light':models.dmx_light[id]}
+            pid = models.dmx_light[id]['id']
+            if pid in self.activeSetting:
+                setting = self.activeSetting[pid]
+            else:
+                setting = None
+            return {'light':models.dmx_light[id], 'setting':setting}
 
     def dmx_set(self, request):
         id = request.json['id']
         if 'setting' in request.json:
             setting = request.json['setting']
             cmds = models.dmx_setting[setting]
+            self.activeSetting[id] = setting
         else:
             setting = None
         if 'cmds' in request.json:
