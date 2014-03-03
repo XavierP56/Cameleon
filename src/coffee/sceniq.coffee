@@ -108,6 +108,12 @@ app.directive "dmxFader", ->
     Sliders.get {id:$scope.id}, (res)->
       $scope.sliders = res.res
 
+    $scope.computeCssClass = (last) ->
+      if (last == true)
+        return null
+      else
+        return "leftpos"
+
 app.directive "soundButton", ->
   restrict : 'E'
   scope : { id : '@'}

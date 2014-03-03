@@ -127,3 +127,9 @@ button.running
 {
     background-color: lightgreen;
 }
+
+span.clear
+{
+    background-color: lightgreen;
+    clear: both;
+}

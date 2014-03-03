@@ -196,11 +196,18 @@
       controller: function($scope, $resource) {
         var Sliders;
         Sliders = $resource('/dmx/faders/:id');
-        return Sliders.get({
+        Sliders.get({
           id: $scope.id
         }, function(res) {
           return $scope.sliders = res.res;
         });
+        return $scope.computeCssClass = function(last) {
+          if (last === true) {
+            return null;
+          } else {
+            return "leftpos";
+          }
+        };
       }
     };
   });

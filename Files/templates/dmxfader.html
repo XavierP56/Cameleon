@@ -1,4 +1,6 @@
-DMX Fader
+DMX Fader projector {{id}}
+<div>
 <span ng-repeat="s in sliders">
-    <dmx-slider class="leftpos" id="{{s.id}}" name="{{s.name}}" key="{{s.key}}"></dmx-slider>
+    <dmx-slider ng-class="computeCssClass($last)" id="{{s.id}}" name="{{s.name}}" key="{{s.key}}"></dmx-slider>
 </span>
+</div>
