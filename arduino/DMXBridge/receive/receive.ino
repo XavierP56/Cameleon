@@ -71,6 +71,7 @@ boolean isReceiver = true;
 // setup the Board and nRF24L01
 void setup(void)
 {
+  int ix;
   // Print preamble
   // Serial.begin(57600);
   // Serial.println("DMXBRIDGE RF24 DMX Transceiver");
@@ -87,6 +88,11 @@ void setup(void)
 
   // ... and send them as DMX packages.
   DMXSerial.init(DMXController);
+  DMXSerial.write (1,200);
+  DMXSerial.write (4,255);
+  DMXSerial.write(3, 0);
+  DMXSerial.write(5, 0);
+  DMXSerial.write(2,0);
 } // setup()
 
 
