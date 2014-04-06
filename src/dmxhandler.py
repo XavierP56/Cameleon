@@ -8,6 +8,7 @@ import threading
 import time
 import thread
 import models
+import serial
 
 # This is where the DMX lighting setup is defined.
 
@@ -31,7 +32,9 @@ class DmxHandler(object):
         self.lock = threading.RLock()
 
         if self.args.dmx:
-            self.dmxoutput = open('/dev/dmx0', 'wb')
+            # self.dmxoutput = open('/dev/dmx0', 'wb')
+            print 'DMX sur arduino'
+            self.dmxoutput = serial.Serial(port='/dev/tty.usbmodemfa121', baudrate=115200)
 
         def f():
             while True:
@@ -95,6 +98,7 @@ class DmxHandler(object):
 
         self.dmxoutput.write(bytearray(self.datas))
         self.changed = False
+        print 'Ecrit' + str(len(self.datas))
         self.dmxoutput.flush()
 
     def dmx_setdefs(self, request):
