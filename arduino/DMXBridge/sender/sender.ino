@@ -5,6 +5,9 @@
 // Copyright (c) 2013 by Matthias Hertel, http://www.mathertel.de
 // This work is licensed under a BSD style license. See http://www.mathertel.de/License.aspx
 //
+// Slightly modifed by Xavier Pouyollon to adapt to the SceniQ projet to read
+// DMX frames from serial port.
+//
 // Documentation and samples are available at http://www.mathertel.de/Arduino
 // 01.06.2013 creation of the DMXBridge project.
 // 28.06.2013 prototype is running.
