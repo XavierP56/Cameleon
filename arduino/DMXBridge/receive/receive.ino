@@ -28,7 +28,7 @@
 
 
 #include <DMXSerial.h>
-
+//#define DMXSERIAL_MAX 512
 
 #include <SPI.h>
 #include <RF24.h>
@@ -39,7 +39,7 @@
 // Hardware and Topology configuration
 
 // Set up nRF24L01 radio on SPI bus plus pins 7 & 8
-RF24 radio(7,8);
+RF24 radio(8,7);
 
 // Single radio pipe address for the 2 nodes to communicate.
 const uint64_t PIPE = 0xE8E8F0F0E1LL;
@@ -72,11 +72,14 @@ boolean isReceiver = true;
 void setup(void)
 {
   int ix;
+#if 0
   // Print preamble
-  // Serial.begin(57600);
-  // Serial.println("DMXBRIDGE RF24 DMX Transceiver");
+  Serial.begin(115200);
+  Serial.println("DMXBRIDGE RF24 DMX Transceiver");
+#endif
 
   // Setup and configure rf radio
+
   radio.begin();
 
   radio.setChannel(101);   // use channel 101
@@ -86,6 +89,7 @@ void setup(void)
   radio.openReadingPipe(1,PIPE);
   radio.startListening();
 
+#if 1
   // ... and send them as DMX packages.
   DMXSerial.init(DMXController);
   DMXSerial.write (1,200);
@@ -93,6 +97,8 @@ void setup(void)
   DMXSerial.write(3, 0);
   DMXSerial.write(5, 0);
   DMXSerial.write(2,0);
+#endif
+
 } // setup()
 
 
@@ -120,6 +126,7 @@ void loop(void)
   
       for (int n = 0; n < 8; n++, i++)
         DMXSerial.write(i, payload.dmxValues[n]);
+        //Serial.println("Recu");
     } // if
   } // if
 
