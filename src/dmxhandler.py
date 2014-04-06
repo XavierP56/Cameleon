@@ -98,7 +98,7 @@ class DmxHandler(object):
 
         self.dmxoutput.write(bytearray(self.datas))
         self.changed = False
-        print 'Ecrit' + str(len(self.datas))
+        #print 'Ecrit' + str(len(self.datas))
         self.dmxoutput.flush()
 
     def dmx_setdefs(self, request):

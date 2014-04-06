@@ -69,15 +69,6 @@ uint8_t messageNr = 0;
 // The role of the current running sketch
 boolean isReceiver = true;
 
-void setup(void) {
-    pinMode(13,OUTPUT);
-    Serial.begin(115200);
-    fastIdx = 1;
-    slowIdx = 1;
-    serialIdx = 0;
-    nextSlow = millis() + 2000;
-  
-}
 
 // setup the Board and nRF24L01
 void radiosetup(void)
@@ -92,16 +83,18 @@ void radiosetup(void)
   radio.setChannel(101);   // use channel 101
   radio.setDataRate(RF24_2MBPS); // use fastest transfer speed
   radio.setAutoAck(false); // use broadcast mode
-
-  // Open the serial port
-  Serial.begin(115200);
-
   // ... and send them into the air.
   radio.openWritingPipe(PIPE);
-
-
 } // setup()
 
+void setup(void) {
+    Serial.begin(115200);
+    fastIdx = 1;
+    slowIdx = 1;
+    serialIdx = 0;
+    nextSlow = millis() + 2000;
+    radiosetup();
+}
 
 // Send a part of the dmx values into the air.
 // Send the package that includes the DMX channel idx.
@@ -122,7 +115,7 @@ int SendBuffer (int idx)
     payload.dmxValues[n] = dmxSentData[i] = serialDmx[i];
     i++;
   } // for
-  //radio.write(&payload, sizeof(payload), true);
+  radio.write(&payload, sizeof(payload), true);
   return (i);
 } // SendBuffer()
 
@@ -136,12 +129,10 @@ void loop(void)
   payload_t payload;
       
   while (Serial.available()) {
-    digitalWrite(13, LOW);
     serialDmx[serialIdx] = Serial.read();
     serialIdx++;
-    if (serialIdx == DMXSERIAL_MAX) {
+    if (serialIdx == (DMXSERIAL_MAX+1)) {
         serialIdx = 0;
-        digitalWrite(13, HIGH);
       }
   }
   
@@ -164,5 +155,4 @@ void loop(void)
     } // for
   } // if
 } // loop()
-
 // The End.
