@@ -12,7 +12,7 @@ import serial
 
 # This is where the DMX lighting setup is defined.
 
-PERIOD = 10
+PERIOD = 100
 
 class DmxHandler(object):
     args = None
@@ -26,6 +26,17 @@ class DmxHandler(object):
     dmxoutput = None
     activeSetting = {}
 
+    def transition_thread(self):
+        while True:
+            # Handle the DMX transition.
+            self.handle_transition()
+            time.sleep(float(PERIOD) / 1000)
+
+    def dmx_thread(self):
+        while True:
+            self.dmxEvent.wait()
+            self.flushDmx()
+
     def __init__(self, args):
         self.args = args
         self.eventq = Queue.Queue(0)
@@ -36,12 +47,12 @@ class DmxHandler(object):
             print 'DMX sur arduino'
             self.dmxoutput = serial.Serial(port='/dev/tty.usbmodemfa121', baudrate=115200)
 
-        def f():
-            while True:
-                self.tick()
-                time.sleep(float(PERIOD) / 1000)
 
-        self.gthread = thread.start_new_thread(f, ())
+
+
+        self.dmxEvent = threading.Event()
+        self.tr_thread = thread.start_new_thread(self.transition_thread, ())
+        self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
         # Init the model
         for id in models.dmx_model:
             models.dmx_model[id] = models.dmx_model[id]
@@ -87,10 +98,17 @@ class DmxHandler(object):
                     del self.transition[t]
                     return
 
-    def tick(self):
-        # Handle the DMX transition.
-        self.handle_transition()
 
+    @property
+    def changed(self):
+        return self._changed
+
+    @changed.setter
+    def changed(self, v):
+        self._changed = v
+        self.dmxEvent.set()
+
+    def flushDmx(self):
         if (self.args.dmx == False):
             return
         if (self.changed == False):
@@ -100,6 +118,7 @@ class DmxHandler(object):
         self.changed = False
         #print 'Ecrit' + str(len(self.datas))
         self.dmxoutput.flush()
+        self.dmxEvent.clear()
 
     def dmx_setdefs(self, request):
         with self.lock:
