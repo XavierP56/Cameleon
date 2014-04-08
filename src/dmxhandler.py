@@ -35,7 +35,7 @@ class DmxHandler(object):
     def dmx_thread(self):
         while True:
             self.dmxEvent.wait()
-            self.flushDmx()
+            self.flushDmxFull()
 
     def __init__(self, args):
         self.args = args
@@ -108,7 +108,8 @@ class DmxHandler(object):
         self._changed = v
         self.dmxEvent.set()
 
-    def flushDmx(self):
+    # Flush DMX in fullmode.
+    def flushDmxFull(self):
         if (self.args.dmx == False):
             return
         if (self.changed == False):

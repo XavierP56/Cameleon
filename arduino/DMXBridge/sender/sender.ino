@@ -66,7 +66,8 @@ int     serialIdx; // Index of serial datas read
 
 int state;
 
-unsigned long nextSlow = 0; // 
+unsigned long nextSlow = 0; 
+unsigned long nextChar = 0;
 uint8_t messageNr = 0;
 
 
@@ -93,6 +94,7 @@ void setup(void) {
     slowIdx = 1;
     serialIdx = 0;
     nextSlow = millis() + 2000;
+    nextChar = millis() + 1000;
     state = WAIT_FRAME;
     radiosetup();
 }
@@ -132,7 +134,8 @@ void loop(void)
   while (Serial.available()) {
     char c;
     c = Serial.read();
-
+    nextChar = now + 1000;
+    
     switch (state) {
       case WAIT_FRAME:
         if (c == 'F') {
@@ -154,6 +157,11 @@ void loop(void)
             }         
          break;
     } // End switch.
+  }
+  
+  if (now > nextChar) {
+    // No char received since 1 second on serial
+    state = WAIT_FRAME;
   }
   
   // DMX Sender role.  Receive each packet, dump it out, add ack payload for next time
