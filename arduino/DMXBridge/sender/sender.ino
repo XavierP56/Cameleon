@@ -2,11 +2,11 @@
 // DMXBridge.ino:
 // Application for sending DMX over an 2.4 GHz wireless link
 // using Arduinos, DMX shields and nRF24L01+ modules.
-// Copyright (c) 2013 by Matthias Hertel, http://www.mathertel.de
+// Copyrith (c) 2014  Xavier Pouyollon based on work from 
+// Matthias Hertel, http://www.mathertel.de
 // This work is licensed under a BSD style license. See http://www.mathertel.de/License.aspx
 //
-// Slightly modifed by Xavier Pouyollon to adapt to the SceniQ projet to read
-// DMX frames from serial port.
+//
 //
 // Documentation and samples are available at http://www.mathertel.de/Arduino
 // 01.06.2013 creation of the DMXBridge project.
@@ -16,11 +16,6 @@
 // This is sketch is part of the DMXBridge project for sending DMX values
 // over a 2.4 GHz wireless link using Arduinos, DMX shields and nRF24L01+ modules.
 //
-// This is an example sends and receives 3 values (non DMX)
-// over the link for testing sender and receiver implementations
-// and various options.
-// The values can be watched at the PWM outputs of the Arduino Board.
-
 // Prerequisites:
 // * Import the DMXSerial library into the Sketches/libraries folder.
 //   http://www.mathertel.de/Arduino/DMXSerial.aspx
@@ -65,12 +60,14 @@ int     fastIdx; // last checked index position using the fast mode.
 int     slowIdx; // last checked index position using the slow mode.
 int     serialIdx; // Index of serial datas read
 
+#define WAIT_FRAME           0
+#define READ_FULL_FRAME      1
+#define READ_PARTIAL_FRAME   2
+
+int state;
+
 unsigned long nextSlow = 0; // 
 uint8_t messageNr = 0;
-
-
-// The role of the current running sketch
-boolean isReceiver = true;
 
 
 // setup the Board and nRF24L01
@@ -96,6 +93,7 @@ void setup(void) {
     slowIdx = 1;
     serialIdx = 0;
     nextSlow = millis() + 2000;
+    state = WAIT_FRAME;
     radiosetup();
 }
 
@@ -132,11 +130,30 @@ void loop(void)
   payload_t payload;
       
   while (Serial.available()) {
-    serialDmx[serialIdx] = Serial.read();
-    serialIdx++;
-    if (serialIdx == (DMXSERIAL_MAX+1)) {
-        serialIdx = 0;
-      }
+    char c;
+    c = Serial.read();
+
+    switch (state) {
+      case WAIT_FRAME:
+        if (c == 'F') {
+          state == READ_FULL_FRAME;
+          serialIdx = 1;
+        } else if (serialDmx[0] = 'P') {
+          state == READ_PARTIAL_FRAME;
+        } else {
+          // Bogus state. Stay in WAIT_FRAME
+          serialIdx = 0;
+        } 
+        break;
+       case READ_FULL_FRAME:
+         serialDmx[serialIdx] = c;
+         serialIdx++;
+         if (serialIdx == (DMXSERIAL_MAX+1)) {
+              serialIdx = 0;
+              state = WAIT_FRAME;
+            }         
+         break;
+    } // End switch.
   }
   
   // DMX Sender role.  Receive each packet, dump it out, add ack payload for next time

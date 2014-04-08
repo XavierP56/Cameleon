@@ -114,7 +114,8 @@ class DmxHandler(object):
         if (self.changed == False):
             return
 
-        self.dmxoutput.write(bytearray(self.datas))
+        self.dmxoutput.write(bytearray(['F']))
+        self.dmxoutput.write(bytearray(self.datas[1:]))
         self.changed = False
         #print 'Ecrit' + str(len(self.datas))
         self.dmxoutput.flush()
