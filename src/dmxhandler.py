@@ -19,6 +19,7 @@ class DmxHandler(object):
     eventq = None
     lock = None
     datas = [0] * 513
+    sent = [0] * 513
     hardware = {}
     transition = {}
     gthread = None
@@ -121,6 +122,27 @@ class DmxHandler(object):
         #print 'Ecrit' + str(len(self.datas))
         self.dmxoutput.flush()
         self.dmxEvent.clear()
+
+
+    # Flush DMX in small trunck
+    def flushDmxPartial(self):
+        if (self.args.dmx == False):
+            return
+        if (self.changed == False):
+            return
+
+        loopagain = True
+        different = False
+        while (loopagain):
+            for v in range(1,513):
+                if (datas[v] != sent[v]):
+                    # Flush a trunck from v.
+                    self.flushDmxTrunk (v)
+                    different = True
+                    break
+            # if different, loop again
+            loopagain = different
+
 
     def dmx_setdefs(self, request):
         with self.lock:
