@@ -92,11 +92,12 @@ void setup(void)
 #if 1
   // ... and send them as DMX packages.
   DMXSerial.init(DMXController);
-  DMXSerial.write (1,200);
-  DMXSerial.write (4,255);
-  DMXSerial.write(3, 0);
-  DMXSerial.write(5, 0);
+  DMXSerial.write (1,255);
   DMXSerial.write(2,0);
+  DMXSerial.write(3, 255);
+  DMXSerial.write (4,255);
+  DMXSerial.write(5, 0);
+
 #endif
 
 } // setup()

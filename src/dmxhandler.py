@@ -36,7 +36,7 @@ class DmxHandler(object):
     def dmx_thread(self):
         while True:
             self.dmxEvent.wait()
-            # self.flushDmxFull()
+            #self.flushDmxFull()
             self.flushDmxPartial()
 
     def __init__(self, args):
@@ -130,13 +130,14 @@ class DmxHandler(object):
 
     # Flush DMX in small trunck
     def flushDmxTrunk(self, start):
-        base = (start - 1) / 8
+        base = int(start / 8)
+        index = base * 8
         print 'Flush trunk at ' + str(base)
         self.dmxoutput.write(bytearray(['P']))
         self.dmxoutput.write(bytearray([int(base)]))
         print self.datas[base:base+8]
-        self.dmxoutput.write(bytearray(self.datas[base:base+8]))
-        self.sent[base:base+8] = self.datas[base:base+8]
+        self.dmxoutput.write(bytearray(self.datas[index:index+8]))
+        self.sent[index:index+8] = self.datas[index:index+8]
         self.changed = False
         self.dmxoutput.flush()
         # self.dmxEvent.clear()
