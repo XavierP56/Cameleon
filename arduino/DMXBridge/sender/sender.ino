@@ -144,7 +144,7 @@ void loop(void)
         if (c == 'F') {
           state = READ_FULL_FRAME;
           serialIdx = 1;
-        } else if (serialDmx[0] = 'P') {
+        } else if (c == 'P') {
           state = READ_PARTIAL_FRAME;
         } else {
           // Bogus state. Stay in WAIT_FRAME
@@ -169,11 +169,6 @@ void loop(void)
           partial_cnt++;
           if (partial_cnt == 8) {
             state = WAIT_FRAME;
-            serialDmx[1] = 255;
-            serialDmx[2] = 0;
-            serialDmx[3] = 255;
-            serialDmx[4] = 0;
-            serialDmx[5] = 0;
           }
     } // End switch.
   }
