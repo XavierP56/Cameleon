@@ -36,7 +36,8 @@ class DmxHandler(object):
     def dmx_thread(self):
         while True:
             self.dmxEvent.wait()
-            self.flushDmxFull()
+            # self.flushDmxFull()
+            self.flushDmxPartial()
 
     def __init__(self, args):
         self.args = args
@@ -107,7 +108,10 @@ class DmxHandler(object):
     @changed.setter
     def changed(self, v):
         self._changed = v
-        self.dmxEvent.set()
+        if (v is True):
+            self.dmxEvent.set()
+        else:
+            self.dmxEvent.clear()
 
     # Flush DMX in fullmode.
     def flushDmxFull(self):
@@ -121,10 +125,22 @@ class DmxHandler(object):
         self.changed = False
         #print 'Ecrit' + str(len(self.datas))
         self.dmxoutput.flush()
-        self.dmxEvent.clear()
+        # self.dmxEvent.clear()
 
 
     # Flush DMX in small trunck
+    def flushDmxTrunk(self, start):
+        base = (start - 1) / 8
+        print 'Flush trunk at ' + str(base)
+        self.dmxoutput.write(bytearray(['P']))
+        self.dmxoutput.write(bytearray([int(base)]))
+        print self.datas[base:base+8]
+        self.dmxoutput.write(bytearray(self.datas[base:base+8]))
+        self.sent[base:base+8] = self.datas[base:base+8]
+        self.changed = False
+        self.dmxoutput.flush()
+        # self.dmxEvent.clear()
+
     def flushDmxPartial(self):
         if (self.args.dmx == False):
             return
@@ -135,7 +151,7 @@ class DmxHandler(object):
         different = False
         while (loopagain):
             for v in range(1,513):
-                if (datas[v] != sent[v]):
+                if (self.datas[v] != self.sent[v]):
                     # Flush a trunck from v.
                     self.flushDmxTrunk (v)
                     different = True

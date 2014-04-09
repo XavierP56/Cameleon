@@ -63,8 +63,11 @@ int     serialIdx; // Index of serial datas read
 #define WAIT_FRAME           0
 #define READ_FULL_FRAME      1
 #define READ_PARTIAL_FRAME   2
+#define READ_PARTIAL_BASE    3
 
 int state;
+int partial_cnt;
+int partial_base;
 
 unsigned long nextSlow = 0; 
 unsigned long nextChar = 0;
@@ -139,10 +142,10 @@ void loop(void)
     switch (state) {
       case WAIT_FRAME:
         if (c == 'F') {
-          state == READ_FULL_FRAME;
+          state = READ_FULL_FRAME;
           serialIdx = 1;
         } else if (serialDmx[0] = 'P') {
-          state == READ_PARTIAL_FRAME;
+          state = READ_PARTIAL_FRAME;
         } else {
           // Bogus state. Stay in WAIT_FRAME
           serialIdx = 0;
@@ -152,15 +155,31 @@ void loop(void)
          serialDmx[serialIdx] = c;
          serialIdx++;
          if (serialIdx == (DMXSERIAL_MAX+1)) {
-              serialIdx = 0;
-              state = WAIT_FRAME;
-            }         
+            serialIdx = 0;
+            state = WAIT_FRAME;
+         }         
          break;
+        case READ_PARTIAL_FRAME:
+          partial_cnt = 0;
+          partial_base = c * 8;
+          state = READ_PARTIAL_BASE;
+          break;
+        case READ_PARTIAL_BASE:
+          serialDmx[partial_base+partial_cnt] = c;
+          partial_cnt++;
+          if (partial_cnt == 8) {
+            state = WAIT_FRAME;
+            serialDmx[1] = 255;
+            serialDmx[2] = 0;
+            serialDmx[3] = 255;
+            serialDmx[4] = 0;
+            serialDmx[5] = 0;
+          }
     } // End switch.
   }
   
   if (now > nextChar) {
-    // No char received since 1 second on serial
+    // No char received since 1 second on serial. Reset frame state.
     state = WAIT_FRAME;
   }
   

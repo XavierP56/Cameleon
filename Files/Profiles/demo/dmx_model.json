@@ -1,6 +1,6 @@
 {
     "1": {
-        "channel": 1,
+        "channel": 1, 
         "defs": {
             "blue": 5, 
             "dimmer": 1, 
@@ -10,7 +10,7 @@
         "inits": {
             "blue": 253, 
             "dimmer": 255, 
-            "green": 254, 
+            "green": 130, 
             "red": 255
         }
     }
