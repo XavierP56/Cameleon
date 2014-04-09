@@ -49,9 +49,6 @@ class DmxHandler(object):
             print 'DMX sur arduino'
             self.dmxoutput = serial.Serial(port='/dev/tty.usbmodemfa121', baudrate=115200)
 
-
-
-
         self.dmxEvent = threading.Event()
         self.tr_thread = thread.start_new_thread(self.transition_thread, ())
         self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
@@ -122,25 +119,18 @@ class DmxHandler(object):
 
         self.dmxoutput.write(bytearray(['F']))
         self.dmxoutput.write(bytearray(self.datas[1:]))
-        self.changed = False
-        #print 'Ecrit' + str(len(self.datas))
         self.dmxoutput.flush()
-        # self.dmxEvent.clear()
-
+        self.changed = False
 
     # Flush DMX in small trunck
     def flushDmxTrunk(self, start):
         base = int(start / 8)
         index = base * 8
-        print 'Flush trunk at ' + str(base)
-        self.dmxoutput.write(bytearray(['P']))
-        self.dmxoutput.write(bytearray([int(base)]))
-        print self.datas[base:base+8]
+        self.dmxoutput.write(bytearray(['P',base]))
         self.dmxoutput.write(bytearray(self.datas[index:index+8]))
+        self.dmxoutput.flush()
         self.sent[index:index+8] = self.datas[index:index+8]
         self.changed = False
-        self.dmxoutput.flush()
-        # self.dmxEvent.clear()
 
     def flushDmxPartial(self):
         if (self.args.dmx == False):
