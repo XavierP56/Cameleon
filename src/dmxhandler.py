@@ -36,22 +36,34 @@ class DmxHandler(object):
     def dmx_thread(self):
         while True:
             self.dmxEvent.wait()
-            #self.flushDmxFull()
-            self.flushDmxPartial()
+            if (self.dmxFull is True):
+                self.flushDmxFull()
+            else:
+                self.flushDmxPartial()
 
     def __init__(self, args):
         self.args = args
         self.eventq = Queue.Queue(0)
         self.lock = threading.RLock()
 
-        if self.args.dmx:
-            # self.dmxoutput = open('/dev/dmx0', 'wb')
-            print 'DMX sur arduino'
-            self.dmxoutput = serial.Serial(port='/dev/tty.usbmodemfa121', baudrate=115200)
+        self.dmxoutput = None
+        self.dmxFull = None
+
+        if self.args.dmx and self.args.wireless is None:
+            print "DMX on wire"
+            self.dmxoutput = open('/dev/dmx0', 'wb')
+            self.dmxFull = True
+
+        if self.args.wireless is not None:
+            print 'DMX on arduino'
+            self.dmxoutput = serial.Serial(port=self.args.wireless, baudrate=115200)
+            self.dmxFull = False
 
         self.dmxEvent = threading.Event()
-        self.tr_thread = thread.start_new_thread(self.transition_thread, ())
-        self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
+        if (self.dmxoutput is not None):
+            self.tr_thread = thread.start_new_thread(self.transition_thread, ())
+            self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
+
         # Init the model
         for id in models.dmx_model:
             models.dmx_model[id] = models.dmx_model[id]

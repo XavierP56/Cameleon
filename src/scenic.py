@@ -93,6 +93,8 @@ parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/wa
 parser.add_argument("-s", "--snd", help="Sound card index", default=None, nargs='+',type=int)
 parser.add_argument('-d', '--dmx', help="Output to /dev/dmx0", default=False, type=bool)
 parser.add_argument('-p', '--profile', help="Profile subdirectory", default="demo")
+# /dev/tty.usbmodemfa121
+parser.add_argument('-i', '--wireless', help="Wireless", default=None)
 args = parser.parse_args()
 
 try:
