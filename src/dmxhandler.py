@@ -35,7 +35,9 @@ class DmxHandler(object):
 
     def dmx_thread(self):
         while True:
-            self.dmxEvent.wait()
+            print 'Dmx take semaphore'
+            self.dmxSemaphore.acquire()
+            print 'Dmx flush'
             if (self.dmxFull is True):
                 self.flushDmxFull()
             else:
@@ -59,8 +61,9 @@ class DmxHandler(object):
             self.dmxoutput = serial.Serial(port=self.args.wireless, baudrate=115200)
             self.dmxFull = False
 
-        self.dmxEvent = threading.Event()
-        if (self.dmxoutput is not None):
+        self.dmxSemaphore = threading.Semaphore(0)
+
+        if (self.dmxoutput is  not None):
             self.tr_thread = thread.start_new_thread(self.transition_thread, ())
             self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
 
@@ -118,9 +121,7 @@ class DmxHandler(object):
     def changed(self, v):
         self._changed = v
         if (v is True):
-            self.dmxEvent.set()
-        else:
-            self.dmxEvent.clear()
+            self.dmxSemaphore.release()
 
     # Flush DMX in fullmode.
     def flushDmxFull(self):

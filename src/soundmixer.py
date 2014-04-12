@@ -520,7 +520,7 @@ def tick(extra=None):
             while gstream.get_write_available() < gchunksize: time.sleep(0.001)
             gstream.write(odata, gchunksize)
 
-def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_device_index=None, output_device_indexes=None):
+def init(samplerate=44100, chunksize=4096, stereo=True, microphone=False, input_device_index=None, output_device_indexes=None):
     """Initialize mixer
 
     Must be called before any sounds can be played or loaded.
