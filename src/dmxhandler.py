@@ -35,18 +35,24 @@ class DmxHandler(object):
 
     def dmx_thread(self):
         while True:
-            print 'Dmx take semaphore'
-            self.dmxSemaphore.acquire()
-            print 'Dmx flush'
+            print 'Dmx Acquire'
+            self.dmxCond.acquire()
+            if (self.changed == False ):
+                self.dmxCond.wait()
+            print 'DMX Flush'
             if (self.dmxFull is True):
                 self.flushDmxFull()
             else:
+                print 'Partial FLush'
                 self.flushDmxPartial()
+            self.dmxCond.release()
+            print 'Dmx release'
 
     def __init__(self, args):
         self.args = args
         self.eventq = Queue.Queue(0)
         self.lock = threading.RLock()
+        self._changed = False
 
         self.dmxoutput = None
         self.dmxFull = None
@@ -61,7 +67,7 @@ class DmxHandler(object):
             self.dmxoutput = serial.Serial(port=self.args.wireless, baudrate=115200)
             self.dmxFull = False
 
-        self.dmxSemaphore = threading.Semaphore(0)
+        self.dmxCond = threading.Condition()
 
         if (self.dmxoutput is  not None):
             self.tr_thread = thread.start_new_thread(self.transition_thread, ())
@@ -119,9 +125,11 @@ class DmxHandler(object):
 
     @changed.setter
     def changed(self, v):
+        self.dmxCond.acquire()
         self._changed = v
         if (v is True):
-            self.dmxSemaphore.release()
+            self.dmxCond.notify()
+        self.dmxCond.release()
 
     # Flush DMX in fullmode.
     def flushDmxFull(self):
@@ -137,6 +145,7 @@ class DmxHandler(object):
 
     # Flush DMX in small trunck
     def flushDmxTrunk(self, start):
+        print 'Flush trunk'
         base = int(start / 8)
         index = base * 8
         self.dmxoutput.write(bytearray(['P',base]))
@@ -144,6 +153,7 @@ class DmxHandler(object):
         self.dmxoutput.flush()
         self.sent[index:index+8] = self.datas[index:index+8]
         self.changed = False
+        print 'Flush done'
 
     def flushDmxPartial(self):
         if (self.args.dmx == False):
@@ -152,8 +162,8 @@ class DmxHandler(object):
             return
 
         loopagain = True
-        different = False
         while (loopagain):
+            different = False
             for v in range(1,513):
                 if (self.datas[v] != self.sent[v]):
                     # Flush a trunck from v.
