@@ -111,7 +111,7 @@ int SendBuffer (int idx)
   messageNr++;
   payload_t payload;
   
-  int p = ((idx-1) % DMXSERIAL_MAX) / 8; // part to be sent
+  int p = idx / 8;
   int i = p*8 + 1;
   
   // populate payload
@@ -122,6 +122,10 @@ int SendBuffer (int idx)
     i++;
   } // for
   radio.write(&payload, sizeof(payload), true);
+  if (i > DMXSERIAL_MAX) {
+    i = 1;
+    nextSlow = millis() + 2000;
+  }
   return (i);
 } // SendBuffer()
 
@@ -183,13 +187,13 @@ void loop(void)
     // Send a package with the current values
     // even if they have changed or not every 2 seconds.
     slowIdx = SendBuffer(slowIdx);
-    nextSlow = now + 2000;
-    
   } else {      
     // Send the next package with changed values.
     // max. check next 20 values
     for (int n = 0; n <= 20; n++) {
-      fastIdx = (fastIdx % DMXSERIAL_MAX) + 1;
+      fastIdx++;
+      if (fastIdx > DMXSERIAL_MAX)
+        fastIdx = 1;
       if (serialDmx[fastIdx] != dmxSentData[fastIdx]) {
         fastIdx = SendBuffer(fastIdx);
         break; // so good for now.
