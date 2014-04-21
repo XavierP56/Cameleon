@@ -517,10 +517,10 @@ def tick(extra=None):
         odata = (b.astype(numpy.int16)).tostring()
         # yield rather than block, pyaudio doesn't release GIL
         if (gstream != None):
-            while gstream.get_write_available() < gchunksize: time.sleep(0.001)
+            while gstream.get_write_available() < gchunksize: time.sleep(0.01)
             gstream.write(odata, gchunksize)
 
-def init(samplerate=44100, chunksize=4096, stereo=True, microphone=False, input_device_index=None, output_device_indexes=None):
+def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_device_index=None, output_device_indexes=None):
     """Initialize mixer
 
     Must be called before any sounds can be played or loaded.
@@ -579,7 +579,7 @@ def start():
     def f():
         while True:
             tick()
-            time.sleep(0.001)
+            time.sleep(0.01)
     gthread = thread.start_new_thread(f, ())
 
 def quit():
