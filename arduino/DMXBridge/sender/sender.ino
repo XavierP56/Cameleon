@@ -187,18 +187,17 @@ void loop(void)
     // Send a package with the current values
     // even if they have changed or not every 2 seconds.
     slowIdx = SendBuffer(slowIdx);
-  } else {      
-    // Send the next package with changed values.
-    // max. check next 20 values
-    for (int n = 0; n <= 20; n++) {
-      fastIdx++;
-      if (fastIdx > DMXSERIAL_MAX)
-        fastIdx = 1;
-      if (serialDmx[fastIdx] != dmxSentData[fastIdx]) {
-        fastIdx = SendBuffer(fastIdx);
-        break; // so good for now.
-      } // if
-    } // for
-  } // if
+  } 
+  // Send the next package with changed values.
+  // max. check next 20 values
+  for (int n = 0; n <= 20; n++) {
+    fastIdx++;
+    if (fastIdx > DMXSERIAL_MAX)
+      fastIdx = 1;
+    if (serialDmx[fastIdx] != dmxSentData[fastIdx]) {
+      fastIdx = SendBuffer(fastIdx);
+      break; // so good for now.
+    } // if
+  } // for
 } // loop()
 // The End.
