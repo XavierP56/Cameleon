@@ -36,12 +36,15 @@ class DmxHandler(object):
     def dmx_thread(self):
         while True:
             self.dmxCond.acquire()
+            # print 'DMX Acquire'
             if (self.changed == False ):
                 self.dmxCond.wait()
             if (self.dmxFull is True):
                 self.flushDmxFull()
             else:
                 self.flushDmxPartial()
+            # print 'DMX Release'
+            self.changed = False
             self.dmxCond.release()
 
     def __init__(self, args):
