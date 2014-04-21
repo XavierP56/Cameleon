@@ -38,7 +38,7 @@
 // Hardware and Topology configuration
 
 // Set up nRF24L01 radio on SPI bus plus pins 7 & 8
-RF24 radio(8,7);
+RF24 radio(9,10);
 
 // Single radio pipe address for the 2 nodes to communicate.
 const uint64_t PIPE = 0xE8E8F0F0E1LL;
