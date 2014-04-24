@@ -53,10 +53,20 @@ div.lrback
 }
 
 .soundbutton {
-    background-color: darkgray;
-    display:table;
-    color: white;
+    background-color: #1a1a1a;
+	border-radius: 10px 10px 0 0;
+	border-width: 2px;
+	border-style: ridge;
+	border-color: grey;
+    display:inline-table;
+	color: white;
     text-align: center;
+}
+
+#range {
+    -webkit-appearance: slider-vertical;
+    width: 120px;
+    height: 150px;
 }
 
 div.leftpos
