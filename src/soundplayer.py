@@ -46,9 +46,14 @@ class SoundPlayer:
             if id in self.levels:
                 sndlevel = self.levels[id]
 
+            opts = dict(models.knobs_model['snd'])
+            if 'knob' in models.sounds[id]:
+                    for k in models.sounds[id]['knob']:
+                        opts[k] = models.sounds[id]['knob'][k]
             return {'playing':playing,
                     'level':sndlevel,
-                    'defs' : models.sounds[id]
+                    'defs' : models.sounds[id],
+                    'knob' : opts
                     }
 
     def sounds_stop(self,id):
@@ -104,7 +109,7 @@ class SoundPlayer:
     def sounds_events(self):
         #print "En attente !"
         try:
-            evt = self.eventq.get(timeout=1)
+            evt = self.eventq.get()
         except:
             evt = None
         #print evt

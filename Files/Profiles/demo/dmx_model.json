@@ -12,6 +12,21 @@
             "dimmer": 255, 
             "green": 130, 
             "red": 255
+        }, 
+        "knobs": {
+            "blue": {
+                "fgColor": "blue"
+            }, 
+            "dimmer": {
+                "cursor": 40, 
+                "fgColor": "yellow"
+            }, 
+            "green": {
+                "fgColor": "green"
+            }, 
+            "red": {
+                "fgColor": "red"
+            }
         }
     }
 }

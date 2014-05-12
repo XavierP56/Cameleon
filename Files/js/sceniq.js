@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit']);
+  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob']);
 
   app.config(function($stateProvider) {
     var config, room1, room2, room3, room4, room5, room6, room7, room8;
@@ -91,17 +91,12 @@
     };
   });
 
-  app.directive("dmxSlider", function() {
+  app.directive("dmxSlider", function($resource) {
     return {
       restrict: 'E',
       templateUrl: '/sceniq/templates/dmxslider.html',
-      scope: {
-        id: '@',
-        key: '@',
-        def: '@',
-        name: '@'
-      },
-      controller: function($scope, $resource) {
+      scope: true,
+      link: function(scope, elemt, attrs) {
         var DmxSet, Query;
         Query = $resource('/dmx/query/:id/:key');
         DmxSet = $resource('/dmx/set', {}, {
@@ -109,28 +104,36 @@
             method: 'POST'
           }
         });
-        $scope.started = Query.get({
-          id: $scope.id,
-          key: $scope.key
-        }, function(res) {
-          $scope.value = res[$scope.key];
-          return $scope.send();
-        });
-        $scope.send = function() {
+        scope.started = function() {
+          return Query.get({
+            id: scope.id,
+            key: scope.key
+          }, function(res) {
+            scope.value = res[scope.key];
+            scope.send();
+            scope.knobOptions = res['knob'];
+            return scope.$on('update', function(sender, evt) {
+              if ((evt.id !== scope.id) || (evt.key !== scope.key)) {
+                return;
+              }
+              return scope.value = evt.val;
+            });
+          });
+        };
+        scope.send = function() {
           var cmd;
           cmd = {};
-          cmd[$scope.key] = $scope.value;
+          cmd[scope.key] = scope.value;
           return DmxSet.set({
-            id: $scope.id,
+            id: scope.id,
             cmds: cmd
           }, function() {});
         };
-        return $scope.$on('update', function(sender, evt) {
-          if ((evt.id !== $scope.id) || (evt.key !== $scope.key)) {
-            return;
-          }
-          return $scope.value = evt.val;
-        });
+        scope.id = attrs.id;
+        scope.key = attrs.key;
+        scope.def = attrs.def;
+        scope.name = attrs.name;
+        return scope.started();
       }
     };
   });
@@ -212,15 +215,14 @@
     };
   });
 
-  app.directive("soundButton", function() {
+  app.directive("soundButton", function($resource) {
     return {
       restrict: 'E',
-      scope: {
-        id: '@'
-      },
       templateUrl: '/sceniq/templates/soundbutton.html',
-      controller: function($scope, $resource) {
+      scope: true,
+      link: function(scope, elemt, attrs) {
         var Query, SoundLevel, SoundPlay, SoundStop;
+        scope.power = 100;
         SoundPlay = $resource('/sounds/play', {}, {
           "do": {
             method: 'POST'
@@ -229,76 +231,79 @@
         SoundStop = $resource('/sounds/stop/:id');
         SoundLevel = $resource('/sounds/level/:id/:power');
         Query = $resource('/sounds/query/:id');
-        $scope.started = Query.get({
-          id: $scope.id
-        }, function(res) {
-          var snd;
-          $scope.song = res.defs;
-          $scope.playing = res.playing;
-          if ($scope.playing === true) {
-            $scope.classstyle = 'playStyle';
-          }
-          if ($scope.playing === true) {
-            $scope.$emit('foldplay');
-          }
-          if ($scope.playing === false) {
-            $scope.classstyle = 'stopStyle';
-          }
-          if (res.level != null) {
-            snd = res.level;
-          }
-          if (res.level == null) {
-            snd = res.defs.defLevel;
-          }
-          return $scope.power = snd;
-        });
-        $scope.playSong = function() {
+        scope.started = function() {
+          return Query.get({
+            id: scope.id
+          }, function(res) {
+            var snd;
+            scope.song = res.defs;
+            scope.playing = res.playing;
+            if (scope.playing === true) {
+              scope.classstyle = 'playStyle';
+            }
+            if (scope.playing === true) {
+              scope.$emit('foldplay');
+            }
+            if (scope.playing === false) {
+              scope.classstyle = 'stopStyle';
+            }
+            if (res.level != null) {
+              snd = res.level;
+            }
+            if (res.level == null) {
+              snd = res.defs.defLevel;
+            }
+            scope.power = snd;
+            scope.knobOptions = res.knob;
+            scope.$on('play', function(sender, evt) {
+              if (evt.id !== scope.id) {
+                return;
+              }
+              scope.playing = true;
+              scope.classstyle = 'playStyle';
+              return scope.$emit('foldplay');
+            });
+            return scope.$on('stop', function(sender, evt) {
+              if (evt.id !== scope.id) {
+                return;
+              }
+              scope.playing = false;
+              scope.classstyle = 'stopStyle';
+              return scope.$emit('foldstop');
+            });
+          });
+        };
+        scope.playSong = function() {
           return SoundPlay["do"]({
-            id: $scope.id,
-            repeat: $scope.song.loop,
-            name: $scope.song.songFile,
-            power: $scope.power,
-            position: $scope.song.position,
-            card: $scope.song.card
+            id: scope.id,
+            repeat: scope.song.loop,
+            name: scope.song.songFile,
+            power: scope.power,
+            position: scope.song.position,
+            card: scope.song.card
           }, function() {});
         };
-        $scope.stopSong = function() {
+        scope.stopSong = function() {
           return SoundStop.get({
-            id: $scope.id
+            id: scope.id
           }, function() {});
         };
-        $scope.doit = function() {
-          if ($scope.playing === false) {
-            $scope.playSong();
+        scope.doit = function() {
+          if (scope.playing === false) {
+            scope.playSong();
           }
-          if ($scope.playing === true) {
-            return $scope.stopSong();
+          if (scope.playing === true) {
+            return scope.stopSong();
           }
         };
-        $scope.level = function() {
+        scope.level = function() {
           return SoundLevel.get({
-            id: $scope.id,
-            power: $scope.power
+            id: scope.id,
+            power: scope.power
           }, function() {});
         };
-        return $scope.started.$promise.then(function() {
-          $scope.$on('play', function(sender, evt) {
-            if (evt.id !== $scope.id) {
-              return;
-            }
-            $scope.playing = true;
-            $scope.classstyle = 'playStyle';
-            return $scope.$emit('foldplay');
-          });
-          return $scope.$on('stop', function(sender, evt) {
-            if (evt.id !== $scope.id) {
-              return;
-            }
-            $scope.playing = false;
-            $scope.classstyle = 'stopStyle';
-            return $scope.$emit('foldstop');
-          });
-        });
+        scope.id = attrs.id;
+        return scope.started();
       }
     };
   });

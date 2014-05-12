@@ -184,6 +184,7 @@ def loadModel(args):
     global dmx_setting
     global dmx_light
     global sounds
+    global knobs_model
 
     ref = "../Files/Profiles/"+args.profile
 
@@ -199,6 +200,9 @@ def loadModel(args):
     fpath = ref + "/sounds.json"
     with open(fpath) as datafile:
         sounds = json.load(datafile)
+    fpath = ref + "/knobs.json"
+    with open(fpath) as datafile:
+        knobs_model = json.load(datafile)
     return
 
 def loadScenes(args):

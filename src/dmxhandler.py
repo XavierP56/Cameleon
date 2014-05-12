@@ -187,7 +187,12 @@ class DmxHandler(object):
         if id in models.dmx_model:
             with self.lock:
                 dstchan = self.GetChannel(id, key)
-                return {key: self.datas[dstchan]}
+                opts = dict(models.knobs_model['dmx'])
+                if key in models.dmx_model[id]['knobs']:
+                    for k in models.dmx_model[id]['knobs'][key]:
+                        opts[k] = models.dmx_model[id]['knobs'][key][k]
+                return {key: self.datas[dstchan],
+                        'knob' : opts}
 
     def dmx_light(self,id):
         if id in models.dmx_light:
@@ -257,7 +262,7 @@ class DmxHandler(object):
     def dmx_events(self):
         #print "En attente !"
         try:
-            evt = self.eventq.get(timeout=1)
+            evt = self.eventq.get()
         except:
             evt = None
         return evt

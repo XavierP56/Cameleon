@@ -2,8 +2,7 @@
 <img src="images/coin.png">
 <img src="images/vide.png"><img src="images/vide.png"><img src="images/vide.png"><img src="images/vide.png">
 <img src="images/coin.png"><br/>
-{{value}}<br/>
-<input id="range" type="range" ng-change="send()" ng-model="value" min="0" max="255" step="1"></input>
+<knob knob-options="knobOptions" knob-changed="send()" knob-data="value"></knob>
 <br/>
 {{name}}
 <br/>

@@ -1,0 +1,7 @@
+[submodule "Files/local_components/angular-knob"]
+	path = Files/local_components/angular-knob
+	url = https://github.com/XavierP56/angular-knob.git
+
+[submodule "Files/local_components/jQuery-Knob"]
+	path = Files/local_components/jQuery-Knob
+	url = https://github.com/XavierP56/jQuery-Knob.git
