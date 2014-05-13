@@ -193,6 +193,11 @@ app.directive "soundButton", ($resource)  ->
 @RoomCtrl = ($scope, $http, $q, $resource)->
   Events = $resource('/sounds/events')
   DmxEvents = $resource('/dmx/events')
+  SndPanic = $resource('/sounds/panic')
+
+  # Panic button
+  $scope.soundPanic = () ->
+    SndPanic.get {}, () ->
 
   # Wait for sound event, analyze it and broadcast it.
   $scope.getSoundEvent = () ->

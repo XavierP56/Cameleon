@@ -40,6 +40,10 @@ def sounds_play():
 def sounds_level(id, power):
     return sndplayer.sounds_level(id, power)
 
+@app.route('/sounds/panic')
+def sounds_panic():
+    return sndplayer.sounds_panic()
+
 @app.route('/sounds/events')
 def sounds_events():
     return sndplayer.sounds_events()

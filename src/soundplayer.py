@@ -106,6 +106,12 @@ class SoundPlayer:
 
             self.levels[id] = power
 
+    def sounds_panic(self):
+        keys = self.sounds.keys()
+        for id in keys:
+            self.sounds_stop(id)
+        return { 'res' : 'ok'}
+
     def sounds_events(self):
         #print "En attente !"
         try:

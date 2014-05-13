@@ -309,9 +309,13 @@
   });
 
   this.RoomCtrl = function($scope, $http, $q, $resource) {
-    var DmxEvents, Events;
+    var DmxEvents, Events, SndPanic;
     Events = $resource('/sounds/events');
     DmxEvents = $resource('/dmx/events');
+    SndPanic = $resource('/sounds/panic');
+    $scope.soundPanic = function() {
+      return SndPanic.get({}, function() {});
+    };
     $scope.getSoundEvent = function() {
       return Events.get({}, function(evt) {
         $scope.$broadcast(evt.evt, evt);
