@@ -14,6 +14,15 @@ import serial
 
 PERIOD = 100
 
+class FakeRequest(object):
+
+    def __init__(self):
+        self._json = {}
+
+    @property
+    def json(self):
+        return self._json
+
 class DmxHandler(object):
     args = None
     eventq = None
@@ -196,11 +205,12 @@ class DmxHandler(object):
 
     def dmx_light(self,id):
         if id in models.dmx_light:
-            pid = models.dmx_light[id]['id']
-            if pid in self.activeSetting:
-                setting = self.activeSetting[pid]
-            else:
-                setting = None
+            #pid = models.dmx_light[id]['id']
+            #if pid in self.activeSetting:
+            #    setting = self.activeSetting[pid]
+            #else:
+            #    setting = None
+            setting = None
             return {'light':models.dmx_light[id], 'setting':setting}
 
     def dmx_faders(self,id):
@@ -247,9 +257,21 @@ class DmxHandler(object):
                         self.eventq.put(evt)
                     self.changed = True
 
-            if (setting != None):
-                evt = { "evt": "activeLight", "id": id, "setting": setting }
-                self.eventq.put(evt)
+    def dmx_setlight (self, light):
+        if light in models.dmx_light:
+            l = models.dmx_light[light]
+            mdls = l['models']
+            for mdl in mdls:
+                request = FakeRequest()
+                request.json['id'] = mdl
+                request.json['setting'] = l['setting']
+                if 'transition' in l:
+                    request.json['transition'] = l['transition']
+                self.dmx_set(request)
+
+            # And send active light event
+            evt = { "evt": "activeLight", "light": light}
+            self.eventq.put(evt)
 
     # Services routines
     def GetChannel(self, id, key):

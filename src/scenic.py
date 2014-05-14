@@ -61,6 +61,10 @@ def dmx_query(id,name):
 def dmx_set():
     return dmxhandler.dmx_set(request)
 
+@app.route('/dmx/setLight/:light', method='GET')
+def dmx_set(light):
+    return dmxhandler.dmx_setlight(light)
+
 @app.route('/dmx/faders/:id')
 def dmx_faders(id):
     return dmxhandler.dmx_faders(id)

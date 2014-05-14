@@ -86,24 +86,23 @@ app.directive "dmxLight", ->
 
   controller: ($scope, $resource) ->
     LightQuery = $resource('/dmx/light/:id')
+    DmxSetLight =  $resource('/dmx/setLight/:light')
 
     LightQuery.get {id:$scope.id}, (res)->
       $scope.light = res.light
 
       $scope.dmxstyle='dmx' if $scope.light.transition == "False"
       $scope.dmxstyle='transit' if $scope.light.transition == "True"
-      $scope.DmxSet =  $resource('/dmx/set',{},{set:{method:'POST'}})
       if $scope.light['setting'] == res.setting
         $scope.active = "running"
 
     $scope.do= () ->
-      $scope.DmxSet.set {id:$scope.light.id, setting:$scope.light.setting, transition:$scope.light.transition, delay:$scope.light.delay}, ->
+      DmxSetLight.get {light:$scope.id}, (res)->
         $scope.active = "running"
         return
 
     $scope.$on 'activeLight', (sender, evt) ->
-      if (evt.id == $scope.light.id)
-        if (evt.setting != $scope.light.setting)
+      if (evt.light != $scope.id)
           $scope.active = null
     return
 

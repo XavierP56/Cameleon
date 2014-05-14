@@ -147,8 +147,9 @@
       },
       transclude: true,
       controller: function($scope, $resource) {
-        var LightQuery;
+        var DmxSetLight, LightQuery;
         LightQuery = $resource('/dmx/light/:id');
+        DmxSetLight = $resource('/dmx/setLight/:light');
         LightQuery.get({
           id: $scope.id
         }, function(res) {
@@ -159,30 +160,20 @@
           if ($scope.light.transition === "True") {
             $scope.dmxstyle = 'transit';
           }
-          $scope.DmxSet = $resource('/dmx/set', {}, {
-            set: {
-              method: 'POST'
-            }
-          });
           if ($scope.light['setting'] === res.setting) {
             return $scope.active = "running";
           }
         });
         $scope["do"] = function() {
-          return $scope.DmxSet.set({
-            id: $scope.light.id,
-            setting: $scope.light.setting,
-            transition: $scope.light.transition,
-            delay: $scope.light.delay
-          }, function() {
+          return DmxSetLight.get({
+            light: $scope.id
+          }, function(res) {
             $scope.active = "running";
           });
         };
         $scope.$on('activeLight', function(sender, evt) {
-          if (evt.id === $scope.light.id) {
-            if (evt.setting !== $scope.light.setting) {
-              return $scope.active = null;
-            }
+          if (evt.light !== $scope.id) {
+            return $scope.active = null;
           }
         });
       }
