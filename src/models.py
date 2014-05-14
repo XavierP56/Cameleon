@@ -79,6 +79,8 @@ dmx_light = {
     }
 }
 
+dmx_group = {}
+
 sounds = {
     "Visiteurs" : {
         'songFile' : "Gnomes deform.wav",
@@ -168,21 +170,31 @@ def saveModel(args):
     fpath = ref + "/dmx_model.json"
     with open(fpath, "w") as outfile:
         json.dump(dmx_model, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+
     fpath = ref + "/dmx_setting.json"
     with open(fpath, "w") as outfile:
         json.dump(dmx_setting, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+
     fpath = ref + "/dmx_light.json"
     with open(fpath, "w") as outfile:
         json.dump(dmx_light, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+
+    fpath = ref + "/dmx_group.json"
+    with open(fpath, "w") as outfile:
+        json.dump(dmx_group, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+
     fpath = ref + "/sounds.json"
     with open(fpath, "w") as outfile:
         json.dump(sounds, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+
+
     return
 
 def loadModel(args):
     global dmx_model
     global dmx_setting
     global dmx_light
+    global dmx_group
     global sounds
     global knobs_model
 
@@ -191,15 +203,23 @@ def loadModel(args):
     fpath = ref + "/dmx_model.json"
     with open(fpath) as datafile:
         dmx_model = json.load(datafile)
+
     fpath = ref + "/dmx_setting.json"
     with open(fpath) as datafile:
         dmx_setting = json.load(datafile)
+
     fpath = ref + "/dmx_light.json"
     with open(fpath) as datafile:
         dmx_light = json.load(datafile)
+
+    fpath = ref + "/dmx_group.json"
+    with open(fpath) as datafile:
+        dmx_group = json.load(datafile)
+
     fpath = ref + "/sounds.json"
     with open(fpath) as datafile:
         sounds = json.load(datafile)
+
     fpath = ref + "/knobs.json"
     with open(fpath) as datafile:
         knobs_model = json.load(datafile)

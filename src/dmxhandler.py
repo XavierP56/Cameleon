@@ -34,7 +34,7 @@ class DmxHandler(object):
     gthread = None
     changed = False
     dmxoutput = None
-    activeSetting = {}
+    activeGroup = {}
 
     def transition_thread(self):
         while True:
@@ -226,7 +226,6 @@ class DmxHandler(object):
         if 'setting' in request.json:
             setting = request.json['setting']
             cmds = models.dmx_setting[setting]
-            self.activeSetting[id] = setting
         else:
             setting = None
         if 'cmds' in request.json:
@@ -260,7 +259,8 @@ class DmxHandler(object):
     def dmx_setlight (self, light):
         if light in models.dmx_light:
             l = models.dmx_light[light]
-            mdls = l['models']
+            grp = l['group']
+            mdls = models.dmx_group[grp]
             for mdl in mdls:
                 request = FakeRequest()
                 request.json['id'] = mdl
@@ -269,6 +269,7 @@ class DmxHandler(object):
                     request.json['transition'] = l['transition']
                 self.dmx_set(request)
 
+            self.activeGroup[grp] = light
             # And send active light event
             evt = { "evt": "activeLight", "light": light}
             self.eventq.put(evt)
