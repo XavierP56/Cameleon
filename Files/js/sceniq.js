@@ -160,7 +160,7 @@
           if ($scope.light.transition === "True") {
             $scope.dmxstyle = 'transit';
           }
-          if ($scope.light['setting'] === res.setting) {
+          if (res.active === true) {
             return $scope.active = "running";
           }
         });

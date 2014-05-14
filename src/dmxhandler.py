@@ -203,15 +203,20 @@ class DmxHandler(object):
                 return {key: self.datas[dstchan],
                         'knob' : opts}
 
-    def dmx_light(self,id):
-        if id in models.dmx_light:
+    def dmx_light(self,light):
+        if light in models.dmx_light:
             #pid = models.dmx_light[id]['id']
             #if pid in self.activeSetting:
             #    setting = self.activeSetting[pid]
             #else:
             #    setting = None
-            setting = None
-            return {'light':models.dmx_light[id], 'setting':setting}
+            l = models.dmx_light[light]
+            grp = l['group']
+            active = False
+            if grp in self.activeGroup:
+                if self.activeGroup[grp] == light:
+                    active = True
+            return {'light':models.dmx_light[light], 'active':active}
 
     def dmx_faders(self,id):
         l = []
