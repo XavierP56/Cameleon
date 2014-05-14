@@ -15,11 +15,18 @@
     }, 
     "light3": {
         "delay": 0, 
-        "group": "group1",
+        "group": "group2",
         "name": "Vert clair", 
         "setting": "setting_green_clair", 
         "transition": "False"
-    }, 
+    },
+    "light3b": {
+        "delay": 0,
+        "group": "group2",
+        "name": "Blue",
+        "setting": "setting_blue",
+        "transition": "False"
+    },
     "light4": {
         "delay": 2, 
         "group": "group1",

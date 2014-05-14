@@ -102,6 +102,8 @@ app.directive "dmxLight", ->
         return
 
     $scope.$on 'activeLight', (sender, evt) ->
+      if (evt.group != $scope.light.group)
+        return
       if (evt.light != $scope.id)
           $scope.active = null
     return

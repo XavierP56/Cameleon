@@ -271,7 +271,7 @@ class DmxHandler(object):
 
             self.activeGroup[grp] = light
             # And send active light event
-            evt = { "evt": "activeLight", "light": light}
+            evt = { "evt": "activeLight", "light": light, "group":grp}
             self.eventq.put(evt)
 
     # Services routines

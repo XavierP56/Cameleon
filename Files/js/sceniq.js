@@ -172,6 +172,9 @@
           });
         };
         $scope.$on('activeLight', function(sender, evt) {
+          if (evt.group !== $scope.light.group) {
+            return;
+          }
           if (evt.light !== $scope.id) {
             return $scope.active = null;
           }
