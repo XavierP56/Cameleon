@@ -79,7 +79,7 @@ def models_getdefs():
 @app.route('/models/setdefs', method='POST')
 def models_setdefs():
     dmxhandler.dmx_setdefs(request)
-    sndplayer.dmx_setdefs(request)
+    sndplayer.snd_setdefs(request)
     return
 
 @app.route('/models/save')
@@ -113,7 +113,7 @@ except:
     models.saveScenes(args)
 
 sndplayer = soundplayer.SoundPlayer(args)
-dmxhandler = dmxhandler.DmxHandler(args)
+dmxhandler = dmxhandler.DmxHandler(args, sndplayer)
 
 # Start the bottle server.
 bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy')

@@ -56,7 +56,7 @@ class DmxHandler(object):
             self.changed = False
             self.dmxCond.release()
 
-    def __init__(self, args):
+    def __init__(self, args, sndplayer):
         self.args = args
         self.eventq = Queue.Queue(0)
         self.lock = threading.RLock()
@@ -64,6 +64,7 @@ class DmxHandler(object):
 
         self.dmxoutput = None
         self.dmxFull = None
+        self.sndplayer = sndplayer
 
         if self.args.dmx and self.args.wireless is None:
             print "DMX on wire"
@@ -262,6 +263,7 @@ class DmxHandler(object):
                     self.changed = True
 
     def dmx_setlight (self, light):
+
         if light in models.dmx_light:
             l = models.dmx_light[light]
             grp = l['group']
@@ -273,6 +275,11 @@ class DmxHandler(object):
                 if 'transition' in l:
                     request.json['transition'] = l['transition']
                 self.dmx_set(request)
+
+            # Music maestro !
+            if 'sounds' in l:
+                for sound in l['sounds']:
+                    self.sndplayer.snd_playSong(sound)
 
             self.activeGroup[grp] = light
             # And send active light event
