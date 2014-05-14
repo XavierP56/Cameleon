@@ -9,19 +9,13 @@ import time
 import thread
 import models
 import serial
+import requests
 
 # This is where the DMX lighting setup is defined.
 
 PERIOD = 100
 
-class FakeRequest(object):
 
-    def __init__(self):
-        self._json = {}
-
-    @property
-    def json(self):
-        return self._json
 
 class DmxHandler(object):
     args = None
@@ -269,7 +263,7 @@ class DmxHandler(object):
             grp = l['group']
             mdls = models.dmx_group[grp]
             for mdl in mdls:
-                request = FakeRequest()
+                request = requests.FakeRequest()
                 request.json['id'] = mdl
                 request.json['setting'] = l['setting']
                 if 'transition' in l:
