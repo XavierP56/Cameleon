@@ -296,6 +296,16 @@
             power: scope.power
           }, function() {});
         };
+        scope.mute = function() {
+          if (scope.power > 0) {
+            scope.muted = scope.power;
+            scope.power = 0;
+          } else {
+            scope.power = scope.muted;
+            scope.muted = 0;
+          }
+          scope.level();
+        };
         scope.id = attrs.id;
         return scope.started();
       }

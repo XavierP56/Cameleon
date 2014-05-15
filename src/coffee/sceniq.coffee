@@ -187,6 +187,16 @@ app.directive "soundButton", ($resource)  ->
       SoundLevel.get {id: scope.id, power: scope.power}, ->
         return
 
+    scope.mute = () ->
+      if scope.power > 0
+        scope.muted = scope.power
+        scope.power = 0
+      else
+        scope.power = scope.muted
+        scope.muted = 0
+      scope.level()
+      return
+
     scope.id = attrs.id
     scope.started()
 
