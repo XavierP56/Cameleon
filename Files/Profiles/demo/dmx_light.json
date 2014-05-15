@@ -2,23 +2,23 @@
     "light1": {
         "delay": 0, 
         "group": "group1",
-        "name": "En rouge", 
-        "setting": "setting_red", 
+        "name": "En rouge",
+        "setting": "setting_red",
         "transition": "False",
         "sounds" : ["Musique"]
-    }, 
+    },
     "light2": {
-        "delay": 0, 
+        "delay": 0,
         "group": "group1",
-        "name": "En vert", 
-        "setting": "setting_green", 
+        "name": "En vert",
+        "setting": "setting_green",
         "transition": "False"
-    }, 
+    },
     "light3": {
-        "delay": 0, 
+        "delay": 0,
         "group": "group2",
-        "name": "Vert clair", 
-        "setting": "setting_green_clair", 
+        "name": "Vert clair",
+        "setting": "setting_green_clair",
         "transition": "False"
     },
     "light3b": {
@@ -29,10 +29,17 @@
         "transition": "False"
     },
     "light4": {
-        "delay": 2, 
+        "delay": 2,
         "group": "group1",
-        "name": "En bleu", 
-        "setting": "setting_blue", 
+        "name": "En bleu",
+        "setting": "setting_blue",
         "transition": "True"
+    },
+    "light5": {
+        "delay": 0,
+        "group": "group1et2",
+        "name": "Blue",
+        "setting": "setting_blue",
+        "transition": "False"
     }
 }
