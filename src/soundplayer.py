@@ -7,6 +7,7 @@ import Queue
 import soundmixer
 import threading
 import models
+import requests
 
 class SoundPlayer:
     sounds = {}
@@ -133,5 +134,26 @@ class SoundPlayer:
             models.sounds = request.json['snd_setting']
             return
 
-    def snd_playSong (self, name):
-        print "Playing " + name
+    def snd_playSong (self, id):
+        req = requests.FakeRequest()
+
+        if id  not in models.sounds:
+            return
+
+        mdl = models.sounds[id]
+        if id in self.levels:
+            sndlevel = self.levels[id]
+        else:
+            sndlevel = mdl['defLevel']
+        req.json['id'] = id
+        req.json['power'] = sndlevel
+        req.json['name'] = mdl['songFile']
+        if 'position' in mdl:
+            req.json['position'] = mdl['position']
+        if 'repeat' in mdl:
+            req.json['repeat'] = mdl['repeat']
+        else:
+            req.json['repeat'] = False
+        if 'card' in mdl:
+            req.json['card'] = mdl['card']
+        self.sounds_play(req)
