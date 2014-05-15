@@ -202,25 +202,35 @@ app.directive "soundButton", ($resource)  ->
 
 
 @RoomCtrl = ($scope, $http, $q, $resource)->
-  Events = $resource('/sounds/events')
-  DmxEvents = $resource('/dmx/events')
+  SndCancel = $q.defer()
+  DmxCancel = $q.defer()
+  Events = $resource('/sounds/events',{timeout: SndCancel})
+  DmxEvents = $resource('/dmx/events',{timeout: DmxCancel})
   SndPanic = $resource('/sounds/panic')
 
-  # Wait for sound event, analyze it and broadcast it.
   $scope.getSoundEvent = () ->
-    Events.get {}, (evt) ->
-      $scope.$broadcast(evt.evt, evt)
-      $scope.getSoundEvent()
+    $scope.promiseGetSnd = Events.get {}
+    # Wait for sound event, analyze it and broadcast it.
+    $scope.promiseGetSnd.$promise.then (evt)->
+        $scope.$broadcast(evt.evt, evt)
+        $scope.getSoundEvent()
 
   # Wait DMX events,  analyze it and broadcast it.
   $scope.getDmxEvent = () ->
-    DmxEvents.get {}, (evt) ->
-      $scope.$broadcast(evt.evt, evt)
-      $scope.getDmxEvent()
+    $scope.promiseGetDmx = DmxEvents.get {}
+    # Wait DMX events,  analyze it and broadcast it.
+    $scope.promiseGetDmx.$promise.then (evt)->
+        $scope.$broadcast(evt.evt, evt)
+        $scope.getDmxEvent()
 
   # Trigger them
   $scope.getSoundEvent()
   $scope.getDmxEvent()
+
+  $scope.$on '$stateChangeStart', (event) ->
+    SndCancel.resolve()
+    DmxCancel.resolve()
+
 
 @ConfigCtrl = ($scope, $http, $q, $resource)->
     # DMX Stuff.
@@ -259,3 +269,4 @@ app.directive "soundButton", ($resource)  ->
   # Panic button
   $scope.soundPanic = () ->
     SndPanic.get {}, () ->
+

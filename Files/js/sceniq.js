@@ -313,24 +313,36 @@
   });
 
   this.RoomCtrl = function($scope, $http, $q, $resource) {
-    var DmxEvents, Events, SndPanic;
-    Events = $resource('/sounds/events');
-    DmxEvents = $resource('/dmx/events');
+    var DmxCancel, DmxEvents, Events, SndCancel, SndPanic;
+    SndCancel = $q.defer();
+    DmxCancel = $q.defer();
+    Events = $resource('/sounds/events', {
+      timeout: SndCancel
+    });
+    DmxEvents = $resource('/dmx/events', {
+      timeout: DmxCancel
+    });
     SndPanic = $resource('/sounds/panic');
     $scope.getSoundEvent = function() {
-      return Events.get({}, function(evt) {
+      $scope.promiseGetSnd = Events.get({});
+      return $scope.promiseGetSnd.$promise.then(function(evt) {
         $scope.$broadcast(evt.evt, evt);
         return $scope.getSoundEvent();
       });
     };
     $scope.getDmxEvent = function() {
-      return DmxEvents.get({}, function(evt) {
+      $scope.promiseGetDmx = DmxEvents.get({});
+      return $scope.promiseGetDmx.$promise.then(function(evt) {
         $scope.$broadcast(evt.evt, evt);
         return $scope.getDmxEvent();
       });
     };
     $scope.getSoundEvent();
-    return $scope.getDmxEvent();
+    $scope.getDmxEvent();
+    return $scope.$on('$stateChangeStart', function(event) {
+      SndCancel.resolve();
+      return DmxCancel.resolve();
+    });
   };
 
   this.ConfigCtrl = function($scope, $http, $q, $resource) {
