@@ -3,13 +3,14 @@
 <body>
     <div ng-controller="MainCtrl">
         <h1>
-            SceniQ : Trigger your sounds and lights !
+            Tandem : Trigger your sounds and lights !
         </h1>
         <div >
             <ul>
                 <li ng-repeat="e in entries" class="menuli">
                     <a ui-sref="{{e.link}}">{{e.name}}</a>
                 </li>
+                <button ng-click="soundPanic()">Sound Panic !</button>
             </ul>
             <div ui-view></div>
             </div>

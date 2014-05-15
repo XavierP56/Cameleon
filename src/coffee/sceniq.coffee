@@ -206,10 +206,6 @@ app.directive "soundButton", ($resource)  ->
   DmxEvents = $resource('/dmx/events')
   SndPanic = $resource('/sounds/panic')
 
-  # Panic button
-  $scope.soundPanic = () ->
-    SndPanic.get {}, () ->
-
   # Wait for sound event, analyze it and broadcast it.
   $scope.getSoundEvent = () ->
     Events.get {}, (evt) ->
@@ -254,7 +250,12 @@ app.directive "soundButton", ($resource)  ->
      #event.preventDefault()
 
 @MainCtrl = ($scope, $http, $q, $resource)->
+  SndPanic = $resource('/sounds/panic')
   Query = $resource('/models/scenes')
 
   Query.get {}, (res)->
     $scope.entries = res.scenes
+
+  # Panic button
+  $scope.soundPanic = () ->
+    SndPanic.get {}, () ->

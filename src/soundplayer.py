@@ -78,6 +78,8 @@ class SoundPlayer:
             # if already playing, don't start again !
             if id in self.sounds:
                 print "Already playing !"
+                evt = {'evt': 'play', 'id': id}
+                self.eventq.put(evt)
                 return
 
             filepath =  self.args.waves + '/'  + name

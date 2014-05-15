@@ -317,9 +317,6 @@
     Events = $resource('/sounds/events');
     DmxEvents = $resource('/dmx/events');
     SndPanic = $resource('/sounds/panic');
-    $scope.soundPanic = function() {
-      return SndPanic.get({}, function() {});
-    };
     $scope.getSoundEvent = function() {
       return Events.get({}, function(evt) {
         $scope.$broadcast(evt.evt, evt);
@@ -377,11 +374,15 @@
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource) {
-    var Query;
+    var Query, SndPanic;
+    SndPanic = $resource('/sounds/panic');
     Query = $resource('/models/scenes');
-    return Query.get({}, function(res) {
+    Query.get({}, function(res) {
       return $scope.entries = res.scenes;
     });
+    return $scope.soundPanic = function() {
+      return SndPanic.get({}, function() {});
+    };
   };
 
 }).call(this);
