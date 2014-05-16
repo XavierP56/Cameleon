@@ -23,6 +23,16 @@ app.config ($stateProvider) ->
   $stateProvider.state('room8', room8)
   $stateProvider.state('config', config)
 
+# Factories
+app.factory 'sessionMngr', () ->
+  mngr = { 'connected' : false}
+  mngr.IsConnected = () ->
+    return mngr.connected
+  mngr.SetConnected = (sessionId) ->
+    mngr.connected = true
+    mngr.sessionId = sessionId
+  return mngr
+
 # Directive
 app.directive "fold", ->
   restrict : 'E'
@@ -201,11 +211,18 @@ app.directive "soundButton", ($resource)  ->
     scope.started()
 
 
-@RoomCtrl = ($scope, $http, $q, $resource)->
+@RoomCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndCancel = $q.defer()
   DmxCancel = $q.defer()
-  Events = $resource('/sounds/events',{timeout: SndCancel})
-  DmxEvents = $resource('/dmx/events',{timeout: DmxCancel})
+
+  sndpromise = SndCancel.promise
+  sndpromise.then () ->
+
+  dmxpromise = DmxCancel.promise
+  dmxpromise.then () ->
+
+  Events = $resource('/sounds/events',{},{'get': {method: 'GET', timeout: sndpromise}})
+  DmxEvents = $resource('/dmx/events',{},{'get': {method: 'GET', timeout: dmxpromise}})
   SndPanic = $resource('/sounds/panic')
 
   $scope.getSoundEvent = () ->
@@ -223,13 +240,18 @@ app.directive "soundButton", ($resource)  ->
         $scope.$broadcast(evt.evt, evt)
         $scope.getDmxEvent()
 
+  # See if we need to create a session
+  if not sessionMngr.IsConnected()
+    alert ('Create session')
+    sessionMngr.SetConnected('44')
+
   # Trigger them
   $scope.getSoundEvent()
   $scope.getDmxEvent()
 
-  $scope.$on '$stateChangeStart', (event) ->
-    SndCancel.resolve()
-    DmxCancel.resolve()
+  # $scope.$on '$stateChangeStart', (event) ->
+  #  SndCancel.resolve()
+  #  DmxCancel.resolve()
 
 
 @ConfigCtrl = ($scope, $http, $q, $resource)->

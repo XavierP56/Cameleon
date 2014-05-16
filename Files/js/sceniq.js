@@ -62,6 +62,21 @@
     return $stateProvider.state('config', config);
   });
 
+  app.factory('sessionMngr', function() {
+    var mngr;
+    mngr = {
+      'connected': false
+    };
+    mngr.IsConnected = function() {
+      return mngr.connected;
+    };
+    mngr.SetConnected = function(sessionId) {
+      mngr.connected = true;
+      return mngr.sessionId = sessionId;
+    };
+    return mngr;
+  });
+
   app.directive("fold", function() {
     return {
       restrict: 'E',
@@ -312,15 +327,25 @@
     };
   });
 
-  this.RoomCtrl = function($scope, $http, $q, $resource) {
-    var DmxCancel, DmxEvents, Events, SndCancel, SndPanic;
+  this.RoomCtrl = function($scope, $http, $q, $resource, sessionMngr) {
+    var DmxCancel, DmxEvents, Events, SndCancel, SndPanic, dmxpromise, sndpromise;
     SndCancel = $q.defer();
     DmxCancel = $q.defer();
-    Events = $resource('/sounds/events', {
-      timeout: SndCancel
+    sndpromise = SndCancel.promise;
+    sndpromise.then(function() {});
+    dmxpromise = DmxCancel.promise;
+    dmxpromise.then(function() {});
+    Events = $resource('/sounds/events', {}, {
+      'get': {
+        method: 'GET',
+        timeout: sndpromise
+      }
     });
-    DmxEvents = $resource('/dmx/events', {
-      timeout: DmxCancel
+    DmxEvents = $resource('/dmx/events', {}, {
+      'get': {
+        method: 'GET',
+        timeout: dmxpromise
+      }
     });
     SndPanic = $resource('/sounds/panic');
     $scope.getSoundEvent = function() {
@@ -337,12 +362,12 @@
         return $scope.getDmxEvent();
       });
     };
+    if (!sessionMngr.IsConnected()) {
+      alert('Create session');
+      sessionMngr.SetConnected('44');
+    }
     $scope.getSoundEvent();
-    $scope.getDmxEvent();
-    return $scope.$on('$stateChangeStart', function(event) {
-      SndCancel.resolve();
-      return DmxCancel.resolve();
-    });
+    return $scope.getDmxEvent();
   };
 
   this.ConfigCtrl = function($scope, $http, $q, $resource) {

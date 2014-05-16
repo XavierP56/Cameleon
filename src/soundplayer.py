@@ -119,6 +119,7 @@ class SoundPlayer:
         #print "En attente !"
         try:
             evt = self.eventq.get()
+            print evt
         except:
             evt = None
         #print evt
