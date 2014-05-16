@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob']);
+  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
 
   app.config(function($stateProvider) {
     var config, room1, room2, room3, room4, room5, room6, room7, room8;
@@ -405,7 +405,7 @@
     return $scope.$on('$stateChangeStart', function(event) {});
   };
 
-  this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
+  this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr, $cookies) {
     var CreateSession, Query, SndPanic;
     SndPanic = $resource('/sounds/panic');
     Query = $resource('/models/scenes');
@@ -415,7 +415,11 @@
     });
     if (!sessionMngr.IsConnected()) {
       CreateSession.get({}, function(res) {
-        return sessionMngr.SetConnected(res.id);
+        var cookie;
+        sessionMngr.SetConnected(res.id);
+        $cookies.sessionId = res.id;
+        cookie = $cookies.sessionId;
+        return $http.defaults.headers.post.Cookies = cookie;
       });
     }
     return $scope.soundPanic = function() {

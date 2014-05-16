@@ -1,7 +1,7 @@
 # Copyright Xavier Pouyollon 2014
 # GPL v3 License
 
-app = angular.module 'myApp', ['ngResource','ui.router','JSONedit','ui.knob']
+app = angular.module 'myApp', ['ngResource','ui.router','JSONedit','ui.knob','ngCookies']
 
 app.config ($stateProvider) ->
   room1 = {url: "/Room1", templateUrl: "/profiles/room1.html",  controller: RoomCtrl}
@@ -275,7 +275,7 @@ app.directive "soundButton", ($resource)  ->
     $scope.$on '$stateChangeStart', (event) ->
      #event.preventDefault()
 
-@MainCtrl = ($scope, $http, $q, $resource,sessionMngr)->
+@MainCtrl = ($scope, $http, $q, $resource,sessionMngr,$cookies)->
   SndPanic = $resource('/sounds/panic')
   Query = $resource('/models/scenes')
   CreateSession = $resource('/scenic/newsession')
@@ -286,6 +286,10 @@ app.directive "soundButton", ($resource)  ->
   if not sessionMngr.IsConnected()
     CreateSession.get {}, (res) ->
       sessionMngr.SetConnected(res.id)
+      # Put it into the http header.
+      $cookies.sessionId = res.id
+      cookie = $cookies.sessionId
+      $http.defaults.headers.post.Cookies = cookie;
 
   # Panic button
   $scope.soundPanic = () ->
