@@ -13,6 +13,7 @@ from bottle import route, run, request, abort, static_file
 app = bottle.Bottle()
 args = {}
 
+sessionId = 0
 
 # Sound handling
 
@@ -94,6 +95,14 @@ def models_scenes():
 @app.route('/dmx/events')
 def dmx_events():
     return dmxhandler.dmx_events()
+
+@app.route('/scenic/newsession')
+def newsession():
+    global sessionId
+
+    sessionId = sessionId + 1
+    print 'New session id ' + str(sessionId)
+    return {'id' : sessionId}
 
 # Start swmixer
 parser = argparse.ArgumentParser()

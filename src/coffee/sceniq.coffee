@@ -211,7 +211,7 @@ app.directive "soundButton", ($resource)  ->
     scope.started()
 
 
-@RoomCtrl = ($scope, $http, $q, $resource, sessionMngr)->
+@RoomCtrl = ($scope, $http, $q, $resource)->
   SndCancel = $q.defer()
   DmxCancel = $q.defer()
 
@@ -223,7 +223,6 @@ app.directive "soundButton", ($resource)  ->
 
   Events = $resource('/sounds/events',{},{'get': {method: 'GET', timeout: sndpromise}})
   DmxEvents = $resource('/dmx/events',{},{'get': {method: 'GET', timeout: dmxpromise}})
-  SndPanic = $resource('/sounds/panic')
 
   $scope.getSoundEvent = () ->
     $scope.promiseGetSnd = Events.get {}
@@ -239,11 +238,6 @@ app.directive "soundButton", ($resource)  ->
     $scope.promiseGetDmx.$promise.then (evt)->
         $scope.$broadcast(evt.evt, evt)
         $scope.getDmxEvent()
-
-  # See if we need to create a session
-  if not sessionMngr.IsConnected()
-    alert ('Create session')
-    sessionMngr.SetConnected('44')
 
   # Trigger them
   $scope.getSoundEvent()
@@ -281,12 +275,17 @@ app.directive "soundButton", ($resource)  ->
     $scope.$on '$stateChangeStart', (event) ->
      #event.preventDefault()
 
-@MainCtrl = ($scope, $http, $q, $resource)->
+@MainCtrl = ($scope, $http, $q, $resource,sessionMngr)->
   SndPanic = $resource('/sounds/panic')
   Query = $resource('/models/scenes')
-
+  CreateSession = $resource('/scenic/newsession')
   Query.get {}, (res)->
     $scope.entries = res.scenes
+
+  # See if we need to create a session
+  if not sessionMngr.IsConnected()
+    CreateSession.get {}, (res) ->
+      sessionMngr.SetConnected(res.id)
 
   # Panic button
   $scope.soundPanic = () ->

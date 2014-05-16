@@ -327,8 +327,8 @@
     };
   });
 
-  this.RoomCtrl = function($scope, $http, $q, $resource, sessionMngr) {
-    var DmxCancel, DmxEvents, Events, SndCancel, SndPanic, dmxpromise, sndpromise;
+  this.RoomCtrl = function($scope, $http, $q, $resource) {
+    var DmxCancel, DmxEvents, Events, SndCancel, dmxpromise, sndpromise;
     SndCancel = $q.defer();
     DmxCancel = $q.defer();
     sndpromise = SndCancel.promise;
@@ -347,7 +347,6 @@
         timeout: dmxpromise
       }
     });
-    SndPanic = $resource('/sounds/panic');
     $scope.getSoundEvent = function() {
       $scope.promiseGetSnd = Events.get({});
       return $scope.promiseGetSnd.$promise.then(function(evt) {
@@ -362,10 +361,6 @@
         return $scope.getDmxEvent();
       });
     };
-    if (!sessionMngr.IsConnected()) {
-      alert('Create session');
-      sessionMngr.SetConnected('44');
-    }
     $scope.getSoundEvent();
     return $scope.getDmxEvent();
   };
@@ -410,13 +405,19 @@
     return $scope.$on('$stateChangeStart', function(event) {});
   };
 
-  this.MainCtrl = function($scope, $http, $q, $resource) {
-    var Query, SndPanic;
+  this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
+    var CreateSession, Query, SndPanic;
     SndPanic = $resource('/sounds/panic');
     Query = $resource('/models/scenes');
+    CreateSession = $resource('/scenic/newsession');
     Query.get({}, function(res) {
       return $scope.entries = res.scenes;
     });
+    if (!sessionMngr.IsConnected()) {
+      CreateSession.get({}, function(res) {
+        return sessionMngr.SetConnected(res.id);
+      });
+    }
     return $scope.soundPanic = function() {
       return SndPanic.get({}, function() {});
     };
