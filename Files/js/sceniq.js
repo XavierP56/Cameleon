@@ -169,11 +169,13 @@
           id: $scope.id
         }, function(res) {
           $scope.light = res.light;
-          if ($scope.light.transition === "False") {
-            $scope.dmxstyle = 'dmx';
-          }
-          if ($scope.light.transition === "True") {
-            $scope.dmxstyle = 'transit';
+          if ($scope.light.hasOwnProperty('transition')) {
+            if ($scope.light.transition === "False") {
+              $scope.dmxstyle = 'dmx';
+            }
+            if ($scope.light.transition === "True") {
+              $scope.dmxstyle = 'transit';
+            }
           }
           if (res.active === true) {
             return $scope.active = "running";
@@ -374,7 +376,6 @@
     SndPanic = $resource('/sounds/panic');
     Query = $resource('/models/scenes');
     CreateSession = $resource('/scenic/newsession');
-    alert('Main Ctrl');
     Query.get({}, function(res) {
       return $scope.entries = res.scenes;
     });

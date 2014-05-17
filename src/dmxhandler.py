@@ -201,12 +201,11 @@ class DmxHandler(object):
 
     def dmx_light(self,light):
         if light in models.dmx_light:
-            #pid = models.dmx_light[id]['id']
-            #if pid in self.activeSetting:
-            #    setting = self.activeSetting[pid]
-            #else:
-            #    setting = None
             l = models.dmx_light[light]
+            # Is it a metagroup button ?
+            if 'list' in l:
+                return {'light':models.dmx_light[light], 'active':False}
+            # Normal light button.
             grp = l['group']
             active = False
             if grp in self.activeGroup:
@@ -257,8 +256,8 @@ class DmxHandler(object):
                         sessionsq.PostEvent('dmx',evt)
                     self.changed = True
 
-    def dmx_setlight (self, light):
 
+    def dmx_setonelight (self, light):
         if light in models.dmx_light:
             l = models.dmx_light[light]
             grp = l['group']
@@ -280,6 +279,17 @@ class DmxHandler(object):
             # And send active light event
             evt = { "evt": "activeLight", "light": light, "group":grp}
             sessionsq.PostEvent('dmx',evt)
+
+    def dmx_setlight (self, light):
+        if light in models.dmx_light:
+            l = models.dmx_light[light]
+            if 'list' in l:
+                print 'Meta button'
+                for l in l['list']:
+                    self.dmx_setonelight(l)
+            else:
+                # Simple light.
+                self.dmx_setonelight(light)
 
     # Services routines
     def GetChannel(self, id, key):

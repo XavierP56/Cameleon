@@ -41,5 +41,9 @@
         "name": "Blue",
         "setting": "setting_blue",
         "transition": "False"
+    },
+    "grp6": {
+        "list" : ["light1", "light3"],
+        "name" : "L1 et L3"
     }
 }

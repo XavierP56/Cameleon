@@ -100,9 +100,9 @@ app.directive "dmxLight", ->
 
     LightQuery.get {id:$scope.id}, (res)->
       $scope.light = res.light
-
-      $scope.dmxstyle='dmx' if $scope.light.transition == "False"
-      $scope.dmxstyle='transit' if $scope.light.transition == "True"
+      if $scope.light.hasOwnProperty('transition')
+        $scope.dmxstyle='dmx' if $scope.light.transition == "False"
+        $scope.dmxstyle='transit' if $scope.light.transition == "True"
       if res.active == true
         $scope.active = "running"
 
@@ -249,7 +249,6 @@ app.directive "soundButton", ($resource)  ->
   Query = $resource('/models/scenes')
   CreateSession = $resource('/scenic/newsession')
 
-  alert ('Main Ctrl')
   Query.get {}, (res)->
     $scope.entries = res.scenes
 
