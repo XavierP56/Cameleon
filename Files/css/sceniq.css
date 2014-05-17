@@ -4,6 +4,12 @@ display:inline;
 margin:10px;
 }
 
+li.faders {
+    display: block;
+    float: left;
+    margin: 10px;
+}
+
 .bloc {
     display: inline-block;
     width: 200px;

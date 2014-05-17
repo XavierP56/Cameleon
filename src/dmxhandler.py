@@ -317,4 +317,5 @@ class DmxHandler(object):
         lst = []
         for i in models.dmx_model:
             lst.append(i)
+        lst.sort()
         return {'list':lst}
