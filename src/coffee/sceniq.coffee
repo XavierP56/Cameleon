@@ -250,12 +250,23 @@ app.directive "soundButton", ($resource)  ->
     $scope.$on '$stateChangeStart', (event) ->
      #event.preventDefault()
 
+app.filter 'faderFilter', ->
+  (input,low,high) ->
+    return input[low..high]
+
 FaderCtrl = ($scope, $http, $q, $resource)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
 
   $scope.showMe = (index) ->
-    true
+    min = $scope.from if $scope.from != undefined
+    min = 0 if $scope.from == undefined
+    max = $scope.to if $scope.to != undefined
+    max = 4096 if $scope.to == undefined
+    if (index >= min and index <= to)
+      return true
+    else
+      return false
 
   FaderList.get {}, (res)->
     $scope.faderlist = res.list

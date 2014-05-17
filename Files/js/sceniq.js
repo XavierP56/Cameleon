@@ -380,11 +380,34 @@
     return $scope.$on('$stateChangeStart', function(event) {});
   };
 
+  app.filter('faderFilter', function() {
+    return function(input, low, high) {
+      return input.slice(low, +high + 1 || 9e9);
+    };
+  });
+
   FaderCtrl = function($scope, $http, $q, $resource) {
     var FaderList;
     FaderList = $resource('/dmx/getfaderlist');
     $scope.showMe = function(index) {
-      return true;
+      var max, min;
+      if ($scope.from !== void 0) {
+        min = $scope.from;
+      }
+      if ($scope.from === void 0) {
+        min = 0;
+      }
+      if ($scope.to !== void 0) {
+        max = $scope.to;
+      }
+      if ($scope.to === void 0) {
+        max = 4096;
+      }
+      if (index >= min && index <= to) {
+        return true;
+      } else {
+        return false;
+      }
     };
     FaderList.get({}, function(res) {
       return $scope.faderlist = res.list;

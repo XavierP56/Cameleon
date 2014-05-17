@@ -1,8 +1,10 @@
 <div>
-    Fader configuration - All available projectors are listed.
+    Fader configuration - All available projectors are listed.<br/>
+    <input ng-model="from" type="number">
+    <input ng-model="to" type="number">
     <ul>
-        <li class="faders" ng-repeat="f in faderlist">
-                <dmx-fader ng-show="showMe($index)" id="{{f}}"></dmx-fader>
+        <li class="faders" ng-repeat="f in faderlist | faderFilter:from:to">
+                <dmx-fader  id="{{f}}"></dmx-fader>
         </li>
     </ul>
 </div>
