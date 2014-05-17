@@ -3,7 +3,7 @@ __author__ = 'xavierpouyollon'
 # GPL v3 License
 
 
-import Queue
+import sessionsq
 import threading
 import time
 import thread
@@ -52,7 +52,8 @@ class DmxHandler(object):
 
     def __init__(self, args, sndplayer):
         self.args = args
-        self.eventq = Queue.Queue(0)
+        # Create the queue
+        sessionsq.CreateQueue('dmx')
         self.lock = threading.RLock()
         self._changed = False
 
@@ -113,7 +114,7 @@ class DmxHandler(object):
                     self.datas[dstchan] = val
                     if (remain % 500) == 0:
                         evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
-                        self.eventq.put(evt)
+                        sessionsq.PostEvent('dmx',evt)
                     self.changed = True
 
                 if (remain == 0):
@@ -253,7 +254,7 @@ class DmxHandler(object):
                         val = int(cmds[key])
                         self.datas[dstchan] = val
                         evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
-                        self.eventq.put(evt)
+                        sessionsq.PostEvent('dmx',evt)
                     self.changed = True
 
     def dmx_setlight (self, light):
@@ -278,7 +279,7 @@ class DmxHandler(object):
             self.activeGroup[grp] = light
             # And send active light event
             evt = { "evt": "activeLight", "light": light, "group":grp}
-            self.eventq.put(evt)
+            sessionsq.PostEvent('dmx',evt)
 
     # Services routines
     def GetChannel(self, id, key):
@@ -289,10 +290,11 @@ class DmxHandler(object):
         return dstchan
 
     def dmx_events(self,request):
-        #print "En attente !"
         try:
-            evt = self.eventq.get(timeout=1)
+            sessionId = request.get_header('SessionId')
+            evt = sessionsq.GetEvent('dmx',sessionId)
         except:
             evt = None
+        #print evt
         return evt
 

@@ -106,7 +106,7 @@ def newsession():
     print 'New session id ' + sName
 
     sessionsq.AddSession('snd', sName)
-    # sessionsq.AddSession('dmx', sName)
+    sessionsq.AddSession('dmx', sName)
     return {'id' : sName}
 
 # Start swmixer
