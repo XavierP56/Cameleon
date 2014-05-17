@@ -108,7 +108,6 @@ app.directive "dmxLight", ->
 
     $scope.do= () ->
       DmxSetLight.get {light:$scope.id}, (res)->
-        $scope.active = "running"
         return
 
     $scope.$on 'activeLight', (sender, evt) ->
@@ -116,6 +115,8 @@ app.directive "dmxLight", ->
         return
       if (evt.light != $scope.id)
           $scope.active = null
+      else
+          $scope.active = "running"
     return
 
 app.directive "dmxFader", ->

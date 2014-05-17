@@ -182,9 +182,7 @@
         $scope["do"] = function() {
           return DmxSetLight.get({
             light: $scope.id
-          }, function(res) {
-            $scope.active = "running";
-          });
+          }, function(res) {});
         };
         $scope.$on('activeLight', function(sender, evt) {
           if (evt.group !== $scope.light.group) {
@@ -192,6 +190,8 @@
           }
           if (evt.light !== $scope.id) {
             return $scope.active = null;
+          } else {
+            return $scope.active = "running";
           }
         });
       }
