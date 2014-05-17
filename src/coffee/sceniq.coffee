@@ -254,6 +254,9 @@ FaderCtrl = ($scope, $http, $q, $resource)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
 
+  $scope.showMe = (index) ->
+    true
+
   FaderList.get {}, (res)->
     $scope.faderlist = res.list
   return

@@ -383,6 +383,9 @@
   FaderCtrl = function($scope, $http, $q, $resource) {
     var FaderList;
     FaderList = $resource('/dmx/getfaderlist');
+    $scope.showMe = function(index) {
+      return true;
+    };
     FaderList.get({}, function(res) {
       return $scope.faderlist = res.list;
     });

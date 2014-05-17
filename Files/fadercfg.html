@@ -2,7 +2,7 @@
     Fader configuration - All available projectors are listed.
     <ul>
         <li class="faders" ng-repeat="f in faderlist">
-                <dmx-fader id="{{f}}"></dmx-fader>
+                <dmx-fader ng-show="showMe($index)" id="{{f}}"></dmx-fader>
         </li>
     </ul>
 </div>

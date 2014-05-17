@@ -36,8 +36,14 @@ li.faders {
 
 a
 {
+    color : grey;
+    font-size: 26px;
+}
+
+h1
+{
     color : white;
-    font-size: 32px;
+    font-size: 22px;
 }
 
 tr:not(:first-child):hover {
