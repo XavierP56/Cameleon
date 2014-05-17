@@ -190,6 +190,14 @@ def saveModel(args):
 
     return
 
+def GenerateDefaultGroup():
+    global dmx_group
+    global dmx_model
+
+    for lid in dmx_model:
+        key = '_' + lid
+        dmx_group[key] = lid
+
 def loadModel(args):
     global dmx_model
     global dmx_setting
@@ -223,6 +231,9 @@ def loadModel(args):
     fpath = ref + "/knobs.json"
     with open(fpath) as datafile:
         knobs_model = json.load(datafile)
+
+    # Generate the default group
+    GenerateDefaultGroup()
     return
 
 def loadScenes(args):
