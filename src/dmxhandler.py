@@ -313,3 +313,8 @@ class DmxHandler(object):
         #print evt
         return evt
 
+    def dmx_faders_list(self):
+        lst = []
+        for i in models.dmx_model:
+            lst.append(i)
+        return {'list':lst}

@@ -80,8 +80,6 @@ class SoundPlayer:
             # if already playing, don't start again !
             if id in self.sounds:
                 print "Already playing !"
-                evt = {'evt': 'play', 'id': id}
-                sessionsq.PostEvent('snd', evt)
                 return
 
             filepath =  self.args.waves + '/'  + name
