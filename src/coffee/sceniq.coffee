@@ -13,6 +13,7 @@ app.config ($stateProvider) ->
   room7 = {url: "/Room7", templateUrl: "/profiles/room7.html",  controller: RoomCtrl}
   room8 = {url: "/Room8", templateUrl: "/profiles/room8.html",  controller: RoomCtrl}
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
+  faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html",controller: FaderCtrl}
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
   $stateProvider.state('room3', room3)
@@ -22,6 +23,7 @@ app.config ($stateProvider) ->
   $stateProvider.state('room7', room7)
   $stateProvider.state('room8', room8)
   $stateProvider.state('config', config)
+  $stateProvider.state('faders', faders)
 
 # Factories
 app.factory 'sessionMngr', () ->
@@ -247,6 +249,14 @@ app.directive "soundButton", ($resource)  ->
 
     $scope.$on '$stateChangeStart', (event) ->
      #event.preventDefault()
+
+FaderCtrl = ($scope, $http, $q, $resource)->
+  # Nothing. The broadcast is done my the MainCtrl.
+  FaderList = $resource('/dmx/getfaderlist')
+
+  FaderList.get {}, (res)->
+    $scope.faderlist = res.list
+  return
 
 @MainCtrl = ($scope, $http, $q, $resource,sessionMngr)->
   SndPanic = $resource('/sounds/panic')
