@@ -123,7 +123,6 @@ class SoundPlayer:
         try:
             sessionId = request.get_header('SessionId')
             evt = sessionsq.GetEvent('snd',sessionId)
-            print evt
         except:
             evt = None
         #print evt

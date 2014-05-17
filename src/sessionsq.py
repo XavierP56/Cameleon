@@ -6,13 +6,14 @@ queues = {}
 
 def CreateQueue(name):
     global queues
+    # print 'Create queue ' + name
 
     queues[name] = {}
     return
 
 def AddSession(qname, sname):
     global queues
-    print 'Adding session ' + sname + ' for ' + qname
+    # print 'Adding session ' + sname + ' for ' + qname
     queues[qname][sname] = Queue.Queue(0)
 
 def PostEvent (qname, evt):
@@ -22,5 +23,10 @@ def PostEvent (qname, evt):
 
 def GetEvent(qname, sname):
     global queues
-
-    return queues[qname][sname].get()
+    # print 'Getting for queue ' + qname + 'session sname'
+    try:
+        evt = queues[qname][sname].get(timeout=10)
+    except:
+        evt = None
+    # print 'Get done'
+    return evt

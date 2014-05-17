@@ -291,7 +291,7 @@ class DmxHandler(object):
     def dmx_events(self,request):
         #print "En attente !"
         try:
-            evt = self.eventq.get()
+            evt = self.eventq.get(timeout=1)
         except:
             evt = None
         return evt

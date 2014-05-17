@@ -212,6 +212,57 @@ app.directive "soundButton", ($resource)  ->
 
 
 @RoomCtrl = ($scope, $http, $q, $resource)->
+  # Nothing. The broadcast is done my the MainCtrl.
+  return
+
+
+@ConfigCtrl = ($scope, $http, $q, $resource)->
+    # DMX Stuff.
+    Query = $resource('/models/getdefs')
+    Update = $resource('/models/setdefs', {}, {set:{method:'POST'}})
+    Save = $resource('/models/save')
+
+    $scope.update = () ->
+      Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight}, ()->
+      alert('Settings updated !')
+
+    $scope.save = () ->
+      $scope.setDone = Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight}, ()->
+        return
+      $scope.setDone.$promise.then () ->
+        Save.get {}, ->
+          alert('Settings saved !')
+
+    Query.get {}, (res) ->
+      $scope.dmxModel = res.dmx_model
+      $scope.dmxSetting = res.dmx_setting
+      $scope.dmxLight = res.dmx_light
+      $scope.sndSetting = res.snd_setting
+      return
+
+    $scope.$on '$stateChangeStart', (event) ->
+     #event.preventDefault()
+
+@MainCtrl = ($scope, $http, $q, $resource,sessionMngr)->
+  SndPanic = $resource('/sounds/panic')
+  Query = $resource('/models/scenes')
+  CreateSession = $resource('/scenic/newsession')
+
+  alert ('Main Ctrl')
+  Query.get {}, (res)->
+    $scope.entries = res.scenes
+
+  # See if we need to create a session
+  if not sessionMngr.IsConnected()
+    CreateSession.get {}, (res) ->
+      sessionMngr.SetConnected(res.id)
+      # Put it into the http header.
+      $http.defaults.headers.post['SessionId'] = res.id
+
+  # Panic button
+  $scope.soundPanic = () ->
+    SndPanic.get {}, () ->
+
   SndCancel = $q.defer()
   DmxCancel = $q.defer()
 
@@ -247,50 +298,3 @@ app.directive "soundButton", ($resource)  ->
   # $scope.$on '$stateChangeStart', (event) ->
   #  SndCancel.resolve()
   #  DmxCancel.resolve()
-
-
-@ConfigCtrl = ($scope, $http, $q, $resource)->
-    # DMX Stuff.
-    Query = $resource('/models/getdefs')
-    Update = $resource('/models/setdefs', {}, {set:{method:'POST'}})
-    Save = $resource('/models/save')
-
-    $scope.update = () ->
-      Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight}, ()->
-      alert('Settings updated !')
-
-    $scope.save = () ->
-      $scope.setDone = Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight}, ()->
-        return
-      $scope.setDone.$promise.then () ->
-        Save.get {}, ->
-          alert('Settings saved !')
-
-    Query.get {}, (res) ->
-      $scope.dmxModel = res.dmx_model
-      $scope.dmxSetting = res.dmx_setting
-      $scope.dmxLight = res.dmx_light
-      $scope.sndSetting = res.snd_setting
-      return
-
-    $scope.$on '$stateChangeStart', (event) ->
-     #event.preventDefault()
-
-@MainCtrl = ($scope, $http, $q, $resource,sessionMngr)->
-  SndPanic = $resource('/sounds/panic')
-  Query = $resource('/models/scenes')
-  CreateSession = $resource('/scenic/newsession')
-  Query.get {}, (res)->
-    $scope.entries = res.scenes
-
-  # See if we need to create a session
-  if not sessionMngr.IsConnected()
-    CreateSession.get {}, (res) ->
-      sessionMngr.SetConnected(res.id)
-      # Put it into the http header.
-      $http.defaults.headers.post['SessionId'] = res.id
-
-  # Panic button
-  $scope.soundPanic = () ->
-    SndPanic.get {}, () ->
-
