@@ -239,6 +239,7 @@ app.directive "soundButton", ($resource)  ->
 
     Query.get {}, (res) ->
       $scope.dmxModel = res.dmx_model
+      $scope.dmxGroup = res.dmx_group
       $scope.dmxSetting = res.dmx_setting
       $scope.dmxLight = res.dmx_light
       $scope.sndSetting = res.snd_setting

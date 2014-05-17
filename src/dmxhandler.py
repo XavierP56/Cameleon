@@ -185,6 +185,7 @@ class DmxHandler(object):
 
     def dmx_getdefs (self):
         return {"dmx_model":models.dmx_model,
+                "dmx_group":models.dmx_group,
                 "dmx_setting": models.dmx_setting,
                 "dmx_light": models.dmx_light}
 
