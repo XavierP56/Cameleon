@@ -121,10 +121,13 @@ args = parser.parse_args()
 
 try:
     models.loadModel(args)
+except:
+    print 'Load model failed'
+
+try:
     models.loadScenes(args)
 except:
-    models.saveModel(args)
-    models.saveScenes(args)
+    print 'Load Scenes failed'
 
 sndplayer = soundplayer.SoundPlayer(args)
 dmxhandler = dmxhandler.DmxHandler(args, sndplayer)
