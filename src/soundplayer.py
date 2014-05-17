@@ -156,8 +156,8 @@ class SoundPlayer:
         req.json['name'] = mdl['songFile']
         if 'position' in mdl:
             req.json['position'] = mdl['position']
-        if 'repeat' in mdl:
-            req.json['repeat'] = mdl['repeat']
+        if 'loop' in mdl:
+            req.json['repeat'] = mdl['loop']
         else:
             req.json['repeat'] = False
         if 'card' in mdl:
