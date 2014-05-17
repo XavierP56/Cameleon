@@ -5,3 +5,6 @@
 [submodule "Files/local_components/jQuery-Knob"]
 	path = Files/local_components/jQuery-Knob
 	url = https://github.com/XavierP56/jQuery-Knob.git
+[submodule "Files/local_components/JSONedit"]
+	path = Files/local_components/JSONedit
+	url = https://github.com/XavierP56/JSONedit.git
