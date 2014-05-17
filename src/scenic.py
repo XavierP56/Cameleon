@@ -8,6 +8,7 @@ import soundplayer
 import dmxhandler
 import models
 import sessionsq
+import uuid
 
 from bottle import route, run, request, abort, static_file
 
@@ -103,9 +104,7 @@ def dmx_events():
 
 @app.route('/scenic/newsession')
 def newsession():
-    global sessionId
-
-    sessionId = sessionId + 1
+    sessionId = uuid.uuid1()
     sName = 's' + str(sessionId)
     print 'New session id ' + sName
 
