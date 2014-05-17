@@ -8,18 +8,20 @@ import soundmixer
 import threading
 import models
 import requests
+import sessionsq
 
 class SoundPlayer:
     sounds = {}
     sndchannels = {}
     levels = {}
     args = None
-    eventq = None
     lock = None
 
     def __init__(self, args):
         self.args = args
-        self.eventq = Queue.Queue(0)
+        # Create the queue
+        sessionsq.CreateQueue('snd')
+
         self.lock = threading.RLock()
         soundmixer.init(output_device_indexes=args.snd)
         soundmixer.start()
@@ -34,7 +36,7 @@ class SoundPlayer:
             del self.sndchannels[chn]
 
             evt = {'evt': 'stop', 'id': id}
-            self.eventq.put(evt)
+            sessionsq.PostEvent('snd',evt)
 
     def sounds_query(self,id):
         with self.lock:
@@ -79,7 +81,7 @@ class SoundPlayer:
             if id in self.sounds:
                 print "Already playing !"
                 evt = {'evt': 'play', 'id': id}
-                self.eventq.put(evt)
+                sessionsq.PostEvent('snd', evt)
                 return
 
             filepath =  self.args.waves + '/'  + name
@@ -98,7 +100,8 @@ class SoundPlayer:
             self.sndchannels[sndchan] = id
             # Send event.
             evt = {'evt': 'play', 'id': id}
-            self.eventq.put(evt)
+            sessionsq.PostEvent('snd',evt)
+            return
 
     def sounds_level(self, id, power):
         with self.lock:
@@ -115,10 +118,11 @@ class SoundPlayer:
             self.sounds_stop(id)
         return { 'res' : 'ok'}
 
-    def sounds_events(self):
+    def sounds_events(self, request):
         #print "En attente !"
         try:
-            evt = self.eventq.get()
+            sessionId = request.get_header('SessionId')
+            evt = sessionsq.GetEvent('snd',sessionId)
             print evt
         except:
             evt = None

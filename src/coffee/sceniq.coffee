@@ -221,8 +221,9 @@ app.directive "soundButton", ($resource)  ->
   dmxpromise = DmxCancel.promise
   dmxpromise.then () ->
 
-  Events = $resource('/sounds/events',{},{'get': {method: 'GET', timeout: sndpromise}})
-  DmxEvents = $resource('/dmx/events',{},{'get': {method: 'GET', timeout: dmxpromise}})
+  # POST request to send cookies (sessionId)
+  Events = $resource('/sounds/events',{},{'get': {method: 'POST', timeout: sndpromise}})
+  DmxEvents = $resource('/dmx/events',{},{'get': {method: 'POST', timeout: dmxpromise}})
 
   $scope.getSoundEvent = () ->
     $scope.promiseGetSnd = Events.get {}
@@ -275,7 +276,7 @@ app.directive "soundButton", ($resource)  ->
     $scope.$on '$stateChangeStart', (event) ->
      #event.preventDefault()
 
-@MainCtrl = ($scope, $http, $q, $resource,sessionMngr,$cookies)->
+@MainCtrl = ($scope, $http, $q, $resource,sessionMngr)->
   SndPanic = $resource('/sounds/panic')
   Query = $resource('/models/scenes')
   CreateSession = $resource('/scenic/newsession')
@@ -287,9 +288,7 @@ app.directive "soundButton", ($resource)  ->
     CreateSession.get {}, (res) ->
       sessionMngr.SetConnected(res.id)
       # Put it into the http header.
-      $cookies.sessionId = res.id
-      cookie = $cookies.sessionId
-      $http.defaults.headers.post.Cookies = cookie;
+      $http.defaults.headers.post['SessionId'] = res.id
 
   # Panic button
   $scope.soundPanic = () ->

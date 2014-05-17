@@ -7,6 +7,7 @@ import argparse
 import soundplayer
 import dmxhandler
 import models
+import sessionsq
 
 from bottle import route, run, request, abort, static_file
 
@@ -45,9 +46,9 @@ def sounds_level(id, power):
 def sounds_panic():
     return sndplayer.sounds_panic()
 
-@app.route('/sounds/events')
+@app.route('/sounds/events', method='POST')
 def sounds_events():
-    return sndplayer.sounds_events()
+    return sndplayer.sounds_events(request)
 
 # DMX handling
 @app.route('/dmx/light/:id')
@@ -92,17 +93,21 @@ def models_scenes():
     models.loadScenes(args)
     return {'scenes':models.scenes}
 
-@app.route('/dmx/events')
+@app.route('/dmx/events', method='POST')
 def dmx_events():
-    return dmxhandler.dmx_events()
+    return dmxhandler.dmx_events(request)
 
 @app.route('/scenic/newsession')
 def newsession():
     global sessionId
 
     sessionId = sessionId + 1
-    print 'New session id ' + str(sessionId)
-    return {'id' : sessionId}
+    sName = 's' + str(sessionId)
+    print 'New session id ' + sName
+
+    sessionsq.AddSession('snd', sName)
+    # sessionsq.AddSession('dmx', sName)
+    return {'id' : sName}
 
 # Start swmixer
 parser = argparse.ArgumentParser()

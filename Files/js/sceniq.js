@@ -337,13 +337,13 @@
     dmxpromise.then(function() {});
     Events = $resource('/sounds/events', {}, {
       'get': {
-        method: 'GET',
+        method: 'POST',
         timeout: sndpromise
       }
     });
     DmxEvents = $resource('/dmx/events', {}, {
       'get': {
-        method: 'GET',
+        method: 'POST',
         timeout: dmxpromise
       }
     });
@@ -405,7 +405,7 @@
     return $scope.$on('$stateChangeStart', function(event) {});
   };
 
-  this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr, $cookies) {
+  this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
     var CreateSession, Query, SndPanic;
     SndPanic = $resource('/sounds/panic');
     Query = $resource('/models/scenes');
@@ -415,11 +415,8 @@
     });
     if (!sessionMngr.IsConnected()) {
       CreateSession.get({}, function(res) {
-        var cookie;
         sessionMngr.SetConnected(res.id);
-        $cookies.sessionId = res.id;
-        cookie = $cookies.sessionId;
-        return $http.defaults.headers.post.Cookies = cookie;
+        return $http.defaults.headers.post['SessionId'] = res.id;
       });
     }
     return $scope.soundPanic = function() {

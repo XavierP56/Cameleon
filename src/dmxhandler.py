@@ -288,7 +288,7 @@ class DmxHandler(object):
         dstchan = channel + relch
         return dstchan
 
-    def dmx_events(self):
+    def dmx_events(self,request):
         #print "En attente !"
         try:
             evt = self.eventq.get()
