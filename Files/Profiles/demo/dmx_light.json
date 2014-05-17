@@ -5,14 +5,15 @@
         "name": "En rouge",
         "setting": "setting_red",
         "transition": "False",
-        "sounds" : ["Musique"]
+        "sounds_start" : ["5"]
     },
     "light2": {
         "delay": 0,
         "group": "group1",
         "name": "En vert",
         "setting": "setting_green",
-        "transition": "False"
+        "transition": "False",
+        "sounds_stop" : ["5"]
     },
     "light3": {
         "delay": 0,

@@ -271,9 +271,13 @@ class DmxHandler(object):
                 self.dmx_set(request)
 
             # Music maestro !
-            if 'sounds' in l:
-                for sound in l['sounds']:
+            if 'sounds_start' in l:
+                for sound in l['sounds_start']:
                     self.sndplayer.snd_playSong(sound)
+            # Music stop !
+            if 'sounds_stop' in l:
+                for sound in l['sounds_stop']:
+                    self.sndplayer.snd_stopSong(sound)
 
             self.activeGroup[grp] = light
             # And send active light event

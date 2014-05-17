@@ -176,6 +176,8 @@
             if ($scope.light.transition === "True") {
               $scope.dmxstyle = 'transit';
             }
+          } else {
+            $scope.dmxstyle = 'list';
           }
           if (res.active === true) {
             return $scope.active = "running";

@@ -163,3 +163,6 @@ class SoundPlayer:
         if 'card' in mdl:
             req.json['card'] = mdl['card']
         self.sounds_play(req)
+
+    def snd_stopSong(self,id):
+        self.sounds_stop(id)

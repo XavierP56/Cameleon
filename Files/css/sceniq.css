@@ -133,6 +133,12 @@ button.transit
     background-color: orange;
 }
 
+button.list
+{
+    height : 40px;
+    background-color: #d3d3d3;
+}
+
 button.running
 {
     background-color: lightgreen;

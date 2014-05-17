@@ -103,6 +103,9 @@ app.directive "dmxLight", ->
       if $scope.light.hasOwnProperty('transition')
         $scope.dmxstyle='dmx' if $scope.light.transition == "False"
         $scope.dmxstyle='transit' if $scope.light.transition == "True"
+      else
+        $scope.dmxstyle='list'
+
       if res.active == true
         $scope.active = "running"
 
