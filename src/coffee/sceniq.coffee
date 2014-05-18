@@ -161,8 +161,8 @@ app.directive "dmxFader", ->
         return "leftpos"
 
     $scope.SetSetting = (fader, setting) ->
-      SetFader.get {fader: fader, setting: setting.menu.name}
-      $scope.currentSetting = setting.menu.name
+      SetFader.get {fader: fader, setting: setting}
+      $scope.currentSetting = setting
 
     $scope.$on 'setFaderSetting', (sender, evt) ->
       if (evt.id != $scope.id)

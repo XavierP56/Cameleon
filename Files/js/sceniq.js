@@ -257,9 +257,9 @@
         $scope.SetSetting = function(fader, setting) {
           SetFader.get({
             fader: fader,
-            setting: setting.menu.name
+            setting: setting
           });
-          return $scope.currentSetting = setting.menu.name;
+          return $scope.currentSetting = setting;
         };
         $scope.$on('setFaderSetting', function(sender, evt) {
           if (evt.id !== $scope.id) {

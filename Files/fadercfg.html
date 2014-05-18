@@ -1,8 +1,8 @@
 <div>
     Fader configuration - All available projectors are listed.<br/>
     <input ng-model="from" type="number">
-    <input ng-model="to" type="number">
-    <button ng-click="updateall()">Update !</button>
+    <input ng-model="to" type="number"><br/>
+    <button ng-click="updateall()">Set all faders to dropbox values !</button>
     <ul>
         <li class="faders" ng-repeat="f in faderlist | faderFilter:from:to">
             <br/><button ng-click="record(f)">Record new setting</button>
