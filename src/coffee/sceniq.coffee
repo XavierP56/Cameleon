@@ -177,6 +177,7 @@ app.directive "dmxFader", ->
         else
           ix++
       $scope.setting.menu = $scope.settings[ix]
+      $scope.SetSetting($scope.id, $scope.currentSetting)
 
 app.directive "soundButton", ($resource)  ->
   restrict : 'E'
@@ -294,7 +295,7 @@ app.filter 'faderFilter', ->
     else
       return input
 
-FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
+FaderCtrl = ($scope, $http, $q, $resource,configMngr,$timeout)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
   RecordSetting = $resource('/dmx/recordsetting/:fader')
@@ -307,6 +308,7 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
         evt = { 'id' : fader, 'setting': res.name}
         $scope.$broadcast('setFaderSetting',evt)
         alert (res.msg)
+        $timeout($scope.updateall)
 
   $scope.updateall = () ->
     $scope.$broadcast('updateDropBox')

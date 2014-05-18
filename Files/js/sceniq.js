@@ -279,7 +279,8 @@
               ix++;
             }
           }
-          return $scope.setting.menu = $scope.settings[ix];
+          $scope.setting.menu = $scope.settings[ix];
+          return $scope.SetSetting($scope.id, $scope.currentSetting);
         });
       }
     };
@@ -441,7 +442,7 @@
     };
   });
 
-  FaderCtrl = function($scope, $http, $q, $resource, configMngr) {
+  FaderCtrl = function($scope, $http, $q, $resource, configMngr, $timeout) {
     var FaderList, RecordSetting;
     FaderList = $resource('/dmx/getfaderlist');
     RecordSetting = $resource('/dmx/recordsetting/:fader');
@@ -459,7 +460,8 @@
             'setting': res.name
           };
           $scope.$broadcast('setFaderSetting', evt);
-          return alert(res.msg);
+          alert(res.msg);
+          return $timeout($scope.updateall);
         });
       });
     };
