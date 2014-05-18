@@ -150,6 +150,7 @@ app.directive "dmxFader", ->
       else
         return "leftpos"
 
+
 app.directive "soundButton", ($resource)  ->
   restrict : 'E'
   templateUrl : '/sceniq/templates/soundbutton.html'
@@ -270,12 +271,18 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
   SetFader = $resource('/dmx/setfader/:fader/:setting')
+  RecordSetting = $resource('/dmx/recordsetting/:fader')
+
   $scope.settingList = []
   FaderList.get {}, (res)->
     $scope.faderlist = res.list
 
   $scope.SetSetting = (fader, setting) ->
-    SetFader.get {fader: fader, setting: setting}
+    SetFader.get {fader: fader, setting: setting.name}
+
+  $scope.record = (fader) ->
+    RecordSetting.get {fader: fader}, (res)->
+      alert(res.msg)
 
   set_promise = configMngr.GetSettingsList()
   set_promise.$promise.then (res) ->

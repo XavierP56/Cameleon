@@ -325,3 +325,7 @@ class DmxHandler(object):
             lst.append(i)
         lst.sort()
         return {'list':lst}
+
+    def dmx_recordsetting(self,fader):
+        print 'Generate setting for fader ' + fader
+        return {'msg' : 'Setting created !'}
