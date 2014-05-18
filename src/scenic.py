@@ -112,6 +112,14 @@ def newsession():
     sessionsq.AddSession('dmx', sName)
     return {'id' : sName}
 
+@app.route('/cfg/getsettinglist')
+def cfg_getsettinglist():
+    res = []
+    for s in models.dmx_setting:
+        v = {'name':s, 'values':models.dmx_setting[s]}
+        res.append(v)
+    return {'settings': res}
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")

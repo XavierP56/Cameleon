@@ -83,6 +83,16 @@
     return mngr;
   });
 
+  app.factory('configMngr', function($resource) {
+    var Query, datas;
+    datas = {};
+    Query = $resource('/cfg/getsettinglist');
+    datas.GetSettingsList = function() {
+      return Query.get({});
+    };
+    return datas;
+  });
+
   app.directive("fold", function() {
     return {
       restrict: 'E',
@@ -382,35 +392,24 @@
 
   app.filter('faderFilter', function() {
     return function(input, low, high) {
-      return input.slice(low, +high + 1 || 9e9);
+      if ((low !== void 0) && (high !== void 0)) {
+        return input.slice(low, +high + 1 || 9e9);
+      } else {
+        return input;
+      }
     };
   });
 
-  FaderCtrl = function($scope, $http, $q, $resource) {
-    var FaderList;
+  FaderCtrl = function($scope, $http, $q, $resource, configMngr) {
+    var FaderList, set_promise;
     FaderList = $resource('/dmx/getfaderlist');
-    $scope.showMe = function(index) {
-      var max, min;
-      if ($scope.from !== void 0) {
-        min = $scope.from;
-      }
-      if ($scope.from === void 0) {
-        min = 0;
-      }
-      if ($scope.to !== void 0) {
-        max = $scope.to;
-      }
-      if ($scope.to === void 0) {
-        max = 4096;
-      }
-      if (index >= min && index <= to) {
-        return true;
-      } else {
-        return false;
-      }
-    };
+    $scope.settingList = [];
     FaderList.get({}, function(res) {
       return $scope.faderlist = res.list;
+    });
+    set_promise = configMngr.GetSettingsList();
+    set_promise.$promise.then(function(res) {
+      return $scope.settingList = res.settings;
     });
   };
 

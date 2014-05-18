@@ -35,6 +35,15 @@ app.factory 'sessionMngr', () ->
     mngr.sessionId = sessionId
   return mngr
 
+app.factory 'configMngr', ($resource) ->
+  datas = {}
+  Query = $resource('/cfg/getsettinglist')
+
+  datas.GetSettingsList = () ->
+    return Query.get {}
+
+  return datas
+
 # Directive
 app.directive "fold", ->
   restrict : 'E'
@@ -252,24 +261,22 @@ app.directive "soundButton", ($resource)  ->
 
 app.filter 'faderFilter', ->
   (input,low,high) ->
-    return input[low..high]
+    if ((low != undefined) and (high != undefined))
+      return input[low..high]
+    else
+      return input
 
-FaderCtrl = ($scope, $http, $q, $resource)->
+FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
-
-  $scope.showMe = (index) ->
-    min = $scope.from if $scope.from != undefined
-    min = 0 if $scope.from == undefined
-    max = $scope.to if $scope.to != undefined
-    max = 4096 if $scope.to == undefined
-    if (index >= min and index <= to)
-      return true
-    else
-      return false
-
+  $scope.settingList = []
   FaderList.get {}, (res)->
     $scope.faderlist = res.list
+
+  set_promise = configMngr.GetSettingsList()
+  set_promise.$promise.then (res) ->
+    $scope.settingList = res.settings
+
   return
 
 @MainCtrl = ($scope, $http, $q, $resource,sessionMngr)->
