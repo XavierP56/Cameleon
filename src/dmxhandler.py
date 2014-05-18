@@ -10,6 +10,7 @@ import thread
 import models
 import serial
 import requests
+import uuid
 
 # This is where the DMX lighting setup is defined.
 
@@ -328,4 +329,15 @@ class DmxHandler(object):
 
     def dmx_recordsetting(self,fader):
         print 'Generate setting for fader ' + fader
+        m = models.dmx_model[fader]
+        name = 'setting_'
+        setting = {}
+        for key in m['defs']:
+            chnl = self.GetChannel(fader, key)
+            value = self.datas[chnl]
+            print key
+            print value
+            setting[key]=value
+            name = name + key + str(value)
+        models.dmx_setting[name] = setting
         return {'msg' : 'Setting created !'}
