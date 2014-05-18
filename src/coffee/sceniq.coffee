@@ -269,13 +269,13 @@ app.filter 'faderFilter', ->
 FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
+  SetFader = $resource('/dmx/setfader/:fader/:setting')
   $scope.settingList = []
   FaderList.get {}, (res)->
     $scope.faderlist = res.list
 
   $scope.SetSetting = (fader, setting) ->
-    alert (fader)
-    alert (setting)
+    SetFader.get {fader: fader, setting: setting}
 
   set_promise = configMngr.GetSettingsList()
   set_promise.$promise.then (res) ->

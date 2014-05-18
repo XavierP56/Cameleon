@@ -297,7 +297,10 @@ class DmxHandler(object):
                 self.dmx_setonelight(light)
 
     def dmx_setfader (self, fader, setting):
-        print 'Setting fader ' + fader + 'to setting ' + setting
+        request = requests.FakeRequest()
+        request.json['id'] = fader
+        request.json['setting'] = setting
+        self.dmx_set(request)
 
     # Services routines
     def GetChannel(self, id, key):

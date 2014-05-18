@@ -401,15 +401,18 @@
   });
 
   FaderCtrl = function($scope, $http, $q, $resource, configMngr) {
-    var FaderList, set_promise;
+    var FaderList, SetFader, set_promise;
     FaderList = $resource('/dmx/getfaderlist');
+    SetFader = $resource('/dmx/setfader/:fader/:setting');
     $scope.settingList = [];
     FaderList.get({}, function(res) {
       return $scope.faderlist = res.list;
     });
     $scope.SetSetting = function(fader, setting) {
-      alert(fader);
-      return alert(setting);
+      return SetFader.get({
+        fader: fader,
+        setting: setting
+      });
     };
     set_promise = configMngr.GetSettingsList();
     set_promise.$promise.then(function(res) {

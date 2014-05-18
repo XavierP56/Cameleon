@@ -78,7 +78,7 @@ def dmx_getfaderlist():
 
 @app.route('/dmx/setfader/:fader/:setting')
 def dmx_setfader(fader, setting):
-    return dmx_setfader(fader, setting)
+    return dmxhandler.dmx_setfader(fader, setting)
 
 # Models
 
