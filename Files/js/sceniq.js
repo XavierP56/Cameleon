@@ -409,7 +409,7 @@
     $scope.SetSetting = function(fader, setting) {
       return SetFader.get({
         fader: fader,
-        setting: setting.lapin.name
+        setting: setting.menu.name
       });
     };
     $scope.record = function(fader, setting) {
@@ -431,7 +431,7 @@
               ix++;
             }
           }
-          setting.lapin = $scope.settingList[ix];
+          setting.menu = $scope.settingList[ix];
           return alert(res.msg);
         });
       });

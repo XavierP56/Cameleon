@@ -278,7 +278,7 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
 
 
   $scope.SetSetting = (fader, setting) ->
-    SetFader.get {fader: fader, setting: setting.lapin.name}
+    SetFader.get {fader: fader, setting: setting.menu.name}
 
   $scope.record = (fader, setting) ->
     RecordSetting.get {fader: fader}, (res)->
@@ -291,7 +291,7 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
             break
           else
             ix++
-        setting.lapin = $scope.settingList[ix]
+        setting.menu = $scope.settingList[ix]
         alert (res.msg)
 
   # Init of the controller.
