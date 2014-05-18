@@ -1,50 +1,57 @@
 {
+    "grp6": {
+        "list": [
+            "light1", 
+            "light3"
+        ], 
+        "name": "L1 et L3"
+    }, 
     "light1": {
         "delay": 0, 
-        "group": "_1",
-        "name": "En rouge",
-        "setting": "setting_red",
-        "transition": "False",
-        "sounds_start" : ["5"]
-    },
+        "group": "_1", 
+        "name": "En rouge", 
+        "setting": "setting_red", 
+        "sounds_start": [
+            "5"
+        ], 
+        "transition": "False"
+    }, 
     "light2": {
-        "delay": 0,
-        "group": "_1",
-        "name": "En vert",
-        "setting": "setting_green",
-        "transition": "False",
-        "sounds_stop" : ["5"]
-    },
+        "delay": 0, 
+        "group": "_1", 
+        "name": "En vert", 
+        "setting": "setting_green", 
+        "sounds_stop": [
+            "5"
+        ], 
+        "transition": "False"
+    }, 
     "light3": {
-        "delay": 0,
-        "group": "_2",
-        "name": "Vert clair",
-        "setting": "setting_green_clair",
+        "delay": 0, 
+        "group": "_2", 
+        "name": "Vert clair", 
+        "setting": "setting_green_clair", 
         "transition": "False"
-    },
+    }, 
     "light3b": {
-        "delay": 0,
-        "group": "_2",
-        "name": "Blue",
-        "setting": "setting_blue",
+        "delay": 0, 
+        "group": "_2", 
+        "name": "Blue", 
+        "setting": "setting_blue", 
         "transition": "False"
-    },
+    }, 
     "light4": {
-        "delay": 2,
-        "group": "_1",
-        "name": "En bleu",
-        "setting": "setting_blue",
+        "delay": 2, 
+        "group": "_1", 
+        "name": "En bleu", 
+        "setting": "setting_blue", 
         "transition": "True"
-    },
+    }, 
     "light5": {
-        "delay": 0,
-        "group": "group1et2",
-        "name": "Blue",
-        "setting": "setting_blue",
+        "delay": 0, 
+        "group": "group1et2", 
+        "name": "Blue", 
+        "setting": "setting_blue", 
         "transition": "False"
-    },
-    "grp6": {
-        "list" : ["light1", "light3"],
-        "name" : "L1 et L3"
     }
 }

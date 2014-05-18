@@ -274,19 +274,32 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
   RecordSetting = $resource('/dmx/recordsetting/:fader')
 
   $scope.settingList = []
-  FaderList.get {}, (res)->
-    $scope.faderlist = res.list
+
+
 
   $scope.SetSetting = (fader, setting) ->
-    SetFader.get {fader: fader, setting: setting.name}
+    SetFader.get {fader: fader, setting: setting.lapin.name}
 
-  $scope.record = (fader) ->
+  $scope.record = (fader, setting) ->
     RecordSetting.get {fader: fader}, (res)->
-      alert(res.msg)
+      set_promise = configMngr.GetSettingsList()
+      set_promise.$promise.then (setv) ->
+        $scope.settingList = setv.settings
+        ix = 0
+        for n in $scope.settingList
+          if n.name == res.name
+            break
+          else
+            ix++
+        setting.lapin = $scope.settingList[ix]
+        alert (res.msg)
 
-  set_promise = configMngr.GetSettingsList()
-  set_promise.$promise.then (res) ->
-    $scope.settingList = res.settings
+  # Init of the controller.
+  FaderList.get {}, (res)->
+    $scope.faderlist = res.list
+    set_promise = configMngr.GetSettingsList()
+    set_promise.$promise.then (res) ->
+      $scope.settingList = res.settings
 
   return
 

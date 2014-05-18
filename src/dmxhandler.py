@@ -338,6 +338,6 @@ class DmxHandler(object):
             print key
             print value
             setting[key]=value
-            name = name + key + str(value)
+            name = name + key[:2] + str(value)
         models.dmx_setting[name] = setting
-        return {'msg' : 'Setting created !'}
+        return {'msg' : 'Setting created !', 'name':name}

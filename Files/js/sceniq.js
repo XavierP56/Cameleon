@@ -401,30 +401,48 @@
   });
 
   FaderCtrl = function($scope, $http, $q, $resource, configMngr) {
-    var FaderList, RecordSetting, SetFader, set_promise;
+    var FaderList, RecordSetting, SetFader;
     FaderList = $resource('/dmx/getfaderlist');
     SetFader = $resource('/dmx/setfader/:fader/:setting');
     RecordSetting = $resource('/dmx/recordsetting/:fader');
     $scope.settingList = [];
-    FaderList.get({}, function(res) {
-      return $scope.faderlist = res.list;
-    });
     $scope.SetSetting = function(fader, setting) {
       return SetFader.get({
         fader: fader,
-        setting: setting.name
+        setting: setting.lapin.name
       });
     };
-    $scope.record = function(fader) {
+    $scope.record = function(fader, setting) {
       return RecordSetting.get({
         fader: fader
       }, function(res) {
-        return alert(res.msg);
+        var set_promise;
+        set_promise = configMngr.GetSettingsList();
+        return set_promise.$promise.then(function(setv) {
+          var ix, n, _i, _len, _ref;
+          $scope.settingList = setv.settings;
+          ix = 0;
+          _ref = $scope.settingList;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            n = _ref[_i];
+            if (n.name === res.name) {
+              break;
+            } else {
+              ix++;
+            }
+          }
+          setting.lapin = $scope.settingList[ix];
+          return alert(res.msg);
+        });
       });
     };
-    set_promise = configMngr.GetSettingsList();
-    set_promise.$promise.then(function(res) {
-      return $scope.settingList = res.settings;
+    FaderList.get({}, function(res) {
+      var set_promise;
+      $scope.faderlist = res.list;
+      set_promise = configMngr.GetSettingsList();
+      return set_promise.$promise.then(function(res) {
+        return $scope.settingList = res.settings;
+      });
     });
   };
 

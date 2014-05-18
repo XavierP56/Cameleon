@@ -126,7 +126,7 @@ def newsession():
 def cfg_getsettinglist():
     res = []
     for s in models.dmx_setting:
-        v = {'name':s, 'values':models.dmx_setting[s]}
+        v = {'name':s}
         res.append(v)
     return {'settings': res}
 
