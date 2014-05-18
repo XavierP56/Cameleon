@@ -145,6 +145,7 @@ app.directive "dmxFader", ->
   controller: ($scope, $resource) ->
     Sliders = $resource('/dmx/faders/:id')
     SetFader = $resource('/dmx/setfader/:fader/:setting')
+    Generate = $resource('/dmx/generate/:fader/:setting')
 
     $scope.currentSetting = ''
     Sliders.get {id:$scope.id}, (res)->
@@ -178,6 +179,9 @@ app.directive "dmxFader", ->
           ix++
       $scope.setting.menu = $scope.settings[ix]
       $scope.SetSetting($scope.id, $scope.currentSetting)
+
+    $scope.$on 'generateAll', (sender, evt) ->
+      Generate {id:$scope.id, setting:$scope.currentSetting}
 
 app.directive "soundButton", ($resource)  ->
   restrict : 'E'
@@ -312,6 +316,9 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr,$timeout)->
 
   $scope.updateall = () ->
     $scope.$broadcast('updateDropBox')
+
+  $scope.generateall = () ->
+    $scope.$broadcast('generateAll')
 
   # Init of the controller.
   FaderList.get {}, (res)->

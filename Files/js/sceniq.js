@@ -232,9 +232,10 @@
       },
       templateUrl: '/sceniq/templates/dmxfader.html',
       controller: function($scope, $resource) {
-        var SetFader, Sliders;
+        var Generate, SetFader, Sliders;
         Sliders = $resource('/dmx/faders/:id');
         SetFader = $resource('/dmx/setfader/:fader/:setting');
+        Generate = $resource('/dmx/generate/:fader/:setting');
         $scope.currentSetting = '';
         Sliders.get({
           id: $scope.id
@@ -267,7 +268,7 @@
           }
           return $scope.currentSetting = evt.setting;
         });
-        return $scope.$on('updateDropBox', function(sender, evt) {
+        $scope.$on('updateDropBox', function(sender, evt) {
           var ix, n, _i, _len, _ref;
           ix = 0;
           _ref = $scope.settings;
@@ -281,6 +282,12 @@
           }
           $scope.setting.menu = $scope.settings[ix];
           return $scope.SetSetting($scope.id, $scope.currentSetting);
+        });
+        return $scope.$on('generateAll', function(sender, evt) {
+          return Generate({
+            id: $scope.id,
+            setting: $scope.currentSetting
+          });
         });
       }
     };
@@ -467,6 +474,9 @@
     };
     $scope.updateall = function() {
       return $scope.$broadcast('updateDropBox');
+    };
+    $scope.generateall = function() {
+      return $scope.$broadcast('generateAll');
     };
     FaderList.get({}, function(res) {
       var set_promise;

@@ -341,3 +341,12 @@ class DmxHandler(object):
             name = name + key[:2] + str(value)
         models.dmx_setting[name] = setting
         return {'msg' : 'Setting created !', 'name':name}
+
+    def dmx_generate (self, fader, setting):
+        name = 'gen_' + fader
+        models.dmx_light[name] = {
+            'group' : '_' + fader,
+            'transition' : "False",
+            'setting' : setting,
+            'name' : 'Projector ' + fader
+        }
