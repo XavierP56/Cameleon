@@ -142,11 +142,11 @@ app.directive "dmxFader", ->
   scope : { id : '@', settings : '='}
   templateUrl : '/sceniq/templates/dmxfader.html'
 
-
   controller: ($scope, $resource) ->
     Sliders = $resource('/dmx/faders/:id')
     SetFader = $resource('/dmx/setfader/:fader/:setting')
 
+    $scope.currentSetting = ''
     Sliders.get {id:$scope.id}, (res)->
       $scope.sliders = res.res
 
@@ -162,6 +162,21 @@ app.directive "dmxFader", ->
 
     $scope.SetSetting = (fader, setting) ->
       SetFader.get {fader: fader, setting: setting.menu.name}
+      $scope.currentSetting = setting.menu.name
+
+    $scope.$on 'setFaderSetting', (sender, evt) ->
+      if (evt.id != $scope.id)
+        return
+      $scope.currentSetting = evt.setting
+
+    $scope.$on 'updateDropBox', (sender, evt) ->
+      ix = 0
+      for n in $scope.settings
+        if n.name == $scope.currentSetting
+          break
+        else
+          ix++
+      $scope.setting.menu = $scope.settings[ix]
 
 app.directive "soundButton", ($resource)  ->
   restrict : 'E'
@@ -286,17 +301,15 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
 
   $scope.record = (fader, setting) ->
     RecordSetting.get {fader: fader}, (res)->
-      set_promise = configMngr.GetSettingsList()
+      set_promise = configMngr.LoadSettingsList()
       set_promise.$promise.then (setv) ->
         $scope.settingList = setv.settings
-        ix = 0
-        for n in $scope.settingList
-          if n.name == res.name
-            break
-          else
-            ix++
-        setting.menu = $scope.settingList[ix]
+        evt = { 'id' : fader, 'setting': res.name}
+        $scope.$broadcast('setFaderSetting',evt)
         alert (res.msg)
+
+  $scope.updateall = () ->
+    $scope.$broadcast('updateDropBox')
 
   # Init of the controller.
   FaderList.get {}, (res)->

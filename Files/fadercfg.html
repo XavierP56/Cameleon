@@ -2,9 +2,10 @@
     Fader configuration - All available projectors are listed.<br/>
     <input ng-model="from" type="number">
     <input ng-model="to" type="number">
+    <button ng-click="updateall()">Update !</button>
     <ul>
         <li class="faders" ng-repeat="f in faderlist | faderFilter:from:to">
-            <br/><button ng-click="record(f,setting)">Record new setting</button>
+            <br/><button ng-click="record(f)">Record new setting</button>
                 <dmx-fader settings="settingList" id="{{f}}"></dmx-fader>
         </li>
     </ul>

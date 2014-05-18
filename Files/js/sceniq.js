@@ -235,6 +235,7 @@
         var SetFader, Sliders;
         Sliders = $resource('/dmx/faders/:id');
         SetFader = $resource('/dmx/setfader/:fader/:setting');
+        $scope.currentSetting = '';
         Sliders.get({
           id: $scope.id
         }, function(res) {
@@ -253,12 +254,33 @@
             return "leftpos";
           }
         };
-        return $scope.SetSetting = function(fader, setting) {
-          return SetFader.get({
+        $scope.SetSetting = function(fader, setting) {
+          SetFader.get({
             fader: fader,
             setting: setting.menu.name
           });
+          return $scope.currentSetting = setting.menu.name;
         };
+        $scope.$on('setFaderSetting', function(sender, evt) {
+          if (evt.id !== $scope.id) {
+            return;
+          }
+          return $scope.currentSetting = evt.setting;
+        });
+        return $scope.$on('updateDropBox', function(sender, evt) {
+          var ix, n, _i, _len, _ref;
+          ix = 0;
+          _ref = $scope.settings;
+          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+            n = _ref[_i];
+            if (n.name === $scope.currentSetting) {
+              break;
+            } else {
+              ix++;
+            }
+          }
+          return $scope.setting.menu = $scope.settings[ix];
+        });
       }
     };
   });
@@ -428,24 +450,21 @@
         fader: fader
       }, function(res) {
         var set_promise;
-        set_promise = configMngr.GetSettingsList();
+        set_promise = configMngr.LoadSettingsList();
         return set_promise.$promise.then(function(setv) {
-          var ix, n, _i, _len, _ref;
+          var evt;
           $scope.settingList = setv.settings;
-          ix = 0;
-          _ref = $scope.settingList;
-          for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-            n = _ref[_i];
-            if (n.name === res.name) {
-              break;
-            } else {
-              ix++;
-            }
-          }
-          setting.menu = $scope.settingList[ix];
+          evt = {
+            'id': fader,
+            'setting': res.name
+          };
+          $scope.$broadcast('setFaderSetting', evt);
           return alert(res.msg);
         });
       });
+    };
+    $scope.updateall = function() {
+      return $scope.$broadcast('updateDropBox');
     };
     FaderList.get({}, function(res) {
       var set_promise;
