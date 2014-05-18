@@ -87,8 +87,13 @@
     var Query, datas;
     datas = {};
     Query = $resource('/cfg/getsettinglist');
-    datas.GetSettingsList = function() {
-      return Query.get({});
+    datas.LoadSettingsList = function() {
+      return Query.get({}, function(res) {
+        return datas.settingLst = res.settings;
+      });
+    };
+    datas.GetSettingList = function() {
+      return datas.settingLst;
     };
     return datas;
   });
@@ -222,23 +227,31 @@
     return {
       restrict: 'E',
       scope: {
-        id: '@'
+        id: '@',
+        settings: '='
       },
       templateUrl: '/sceniq/templates/dmxfader.html',
       controller: function($scope, $resource) {
-        var Sliders;
+        var SetFader, Sliders;
         Sliders = $resource('/dmx/faders/:id');
+        SetFader = $resource('/dmx/setfader/:fader/:setting');
         Sliders.get({
           id: $scope.id
         }, function(res) {
           return $scope.sliders = res.res;
         });
-        return $scope.computeCssClass = function(last) {
+        $scope.computeCssClass = function(last) {
           if (last === true) {
             return null;
           } else {
             return "leftpos";
           }
+        };
+        return $scope.SetSetting = function(fader, setting) {
+          return SetFader.get({
+            fader: fader,
+            setting: setting.menu.name
+          });
         };
       }
     };
@@ -401,17 +414,9 @@
   });
 
   FaderCtrl = function($scope, $http, $q, $resource, configMngr) {
-    var FaderList, RecordSetting, SetFader;
+    var FaderList, RecordSetting;
     FaderList = $resource('/dmx/getfaderlist');
-    SetFader = $resource('/dmx/setfader/:fader/:setting');
     RecordSetting = $resource('/dmx/recordsetting/:fader');
-    $scope.settingList = [];
-    $scope.SetSetting = function(fader, setting) {
-      return SetFader.get({
-        fader: fader,
-        setting: setting.menu.name
-      });
-    };
     $scope.record = function(fader, setting) {
       return RecordSetting.get({
         fader: fader
@@ -439,7 +444,7 @@
     FaderList.get({}, function(res) {
       var set_promise;
       $scope.faderlist = res.list;
-      set_promise = configMngr.GetSettingsList();
+      set_promise = configMngr.LoadSettingsList();
       return set_promise.$promise.then(function(res) {
         return $scope.settingList = res.settings;
       });

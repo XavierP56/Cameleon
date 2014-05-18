@@ -1,5 +1,6 @@
 <b>DMX Fader projector {{id}}</b>
 <div>
+<select ng-model="setting.menu" ng-options="c.name for c in settings" ng-change="SetSetting(id,setting)"></select><br/>
 <span ng-repeat="s in sliders">
     <dmx-slider ng-class="computeCssClass($last)" id="{{s.id}}" name="{{s.name}}" key="{{s.key}}"></dmx-slider>
 </span>

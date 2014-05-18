@@ -39,8 +39,12 @@ app.factory 'configMngr', ($resource) ->
   datas = {}
   Query = $resource('/cfg/getsettinglist')
 
-  datas.GetSettingsList = () ->
-    return Query.get {}
+  datas.LoadSettingsList = () ->
+    return Query.get {}, (res) ->
+      datas.settingLst = res.settings
+
+  datas.GetSettingList = () ->
+    return datas.settingLst
 
   return datas
 
@@ -135,11 +139,13 @@ app.directive "dmxLight", ->
 
 app.directive "dmxFader", ->
   restrict : 'E'
-  scope : { id : '@'}
+  scope : { id : '@', settings : '='}
   templateUrl : '/sceniq/templates/dmxfader.html'
+
 
   controller: ($scope, $resource) ->
     Sliders = $resource('/dmx/faders/:id')
+    SetFader = $resource('/dmx/setfader/:fader/:setting')
 
     Sliders.get {id:$scope.id}, (res)->
       $scope.sliders = res.res
@@ -150,6 +156,8 @@ app.directive "dmxFader", ->
       else
         return "leftpos"
 
+    $scope.SetSetting = (fader, setting) ->
+      SetFader.get {fader: fader, setting: setting.menu.name}
 
 app.directive "soundButton", ($resource)  ->
   restrict : 'E'
@@ -270,15 +278,7 @@ app.filter 'faderFilter', ->
 FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
-  SetFader = $resource('/dmx/setfader/:fader/:setting')
   RecordSetting = $resource('/dmx/recordsetting/:fader')
-
-  $scope.settingList = []
-
-
-
-  $scope.SetSetting = (fader, setting) ->
-    SetFader.get {fader: fader, setting: setting.menu.name}
 
   $scope.record = (fader, setting) ->
     RecordSetting.get {fader: fader}, (res)->
@@ -297,7 +297,7 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
   # Init of the controller.
   FaderList.get {}, (res)->
     $scope.faderlist = res.list
-    set_promise = configMngr.GetSettingsList()
+    set_promise = configMngr.LoadSettingsList()
     set_promise.$promise.then (res) ->
       $scope.settingList = res.settings
 

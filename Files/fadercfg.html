@@ -4,9 +4,8 @@
     <input ng-model="to" type="number">
     <ul>
         <li class="faders" ng-repeat="f in faderlist | faderFilter:from:to">
-            <select ng-model="setting.menu" ng-options="c.name for c in settingList" ng-change="SetSetting(f,setting)"></select>
             <br/><button ng-click="record(f,setting)">Record new setting</button>
-                <dmx-fader  id="{{f}}"></dmx-fader>
+                <dmx-fader settings="settingList" id="{{f}}"></dmx-fader>
         </li>
     </ul>
 </div>
