@@ -240,6 +240,12 @@
         }, function(res) {
           return $scope.sliders = res.res;
         });
+        $scope.showMe = function() {
+          if ($scope.settings === void 0) {
+            return false;
+          }
+          return true;
+        };
         $scope.computeCssClass = function(last) {
           if (last === true) {
             return null;

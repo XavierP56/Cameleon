@@ -150,6 +150,10 @@ app.directive "dmxFader", ->
     Sliders.get {id:$scope.id}, (res)->
       $scope.sliders = res.res
 
+    $scope.showMe = () ->
+      return false if $scope.settings == undefined
+      return true
+
     $scope.computeCssClass = (last) ->
       if (last == true)
         return null
