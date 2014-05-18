@@ -273,6 +273,10 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr)->
   FaderList.get {}, (res)->
     $scope.faderlist = res.list
 
+  $scope.SetSetting = (fader, setting) ->
+    alert (fader)
+    alert (setting)
+
   set_promise = configMngr.GetSettingsList()
   set_promise.$promise.then (res) ->
     $scope.settingList = res.settings

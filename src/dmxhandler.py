@@ -296,6 +296,9 @@ class DmxHandler(object):
                 # Simple light.
                 self.dmx_setonelight(light)
 
+    def dmx_setfader (self, fader, setting):
+        print 'Setting fader ' + fader + 'to setting ' + setting
+
     # Services routines
     def GetChannel(self, id, key):
         hw = models.dmx_model[id]

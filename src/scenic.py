@@ -76,6 +76,12 @@ def dmx_faders(id):
 def dmx_getfaderlist():
     return dmxhandler.dmx_faders_list()
 
+@app.route('/dmx/setfader/:fader/:setting')
+def dmx_setfader(fader, setting):
+    return dmx_setfader(fader, setting)
+
+# Models
+
 @app.route('/models/getdefs')
 def models_getdefs():
     dmx = dmxhandler.dmx_getdefs()

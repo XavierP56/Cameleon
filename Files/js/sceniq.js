@@ -407,6 +407,10 @@
     FaderList.get({}, function(res) {
       return $scope.faderlist = res.list;
     });
+    $scope.SetSetting = function(fader, setting) {
+      alert(fader);
+      return alert(setting);
+    };
     set_promise = configMngr.GetSettingsList();
     set_promise.$promise.then(function(res) {
       return $scope.settingList = res.settings;
