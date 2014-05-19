@@ -341,7 +341,8 @@ class DmxHandler(object):
             setting[key]=value
             name = name + key[:2] + str(value)
         models.dmx_setting[name] = setting
-        return {'msg' : 'Setting created !', 'name':name}
+        evt =  {'evt': 'recordDone', 'msg' : 'Setting created !', 'fader':fader, 'name':name}
+        sessionsq.PostEvent ('dmx', evt)
 
     def dmx_generate (self, fader, setting):
         name = 'gen_' + fader

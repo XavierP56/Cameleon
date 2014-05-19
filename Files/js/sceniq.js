@@ -462,20 +462,21 @@
     $scope.record = function(fader, setting) {
       return RecordSetting.get({
         fader: fader
-      }, function(res) {
-        var set_promise;
-        set_promise = configMngr.LoadSettingsList();
-        return set_promise.$promise.then(function(setv) {
-          var evt;
-          $scope.settingList = setv.settings;
-          evt = {
-            'id': fader,
-            'setting': res.name
-          };
-          $scope.$broadcast('setFaderSetting', evt);
-          alert(res.msg);
-          return $timeout($scope.updateall);
-        });
+      });
+    };
+    $scope.record_done = function(res) {
+      var set_promise;
+      set_promise = configMngr.LoadSettingsList();
+      return set_promise.$promise.then(function(setv) {
+        var evt;
+        $scope.settingList = setv.settings;
+        evt = {
+          'id': res.fader,
+          'setting': res.name
+        };
+        $scope.$broadcast('setFaderSetting', evt);
+        alert(res.msg);
+        return $timeout($scope.updateall);
       });
     };
     $scope.updateall = function() {
@@ -492,6 +493,9 @@
       return set_promise.$promise.then(function(res) {
         return $scope.settingList = res.settings;
       });
+    });
+    $scope.$on('recordDone', function(sender, evt) {
+      return $scope.record_done(evt);
     });
   };
 

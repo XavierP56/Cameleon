@@ -311,11 +311,13 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr,$timeout)->
   RecordSetting = $resource('/dmx/recordsetting/:fader')
 
   $scope.record = (fader, setting) ->
-    RecordSetting.get {fader: fader}, (res)->
+    RecordSetting.get {fader: fader}
+
+  $scope.record_done = (res) ->
       set_promise = configMngr.LoadSettingsList()
       set_promise.$promise.then (setv) ->
         $scope.settingList = setv.settings
-        evt = { 'id' : fader, 'setting': res.name}
+        evt = { 'id' : res.fader, 'setting': res.name}
         $scope.$broadcast('setFaderSetting',evt)
         alert (res.msg)
         $timeout($scope.updateall)
@@ -334,6 +336,9 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr,$timeout)->
     set_promise.$promise.then (res) ->
       $scope.settingList = res.settings
 
+  # When a new entry is created, please update.
+  $scope.$on 'recordDone', (sender, evt)->
+    $scope.record_done (evt)
   return
 
 @MainCtrl = ($scope, $http, $q, $resource,sessionMngr)->
