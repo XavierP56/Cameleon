@@ -181,7 +181,7 @@ app.directive "dmxFader", ->
       $scope.SetSetting($scope.id, $scope.currentSetting)
 
     $scope.$on 'generateAll', (sender, evt) ->
-      Generate {id:$scope.id, setting:$scope.currentSetting}
+      Generate.get {fader:$scope.id, setting:$scope.currentSetting}
 
 app.directive "soundButton", ($resource)  ->
   restrict : 'E'

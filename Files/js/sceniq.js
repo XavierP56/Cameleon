@@ -284,8 +284,8 @@
           return $scope.SetSetting($scope.id, $scope.currentSetting);
         });
         return $scope.$on('generateAll', function(sender, evt) {
-          return Generate({
-            id: $scope.id,
+          return Generate.get({
+            fader: $scope.id,
             setting: $scope.currentSetting
           });
         });
