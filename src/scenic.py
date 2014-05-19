@@ -129,6 +129,7 @@ def newsession():
 @app.route('/cfg/getsettinglist')
 def cfg_getsettinglist():
     res = []
+    res.append({'name': '-------'})
     for s in sorted(models.dmx_setting):
         v = {'name':s}
         res.append(v)

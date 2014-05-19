@@ -137,57 +137,72 @@ app.directive "dmxLight", ->
         $scope.active = "running"
     return
 
-app.directive "dmxFader", ->
+app.directive "dmxFader", ($resource) ->
   restrict: 'E'
   scope: { id: '@', settings: '='}
+  scope : true
   templateUrl: '/sceniq/templates/dmxfader.html'
 
-  controller: ($scope, $resource) ->
+  link: (scope, elemt, attrs) ->
     Sliders = $resource('/dmx/faders/:id')
     SetFader = $resource('/dmx/setfader/:fader/:setting')
     Generate = $resource('/dmx/generate/:fader/:setting')
 
-    $scope.currentSetting = ''
-    Sliders.get {id: $scope.id}, (res)->
-      $scope.sliders = res.res
-
-    $scope.showMe = () ->
-      return false if $scope.settings == undefined
+    scope.showMe = () ->
+      return false if scope.settings == undefined
       return true
 
-    $scope.computeCssClass = (last) ->
+    scope.computeCssClass = (last) ->
       if (last == true)
         return null
       else
         return "leftpos"
 
-    $scope.SetSetting = (fader, setting) ->
+    scope.SetSetting = (fader, setting) ->
       SetFader.get {fader: fader, setting: setting}
 
-    $scope.RefreshDropBox = () ->
+    scope.RefreshDropBox = () ->
       ix = 0
-      for n in $scope.settings
-        if n.name == $scope.currentSetting
+      for n in scope.settings
+        if n.name == scope.currentSetting
           break
         else
           ix++
-      $scope.setting.menu = $scope.settings[ix]
+      scope.setting.menu = scope.settings[ix]
 
-    $scope.$on 'setFaderSetting', (sender, evt) ->
-      if (evt.id != $scope.id)
+    # Init
+    scope.setting = {}
+    scope.setting.menu = {'name' :'me'}
+
+    scope.InitMenu = () ->
+      scope.setting.menu = scope.settings[0]
+
+    scope.$watch attrs.settings, (n,o) ->
+      if (n != undefined)
+        scope.settings = n
+        scope.setting.menu = scope.settings[0]
+
+    scope.$on 'setFaderSetting', (sender, evt) ->
+      if (evt.id != scope.id)
         return
-      $scope.currentSetting = evt.setting
-      $scope.RefreshDropBox()
+      scope.currentSetting = evt.setting
+      scope.RefreshDropBox()
 
-    $scope.$on 'updateDropBox', (sender, evt) ->
-      $scope.RefreshDropBox()
-      $scope.SetSetting($scope.id, $scope.currentSetting)
+    scope.$on 'updateDropBox', (sender, evt) ->
+      scope.RefreshDropBox()
+      scope.SetSetting(scope.id, scope.currentSetting)
 
-    $scope.$on 'refreshDropBox', (sender, evt) ->
-      $scope.RefreshDropBox()
+    scope.$on 'refreshDropBox', (sender, evt) ->
+      scope.RefreshDropBox()
 
-    $scope.$on 'generateAll', (sender, evt) ->
-      Generate.get {fader: $scope.id, setting: $scope.currentSetting}
+    scope.$on 'generateAll', (sender, evt) ->
+      Generate.get {fader: scope.id, setting: scope.currentSetting}
+
+    # Directive init
+    scope.id = attrs.id
+    scope.currentSetting = ''
+    Sliders.get {id: scope.id}, (res)->
+      scope.sliders = res.res
 
 app.directive "soundButton", ($resource)  ->
   restrict: 'E'
@@ -329,7 +344,7 @@ app.filter 'faderFilter', ->
     else
       return input
 
-FaderCtrl = ($scope, $http, $q, $resource, configMngr, $timeout)->
+FaderCtrl = ($scope, $http, $q, $resource, configMngr)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
   RecordSetting = $resource('/dmx/recordsetting/:fader')
@@ -344,7 +359,8 @@ FaderCtrl = ($scope, $http, $q, $resource, configMngr, $timeout)->
       evt = { 'id': res.fader, 'setting': res.name}
       $scope.$broadcast('setFaderSetting', evt)
       alert (res.msg)
-      $timeout($scope.updateall)
+      #$timeout($scope.updateall)
+      $scope.updateall()
 
   $scope.updateall = () ->
     $scope.$broadcast('updateDropBox')

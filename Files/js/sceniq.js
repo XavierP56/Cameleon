@@ -223,77 +223,92 @@
     };
   });
 
-  app.directive("dmxFader", function() {
+  app.directive("dmxFader", function($resource) {
     return {
       restrict: 'E',
       scope: {
         id: '@',
         settings: '='
       },
+      scope: true,
       templateUrl: '/sceniq/templates/dmxfader.html',
-      controller: function($scope, $resource) {
+      link: function(scope, elemt, attrs) {
         var Generate, SetFader, Sliders;
         Sliders = $resource('/dmx/faders/:id');
         SetFader = $resource('/dmx/setfader/:fader/:setting');
         Generate = $resource('/dmx/generate/:fader/:setting');
-        $scope.currentSetting = '';
-        Sliders.get({
-          id: $scope.id
-        }, function(res) {
-          return $scope.sliders = res.res;
-        });
-        $scope.showMe = function() {
-          if ($scope.settings === void 0) {
+        scope.showMe = function() {
+          if (scope.settings === void 0) {
             return false;
           }
           return true;
         };
-        $scope.computeCssClass = function(last) {
+        scope.computeCssClass = function(last) {
           if (last === true) {
             return null;
           } else {
             return "leftpos";
           }
         };
-        $scope.SetSetting = function(fader, setting) {
+        scope.SetSetting = function(fader, setting) {
           return SetFader.get({
             fader: fader,
             setting: setting
           });
         };
-        $scope.RefreshDropBox = function() {
+        scope.RefreshDropBox = function() {
           var ix, n, _i, _len, _ref;
           ix = 0;
-          _ref = $scope.settings;
+          _ref = scope.settings;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
             n = _ref[_i];
-            if (n.name === $scope.currentSetting) {
+            if (n.name === scope.currentSetting) {
               break;
             } else {
               ix++;
             }
           }
-          return $scope.setting.menu = $scope.settings[ix];
+          return scope.setting.menu = scope.settings[ix];
         };
-        $scope.$on('setFaderSetting', function(sender, evt) {
-          if (evt.id !== $scope.id) {
+        scope.setting = {};
+        scope.setting.menu = {
+          'name': 'me'
+        };
+        scope.InitMenu = function() {
+          return scope.setting.menu = scope.settings[0];
+        };
+        scope.$watch(attrs.settings, function(n, o) {
+          if (n !== void 0) {
+            scope.settings = n;
+            return scope.setting.menu = scope.settings[0];
+          }
+        });
+        scope.$on('setFaderSetting', function(sender, evt) {
+          if (evt.id !== scope.id) {
             return;
           }
-          $scope.currentSetting = evt.setting;
-          return $scope.RefreshDropBox();
+          scope.currentSetting = evt.setting;
+          return scope.RefreshDropBox();
         });
-        $scope.$on('updateDropBox', function(sender, evt) {
-          $scope.RefreshDropBox();
-          return $scope.SetSetting($scope.id, $scope.currentSetting);
+        scope.$on('updateDropBox', function(sender, evt) {
+          scope.RefreshDropBox();
+          return scope.SetSetting(scope.id, scope.currentSetting);
         });
-        $scope.$on('refreshDropBox', function(sender, evt) {
-          return $scope.RefreshDropBox();
+        scope.$on('refreshDropBox', function(sender, evt) {
+          return scope.RefreshDropBox();
         });
-        return $scope.$on('generateAll', function(sender, evt) {
+        scope.$on('generateAll', function(sender, evt) {
           return Generate.get({
-            fader: $scope.id,
-            setting: $scope.currentSetting
+            fader: scope.id,
+            setting: scope.currentSetting
           });
+        });
+        scope.id = attrs.id;
+        scope.currentSetting = '';
+        return Sliders.get({
+          id: scope.id
+        }, function(res) {
+          return scope.sliders = res.res;
         });
       }
     };
@@ -469,7 +484,7 @@
     };
   });
 
-  FaderCtrl = function($scope, $http, $q, $resource, configMngr, $timeout) {
+  FaderCtrl = function($scope, $http, $q, $resource, configMngr) {
     var FaderList, RecordSetting;
     FaderList = $resource('/dmx/getfaderlist');
     RecordSetting = $resource('/dmx/recordsetting/:fader');
@@ -490,7 +505,7 @@
         };
         $scope.$broadcast('setFaderSetting', evt);
         alert(res.msg);
-        return $timeout($scope.updateall);
+        return $scope.updateall();
       });
     };
     $scope.updateall = function() {
