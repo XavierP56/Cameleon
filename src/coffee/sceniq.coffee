@@ -89,6 +89,7 @@ app.directive "dmxSlider", ($resource) ->
           if (evt.id != scope.id) or (evt.key != scope.key)
             return
           scope.value = evt.val
+        scope.showMe = true
 
     scope.send = () ->
       cmd = {}
@@ -96,6 +97,7 @@ app.directive "dmxSlider", ($resource) ->
       DmxSet.set {id: scope.id, cmds: cmd}, ->
         return
 
+    scope.showMe = true
     scope.id = attrs.id
     scope.key = attrs.key
     scope.def = attrs.def
@@ -203,10 +205,12 @@ app.directive "dmxFader", ($resource) ->
       Generate.get {fader: scope.id, setting: scope.currentSetting}
 
     # Directive init
+    scope.showIt = false
     scope.id = attrs.id
     scope.currentSetting = '-------'
     Sliders.get {id: scope.id}, (res)->
       scope.sliders = res.res
+      scope.showIt = true
 
 app.directive "soundButton", ($resource)  ->
   restrict: 'E'
@@ -220,6 +224,8 @@ app.directive "soundButton", ($resource)  ->
     SoundStop = $resource('/sounds/stop/:id')
     SoundLevel = $resource('/sounds/level/:id/:power')
     Query = $resource('/sounds/query/:id')
+
+    scope.showMe = false
 
     scope.started = () ->
       Query.get {id: scope.id}, (res) ->
@@ -254,6 +260,8 @@ app.directive "soundButton", ($resource)  ->
           if evt.id != scope.id
             return
           scope.power = evt.power
+        # And show me
+        scope.showMe = true
 
     scope.playSong = () ->
       cmd =

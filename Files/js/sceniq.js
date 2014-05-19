@@ -148,12 +148,13 @@
             scope.value = res[scope.key];
             scope.send();
             scope.knobOptions = res['knob'];
-            return scope.$on('update', function(sender, evt) {
+            scope.$on('update', function(sender, evt) {
               if ((evt.id !== scope.id) || (evt.key !== scope.key)) {
                 return;
               }
               return scope.value = evt.val;
             });
+            return scope.showMe = true;
           });
         };
         scope.send = function() {
@@ -165,6 +166,7 @@
             cmds: cmd
           }, function() {});
         };
+        scope.showMe = true;
         scope.id = attrs.id;
         scope.key = attrs.key;
         scope.def = attrs.def;
@@ -309,12 +311,14 @@
             setting: scope.currentSetting
           });
         });
+        scope.showIt = false;
         scope.id = attrs.id;
         scope.currentSetting = '-------';
         return Sliders.get({
           id: scope.id
         }, function(res) {
-          return scope.sliders = res.res;
+          scope.sliders = res.res;
+          return scope.showIt = true;
         });
       }
     };
@@ -336,6 +340,7 @@
         SoundStop = $resource('/sounds/stop/:id');
         SoundLevel = $resource('/sounds/level/:id/:power');
         Query = $resource('/sounds/query/:id');
+        scope.showMe = false;
         scope.started = function() {
           return Query.get({
             id: scope.id
@@ -376,12 +381,13 @@
               scope.classstyle = 'stopStyle';
               return scope.$emit('foldstop');
             });
-            return scope.$on('volumeUpt', function(sender, evt) {
+            scope.$on('volumeUpt', function(sender, evt) {
               if (evt.id !== scope.id) {
                 return;
               }
               return scope.power = evt.power;
             });
+            return scope.showMe = true;
           });
         };
         scope.playSong = function() {
