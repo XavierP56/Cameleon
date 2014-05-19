@@ -347,13 +347,19 @@
               scope.classstyle = 'playStyle';
               return scope.$emit('foldplay');
             });
-            return scope.$on('stop', function(sender, evt) {
+            scope.$on('stop', function(sender, evt) {
               if (evt.id !== scope.id) {
                 return;
               }
               scope.playing = false;
               scope.classstyle = 'stopStyle';
               return scope.$emit('foldstop');
+            });
+            return scope.$on('volumeUpt', function(sender, evt) {
+              if (evt.id !== scope.id) {
+                return;
+              }
+              return scope.power = evt.power;
             });
           });
         };

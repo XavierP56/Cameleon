@@ -231,6 +231,10 @@ app.directive "soundButton", ($resource)  ->
           scope.classstyle = 'stopStyle'
           scope.$emit('foldstop')
 
+        scope.$on 'volumeUpt', (sender, evt) ->
+          if evt.id != scope.id
+            return
+          scope.power = evt.power
 
     scope.playSong = () ->
       cmd =

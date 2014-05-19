@@ -109,6 +109,9 @@ class SoundPlayer:
                 sndchn.set_volume(sndlevel)
 
             self.levels[id] = power
+            evt = {'evt' : 'volumeUpt', 'id':id, 'power':power}
+            sessionsq.PostEvent('snd',evt)
+            return
 
     def sounds_panic(self):
         keys = self.sounds.keys()
