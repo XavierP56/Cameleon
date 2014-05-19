@@ -58,5 +58,34 @@
                 "fgColor": "red"
             }
         }
+    }, 
+    "LedParZoom": {
+        "channel": 28, 
+        "defs": {
+            "blue": 7, 
+            "colormacro": 8, 
+            "green": 6, 
+            "pano": 1, 
+            "panofin": 2, 
+            "red": 5, 
+            "tilt": 3, 
+            "tiltfin": 4
+        }, 
+        "inits": {}, 
+        "knobs": {
+            "blue": {
+                "fgColor": "blue"
+            }, 
+            "dimmer": {
+                "cursor": 40, 
+                "fgColor": "yellow"
+            }, 
+            "green": {
+                "fgColor": "green"
+            }, 
+            "red": {
+                "fgColor": "red"
+            }
+        }
     }
 }

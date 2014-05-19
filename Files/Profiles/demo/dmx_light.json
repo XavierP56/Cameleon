@@ -1,4 +1,35 @@
 {
+    "gen_1": {
+        "group": "_1", 
+        "name": "Projector 1", 
+        "setting": "setting_red", 
+        "transition": "False"
+    }, 
+    "gen_1_dup": {
+        "group": "_1_dup", 
+        "name": "Projector 1_dup", 
+        "setting": "setting_bl255di255gr131re72", 
+        "transition": "False"
+    }, 
+    "gen_2": {
+        "group": "_2", 
+        "name": "Projector 2", 
+        "setting": "setting_blue", 
+        "transition": "False"
+    }, 
+    "gen_2_dup": {
+        "group": "_2_dup", 
+        "name": "Projector 2_dup", 
+        "setting": "setting_blue", 
+        "transition": "False"
+    }, 
+    "gen_LedParZoom": {
+	    "delay": 0, 
+        "group": "_LedParZoom", 
+        "name": "Projector LedParZoom", 
+        "setting": "setting_pa156bl120ti189gr113ti207pa0co110re239", 
+        "transition": "False"
+    }, 
     "grp6": {
         "list": [
             "light1", 

@@ -196,7 +196,7 @@ def GenerateDefaultGroup():
 
     for lid in dmx_model:
         key = '_' + lid
-        dmx_group[key] = lid
+        dmx_group[key] = [lid]
 
 def loadModel(args):
     global dmx_model
