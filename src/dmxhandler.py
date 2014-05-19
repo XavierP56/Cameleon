@@ -252,11 +252,14 @@ class DmxHandler(object):
                     if id in self.transition:
                         del self.transition[id]
                     for key in cmds:
-                        dstchan = self.GetChannel(id, key)
-                        val = int(cmds[key])
-                        self.datas[dstchan] = val
-                        evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
-                        sessionsq.PostEvent('dmx',evt)
+                        try:
+                            dstchan = self.GetChannel(id, key)
+                            val = int(cmds[key])
+                            self.datas[dstchan] = val
+                            evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
+                            sessionsq.PostEvent('dmx',evt)
+                        except:
+                            pass
                     self.changed = True
 
 
