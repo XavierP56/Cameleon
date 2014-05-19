@@ -62,9 +62,9 @@ class DmxHandler(object):
         self.dmxFull = None
         self.sndplayer = sndplayer
 
-        if self.args.dmx and self.args.wireless is None:
+        if self.args.dmx is not None and self.args.wireless is None:
             print "DMX on wire"
-            self.dmxoutput = open('/dev/dmx0', 'wb')
+            self.dmxoutput = open(self.args.dmx, 'wb')
             self.dmxFull = True
 
         if self.args.wireless is not None:
