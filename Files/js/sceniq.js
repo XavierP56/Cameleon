@@ -358,14 +358,16 @@
           });
         };
         scope.playSong = function() {
-          return SoundPlay["do"]({
+          var cmd;
+          cmd = {
             id: scope.id,
             repeat: scope.song.loop,
             name: scope.song.songFile,
             power: scope.power,
             position: scope.song.position,
             card: scope.song.card
-          }, function() {});
+          };
+          return SoundPlay["do"](cmd, function() {});
         };
         scope.stopSong = function() {
           return SoundStop.get({
@@ -414,23 +416,27 @@
     });
     Save = $resource('/models/save');
     $scope.update = function() {
-      Update.set({
+      var cmd;
+      cmd = {
         'dmx_model': $scope.dmxModel,
         'dmx_setting': $scope.dmxSetting,
         'snd_setting': $scope.sndSetting,
         'dmx_light': $scope.dmxLight,
         'dmx_group': $scope.dmxGroup
-      }, function() {});
+      };
+      Update.set(cmd, function() {});
       return alert('Settings updated !');
     };
     $scope.save = function() {
-      $scope.setDone = Update.set({
+      var cmd;
+      cmd = {
         'dmx_model': $scope.dmxModel,
         'dmx_setting': $scope.dmxSetting,
         'snd_setting': $scope.sndSetting,
-        "dmx_light": $scope.dmxLight,
+        'dmx_light': $scope.dmxLight,
         'dmx_group': $scope.dmxGroup
-      }, function() {});
+      };
+      $scope.setDone = Update.set(cmd, function() {});
       return $scope.setDone.$promise.then(function() {
         return Save.get({}, function() {
           return alert('Settings saved !');

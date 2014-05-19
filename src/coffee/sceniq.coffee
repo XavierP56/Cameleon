@@ -1,19 +1,19 @@
 # Copyright Xavier Pouyollon 2014
 # GPL v3 License
 
-app = angular.module 'myApp', ['ngResource','ui.router','JSONedit','ui.knob','ngCookies']
+app = angular.module 'myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']
 
 app.config ($stateProvider) ->
-  room1 = {url: "/Room1", templateUrl: "/profiles/room1.html",  controller: RoomCtrl}
-  room2 = {url: "/Room2", templateUrl: "/profiles/room2.html",  controller: RoomCtrl}
-  room3 = {url: "/Room3", templateUrl: "/profiles/room3.html",  controller: RoomCtrl}
-  room4 = {url: "/Room4", templateUrl: "/profiles/room4.html",  controller: RoomCtrl}
-  room5 = {url: "/Room5", templateUrl: "/profiles/room5.html",  controller: RoomCtrl}
-  room6 = {url: "/Room6", templateUrl: "/profiles/room6.html",  controller: RoomCtrl}
-  room7 = {url: "/Room7", templateUrl: "/profiles/room7.html",  controller: RoomCtrl}
-  room8 = {url: "/Room8", templateUrl: "/profiles/room8.html",  controller: RoomCtrl}
+  room1 = {url: "/Room1", templateUrl: "/profiles/room1.html", controller: RoomCtrl}
+  room2 = {url: "/Room2", templateUrl: "/profiles/room2.html", controller: RoomCtrl}
+  room3 = {url: "/Room3", templateUrl: "/profiles/room3.html", controller: RoomCtrl}
+  room4 = {url: "/Room4", templateUrl: "/profiles/room4.html", controller: RoomCtrl}
+  room5 = {url: "/Room5", templateUrl: "/profiles/room5.html", controller: RoomCtrl}
+  room6 = {url: "/Room6", templateUrl: "/profiles/room6.html", controller: RoomCtrl}
+  room7 = {url: "/Room7", templateUrl: "/profiles/room7.html", controller: RoomCtrl}
+  room8 = {url: "/Room8", templateUrl: "/profiles/room8.html", controller: RoomCtrl}
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
-  faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html",controller: FaderCtrl}
+  faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html", controller: FaderCtrl}
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
   $stateProvider.state('room3', room3)
@@ -27,7 +27,7 @@ app.config ($stateProvider) ->
 
 # Factories
 app.factory 'sessionMngr', () ->
-  mngr = { 'connected' : false}
+  mngr = { 'connected': false}
   mngr.IsConnected = () ->
     return mngr.connected
   mngr.SetConnected = (sessionId) ->
@@ -50,10 +50,10 @@ app.factory 'configMngr', ($resource) ->
 
 # Directive
 app.directive "fold", ->
-  restrict : 'E'
-  templateUrl : '/sceniq/templates/fold.html'
-  scope : {foldName : '@'}
-  transclude : true
+  restrict: 'E'
+  templateUrl: '/sceniq/templates/fold.html'
+  scope: {foldName: '@'}
+  transclude: true
 
   compile: (element, attr, linker) ->
     pre: (scope, element, attr) ->
@@ -62,22 +62,22 @@ app.directive "fold", ->
         return
 
   controller: ($scope) ->
-      $scope.nb = 0
+    $scope.nb = 0
 
-      $scope.$on 'foldplay', (sender, evt) ->
-        $scope.nb = $scope.nb + 1
+    $scope.$on 'foldplay', (sender, evt) ->
+      $scope.nb = $scope.nb + 1
 
-      $scope.$on 'foldstop', (sender, evt) ->
-        $scope.nb = $scope.nb - 1
+    $scope.$on 'foldstop', (sender, evt) ->
+      $scope.nb = $scope.nb - 1
 
 app.directive "dmxSlider", ($resource) ->
-  restrict : 'E'
-  templateUrl : '/sceniq/templates/dmxslider.html'
-  scope : true
+  restrict: 'E'
+  templateUrl: '/sceniq/templates/dmxslider.html'
+  scope: true
 
   link: (scope, elemt, attrs) ->
     Query = $resource('/dmx/query/:id/:key')
-    DmxSet = $resource('/dmx/set', {}, {set:{method:'POST'}})
+    DmxSet = $resource('/dmx/set', {}, {set: {method: 'POST'}})
 
     scope.started = () ->
       Query.get {id: scope.id, key: scope.key}, (res) ->
@@ -93,7 +93,7 @@ app.directive "dmxSlider", ($resource) ->
     scope.send = () ->
       cmd = {}
       cmd[scope.key] = scope.value
-      DmxSet.set {id:scope.id, cmds: cmd}, ->
+      DmxSet.set {id: scope.id, cmds: cmd}, ->
         return
 
     scope.id = attrs.id
@@ -104,43 +104,43 @@ app.directive "dmxSlider", ($resource) ->
     scope.started()
 
 app.directive "dmxLight", ->
-  restrict : 'E'
-  templateUrl : '/sceniq/templates/dmxlight.html'
-  scope : {id:'@'}
-  transclude : true
+  restrict: 'E'
+  templateUrl: '/sceniq/templates/dmxlight.html'
+  scope: {id: '@'}
+  transclude: true
 
   controller: ($scope, $resource) ->
     LightQuery = $resource('/dmx/light/:id')
-    DmxSetLight =  $resource('/dmx/setLight/:light')
+    DmxSetLight = $resource('/dmx/setLight/:light')
 
-    LightQuery.get {id:$scope.id}, (res)->
+    LightQuery.get {id: $scope.id}, (res)->
       $scope.light = res.light
       if $scope.light.hasOwnProperty('transition')
-        $scope.dmxstyle='dmx' if $scope.light.transition == "False"
-        $scope.dmxstyle='transit' if $scope.light.transition == "True"
+        $scope.dmxstyle = 'dmx' if $scope.light.transition == "False"
+        $scope.dmxstyle = 'transit' if $scope.light.transition == "True"
       else
-        $scope.dmxstyle='list'
+        $scope.dmxstyle = 'list'
 
       if res.active == true
         $scope.active = "running"
 
-    $scope.do= () ->
-      DmxSetLight.get {light:$scope.id}, (res)->
+    $scope.do = () ->
+      DmxSetLight.get {light: $scope.id}, (res)->
         return
 
     $scope.$on 'activeLight', (sender, evt) ->
       if (evt.group != $scope.light.group)
         return
       if (evt.light != $scope.id)
-          $scope.active = null
+        $scope.active = null
       else
-          $scope.active = "running"
+        $scope.active = "running"
     return
 
 app.directive "dmxFader", ->
-  restrict : 'E'
-  scope : { id : '@', settings : '='}
-  templateUrl : '/sceniq/templates/dmxfader.html'
+  restrict: 'E'
+  scope: { id: '@', settings: '='}
+  templateUrl: '/sceniq/templates/dmxfader.html'
 
   controller: ($scope, $resource) ->
     Sliders = $resource('/dmx/faders/:id')
@@ -148,7 +148,7 @@ app.directive "dmxFader", ->
     Generate = $resource('/dmx/generate/:fader/:setting')
 
     $scope.currentSetting = ''
-    Sliders.get {id:$scope.id}, (res)->
+    Sliders.get {id: $scope.id}, (res)->
       $scope.sliders = res.res
 
     $scope.showMe = () ->
@@ -187,19 +187,18 @@ app.directive "dmxFader", ->
       $scope.RefreshDropBox()
 
     $scope.$on 'generateAll', (sender, evt) ->
-      Generate.get {fader:$scope.id, setting:$scope.currentSetting}
+      Generate.get {fader: $scope.id, setting: $scope.currentSetting}
 
 app.directive "soundButton", ($resource)  ->
-  restrict : 'E'
-  templateUrl : '/sceniq/templates/soundbutton.html'
-  scope : true
+  restrict: 'E'
+  templateUrl: '/sceniq/templates/soundbutton.html'
+  scope: true
 
   link: (scope, elemt, attrs) ->
     # Default Knob settings.
-
     scope.power = 100
-    SoundPlay =  $resource('/sounds/play',{},{do:{method:'POST'}})
-    SoundStop =  $resource('/sounds/stop/:id')
+    SoundPlay = $resource('/sounds/play', {}, {do: {method: 'POST'}})
+    SoundStop = $resource('/sounds/stop/:id')
     SoundLevel = $resource('/sounds/level/:id/:power')
     Query = $resource('/sounds/query/:id')
 
@@ -234,13 +233,20 @@ app.directive "soundButton", ($resource)  ->
 
 
     scope.playSong = () ->
-       SoundPlay.do {id: scope.id, repeat: scope.song.loop, name:scope.song.songFile, power:scope.power,
-       position:scope.song.position, card:scope.song.card}, ->
-         return
+      cmd =
+        id: scope.id
+        repeat: scope.song.loop
+        name: scope.song.songFile
+        power: scope.power
+        position: scope.song.position
+        card: scope.song.card
+
+      SoundPlay.do cmd, ->
+        return
 
     scope.stopSong = () ->
       SoundStop.get {id: scope.id}, ->
-         return
+        return
 
     scope.doit = () ->
       # Send request to server
@@ -271,41 +277,55 @@ app.directive "soundButton", ($resource)  ->
 
 
 @ConfigCtrl = ($scope, $http, $q, $resource)->
-    # DMX Stuff.
-    Query = $resource('/models/getdefs')
-    Update = $resource('/models/setdefs', {}, {set:{method:'POST'}})
-    Save = $resource('/models/save')
+  # DMX Stuff.
+  Query = $resource('/models/getdefs')
+  Update = $resource('/models/setdefs', {}, {set: {method: 'POST'}})
+  Save = $resource('/models/save')
 
-    $scope.update = () ->
-      Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, 'dmx_light': $scope.dmxLight, 'dmx_group': $scope.dmxGroup}, ()->
-      alert('Settings updated !')
+  $scope.update = () ->
+    cmd =
+      'dmx_model': $scope.dmxModel
+      'dmx_setting': $scope.dmxSetting
+      'snd_setting': $scope.sndSetting
+      'dmx_light': $scope.dmxLight
+      'dmx_group': $scope.dmxGroup
 
-    $scope.save = () ->
-      $scope.setDone = Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight, 'dmx_group': $scope.dmxGroup}, ()->
-        return
-      $scope.setDone.$promise.then () ->
-        Save.get {}, ->
-          alert('Settings saved !')
+    Update.set cmd, ()->
+    alert('Settings updated !')
 
-    Query.get {}, (res) ->
-      $scope.dmxModel = res.dmx_model
-      $scope.dmxGroup = res.dmx_group
-      $scope.dmxSetting = res.dmx_setting
-      $scope.dmxLight = res.dmx_light
-      $scope.sndSetting = res.snd_setting
+  $scope.save = () ->
+    cmd =
+      'dmx_model': $scope.dmxModel
+      'dmx_setting': $scope.dmxSetting
+      'snd_setting': $scope.sndSetting
+      'dmx_light': $scope.dmxLight
+      'dmx_group': $scope.dmxGroup
+
+    $scope.setDone = Update.set cmd, ()->
       return
+    $scope.setDone.$promise.then () ->
+      Save.get {}, ->
+        alert('Settings saved !')
 
-    $scope.$on '$stateChangeStart', (event) ->
-     #event.preventDefault()
+  Query.get {}, (res) ->
+    $scope.dmxModel = res.dmx_model
+    $scope.dmxGroup = res.dmx_group
+    $scope.dmxSetting = res.dmx_setting
+    $scope.dmxLight = res.dmx_light
+    $scope.sndSetting = res.snd_setting
+    return
+
+  $scope.$on '$stateChangeStart', (event) ->
+    #event.preventDefault()
 
 app.filter 'faderFilter', ->
-  (input,low,high) ->
+  (input, low, high) ->
     if ((low != undefined) and (high != undefined))
       return input[low..high]
     else
       return input
 
-FaderCtrl = ($scope, $http, $q, $resource,configMngr,$timeout)->
+FaderCtrl = ($scope, $http, $q, $resource, configMngr, $timeout)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
   RecordSetting = $resource('/dmx/recordsetting/:fader')
@@ -314,13 +334,13 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr,$timeout)->
     RecordSetting.get {fader: fader}
 
   $scope.record_done = (res) ->
-      set_promise = configMngr.LoadSettingsList()
-      set_promise.$promise.then (setv) ->
-        $scope.settingList = setv.settings
-        evt = { 'id' : res.fader, 'setting': res.name}
-        $scope.$broadcast('setFaderSetting',evt)
-        alert (res.msg)
-        $timeout($scope.updateall)
+    set_promise = configMngr.LoadSettingsList()
+    set_promise.$promise.then (setv) ->
+      $scope.settingList = setv.settings
+      evt = { 'id': res.fader, 'setting': res.name}
+      $scope.$broadcast('setFaderSetting', evt)
+      alert (res.msg)
+      $timeout($scope.updateall)
 
   $scope.updateall = () ->
     $scope.$broadcast('updateDropBox')
@@ -341,7 +361,7 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr,$timeout)->
     $scope.record_done (evt)
   return
 
-@MainCtrl = ($scope, $http, $q, $resource,sessionMngr)->
+@MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')
   Query = $resource('/models/scenes')
   CreateSession = $resource('/scenic/newsession')
@@ -369,29 +389,29 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr,$timeout)->
   dmxpromise = DmxCancel.promise
   dmxpromise.then () ->
 
-  # POST request to send cookies (sessionId)
-  Events = $resource('/sounds/events',{},{'get': {method: 'POST', timeout: sndpromise}})
-  DmxEvents = $resource('/dmx/events',{},{'get': {method: 'POST', timeout: dmxpromise}})
+    # POST request to send cookies (sessionId)
+  Events = $resource('/sounds/events', {}, {'get': {method: 'POST', timeout: sndpromise}})
+  DmxEvents = $resource('/dmx/events', {}, {'get': {method: 'POST', timeout: dmxpromise}})
 
   $scope.getSoundEvent = () ->
     $scope.promiseGetSnd = Events.get {}
     # Wait for sound event, analyze it and broadcast it.
     $scope.promiseGetSnd.$promise.then (evt)->
-        $scope.$broadcast(evt.evt, evt)
-        $scope.getSoundEvent()
+      $scope.$broadcast(evt.evt, evt)
+      $scope.getSoundEvent()
 
   # Wait DMX events,  analyze it and broadcast it.
   $scope.getDmxEvent = () ->
     $scope.promiseGetDmx = DmxEvents.get {}
     # Wait DMX events,  analyze it and broadcast it.
     $scope.promiseGetDmx.$promise.then (evt)->
-        $scope.$broadcast(evt.evt, evt)
-        $scope.getDmxEvent()
+      $scope.$broadcast(evt.evt, evt)
+      $scope.getDmxEvent()
 
   # Trigger them
   $scope.getSoundEvent()
   $scope.getDmxEvent()
 
-  # $scope.$on '$stateChangeStart', (event) ->
-  #  SndCancel.resolve()
-  #  DmxCancel.resolve()
+# $scope.$on '$stateChangeStart', (event) ->
+#  SndCancel.resolve()
+#  DmxCancel.resolve()
