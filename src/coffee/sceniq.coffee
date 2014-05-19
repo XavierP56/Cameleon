@@ -369,6 +369,7 @@ FaderCtrl = ($scope, $http, $q, $resource, configMngr, $timeout)->
   SndPanic = $resource('/sounds/panic')
   Query = $resource('/models/scenes')
   CreateSession = $resource('/scenic/newsession')
+  ReloadProfile = $resource('/cfg/reloadprofiles')
 
   Query.get {}, (res)->
     $scope.entries = res.scenes
@@ -393,7 +394,11 @@ FaderCtrl = ($scope, $http, $q, $resource, configMngr, $timeout)->
   dmxpromise = DmxCancel.promise
   dmxpromise.then () ->
 
-    # POST request to send cookies (sessionId)
+  $scope.reloadProfile = () ->
+    ReloadProfile.get {}, () ->
+      alert ('Profiles loaded !')
+
+  # POST request to send cookies (sessionId)
   Events = $resource('/sounds/events', {}, {'get': {method: 'POST', timeout: sndpromise}})
   DmxEvents = $resource('/dmx/events', {}, {'get': {method: 'POST', timeout: dmxpromise}})
 

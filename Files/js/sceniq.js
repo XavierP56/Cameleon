@@ -514,10 +514,11 @@
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
-    var CreateSession, DmxCancel, DmxEvents, Events, Query, SndCancel, SndPanic, dmxpromise, sndpromise;
+    var CreateSession, DmxCancel, DmxEvents, Events, Query, ReloadProfile, SndCancel, SndPanic, dmxpromise, sndpromise;
     SndPanic = $resource('/sounds/panic');
     Query = $resource('/models/scenes');
     CreateSession = $resource('/scenic/newsession');
+    ReloadProfile = $resource('/cfg/reloadprofiles');
     Query.get({}, function(res) {
       return $scope.entries = res.scenes;
     });
@@ -536,6 +537,11 @@
     sndpromise.then(function() {});
     dmxpromise = DmxCancel.promise;
     dmxpromise.then(function() {});
+    $scope.reloadProfile = function() {
+      return ReloadProfile.get({}, function() {
+        return alert('Profiles loaded !');
+      });
+    };
     Events = $resource('/sounds/events', {}, {
       'get': {
         method: 'POST',

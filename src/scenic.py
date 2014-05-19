@@ -134,6 +134,13 @@ def cfg_getsettinglist():
         res.append(v)
     return {'settings': res}
 
+@app.route('/cfg/reloadprofiles')
+def cfg_reloadprofiles():
+    try:
+        models.loadModel(args)
+    except:
+        print 'Load model failed'
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
