@@ -277,11 +277,11 @@ app.directive "soundButton", ($resource)  ->
     Save = $resource('/models/save')
 
     $scope.update = () ->
-      Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight}, ()->
+      Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, 'dmx_light': $scope.dmxLight, 'dmx_group': $scope.dmxGroup}, ()->
       alert('Settings updated !')
 
     $scope.save = () ->
-      $scope.setDone = Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight}, ()->
+      $scope.setDone = Update.set {'dmx_model': $scope.dmxModel, 'dmx_setting':$scope.dmxSetting,'snd_setting':$scope.sndSetting, "dmx_light": $scope.dmxLight, 'dmx_group': $scope.dmxGroup}, ()->
         return
       $scope.setDone.$promise.then () ->
         Save.get {}, ->

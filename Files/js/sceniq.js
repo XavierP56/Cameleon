@@ -418,7 +418,8 @@
         'dmx_model': $scope.dmxModel,
         'dmx_setting': $scope.dmxSetting,
         'snd_setting': $scope.sndSetting,
-        "dmx_light": $scope.dmxLight
+        'dmx_light': $scope.dmxLight,
+        'dmx_group': $scope.dmxGroup
       }, function() {});
       return alert('Settings updated !');
     };
@@ -427,7 +428,8 @@
         'dmx_model': $scope.dmxModel,
         'dmx_setting': $scope.dmxSetting,
         'snd_setting': $scope.sndSetting,
-        "dmx_light": $scope.dmxLight
+        "dmx_light": $scope.dmxLight,
+        'dmx_group': $scope.dmxGroup
       }, function() {});
       return $scope.setDone.$promise.then(function() {
         return Save.get({}, function() {
