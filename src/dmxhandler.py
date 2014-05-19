@@ -271,6 +271,9 @@ class DmxHandler(object):
                 request.json['setting'] = l['setting']
                 if 'transition' in l:
                     request.json['transition'] = l['transition']
+                if 'delay' in l:
+					request.json['delay'] = l['delay']
+					
                 self.dmx_set(request)
 
             # Music maestro !
