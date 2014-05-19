@@ -302,6 +302,7 @@ class DmxHandler(object):
         request.json['id'] = fader
         request.json['setting'] = setting
         self.dmx_set(request)
+        sessionsq.PostEvent('dmx',{'evt':'setFaderSetting', 'id':fader, 'setting':setting})
 
     # Services routines
     def GetChannel(self, id, key):

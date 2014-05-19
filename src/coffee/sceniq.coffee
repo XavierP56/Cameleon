@@ -163,14 +163,8 @@ app.directive "dmxFader", ->
 
     $scope.SetSetting = (fader, setting) ->
       SetFader.get {fader: fader, setting: setting}
-      $scope.currentSetting = setting
 
-    $scope.$on 'setFaderSetting', (sender, evt) ->
-      if (evt.id != $scope.id)
-        return
-      $scope.currentSetting = evt.setting
-
-    $scope.$on 'updateDropBox', (sender, evt) ->
+    $scope.RefreshDropBox = () ->
       ix = 0
       for n in $scope.settings
         if n.name == $scope.currentSetting
@@ -178,7 +172,19 @@ app.directive "dmxFader", ->
         else
           ix++
       $scope.setting.menu = $scope.settings[ix]
+
+    $scope.$on 'setFaderSetting', (sender, evt) ->
+      if (evt.id != $scope.id)
+        return
+      $scope.currentSetting = evt.setting
+      $scope.RefreshDropBox()
+
+    $scope.$on 'updateDropBox', (sender, evt) ->
+      $scope.RefreshDropBox()
       $scope.SetSetting($scope.id, $scope.currentSetting)
+
+    $scope.$on 'refreshDropBox', (sender, evt) ->
+      $scope.RefreshDropBox()
 
     $scope.$on 'generateAll', (sender, evt) ->
       Generate.get {fader:$scope.id, setting:$scope.currentSetting}
@@ -319,6 +325,7 @@ FaderCtrl = ($scope, $http, $q, $resource,configMngr,$timeout)->
 
   $scope.generateall = () ->
     $scope.$broadcast('generateAll')
+    alert('Light button will be soon generated !')
 
   # Init of the controller.
   FaderList.get {}, (res)->

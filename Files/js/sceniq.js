@@ -256,19 +256,12 @@
           }
         };
         $scope.SetSetting = function(fader, setting) {
-          SetFader.get({
+          return SetFader.get({
             fader: fader,
             setting: setting
           });
-          return $scope.currentSetting = setting;
         };
-        $scope.$on('setFaderSetting', function(sender, evt) {
-          if (evt.id !== $scope.id) {
-            return;
-          }
-          return $scope.currentSetting = evt.setting;
-        });
-        $scope.$on('updateDropBox', function(sender, evt) {
+        $scope.RefreshDropBox = function() {
           var ix, n, _i, _len, _ref;
           ix = 0;
           _ref = $scope.settings;
@@ -280,8 +273,21 @@
               ix++;
             }
           }
-          $scope.setting.menu = $scope.settings[ix];
+          return $scope.setting.menu = $scope.settings[ix];
+        };
+        $scope.$on('setFaderSetting', function(sender, evt) {
+          if (evt.id !== $scope.id) {
+            return;
+          }
+          $scope.currentSetting = evt.setting;
+          return $scope.RefreshDropBox();
+        });
+        $scope.$on('updateDropBox', function(sender, evt) {
+          $scope.RefreshDropBox();
           return $scope.SetSetting($scope.id, $scope.currentSetting);
+        });
+        $scope.$on('refreshDropBox', function(sender, evt) {
+          return $scope.RefreshDropBox();
         });
         return $scope.$on('generateAll', function(sender, evt) {
           return Generate.get({
@@ -476,7 +482,8 @@
       return $scope.$broadcast('updateDropBox');
     };
     $scope.generateall = function() {
-      return $scope.$broadcast('generateAll');
+      $scope.$broadcast('generateAll');
+      return alert('Light button will be soon generated !');
     };
     FaderList.get({}, function(res) {
       var set_promise;
