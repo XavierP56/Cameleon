@@ -159,6 +159,8 @@ app.directive "dmxFader", ($resource) ->
         return "leftpos"
 
     scope.SetSetting = (fader, setting) ->
+      if setting == '-------'
+        return
       SetFader.get {fader: fader, setting: setting}
 
     scope.RefreshDropBox = () ->
@@ -196,11 +198,13 @@ app.directive "dmxFader", ($resource) ->
       scope.RefreshDropBox()
 
     scope.$on 'generateAll', (sender, evt) ->
+      if scope.currentSetting == '-------'
+        return
       Generate.get {fader: scope.id, setting: scope.currentSetting}
 
     # Directive init
     scope.id = attrs.id
-    scope.currentSetting = ''
+    scope.currentSetting = '-------'
     Sliders.get {id: scope.id}, (res)->
       scope.sliders = res.res
 

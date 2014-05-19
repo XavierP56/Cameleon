@@ -251,6 +251,9 @@
           }
         };
         scope.SetSetting = function(fader, setting) {
+          if (setting === '-------') {
+            return;
+          }
           return SetFader.get({
             fader: fader,
             setting: setting
@@ -298,13 +301,16 @@
           return scope.RefreshDropBox();
         });
         scope.$on('generateAll', function(sender, evt) {
+          if (scope.currentSetting === '-------') {
+            return;
+          }
           return Generate.get({
             fader: scope.id,
             setting: scope.currentSetting
           });
         });
         scope.id = attrs.id;
-        scope.currentSetting = '';
+        scope.currentSetting = '-------';
         return Sliders.get({
           id: scope.id
         }, function(res) {
