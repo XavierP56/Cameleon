@@ -359,10 +359,14 @@ app.filter 'faderFilter', ->
 FaderCtrl = ($scope, $http, $q, $resource, configMngr)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
-  RecordSetting = $resource('/dmx/recordsetting/:fader')
+  RecordSetting = $resource('/dmx/recordsetting/:fader/:setname')
 
-  $scope.record = (fader, setting) ->
-    RecordSetting.get {fader: fader}
+  $scope.record = (fader, wrapper) ->
+    if (wrapper is undefined) or (wrapper == '')
+      RecordSetting.get {fader: fader, setname: ''}
+    else
+      RecordSetting.get {fader: fader, setname: wrapper.name}
+      wrapper.name = ""
 
   $scope.record_done = (res) ->
     set_promise = configMngr.LoadSettingsList()

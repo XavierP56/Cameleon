@@ -335,7 +335,7 @@ class DmxHandler(object):
         lst.sort()
         return {'list':lst}
 
-    def dmx_recordsetting(self,fader):
+    def dmx_recordsetting(self,fader,setname):
         print 'Generate setting for fader ' + fader
         m = models.dmx_model[fader]
         name = 'setting_'
@@ -347,7 +347,9 @@ class DmxHandler(object):
             print value
             setting[key]=value
             name = name + key[:2] + str(value)
-        models.dmx_setting[name] = setting
+        if (setname != ''):
+            name = setname
+        models.dmx_setting[name] = name
         evt =  {'evt': 'recordDone', 'msg' : 'Setting created !', 'fader':fader, 'name':name}
         sessionsq.PostEvent ('dmx', evt)
 

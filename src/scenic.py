@@ -108,9 +108,13 @@ def models_scenes():
 def dmx_events():
     return dmxhandler.dmx_events(request)
 
+@app.route ('/dmx/recordsetting/:fader/:setname')
+def dmx_recordsetting (fader,setname):
+    return dmxhandler.dmx_recordsetting(fader,setname)
+
 @app.route ('/dmx/recordsetting/:fader')
-def dmx_recordsetting (fader):
-    return dmxhandler.dmx_recordsetting(fader)
+def dmx_recordsetting1 (fader):
+    return dmxhandler.dmx_recordsetting(fader,'')
 
 @app.route('/dmx/generate/:fader/:setting')
 def dmx_generate (fader, setting):

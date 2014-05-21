@@ -6,7 +6,8 @@
     <button ng-click="generateall()">Generate light button for this</button>
     <ul>
         <li class="faders" ng-repeat="f in faderlist | faderFilter:from:to">
-            <br/><button ng-click="record(f)">Record new setting</button>
+            <br/><button ng-click="record(f,wrapper)">Record new setting</button><br/>
+                <input type="text" ng-model="wrapper.name">
                 <dmx-fader settings="settingList" id="{{f}}"></dmx-fader>
         </li>
     </ul>

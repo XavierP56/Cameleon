@@ -499,11 +499,20 @@
   FaderCtrl = function($scope, $http, $q, $resource, configMngr) {
     var FaderList, RecordSetting;
     FaderList = $resource('/dmx/getfaderlist');
-    RecordSetting = $resource('/dmx/recordsetting/:fader');
-    $scope.record = function(fader, setting) {
-      return RecordSetting.get({
-        fader: fader
-      });
+    RecordSetting = $resource('/dmx/recordsetting/:fader/:setname');
+    $scope.record = function(fader, wrapper) {
+      if ((wrapper === void 0) || (wrapper === '')) {
+        return RecordSetting.get({
+          fader: fader,
+          setname: ''
+        });
+      } else {
+        RecordSetting.get({
+          fader: fader,
+          setname: wrapper.name
+        });
+        return wrapper.name = "";
+      }
     };
     $scope.record_done = function(res) {
       var set_promise;
