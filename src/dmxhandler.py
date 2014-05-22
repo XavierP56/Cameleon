@@ -362,13 +362,11 @@ class DmxHandler(object):
         for key in m['defs']:
             chnl = self.GetChannel(fader, key)
             value = self.datas[chnl]
-            print key
-            print value
             setting[key]=value
             name = name + key[:2] + str(value)
         if (setname != ''):
             name = setname
-        models.dmx_setting[name] = name
+        models.dmx_setting[name] = setting
         evt =  {'evt': 'recordDone', 'msg' : 'Setting created !', 'fader':fader, 'name':name}
         sessionsq.PostEvent ('dmx', evt)
 
