@@ -154,6 +154,7 @@ parser.add_argument('-d', '--dmx', help="Output to dmx device like /dev/dmx0", d
 parser.add_argument('-p', '--profile', help="Profile subdirectory", default="demo")
 # /dev/tty.usbmodemfa121
 parser.add_argument('-i', '--wireless', help="Wireless", default=None)
+parser.add_argument('-v', '--view', help="View DMX frame", default=False,type=bool)
 args = parser.parse_args()
 
 try:

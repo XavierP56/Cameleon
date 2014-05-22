@@ -63,6 +63,10 @@ class DmxHandler(object):
         self.dmxoutput = None
         self.dmxFull = None
         self.sndplayer = sndplayer
+        self.dmxview = False
+
+        if self.args.view is True:
+            self.dmxview = True
 
         if self.args.dmx is not None and self.args.wireless is None:
             print "DMX on wire"
@@ -154,12 +158,13 @@ class DmxHandler(object):
         disp = ['{:03d} '.format(x) for x in ba]
 
         # Debug DMX
-        print
-        for ix in range(16):
-            print '{:03d} : '.format((ix*16)+1),
-            for jx in range(16):
-                print disp[(ix*16)+jx+1],
+        if (self.dmxview):
             print
+            for ix in range(16):
+                print '{:03d} : '.format((ix*16)+1),
+                for jx in range(16):
+                    print disp[(ix*16)+jx+1],
+                print
         self.changed = False
 
     # Flush DMX in small trunck
