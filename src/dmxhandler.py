@@ -10,6 +10,8 @@ import thread
 import models
 import serial
 import requests
+import pprint
+
 import uuid
 
 # This is where the DMX lighting setup is defined.
@@ -64,7 +66,7 @@ class DmxHandler(object):
 
         if self.args.dmx is not None and self.args.wireless is None:
             print "DMX on wire"
-            self.dmxoutput = open(self.args.dmx, 'wb')
+            self.dmxoutput = open(self.args.dmx, 'wb', 513)
             self.dmxFull = True
 
         if self.args.wireless is not None:
@@ -143,9 +145,21 @@ class DmxHandler(object):
         if (self.changed == False):
             return
 
-        self.dmxoutput.write(bytearray(['F']))
-        self.dmxoutput.write(bytearray(self.datas[1:]))
+        ba = bytearray(self.datas)
+        ba[0] = 'F'
+
+        self.dmxoutput.write(ba)
         self.dmxoutput.flush()
+
+        disp = ['{:03d} '.format(x) for x in ba]
+
+        # Debug DMX
+        print
+        for ix in range(16):
+            print '{:03d} : '.format((ix*16)+1),
+            for jx in range(16):
+                print disp[(ix*16)+jx+1],
+            print
         self.changed = False
 
     # Flush DMX in small trunck
