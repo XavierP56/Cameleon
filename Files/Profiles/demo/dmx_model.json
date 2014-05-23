@@ -1,91 +1,21 @@
 {
-    "1": {
-        "channel": 1, 
-        "defs": {
-            "blue": 5, 
-            "dimmer": 1, 
-            "green": 4, 
-            "red": 3
-        }, 
+    "Pj1": {
+        "channel": 1,
+        "fixture" : "Ibiza",
         "inits": {
             "blue": 253, 
             "dimmer": 255, 
             "green": 130, 
             "red": 255
-        }, 
-        "knobs": {
-            "blue": {
-                "fgColor": "blue"
-            }, 
-            "dimmer": {
-                "cursor": 40, 
-                "fgColor": "yellow"
-            }, 
-            "green": {
-                "fgColor": "green"
-            }, 
-            "red": {
-                "fgColor": "red"
-            }
         }
     }, 
-    "2": {
+    "Pj2": {
         "channel": 10, 
-        "defs": {
-            "blue": 5, 
-            "dimmer": 1, 
-            "green": 4, 
-            "red": 3
-        }, 
-        "inits": {
-            "blue": 253, 
-            "dimmer": 255, 
-            "green": 130, 
-            "red": 255
-        }, 
-        "knobs": {
-            "blue": {
-                "fgColor": "blue"
-            }, 
-            "dimmer": {
-                "cursor": 40, 
-                "fgColor": "yellow"
-            }, 
-            "green": {
-                "fgColor": "green"
-            }, 
-            "red": {
-                "fgColor": "red"
-            }
-        }
+        "fixture" : "Ibiza"
     }, 
     "LedParZoom": {
         "channel": 28, 
-        "defs": {
-            "blue": 7, 
-            "colormacro": 8, 
-            "green": 6, 
-            "pano": 1, 
-            "panofin": 2, 
-            "red": 5, 
-            "tilt": 3, 
-            "tiltfin": 4
-        }, 
-        "inits": {}, 
-        "knobs": {
-            "blue": {
-                "fgColor": "blue"
-            }, 
-            "dimmer": {
-                "cursor": 40, 
-                "fgColor": "yellow"
-            }, 
-            "green": {
-                "fgColor": "green"
-            }, 
-            "red": {
-                "fgColor": "red"
-            }
-        }
+        "fixture" : "LedParZoom",
+        "inits": {}
     }
 }
