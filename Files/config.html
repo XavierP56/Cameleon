@@ -2,35 +2,46 @@
     Welcome to the configuration page. <br/><br/>
     <button ng-click="update()">Update</button>
     <button ng-click="save()">Save</button>
-    <br/>
-    <b>Dmx models : Define the projector and default values</b>
-        <div class="jsonView" defocus>
-            <json collapse=true child="dmxModel" type="'object'"></json>
-        </div>
+    <br/><br/>
 
-    <br/>
+    <fold fold-name="Dmx Devices">
+        <b>Dmx devices : Define the projector and default values</b>
+            <div class="jsonView" defocus>
+                <json collapse=true child="dmxModel" type="'object'"></json>
+            </div>
 
-    <b>Dmx groups : Define the projector group</b>
-        <div class="jsonView" defocus>
-            <json collapse=true child="dmxGroup" type="'object'"></json>
-        </div>
+        <br/>
+    </fold>
 
-    <br/>
+    <fold fold-name="Dmx Groups">
+        <b>Dmx groups : Define the projector group</b>
+            <div class="jsonView" defocus>
+                <json collapse=true child="dmxGroup" type="'object'"></json>
+            </div>
 
-    <b>Dmx settings : Define the various DMX settings used by the lights</b>
-        <div class="jsonView" defocus>
-            <json collapse=true child="dmxSetting" type="'object'"></json>
-        </div>
-    <br/>
+        <br/>
+    </fold>
 
-    <b>Dmx lights: Define your various light buttons</b>
-        <div class="jsonView" defocus>
-            <json collapse=true child="dmxLight" type="'object'"></json>
-        </div>
-    <br/>
+    <fold fold-name="Dmx Settings">
+        <b>Dmx settings : Define the various DMX settings used by the lights</b>
+            <div class="jsonView" defocus>
+                <json collapse=true child="dmxSetting" type="'object'"></json>
+            </div>
+        <br/>
+    </fold>
 
+    <fold fold-name="Dmx Lights">
+        <b>Dmx lights: Define your various light buttons</b>
+            <div class="jsonView" defocus>
+                <json collapse=true child="dmxLight" type="'object'"></json>
+            </div>
+        <br/>
+    </fold>
+
+    <fold fold-name="Sound buttons">
     <b>Sound settings : Define the various sound buttons</b>
         <div class="jsonView" defocus>
             <json collapse=true child="sndSetting" type="'object'"></json>
         </div>
+    </fold>
 </div>

@@ -85,12 +85,12 @@ class DmxHandler(object):
             self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
 
         # Init the model
-        for id in models.dmx_model:
-            models.dmx_model[id] = models.dmx_model[id]
-            if 'inits' in models.dmx_model[id]:
-                for key in models.dmx_model[id]['inits']:
+        for id in models.dmx_devices:
+            models.dmx_devices[id] = models.dmx_devices[id]
+            if 'inits' in models.dmx_devices[id]:
+                for key in models.dmx_devices[id]['inits']:
                     dstchan = self.GetChannel(id, key)
-                    val = int(models.dmx_model[id]['inits'][key])
+                    val = int(models.dmx_devices[id]['inits'][key])
                     self.datas[dstchan] = val
 
     def handle_transition(self):
@@ -202,20 +202,20 @@ class DmxHandler(object):
 
     def dmx_setdefs(self, request):
         with self.lock:
-            models.dmx_model = request.json['dmx_model']
+            models.dmx_devices = request.json['dmx_model']
             models.dmx_setting = request.json['dmx_setting']
             models.dmx_light = request.json['dmx_light']
             models.dmx_group = request.json['dmx_group']
             return
 
     def dmx_getdefs (self):
-        return {"dmx_model":models.dmx_model,
+        return {"dmx_model":models.dmx_devices,
                 "dmx_group":models.dmx_group,
                 "dmx_setting": models.dmx_setting,
                 "dmx_light": models.dmx_light}
 
     def dmx_query(self, id, key):
-        if id in models.dmx_model:
+        if id in models.dmx_devices:
             with self.lock:
                 dstchan = self.GetChannel(id, key)
                 opts = dict(models.knobs_model['dmx'])
@@ -266,7 +266,7 @@ class DmxHandler(object):
         else:
             delay = 0
 
-        if id in models.dmx_model:
+        if id in models.dmx_devices:
             with self.lock:
                 if ((transition == "True") and (delay >0)):
                     cmds=models.dmx_setting[setting]
@@ -336,10 +336,10 @@ class DmxHandler(object):
         sessionsq.PostEvent('dmx',{'evt':'setFaderSetting', 'id':fader, 'setting':setting})
 
     def GetKnobs (self,id):
-        if id not in models.dmx_model:
+        if id not in models.dmx_devices:
             print 'Model ' + id + ' not known !'
             return None
-        model = models.dmx_model[id]
+        model = models.dmx_devices[id]
         fixId = model['fixture']
         if fixId in models.dmx_fixtures:
             fixture = models.dmx_fixtures[fixId]
@@ -351,11 +351,11 @@ class DmxHandler(object):
             print 'Can not return fixture for ' + id
 
     def GetDefs (self,id):
-        if id not in models.dmx_model:
+        if id not in models.dmx_devices:
             print 'Model ' + id + ' not known !'
             return None
 
-        model = models.dmx_model[id]
+        model = models.dmx_devices[id]
         fixId = model['fixture']
         if fixId in models.dmx_fixtures:
             return models.dmx_fixtures[fixId]['defs']
@@ -363,7 +363,7 @@ class DmxHandler(object):
             print 'Can not return fixture for ' + id
 
     def GetChannel(self, id, key):
-        hw = models.dmx_model[id]
+        hw = models.dmx_devices[id]
         channel = int(hw['channel']) - 1
         defs = self.GetDefs(id)
         relch = int(defs[key])
@@ -381,14 +381,14 @@ class DmxHandler(object):
 
     def dmx_faders_list(self):
         lst = []
-        for i in models.dmx_model:
+        for i in models.dmx_devices:
             lst.append(i)
         lst.sort()
         return {'list':lst}
 
     def dmx_recordsetting(self,fader,setname):
         print 'Generate setting for fader ' + fader
-        m = models.dmx_model[fader]
+        m = models.dmx_devices[fader]
         name = 'setting_'
         setting = {}
         defs = self.GetDefs(fader)

@@ -4,7 +4,7 @@
 # This file contains the model. Will get away in a soon future.
 import json
 
-dmx_model = {}
+dmx_devices = {}
 dmx_setting = {}
 dmx_light = {}
 dmx_group = {}
@@ -16,9 +16,9 @@ scenes = []
 def saveModel(args):
     ref = "../Files/Profiles/"+args.profile
 
-    fpath = ref + "/dmx_model.json"
+    fpath = ref + "/dmx_devices.json"
     with open(fpath, "w") as outfile:
-        json.dump(dmx_model, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+        json.dump(dmx_devices, outfile, sort_keys=True, indent=4,ensure_ascii=False)
 
     fpath = ref + "/dmx_setting.json"
     with open(fpath, "w") as outfile:
@@ -41,15 +41,15 @@ def saveModel(args):
 
 def GenerateDefaultGroup():
     global dmx_group
-    global dmx_model
+    global dmx_devices
 
-    for lid in dmx_model:
+    for lid in dmx_devices:
         key = '_' + lid
         if not key in dmx_group:
             dmx_group[key] = [lid]
 
 def loadModel(args):
-    global dmx_model
+    global dmx_devices
     global dmx_setting
     global dmx_light
     global dmx_group
@@ -65,9 +65,9 @@ def loadModel(args):
 
     # Load the profile
     ref = "../Files/Profiles/"+args.profile
-    fpath = ref + "/dmx_model.json"
+    fpath = ref + "/dmx_devices.json"
     with open(fpath) as datafile:
-        dmx_model = json.load(datafile)
+        dmx_devices = json.load(datafile)
 
     fpath = ref + "/dmx_setting.json"
     with open(fpath) as datafile:
