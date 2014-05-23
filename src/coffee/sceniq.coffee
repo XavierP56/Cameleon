@@ -320,6 +320,7 @@ app.directive "soundButton", ($resource)  ->
       'snd_setting': $scope.sndSetting
       'dmx_light': $scope.dmxLight
       'dmx_group': $scope.dmxGroup
+      'dmx_fixtures' : $scope.dmxFixtures
 
     Update.set cmd, ()->
     alert('Settings updated !')
@@ -331,6 +332,7 @@ app.directive "soundButton", ($resource)  ->
       'snd_setting': $scope.sndSetting
       'dmx_light': $scope.dmxLight
       'dmx_group': $scope.dmxGroup
+      'dmx_fixtures' : $scope.dmxFixtures
 
     $scope.setDone = Update.set cmd, ()->
       return
@@ -344,6 +346,7 @@ app.directive "soundButton", ($resource)  ->
     $scope.dmxSetting = res.dmx_setting
     $scope.dmxLight = res.dmx_light
     $scope.sndSetting = res.snd_setting
+    $scope.dmxFixtures = res.dmx_fixtures
     return
 
   $scope.$on '$stateChangeStart', (event) ->

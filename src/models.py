@@ -14,6 +14,14 @@ scenes = []
 
 
 def saveModel(args):
+
+    # Save the fixtures
+    ref = "../Files/Fixtures"
+    fpath = ref + "/fixtures.json"
+    with open(fpath, "w") as outfile:
+        json.dump(dmx_fixtures, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+
+    # Save the profiles.
     ref = "../Files/Profiles/"+args.profile
 
     fpath = ref + "/dmx_devices.json"

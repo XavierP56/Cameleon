@@ -1,49 +1,49 @@
 {
     "Ibiza": {
         "defs": {
-            "blue": 5,
-            "dimmer": 1,
-            "green": 4,
+            "blue": 5, 
+            "dimmer": 1, 
+            "green": 4, 
             "red": 3
-        },
+        }, 
         "knobs": {
             "blue": {
                 "fgColor": "blue"
-            },
+            }, 
             "dimmer": {
-                "cursor": 40,
+                "cursor": 40, 
                 "fgColor": "yellow"
-            },
+            }, 
             "green": {
                 "fgColor": "green"
-            },
+            }, 
             "red": {
                 "fgColor": "red"
             }
         }
-    },
-    "LedParZoom" : {
+    }, 
+    "LedParZoom": {
         "defs": {
-            "blue": 7,
-            "colormacro": 8,
-            "green": 6,
-            "pano": 1,
-            "panofin": 2,
-            "red": 5,
-            "tilt": 3,
+            "blue": 7, 
+            "colormacro": 8, 
+            "green": 6, 
+            "pano": 1, 
+            "panofin": 2, 
+            "red": 5, 
+            "tilt": 3, 
             "tiltfin": 4
-        },
+        }, 
         "knobs": {
             "blue": {
                 "fgColor": "blue"
-            },
+            }, 
             "dimmer": {
-                "cursor": 40,
+                "cursor": 40, 
                 "fgColor": "yellow"
-            },
+            }, 
             "green": {
                 "fgColor": "green"
-            },
+            }, 
             "red": {
                 "fgColor": "red"
             }

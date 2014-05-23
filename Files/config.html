@@ -4,6 +4,15 @@
     <button ng-click="save()">Save</button>
     <br/><br/>
 
+    <fold fold-name="Dmx Fixtures">
+        <b>Dmx Fixtures : Define the projector specifications</b>
+            <div class="jsonView" defocus>
+                <json collapse=true child="dmxFixtures" type="'object'"></json>
+            </div>
+
+        <br/>
+    </fold>
+
     <fold fold-name="Dmx Devices">
         <b>Dmx devices : Define the projector and default values</b>
             <div class="jsonView" defocus>

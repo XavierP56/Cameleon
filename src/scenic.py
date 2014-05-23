@@ -86,13 +86,15 @@ def dmx_setfader(fader, setting):
 def models_getdefs():
     dmx = dmxhandler.dmx_getdefs()
     snd = sndplayer.snd_getdefs()
-    res = dict(dmx.items() + snd.items())
+    fixtures = { 'dmx_fixtures' : models.dmx_fixtures}
+    res = dict(dmx.items() + snd.items() + fixtures.items())
     return res
 
 @app.route('/models/setdefs', method='POST')
 def models_setdefs():
     dmxhandler.dmx_setdefs(request)
     sndplayer.snd_setdefs(request)
+    models.dmx_fixtures = request.json['dmx_fixtures']
     return
 
 @app.route('/models/save')
