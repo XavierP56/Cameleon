@@ -24,7 +24,7 @@
         "transition": "False"
     }, 
     "gen_LedParZoom": {
-	    "delay": 0, 
+        "delay": 0, 
         "group": "_LedParZoom", 
         "name": "Projector LedParZoom", 
         "setting": "setting_pa156bl120ti189gr113ti207pa0co110re239", 

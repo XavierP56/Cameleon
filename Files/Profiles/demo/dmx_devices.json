@@ -1,7 +1,12 @@
 {
+    "LedParZoom": {
+        "channel": 28, 
+        "fixture": "LedParZoom", 
+        "inits": {}
+    }, 
     "Pj1": {
-        "channel": 1,
-        "fixture" : "Ibiza",
+        "channel": 1, 
+        "fixture": "Ibiza", 
         "inits": {
             "blue": 253, 
             "dimmer": 255, 
@@ -11,11 +16,6 @@
     }, 
     "Pj2": {
         "channel": 10, 
-        "fixture" : "Ibiza"
-    }, 
-    "LedParZoom": {
-        "channel": 28, 
-        "fixture" : "LedParZoom",
-        "inits": {}
+        "fixture": "Ibiza"
     }
 }
