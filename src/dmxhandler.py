@@ -149,9 +149,8 @@ class DmxHandler(object):
         if (self.changed == False):
             return
 
+        self.datas[0] = ord('F')
         ba = bytearray(self.datas)
-        ba[0] = 'F'
-
         self.dmxoutput.write(ba)
         self.dmxoutput.flush()
 
@@ -159,6 +158,10 @@ class DmxHandler(object):
 
         # Debug DMX
         if (self.dmxview):
+            print
+            print '      ',
+            for ix in range(16):
+                print ' {:02d} '.format(ix),
             print
             for ix in range(16):
                 print '{:03d} : '.format((ix*16)+1),
