@@ -1,13 +1,20 @@
 <div>
     Fader configuration - All available projectors are listed.<br/>
+    <!---
     <input ng-model="from" type="number">
     <input ng-model="to" type="number"><br/>
-    <button ng-click="updateall()">Set all faders to dropbox values !</button><br/>
+    --->
+    <br/>
+    Filter:<input ng-model="name">
+
+    <button ng-click="updateall()">Set all faders to dropbox values !</button>
     <button ng-click="generateall()">Generate light button for this</button>
+    <br/><br/>
+
     <ul>
-        <li class="faders" ng-repeat="f in faderlist | faderFilter:from:to">
-            <br/><button ng-click="record(f,wrapper)">Record new setting</button><br/>
-                <input type="text" ng-model="wrapper.name">
+        <li class="faders" ng-repeat="f in faderlist | faderFilter:from:to | filter:name">
+            <input ng-model="wrapper.name">
+            <button ng-click="record(f,wrapper)">Record new setting</button><br/>
                 <dmx-fader settings="settingList" id="{{f}}"></dmx-fader>
         </li>
     </ul>
