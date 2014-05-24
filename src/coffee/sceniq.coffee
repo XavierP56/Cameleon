@@ -407,7 +407,7 @@ app.filter 'faderFilter', ->
 
 @ConfigRoomCtrl = ($scope, $http, $q, $resource, configMngr)->
   $scope.scenes = {
-    "room1" : [{ "type" : "Light", "id" : "light1"},{ "type" : "Sound", "id" : "4"}]
+    "room1" : [{ "type" : "Light", "id" : "light1"},{ "type" : "Light", "id" : "light1"}, {"type": "Line", "msg" : "Boo !"}, { "type" : "Sound", "id" : "4"},{ "type" : "Sound", "id" : "4"}]
   }
 
   $scope.stuff = $scope.scenes.room1

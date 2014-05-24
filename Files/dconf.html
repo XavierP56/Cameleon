@@ -15,6 +15,10 @@
                 <span ng-switch-when="Light">
                     <dmx-light  id="{{s.id}}"></dmx-light>
                 </span>
+                <div ng-switch-when="Line">
+                    <b>{{s.msg}}</b>
+                    <br/>
+                </div>
             </span>
         </span>
     </div>

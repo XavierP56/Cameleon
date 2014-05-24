@@ -570,6 +570,15 @@
           "type": "Light",
           "id": "light1"
         }, {
+          "type": "Light",
+          "id": "light1"
+        }, {
+          "type": "Line",
+          "msg": "Boo !"
+        }, {
+          "type": "Sound",
+          "id": "4"
+        }, {
           "type": "Sound",
           "id": "4"
         }
