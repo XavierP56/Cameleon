@@ -422,8 +422,8 @@ app.filter 'faderFilter', ->
   for scene of $scope.scenes
     $scope.list.push({'name' : scene})
 
-  $scope.refresh = () ->
-   $scope.stuff = angular.copy( $scope.scenes.room1)
+  $scope.refresh = (name) ->
+   $scope.stuff = angular.copy( $scope.scenes[name])
 
   $scope.SetScene = (scene) ->
     $scope.refresh(scene.name)

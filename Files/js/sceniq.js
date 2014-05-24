@@ -606,8 +606,8 @@
         'name': scene
       });
     }
-    $scope.refresh = function() {
-      return $scope.stuff = angular.copy($scope.scenes.room1);
+    $scope.refresh = function(name) {
+      return $scope.stuff = angular.copy($scope.scenes[name]);
     };
     return $scope.SetScene = function(scene) {
       return $scope.refresh(scene.name);

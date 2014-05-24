@@ -1,7 +1,7 @@
 <div>
     Dynamic room configurator <br/>
 
-     <button ng-click="refresh()">Force refresh</button>
+     <button ng-click="refresh(setting.scene.name)">Force refresh</button>
      <div class="jsonView" defocus>
         <json collapse=true child="scenes" type="'object'"></json>
     </div>
