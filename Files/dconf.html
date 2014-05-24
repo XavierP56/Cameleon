@@ -6,14 +6,16 @@
         <json collapse=true child="scenes" type="'object'"></json>
     </div>
     <br/>
-    <div ng-repeat="s in stuff">
-        <div ng-switch="s.type">
-            <div ng-switch-when="Sound" style="text-align: center;">
-                <sound-button  height=60 id="{{s.id}}"></sound-button>
-            </div>
-            <div ng-switch-when="Light" style="text-align: center;">
-                <dmx-light  id="{{s.id}}">
-            </div>
-        </div>
+    <div style="text-align: center;">
+        <span ng-repeat="s in stuff">
+            <span ng-switch="s.type">
+                <span ng-switch-when="Sound">
+                    <sound-button  height=60 id="{{s.id}}"></sound-button>
+                </span>
+                <span ng-switch-when="Light">
+                    <dmx-light  id="{{s.id}}"></dmx-light>
+                </span>
+            </span>
+        </span>
     </div>
 </div>
