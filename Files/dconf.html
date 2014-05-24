@@ -7,37 +7,6 @@
     </div>
     <br/>
     <div style="text-align: center;">
-        <span ng-repeat="s in stuff">
-            <span ng-switch="s.type">
-                <span ng-switch-when="Sound">
-                    <sound-button  height=60 id="{{s.id}}"></sound-button>
-                </span>
-                <span ng-switch-when="Light">
-                    <dmx-light  id="{{s.id}}"></dmx-light>
-                </span>
-                <div ng-switch-when="Line">
-                    <b>{{s.msg}}</b>
-                    <br/>
-                </div>
-                <span ng-switch-when="Fold">
-                    <fold >
-                        <span ng-repeat="s in s.what">
-                            <span ng-switch="s.type">
-                                <span ng-switch-when="Sound">
-                                    <sound-button  height=60 id="{{s.id}}"></sound-button>
-                                </span>
-                                <span ng-switch-when="Light">
-                                    <dmx-light  id="{{s.id}}"></dmx-light>
-                                </span>
-                                <div ng-switch-when="Line">
-                                    <b>{{s.msg}}</b>
-                                    <br/>
-                                </div>
-                            </span>
-                        </span>
-                    </fold>
-                </span>
-            </span>
-        </span>
+        <widgets stuff="stuff"></widgets>
     </div>
 </div>

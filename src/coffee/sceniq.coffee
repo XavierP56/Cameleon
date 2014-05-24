@@ -51,6 +51,17 @@ app.factory 'configMngr', ($resource) ->
   return datas
 
 # Directive
+app.directive "widgets", ->
+  restrict: 'E'
+  templateUrl: '/sceniq/templates/widgets.html'
+  scope : true
+
+  link: (scope, elemt, attrs) ->
+    scope.$watch attrs.stuff, (n,o) ->
+      alert ('Opla')
+      if (n != undefined)
+        scope.stuff = n
+
 app.directive "fold", ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/fold.html'

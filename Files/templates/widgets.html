@@ -1,0 +1,21 @@
+<script type="text/ng-template" id="widget_renderer">
+    <span ng-switch="s.type">
+        <span ng-switch-when="Sound">
+            <sound-button  height=60 id="{{s.id}}"></sound-button>
+        </span>
+        <span ng-switch-when="Light">
+            <dmx-light  id="{{s.id}}"></dmx-light>
+        </span>
+        <div ng-switch-when="Line">
+            <b>{{s.msg}}</b>
+            <br/>
+        </div>
+        <span ng-switch-when="Fold">
+            <fold >
+            </fold>
+        </span>
+    </span>
+</script>
+
+<span ng-repeat="s in stuff" ng-include="'widget_renderer'">
+</span>
