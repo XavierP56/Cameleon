@@ -58,7 +58,6 @@ app.directive "widgets", ->
 
   link: (scope, elemt, attrs) ->
     scope.$watch attrs.stuff, (n,o) ->
-      alert ('Opla')
       if (n != undefined)
         scope.stuff = n
 

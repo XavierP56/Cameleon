@@ -111,7 +111,6 @@
       scope: true,
       link: function(scope, elemt, attrs) {
         return scope.$watch(attrs.stuff, function(n, o) {
-          alert('Opla');
           if (n !== void 0) {
             return scope.stuff = n;
           }
