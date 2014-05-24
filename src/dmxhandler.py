@@ -414,3 +414,13 @@ class DmxHandler(object):
 
     def dmx_panic(self):
         print 'In DMX Panic'
+        for id in models.dmx_devices:
+            defs = self.GetDefs(id)
+            for key in defs:
+                dstchan = self.GetChannel(id, key)
+                val = 0
+                self.datas[dstchan] = val
+                evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
+                sessionsq.PostEvent('dmx',evt)
+        self.datas = [0] * 513
+        self.changed = True
