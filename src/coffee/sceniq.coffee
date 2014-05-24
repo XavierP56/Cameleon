@@ -411,7 +411,10 @@ app.filter 'faderFilter', ->
   }
 
   $scope.stuff = $scope.scenes.room1
-  alert ('boo')
+
+  $scope.refresh = () ->
+    $scope.stuff = $scope.scenes.room1
+    $scope.stuff = angular.copy($scope.stuff)
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

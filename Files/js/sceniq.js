@@ -576,7 +576,10 @@
       ]
     };
     $scope.stuff = $scope.scenes.room1;
-    return alert('boo');
+    return $scope.refresh = function() {
+      $scope.stuff = $scope.scenes.room1;
+      return $scope.stuff = angular.copy($scope.stuff);
+    };
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

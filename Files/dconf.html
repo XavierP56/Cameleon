@@ -1,6 +1,7 @@
 <div>
     Dynamic room configurator <br/>
 
+     <button ng-click="refresh()">Force refresh</button>
      <div class="jsonView" defocus>
         <json collapse=true child="scenes" type="'object'"></json>
     </div>
@@ -11,7 +12,7 @@
                 <sound-button  height=60 id="{{s.id}}"></sound-button>
             </div>
             <div ng-switch-when="Light">
-                LIGHT
+                <dmx-light  id="{{s.id}}">
             </div>
         </div>
     </div>
