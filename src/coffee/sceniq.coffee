@@ -54,12 +54,11 @@ app.factory 'configMngr', ($resource) ->
 app.directive "widgets", ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/widgets.html'
-  scope : true
+  scope : {stuff : '=things'}
 
   link: (scope, elemt, attrs) ->
-    scope.$watch attrs.stuff, (n,o) ->
-      if (n != undefined)
-        scope.stuff = n
+
+
 
 app.directive "fold", ->
   restrict: 'E'
@@ -121,7 +120,6 @@ app.directive "dmxLight", ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/dmxlight.html'
   scope: {id: '@'}
-  transclude: true
 
   controller: ($scope, $resource) ->
     LightQuery = $resource('/dmx/light/:id')
@@ -420,11 +418,15 @@ app.filter 'faderFilter', ->
     "room1" : [{"type": "Fold", "what": [{ "type" : "Light", "id" : "light1"},{ "type" : "Light", "id" : "light1"}]}, {"type": "Line", "msg" : "Boo !"}, { "type" : "Sound", "id" : "4"},{ "type" : "Sound", "id" : "4"}]
   }
 
-  $scope.stuff = $scope.scenes.room1
+  $scope.list = []
+  for scene of $scope.scenes
+    $scope.list.push({'name' : scene})
 
   $scope.refresh = () ->
-    $scope.stuff = $scope.scenes.room1
-    $scope.stuff = angular.copy($scope.stuff)
+   $scope.stuff = angular.copy( $scope.scenes.room1)
+
+  $scope.SetScene = (scene) ->
+    $scope.refresh(scene.name)
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

@@ -108,14 +108,10 @@
     return {
       restrict: 'E',
       templateUrl: '/sceniq/templates/widgets.html',
-      scope: true,
-      link: function(scope, elemt, attrs) {
-        return scope.$watch(attrs.stuff, function(n, o) {
-          if (n !== void 0) {
-            return scope.stuff = n;
-          }
-        });
-      }
+      scope: {
+        stuff: '=things'
+      },
+      link: function(scope, elemt, attrs) {}
     };
   });
 
@@ -204,7 +200,6 @@
       scope: {
         id: '@'
       },
-      transclude: true,
       controller: function($scope, $resource) {
         var DmxSetLight, LightQuery;
         LightQuery = $resource('/dmx/light/:id');
@@ -579,6 +574,7 @@
   };
 
   this.ConfigRoomCtrl = function($scope, $http, $q, $resource, configMngr) {
+    var scene;
     $scope.scenes = {
       "room1": [
         {
@@ -604,10 +600,17 @@
         }
       ]
     };
-    $scope.stuff = $scope.scenes.room1;
-    return $scope.refresh = function() {
-      $scope.stuff = $scope.scenes.room1;
-      return $scope.stuff = angular.copy($scope.stuff);
+    $scope.list = [];
+    for (scene in $scope.scenes) {
+      $scope.list.push({
+        'name': scene
+      });
+    }
+    $scope.refresh = function() {
+      return $scope.stuff = angular.copy($scope.scenes.room1);
+    };
+    return $scope.SetScene = function(scene) {
+      return $scope.refresh(scene.name);
     };
   };
 
