@@ -57,9 +57,9 @@
       controller: FaderCtrl
     };
     drooms = {
-      url: "/DRoom",
-      templateUrl: "/sceniq/droom.html",
-      controller: DRoomCtrl
+      url: "/CRoom",
+      templateUrl: "/sceniq/dconf.html",
+      controller: ConfigRoomCtrl
     };
     $stateProvider.state('room1', room1);
     $stateProvider.state('room2', room2);
@@ -563,7 +563,21 @@
     });
   };
 
-  this.DRoomCtrl = function($scope, $http, $q, $resource, configMngr) {};
+  this.ConfigRoomCtrl = function($scope, $http, $q, $resource, configMngr) {
+    $scope.scenes = {
+      "room1": [
+        {
+          "type": "Light",
+          "id": "light1"
+        }, {
+          "type": "Sound",
+          "id": "4"
+        }
+      ]
+    };
+    $scope.stuff = $scope.scenes.room1;
+    return alert('boo');
+  };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
     var CreateSession, DmxCancel, DmxEvents, DmxPanic, Events, Query, ReloadProfile, SndCancel, SndPanic, dmxpromise, sndpromise;

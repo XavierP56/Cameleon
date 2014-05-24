@@ -1,0 +1,18 @@
+<div>
+    Dynamic room configurator <br/>
+
+     <div class="jsonView" defocus>
+        <json collapse=true child="scenes" type="'object'"></json>
+    </div>
+    <br/>
+    <div ng-repeat="s in stuff">
+        <div ng-switch="s.type">
+            <div ng-switch-when="Sound">
+                <sound-button  height=60 id="{{s.id}}"></sound-button>
+            </div>
+            <div ng-switch-when="Light">
+                LIGHT
+            </div>
+        </div>
+    </div>
+</div>

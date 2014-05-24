@@ -14,5 +14,9 @@
     {
         "link" : "faders",
         "name" : "Faders"
+    },
+    {
+        "link" : "drooms",
+        "name" : "Room configuration"
     }
 ]
