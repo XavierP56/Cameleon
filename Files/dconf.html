@@ -8,10 +8,10 @@
     <br/>
     <div ng-repeat="s in stuff">
         <div ng-switch="s.type">
-            <div ng-switch-when="Sound">
+            <div ng-switch-when="Sound" style="text-align: center;">
                 <sound-button  height=60 id="{{s.id}}"></sound-button>
             </div>
-            <div ng-switch-when="Light">
+            <div ng-switch-when="Light" style="text-align: center;">
                 <dmx-light  id="{{s.id}}">
             </div>
         </div>
