@@ -567,11 +567,16 @@
     $scope.scenes = {
       "room1": [
         {
-          "type": "Light",
-          "id": "light1"
-        }, {
-          "type": "Light",
-          "id": "light1"
+          "type": "Fold",
+          "what": [
+            {
+              "type": "Light",
+              "id": "light1"
+            }, {
+              "type": "Light",
+              "id": "light1"
+            }
+          ]
         }, {
           "type": "Line",
           "msg": "Boo !"
