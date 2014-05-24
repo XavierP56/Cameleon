@@ -574,7 +574,6 @@
   };
 
   this.ConfigRoomCtrl = function($scope, $http, $q, $resource, configMngr) {
-    var scene;
     $scope.scenes = {
       "room1": [
         {
@@ -600,18 +599,28 @@
         }
       ]
     };
-    $scope.list = [];
-    for (scene in $scope.scenes) {
-      $scope.list.push({
-        'name': scene
-      });
-    }
-    $scope.refresh = function(name) {
+    $scope.InitMenu = function() {
+      var scene, _results;
+      $scope.list = [];
+      _results = [];
+      for (scene in $scope.scenes) {
+        _results.push($scope.list.push({
+          'name': scene
+        }));
+      }
+      return _results;
+    };
+    $scope.update = function(name) {
       return $scope.stuff = angular.copy($scope.scenes[name]);
     };
-    return $scope.SetScene = function(scene) {
-      return $scope.refresh(scene.name);
+    $scope.refresh = function(name) {
+      $scope.InitMenu();
+      return $scope.update(name);
     };
+    $scope.SetScene = function(scene) {
+      return $scope.update(scene.name);
+    };
+    return $scope.InitMenu();
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

@@ -418,15 +418,23 @@ app.filter 'faderFilter', ->
     "room1" : [{"type": "Fold", "what": [{ "type" : "Light", "id" : "light1"},{ "type" : "Light", "id" : "light1"}]}, {"type": "Line", "msg" : "Boo !"}, { "type" : "Sound", "id" : "4"},{ "type" : "Sound", "id" : "4"}]
   }
 
-  $scope.list = []
-  for scene of $scope.scenes
-    $scope.list.push({'name' : scene})
+  $scope.InitMenu = () ->
+    $scope.list = []
+    for scene of $scope.scenes
+      $scope.list.push({'name' : scene})
+
+  $scope.update = (name) ->
+    $scope.stuff = angular.copy($scope.scenes[name])
 
   $scope.refresh = (name) ->
-   $scope.stuff = angular.copy( $scope.scenes[name])
+    $scope.InitMenu()
+    $scope.update(name)
 
   $scope.SetScene = (scene) ->
-    $scope.refresh(scene.name)
+    $scope.update(scene.name)
+
+  # Init
+  $scope.InitMenu()
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')
