@@ -411,3 +411,6 @@ class DmxHandler(object):
             'setting' : setting,
             'name' : 'Projector ' + fader
         }
+
+    def dmx_panic(self):
+        print 'In DMX Panic'

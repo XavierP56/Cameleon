@@ -558,8 +558,9 @@
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
-    var CreateSession, DmxCancel, DmxEvents, Events, Query, ReloadProfile, SndCancel, SndPanic, dmxpromise, sndpromise;
+    var CreateSession, DmxCancel, DmxEvents, DmxPanic, Events, Query, ReloadProfile, SndCancel, SndPanic, dmxpromise, sndpromise;
     SndPanic = $resource('/sounds/panic');
+    DmxPanic = $resource('/dmx/panic');
     Query = $resource('/models/scenes');
     CreateSession = $resource('/scenic/newsession');
     ReloadProfile = $resource('/cfg/reloadprofiles');
@@ -574,6 +575,9 @@
     }
     $scope.soundPanic = function() {
       return SndPanic.get({}, function() {});
+    };
+    $scope.dmxPanic = function() {
+      return DmxPanic.get({}, function() {});
     };
     SndCancel = $q.defer();
     DmxCancel = $q.defer();

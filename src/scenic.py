@@ -80,6 +80,10 @@ def dmx_getfaderlist():
 def dmx_setfader(fader, setting):
     return dmxhandler.dmx_setfader(fader, setting)
 
+@app.route('/dmx/panic')
+def dmx_panic():
+    return dmxhandler.dmx_panic()
+
 # Models
 
 @app.route('/models/getdefs')

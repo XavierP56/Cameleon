@@ -405,6 +405,7 @@ app.filter 'faderFilter', ->
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')
+  DmxPanic = $resource('/dmx/panic')
   Query = $resource('/models/scenes')
   CreateSession = $resource('/scenic/newsession')
   ReloadProfile = $resource('/cfg/reloadprofiles')
@@ -422,6 +423,9 @@ app.filter 'faderFilter', ->
   # Panic button
   $scope.soundPanic = () ->
     SndPanic.get {}, () ->
+
+  $scope.dmxPanic = () ->
+    DmxPanic.get {}, () ->
 
   SndCancel = $q.defer()
   DmxCancel = $q.defer()
