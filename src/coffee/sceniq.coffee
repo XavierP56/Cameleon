@@ -14,6 +14,7 @@ app.config ($stateProvider) ->
   room8 = {url: "/Room8", templateUrl: "/profiles/room8.html", controller: RoomCtrl}
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
   faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html", controller: FaderCtrl}
+  drooms = {url: "/DRoom", templateUrl: "/sceniq/droom.html", controller:DRoomCtrl}
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
   $stateProvider.state('room3', room3)
@@ -24,6 +25,7 @@ app.config ($stateProvider) ->
   $stateProvider.state('room8', room8)
   $stateProvider.state('config', config)
   $stateProvider.state('faders', faders)
+  $stateProvider.state('drooms', drooms)
 
 # Factories
 app.factory 'sessionMngr', () ->
@@ -402,6 +404,8 @@ app.filter 'faderFilter', ->
   $scope.$on 'recordDone', (sender, evt)->
     $scope.record_done (evt)
   return
+
+@DRoomCtrl = ($scope, $http, $q, $resource, configMngr)->
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

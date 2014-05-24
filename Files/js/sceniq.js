@@ -5,7 +5,7 @@
   app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
 
   app.config(function($stateProvider) {
-    var config, faders, room1, room2, room3, room4, room5, room6, room7, room8;
+    var config, drooms, faders, room1, room2, room3, room4, room5, room6, room7, room8;
     room1 = {
       url: "/Room1",
       templateUrl: "/profiles/room1.html",
@@ -56,6 +56,11 @@
       templateUrl: "/sceniq/fadercfg.html",
       controller: FaderCtrl
     };
+    drooms = {
+      url: "/DRoom",
+      templateUrl: "/sceniq/droom.html",
+      controller: DRoomCtrl
+    };
     $stateProvider.state('room1', room1);
     $stateProvider.state('room2', room2);
     $stateProvider.state('room3', room3);
@@ -65,7 +70,8 @@
     $stateProvider.state('room7', room7);
     $stateProvider.state('room8', room8);
     $stateProvider.state('config', config);
-    return $stateProvider.state('faders', faders);
+    $stateProvider.state('faders', faders);
+    return $stateProvider.state('drooms', drooms);
   });
 
   app.factory('sessionMngr', function() {
@@ -556,6 +562,8 @@
       return $scope.record_done(evt);
     });
   };
+
+  this.DRoomCtrl = function($scope, $http, $q, $resource, configMngr) {};
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
     var CreateSession, DmxCancel, DmxEvents, DmxPanic, Events, Query, ReloadProfile, SndCancel, SndPanic, dmxpromise, sndpromise;
