@@ -1,4 +1,10 @@
 {
+    "dsfLedParZoom": {
+        "group": "_LedParZoom", 
+        "name": "Projector LedParZoom", 
+        "setting": "setting_blue", 
+        "transition": "False"
+    }, 
     "gen_1": {
         "group": "_1", 
         "name": "Projector 1", 

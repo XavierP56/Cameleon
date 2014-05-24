@@ -118,9 +118,9 @@ def dmx_recordsetting (fader,setname):
 def dmx_recordsetting1 (fader):
     return dmxhandler.dmx_recordsetting(fader,'')
 
-@app.route('/dmx/generate/:fader/:setting')
-def dmx_generate (fader, setting):
-    return dmxhandler.dmx_generate(fader, setting)
+@app.route('/dmx/generate/:fader/:setting/:prefix')
+def dmx_generate (fader, setting,prefix):
+    return dmxhandler.dmx_generate(fader, setting, prefix)
 
 @app.route('/scenic/newsession')
 def newsession():

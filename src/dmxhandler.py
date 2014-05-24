@@ -403,8 +403,8 @@ class DmxHandler(object):
         evt =  {'evt': 'recordDone', 'msg' : 'Setting created !', 'fader':fader, 'name':name}
         sessionsq.PostEvent ('dmx', evt)
 
-    def dmx_generate (self, fader, setting):
-        name = 'gen_' + fader
+    def dmx_generate (self, fader, setting,prefix):
+        name = prefix + fader
         models.dmx_light[name] = {
             'group' : '_' + fader,
             'transition' : "False",

@@ -148,7 +148,7 @@ app.directive "dmxFader", ($resource) ->
   link: (scope, elemt, attrs) ->
     Sliders = $resource('/dmx/faders/:id')
     SetFader = $resource('/dmx/setfader/:fader/:setting')
-    Generate = $resource('/dmx/generate/:fader/:setting')
+    Generate = $resource('/dmx/generate/:fader/:setting/:prefix')
 
     scope.showMe = () ->
       return false if scope.settings == undefined
@@ -199,10 +199,10 @@ app.directive "dmxFader", ($resource) ->
     scope.$on 'refreshDropBox', (sender, evt) ->
       scope.RefreshDropBox()
 
-    scope.$on 'generateAll', (sender, evt) ->
+    scope.$on 'generateAll', (sender, pref) ->
       if scope.currentSetting == '-------'
         return
-      Generate.get {fader: scope.id, setting: scope.currentSetting}
+      Generate.get {fader: scope.id, setting: scope.currentSetting, prefix:pref}
 
     # Directive init
     scope.showIt = false
@@ -359,7 +359,7 @@ app.filter 'faderFilter', ->
     else
       return input
 
-FaderCtrl = ($scope, $http, $q, $resource, configMngr)->
+@FaderCtrl = ($scope, $http, $q, $resource, configMngr)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
   RecordSetting = $resource('/dmx/recordsetting/:fader/:setname')
@@ -384,8 +384,11 @@ FaderCtrl = ($scope, $http, $q, $resource, configMngr)->
   $scope.updateall = () ->
     $scope.$broadcast('updateDropBox')
 
-  $scope.generateall = () ->
-    $scope.$broadcast('generateAll')
+  $scope.generateall = (prefix) ->
+    if (prefix is undefined or prefix == '')
+      alert ('Prefix must be specified !')
+      return
+    $scope.$broadcast('generateAll', prefix)
     alert('Light button will be soon generated !')
 
   # Init of the controller.
