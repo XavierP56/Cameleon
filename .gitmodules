@@ -8,3 +8,6 @@
 [submodule "Files/local_components/JSONedit"]
 	path = Files/local_components/JSONedit
 	url = https://github.com/XavierP56/JSONedit.git
+[submodule "Files/local_components/ui-sortable"]
+	path = Files/local_components/ui-sortable
+	url = https://github.com/angular-ui/ui-sortable.git
