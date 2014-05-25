@@ -158,7 +158,7 @@ def models_savedrooms():
 
 @app.route('/models/loadDrooms')
 def models_loaddrooms():
-    models.loadDRooms(args)
+    return models.loadDRooms(args)
 
 # Start swmixer
 parser = argparse.ArgumentParser()

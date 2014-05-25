@@ -414,11 +414,10 @@ app.filter 'faderFilter', ->
   return
 
 @ConfigRoomCtrl = ($scope, $http, $q, $resource, configMngr)->
-  $scope.scenes = {
-    "room1" : [{"type": "Fold", "what": [{ "type" : "Light", "id" : "light1"},{ "type" : "Light", "id" : "light1"}]}, {"type": "Line", "msg" : "Boo !"}, { "type" : "Sound", "id" : "4"},{ "type" : "Sound", "id" : "4"}]
-  }
+  $scope.scenes = {}
 
   Save = $resource('/models/saveDrooms', {}, {set: {method: 'POST'}})
+  Load = $resource('/models/loadDrooms')
 
   $scope.current = ''
   $scope.setting = {}
@@ -455,7 +454,9 @@ app.filter 'faderFilter', ->
         alert('Dynamic Rooms saved !')
 
   # Init
-  $scope.InitMenu()
+  Load.get (res) ->
+    $scope.scenes = res.drooms
+    $scope.InitMenu()
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

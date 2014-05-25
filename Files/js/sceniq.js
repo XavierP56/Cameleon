@@ -578,37 +578,14 @@
   };
 
   this.ConfigRoomCtrl = function($scope, $http, $q, $resource, configMngr) {
-    var Save;
-    $scope.scenes = {
-      "room1": [
-        {
-          "type": "Fold",
-          "what": [
-            {
-              "type": "Light",
-              "id": "light1"
-            }, {
-              "type": "Light",
-              "id": "light1"
-            }
-          ]
-        }, {
-          "type": "Line",
-          "msg": "Boo !"
-        }, {
-          "type": "Sound",
-          "id": "4"
-        }, {
-          "type": "Sound",
-          "id": "4"
-        }
-      ]
-    };
+    var Load, Save;
+    $scope.scenes = {};
     Save = $resource('/models/saveDrooms', {}, {
       set: {
         method: 'POST'
       }
     });
+    Load = $resource('/models/loadDrooms');
     $scope.current = '';
     $scope.setting = {};
     $scope.InitMenu = function() {
@@ -652,7 +629,10 @@
         return alert('Dynamic Rooms saved !');
       });
     };
-    return $scope.InitMenu();
+    return Load.get(function(res) {
+      $scope.scenes = res.drooms;
+      return $scope.InitMenu();
+    });
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
