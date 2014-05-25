@@ -1,0 +1,33 @@
+{
+    "room1": [
+        {
+            "type": "Fold", 
+            "what": [
+                {
+                    "id": "light1", 
+                    "type": "Light"
+                }, 
+                {
+                    "id": "light2", 
+                    "type": "Light"
+                }
+            ]
+        }, 
+        {
+            "msg": "Ceci est un message !", 
+            "type": "Line"
+        }, 
+        {
+            "msg": "Greetings", 
+            "type": "Line"
+        }, 
+        {
+            "id": "4", 
+            "type": "Sound"
+        }, 
+        {
+            "id": 5, 
+            "type": "Sound"
+        }
+    ]
+}
