@@ -16,7 +16,7 @@
         "name" : "Faders"
     },
     {
-        "link" : "drooms",
+        "link" : "confdrooms",
         "name" : "RoomsConf"
     }
 ]
