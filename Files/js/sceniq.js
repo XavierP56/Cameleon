@@ -599,16 +599,27 @@
         }
       ]
     };
+    $scope.current = '';
+    $scope.setting = {};
     $scope.InitMenu = function() {
-      var scene, _results;
+      var ix, n, scene, _i, _len, _ref;
       $scope.list = [];
-      _results = [];
       for (scene in $scope.scenes) {
-        _results.push($scope.list.push({
+        $scope.list.push({
           'name': scene
-        }));
+        });
       }
-      return _results;
+      ix = 0;
+      _ref = $scope.list;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        n = _ref[_i];
+        if (n.name === $scope.current) {
+          break;
+        } else {
+          ix++;
+        }
+      }
+      return $scope.setting.scene = $scope.list[ix];
     };
     $scope.update = function(name) {
       return $scope.stuff = angular.copy($scope.scenes[name]);
@@ -618,7 +629,8 @@
       return $scope.update(name);
     };
     $scope.SetScene = function(scene) {
-      return $scope.update(scene.name);
+      $scope.current = scene.name;
+      return $scope.update($scope.current);
     };
     return $scope.InitMenu();
   };

@@ -418,10 +418,20 @@ app.filter 'faderFilter', ->
     "room1" : [{"type": "Fold", "what": [{ "type" : "Light", "id" : "light1"},{ "type" : "Light", "id" : "light1"}]}, {"type": "Line", "msg" : "Boo !"}, { "type" : "Sound", "id" : "4"},{ "type" : "Sound", "id" : "4"}]
   }
 
+  $scope.current = ''
+  $scope.setting = {}
   $scope.InitMenu = () ->
     $scope.list = []
     for scene of $scope.scenes
       $scope.list.push({'name' : scene})
+
+    ix = 0
+    for n in $scope.list
+      if n.name == $scope.current
+        break
+      else
+        ix++
+    $scope.setting.scene = $scope.list[ix]
 
   $scope.update = (name) ->
     $scope.stuff = angular.copy($scope.scenes[name])
@@ -430,8 +440,10 @@ app.filter 'faderFilter', ->
     $scope.InitMenu()
     $scope.update(name)
 
+
   $scope.SetScene = (scene) ->
-    $scope.update(scene.name)
+    $scope.current = scene.name
+    $scope.update($scope.current)
 
   # Init
   $scope.InitMenu()
