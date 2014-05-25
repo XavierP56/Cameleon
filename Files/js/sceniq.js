@@ -595,17 +595,19 @@
     $scope.current = '';
     $scope.setting = {};
     $scope.InitMenu = function() {
-      var ix, n, scene, _i, _len, _ref;
+      var ix, keys, n, scene, _i, _j, _len, _len1, _ref;
       $scope.list = [];
-      for (scene in $scope.scenes) {
+      keys = Object.keys($scope.scenes).sort();
+      for (_i = 0, _len = keys.length; _i < _len; _i++) {
+        scene = keys[_i];
         $scope.list.push({
           'name': scene
         });
       }
       ix = 0;
       _ref = $scope.list;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        n = _ref[_i];
+      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
+        n = _ref[_j];
         if (n.name === $scope.current) {
           break;
         } else {

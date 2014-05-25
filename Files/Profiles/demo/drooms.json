@@ -29,5 +29,36 @@
             "id": 5, 
             "type": "Sound"
         }
-    ]
+    ], 
+    "room2": {
+        "0": {
+            "type": "Fold", 
+            "what": [
+                {
+                    "id": "light1", 
+                    "type": "Light"
+                }, 
+                {
+                    "id": "light2", 
+                    "type": "Light"
+                }
+            ]
+        }, 
+        "1": {
+            "msg": "Ceci est un message !", 
+            "type": "Line"
+        }, 
+        "2": {
+            "msg": "Greetings", 
+            "type": "Line"
+        }, 
+        "3": {
+            "id": "4", 
+            "type": "Sound"
+        }, 
+        "4": {
+            "id": 5, 
+            "type": "Sound"
+        }
+    }
 }

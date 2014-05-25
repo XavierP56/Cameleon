@@ -425,7 +425,8 @@ app.filter 'faderFilter', ->
   $scope.setting = {}
   $scope.InitMenu = () ->
     $scope.list = []
-    for scene of $scope.scenes
+    keys = Object.keys($scope.scenes).sort()
+    for scene in keys
       $scope.list.push({'name' : scene})
 
     ix = 0
