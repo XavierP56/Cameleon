@@ -319,7 +319,7 @@ app.directive "soundButton", ($resource)  ->
 
 @ConfigCtrl = ($scope, $http, $q, $resource)->
   # DMX Stuff.
-  Query = $resource('/models/getdefs')
+  Query = $resource('/models/getdefs', {}, {set: {method: 'POST'}})
   Update = $resource('/models/setdefs', {}, {set: {method: 'POST'}})
   Save = $resource('/models/save')
 
@@ -350,7 +350,7 @@ app.directive "soundButton", ($resource)  ->
       Save.get {}, ->
         alert('Settings saved !')
 
-  Query.get {}, (res) ->
+  Query.set {}, (res) ->
     $scope.dmxModel = res.dmx_model
     $scope.dmxGroup = res.dmx_group
     $scope.dmxSetting = res.dmx_setting
@@ -418,6 +418,8 @@ app.filter 'faderFilter', ->
     "room1" : [{"type": "Fold", "what": [{ "type" : "Light", "id" : "light1"},{ "type" : "Light", "id" : "light1"}]}, {"type": "Line", "msg" : "Boo !"}, { "type" : "Sound", "id" : "4"},{ "type" : "Sound", "id" : "4"}]
   }
 
+  Save = $resource('/models/saveDrooms', {}, {set: {method: 'POST'}})
+
   $scope.current = ''
   $scope.setting = {}
   $scope.InitMenu = () ->
@@ -440,10 +442,17 @@ app.filter 'faderFilter', ->
     $scope.InitMenu()
     $scope.update(name)
 
-
   $scope.SetScene = (scene) ->
     $scope.current = scene.name
     $scope.update($scope.current)
+
+  $scope.save = () ->
+    cmd = 'drooms' : $scope.scenes
+
+    $scope.setDone = Save.set cmd, ()->
+      return
+    $scope.setDone.$promise.then () ->
+        alert('Dynamic Rooms saved !')
 
   # Init
   $scope.InitMenu()

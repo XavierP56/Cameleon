@@ -86,7 +86,7 @@ def dmx_panic():
 
 # Models
 
-@app.route('/models/getdefs')
+@app.route('/models/getdefs', method='POST')
 def models_getdefs():
     dmx = dmxhandler.dmx_getdefs()
     snd = sndplayer.snd_getdefs()
@@ -151,6 +151,14 @@ def cfg_reloadprofiles():
         models.loadModel(args)
     except:
         print 'Load model failed'
+
+@app.route('/models/saveDrooms', method='POST')
+def models_savedrooms():
+    models.saveDRooms(args,request)
+
+@app.route('/models/loadDrooms')
+def models_loaddrooms():
+    models.loadDRooms(args)
 
 # Start swmixer
 parser = argparse.ArgumentParser()

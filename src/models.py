@@ -12,7 +12,6 @@ dmx_fixtures = {}
 sounds = {}
 scenes = []
 
-
 def saveModel(args):
 
     # Save the fixtures
@@ -117,3 +116,17 @@ def saveScenes(args):
     fpath = ref + "/room_model.json"
     with open(fpath, "w") as outfile:
         json.dump(scenes, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+
+def loadDRooms(args):
+    ref = "../Files/Profiles/"+args.profile
+    fpath = ref + "/drooms.json"
+    with open(fpath) as datafile:
+        drooms = json.load(datafile)
+    return {'drooms' : drooms}
+
+def saveDRooms(args, request):
+    drooms = request.json['drooms']
+    ref = "../Files/Profiles/"+args.profile
+    fpath = ref + "/drooms.json"
+    with open(fpath, "w") as outfile:
+        json.dump(drooms, outfile, sort_keys=True, indent=4,ensure_ascii=False)

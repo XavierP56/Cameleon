@@ -458,7 +458,11 @@
 
   this.ConfigCtrl = function($scope, $http, $q, $resource) {
     var Query, Save, Update;
-    Query = $resource('/models/getdefs');
+    Query = $resource('/models/getdefs', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     Update = $resource('/models/setdefs', {}, {
       set: {
         method: 'POST'
@@ -495,7 +499,7 @@
         });
       });
     };
-    Query.get({}, function(res) {
+    Query.set({}, function(res) {
       $scope.dmxModel = res.dmx_model;
       $scope.dmxGroup = res.dmx_group;
       $scope.dmxSetting = res.dmx_setting;
@@ -574,6 +578,7 @@
   };
 
   this.ConfigRoomCtrl = function($scope, $http, $q, $resource, configMngr) {
+    var Save;
     $scope.scenes = {
       "room1": [
         {
@@ -599,6 +604,11 @@
         }
       ]
     };
+    Save = $resource('/models/saveDrooms', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     $scope.current = '';
     $scope.setting = {};
     $scope.InitMenu = function() {
@@ -631,6 +641,16 @@
     $scope.SetScene = function(scene) {
       $scope.current = scene.name;
       return $scope.update($scope.current);
+    };
+    $scope.save = function() {
+      var cmd;
+      cmd = {
+        'drooms': $scope.scenes
+      };
+      $scope.setDone = Save.set(cmd, function() {});
+      return $scope.setDone.$promise.then(function() {
+        return alert('Dynamic Rooms saved !');
+      });
     };
     return $scope.InitMenu();
   };
