@@ -577,7 +577,7 @@
     });
   };
 
-  this.ConfigRoomCtrl = function($scope, $http, $q, $resource, configMngr) {
+  this.ConfigRoomCtrl = function($scope, $http, $q, $resource) {
     var Load, Save;
     $scope.scenes = {};
     Save = $resource('/models/saveDrooms', {}, {
@@ -627,6 +627,12 @@
       $scope.setDone = Save.set(cmd, function() {});
       return $scope.setDone.$promise.then(function() {
         return alert('Dynamic Rooms saved !');
+      });
+    };
+    $scope.reload = function() {
+      return Load.get(function(res) {
+        $scope.scenes = res.drooms;
+        return $scope.refresh($scope.current);
       });
     };
     return Load.get(function(res) {

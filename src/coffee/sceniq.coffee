@@ -413,7 +413,7 @@ app.filter 'faderFilter', ->
     $scope.record_done (evt)
   return
 
-@ConfigRoomCtrl = ($scope, $http, $q, $resource, configMngr)->
+@ConfigRoomCtrl = ($scope, $http, $q, $resource)->
   $scope.scenes = {}
 
   Save = $resource('/models/saveDrooms', {}, {set: {method: 'POST'}})
@@ -452,6 +452,11 @@ app.filter 'faderFilter', ->
       return
     $scope.setDone.$promise.then () ->
         alert('Dynamic Rooms saved !')
+
+  $scope.reload = () ->
+    Load.get (res) ->
+      $scope.scenes = res.drooms
+      $scope.refresh($scope.current)
 
   # Init
   Load.get (res) ->
