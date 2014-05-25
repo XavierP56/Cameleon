@@ -15,6 +15,9 @@
                 <span ng-repeat="s in s.what" ng-include="'widget_renderer'">
             </fold>
         </span>
+        <span ng-switch-when="Fader">
+            <dmx-fader id="{{s.id}}"></dmx-fader>
+        </span>
     </span>
 </script>
 
