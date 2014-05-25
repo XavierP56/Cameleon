@@ -6,7 +6,11 @@
     {
         "link": "room2", 
         "name": "Tableau 2"
-    }, 
+    },
+    {
+        "link" : "drooms",
+        "name": "Rooms"
+    },
     {
         "link": "config", 
         "name": "Config"
