@@ -15,6 +15,7 @@
     <ul>
         <li class="faders" ng-repeat="f in faderlist | faderFilter:from:to | filter:name">
                 <dmx-fader settings="settingList" id="{{f}}"></dmx-fader>
+                <br/>
                 <input ng-model="wrapper.name">
                 <button ng-click="record(f,wrapper)">Record new setting</button><br/>
         </li>
