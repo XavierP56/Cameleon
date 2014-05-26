@@ -108,6 +108,7 @@ app.directive "dmxSlider", ($resource) ->
       cmd = {}
       cmd[scope.key] = scope.value
       DmxSet.set {id: scope.id, cmds: cmd}, ->
+        scope.$emit('sliderChanged', {'id' : scope.id})
         return
 
     scope.showMe = true
@@ -215,6 +216,11 @@ app.directive "dmxFader", ($resource) ->
       if scope.currentSetting == '-------'
         return
       Generate.get {fader: scope.id, setting: scope.currentSetting, prefix:pref}
+
+    scope.$on 'sliderChanged', (sender, evt) ->
+      return if scope.id != evt.id
+      scope.currentSetting = '-------'
+      scope.RefreshDropBox()
 
     # Directive init
     scope.showIt = false

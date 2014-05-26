@@ -187,7 +187,11 @@
           return DmxSet.set({
             id: scope.id,
             cmds: cmd
-          }, function() {});
+          }, function() {
+            scope.$emit('sliderChanged', {
+              'id': scope.id
+            });
+          });
         };
         scope.showMe = true;
         scope.id = attrs.id;
@@ -333,6 +337,13 @@
             setting: scope.currentSetting,
             prefix: pref
           });
+        });
+        scope.$on('sliderChanged', function(sender, evt) {
+          if (scope.id !== evt.id) {
+            return;
+          }
+          scope.currentSetting = '-------';
+          return scope.RefreshDropBox();
         });
         scope.showIt = false;
         scope.id = attrs.id;

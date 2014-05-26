@@ -382,7 +382,7 @@ class DmxHandler(object):
     def dmx_faders_list(self):
         lst = []
         for i in models.dmx_devices:
-            lst.append(i)
+            lst.append({'id': i, 'enabled': True} )
         lst.sort()
         return {'list':lst}
 
