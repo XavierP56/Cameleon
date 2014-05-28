@@ -5,7 +5,7 @@
   app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
 
   app.config(function($stateProvider) {
-    var confdrooms, config, drooms, faders, room1, room2, room3, room4, room5, room6, room7, room8;
+    var cameleon, cammachines, camscenes, confdrooms, config, drooms, faders, room1, room2, room3, room4, room5, room6, room7, room8;
     room1 = {
       url: "/Room1",
       templateUrl: "/profiles/room1.html",
@@ -66,6 +66,18 @@
       templateUrl: "/sceniq/drooms.html",
       controller: ConfigRoomCtrl
     };
+    cameleon = {
+      'url': '/Cameleon',
+      templateUrl: "/sceniq/cameleon.html"
+    };
+    cammachines = {
+      'url': '/machines',
+      'templateUrl': 'partials/machines.html'
+    };
+    camscenes = {
+      'url': '/scenes',
+      'templateUrl': 'partials/scenes.html'
+    };
     $stateProvider.state('room1', room1);
     $stateProvider.state('room2', room2);
     $stateProvider.state('room3', room3);
@@ -77,7 +89,10 @@
     $stateProvider.state('config', config);
     $stateProvider.state('faders', faders);
     $stateProvider.state('confdrooms', confdrooms);
-    return $stateProvider.state('drooms', drooms);
+    $stateProvider.state('drooms', drooms);
+    $stateProvider.state('cameleon', cameleon);
+    $stateProvider.state('cameleon.machines', cammachines);
+    return $stateProvider.state('cameleon.scenes', camscenes);
   });
 
   app.factory('sessionMngr', function() {

@@ -16,6 +16,14 @@ app.config ($stateProvider) ->
   faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html", controller: FaderCtrl}
   confdrooms = {url: "/CRoom", templateUrl: "/sceniq/dconf.html", controller:ConfigRoomCtrl}
   drooms = {url: "/DRooms", templateUrl: "/sceniq/drooms.html", controller:ConfigRoomCtrl}
+  cameleon = {'url' : '/Cameleon', templateUrl: "/sceniq/cameleon.html"}
+  cammachines =
+    'url': '/machines'
+    'templateUrl': 'partials/machines.html'
+  camscenes =
+    'url' : '/scenes'
+    'templateUrl': 'partials/scenes.html'
+
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
   $stateProvider.state('room3', room3)
@@ -28,6 +36,10 @@ app.config ($stateProvider) ->
   $stateProvider.state('faders', faders)
   $stateProvider.state('confdrooms', confdrooms)
   $stateProvider.state('drooms', drooms)
+  # Declare the cameleon
+  $stateProvider.state('cameleon', cameleon)
+  $stateProvider.state('cameleon.machines', cammachines)
+  $stateProvider.state('cameleon.scenes', camscenes)
 
 # Factories
 app.factory 'sessionMngr', () ->
