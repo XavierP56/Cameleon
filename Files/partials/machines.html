@@ -1,4 +1,17 @@
 <div>
 Here we define the machines
-{{machines[1]}}
+<br/>
+<select  ng-model="currentMachine" ng-options="c.id for c in machinesList"></select>
+<br/>
+<button ng-click='addMachine(currentMachine)'>Add</button>
+<button ng-click='removeMachine(currentMachine)'>Remove</button>
+<br/>
+    List of selected machines:
+    <br/>
+    <ul>
+        <li class="faders" ng-repeat="m in machines ">
+                <button ng-click="infos(m)">{{m.id}}</button>
+        </li>
+    </ul>
+
 </div>

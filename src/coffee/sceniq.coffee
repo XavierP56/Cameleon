@@ -16,6 +16,8 @@ app.config ($stateProvider) ->
   faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html", controller: FaderCtrl}
   confdrooms = {url: "/CRoom", templateUrl: "/sceniq/dconf.html", controller:ConfigRoomCtrl}
   drooms = {url: "/DRooms", templateUrl: "/sceniq/drooms.html", controller:ConfigRoomCtrl}
+
+  # Cameleon
   cameleon =
     'url' : '/Cameleon'
     templateUrl: "/sceniq/cameleon.html"
@@ -24,6 +26,8 @@ app.config ($stateProvider) ->
   cammachines =
     'url': '/machines'
     'templateUrl': 'partials/machines.html'
+    controller : CamMachinesCtrl
+
   camscenes =
     'url' : '/scenes'
     'templateUrl': 'partials/scenes.html'
@@ -74,7 +78,7 @@ app.factory 'CameleonServer', ($resource) ->
   Query = $resource('/cfg/getsettinglist')
   FaderList = $resource('/dmx/getfaderlist')
 
-  datas.GetFaderList = () ->
+  datas.GetMachinesList = () ->
     return FaderList.get {}
 
   return datas
@@ -500,9 +504,25 @@ app.filter 'faderFilter', ->
     $scope.scenes = res.drooms
     $scope.InitMenu()
 
+@CamMachinesCtrl = ($scope, CameleonServer, $http, $q, $resource) ->
+  # Get the list of machines.
+  CameleonServer.GetMachinesList().$promise.then (res)->
+    $scope.machinesList = res.list
+
+  $scope.addMachine = (currentMachine)->
+    $scope.machines.push currentMachine
+    return
+  $scope.removeMachine = (currentMachine)->
+    index = $scope.machines.indexOf currentMachine
+    return if index == -1
+    $scope.machines.splice(index,1)
+    return
+
 @CameleonCtrl = ($scope, $http, $q, $resource)->
   # Init
-  $scope.machines = ['A', 'B', 'C']
+
+  # $scope.machines is the list of machines we do use.
+  $scope.machines = []
   alert 'BOO'
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->

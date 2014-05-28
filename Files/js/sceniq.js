@@ -73,7 +73,8 @@
     };
     cammachines = {
       'url': '/machines',
-      'templateUrl': 'partials/machines.html'
+      'templateUrl': 'partials/machines.html',
+      controller: CamMachinesCtrl
     };
     camscenes = {
       'url': '/scenes',
@@ -131,7 +132,7 @@
     datas = {};
     Query = $resource('/cfg/getsettinglist');
     FaderList = $resource('/dmx/getfaderlist');
-    datas.GetFaderList = function() {
+    datas.GetMachinesList = function() {
       return FaderList.get({});
     };
     return datas;
@@ -687,8 +688,25 @@
     });
   };
 
+  this.CamMachinesCtrl = function($scope, CameleonServer, $http, $q, $resource) {
+    CameleonServer.GetMachinesList().$promise.then(function(res) {
+      return $scope.machinesList = res.list;
+    });
+    $scope.addMachine = function(currentMachine) {
+      $scope.machines.push(currentMachine);
+    };
+    return $scope.removeMachine = function(currentMachine) {
+      var index;
+      index = $scope.machines.indexOf(currentMachine);
+      if (index === -1) {
+        return;
+      }
+      $scope.machines.splice(index, 1);
+    };
+  };
+
   this.CameleonCtrl = function($scope, $http, $q, $resource) {
-    $scope.machines = ['A', 'B', 'C'];
+    $scope.machines = [];
     return alert('BOO');
   };
 
