@@ -690,9 +690,15 @@
 
   this.CamMachinesCtrl = function($scope, CameleonServer, $http, $q, $resource) {
     CameleonServer.GetMachinesList().$promise.then(function(res) {
-      return $scope.machinesList = res.list;
+      $scope.machinesList = res.list;
+      return $scope.currentMachine = $scope.machinesList[0];
     });
     $scope.addMachine = function(currentMachine) {
+      var index;
+      index = $scope.machines.indexOf(currentMachine);
+      if (index !== -1) {
+        return;
+      }
       $scope.machines.push(currentMachine);
     };
     return $scope.removeMachine = function(currentMachine) {
@@ -706,8 +712,7 @@
   };
 
   this.CameleonCtrl = function($scope, $http, $q, $resource) {
-    $scope.machines = [];
-    return alert('BOO');
+    return $scope.machines = [];
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

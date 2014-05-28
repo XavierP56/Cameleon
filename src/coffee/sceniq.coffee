@@ -508,10 +508,14 @@ app.filter 'faderFilter', ->
   # Get the list of machines.
   CameleonServer.GetMachinesList().$promise.then (res)->
     $scope.machinesList = res.list
+    $scope.currentMachine = $scope.machinesList[0]
 
   $scope.addMachine = (currentMachine)->
+    index = $scope.machines.indexOf currentMachine
+    return if index != -1
     $scope.machines.push currentMachine
     return
+
   $scope.removeMachine = (currentMachine)->
     index = $scope.machines.indexOf currentMachine
     return if index == -1
@@ -523,7 +527,7 @@ app.filter 'faderFilter', ->
 
   # $scope.machines is the list of machines we do use.
   $scope.machines = []
-  alert 'BOO'
+
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

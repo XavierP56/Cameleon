@@ -1,17 +1,15 @@
-<div>
-Here we define the machines
+<div style="text-align: center;">
+Select the machines you want to use:
 <br/>
 <select  ng-model="currentMachine" ng-options="c.id for c in machinesList"></select>
 <br/>
 <button ng-click='addMachine(currentMachine)'>Add</button>
 <button ng-click='removeMachine(currentMachine)'>Remove</button>
-<br/>
+<br/><br/>
     List of selected machines:
     <br/>
-    <ul>
-        <li class="faders" ng-repeat="m in machines ">
-                <button ng-click="infos(m)">{{m.id}}</button>
-        </li>
-    </ul>
 
+            <li class="menuli"  ng-repeat="m in machines ">
+                    <button ng-click="infos(m)">{{m.id}}</button>
+            </li>
 </div>
