@@ -68,7 +68,8 @@
     };
     cameleon = {
       'url': '/Cameleon',
-      templateUrl: "/sceniq/cameleon.html"
+      templateUrl: "/sceniq/cameleon.html",
+      controller: CameleonCtrl
     };
     cammachines = {
       'url': '/machines',
@@ -121,6 +122,17 @@
     };
     datas.GetSettingList = function() {
       return datas.settingLst;
+    };
+    return datas;
+  });
+
+  app.factory('CameleonServer', function($resource) {
+    var FaderList, Query, datas;
+    datas = {};
+    Query = $resource('/cfg/getsettinglist');
+    FaderList = $resource('/dmx/getfaderlist');
+    datas.GetFaderList = function() {
+      return FaderList.get({});
     };
     return datas;
   });
@@ -673,6 +685,11 @@
       $scope.scenes = res.drooms;
       return $scope.InitMenu();
     });
+  };
+
+  this.CameleonCtrl = function($scope, $http, $q, $resource) {
+    $scope.machines = ['A', 'B', 'C'];
+    return alert('BOO');
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

@@ -16,7 +16,11 @@ app.config ($stateProvider) ->
   faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html", controller: FaderCtrl}
   confdrooms = {url: "/CRoom", templateUrl: "/sceniq/dconf.html", controller:ConfigRoomCtrl}
   drooms = {url: "/DRooms", templateUrl: "/sceniq/drooms.html", controller:ConfigRoomCtrl}
-  cameleon = {'url' : '/Cameleon', templateUrl: "/sceniq/cameleon.html"}
+  cameleon =
+    'url' : '/Cameleon'
+    templateUrl: "/sceniq/cameleon.html"
+    controller: CameleonCtrl
+
   cammachines =
     'url': '/machines'
     'templateUrl': 'partials/machines.html'
@@ -63,6 +67,18 @@ app.factory 'configMngr', ($resource) ->
     return datas.settingLst
 
   return datas
+
+# Let's centralize all the communication to the server.
+app.factory 'CameleonServer', ($resource) ->
+  datas = {}
+  Query = $resource('/cfg/getsettinglist')
+  FaderList = $resource('/dmx/getfaderlist')
+
+  datas.GetFaderList = () ->
+    return FaderList.get {}
+
+  return datas
+
 
 # Directive
 app.directive "widgets", ->
@@ -483,6 +499,11 @@ app.filter 'faderFilter', ->
   Load.get (res) ->
     $scope.scenes = res.drooms
     $scope.InitMenu()
+
+@CameleonCtrl = ($scope, $http, $q, $resource)->
+  # Init
+  $scope.machines = ['A', 'B', 'C']
+  alert 'BOO'
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')
