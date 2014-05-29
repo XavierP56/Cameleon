@@ -92,6 +92,7 @@ app.factory 'CameleonServer', ($resource) ->
   _RecordSetting = $resource('/dmx/recordsetting/:fader/:setname')
   _GetSceneList = $resource('/cameleon/getscenelist')
   _CreateScene = $resource('/cameleon/createscene/:scene')
+  _RecordScene = $resource('/cameleon/recordscene', {}, {set: {method: 'POST'}})
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -111,6 +112,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _GetSceneList.get {}
   datas.CreateScene = (scene) ->
     return _CreateScene.get {scene: scene}
+  datas.RecordScene = (scene, machines)->
+    return _RecordScene.set {scene: scene, machines: machines}
   return datas
 
 
@@ -567,6 +570,10 @@ app.filter 'faderFilter', ->
         CameleonServer.GetSceneList().$promise.then (res)->
           $scope.currentScene.id = scene
           $scope.scenesList = res.list
+
+  $scope.record = () ->
+    CameleonServer.RecordScene($scope.currentScene.id, $scope.machines).$promise.then (evt)->
+      alert ('Scene recorded !')
 
 #  $scope.$watch 'currentScene', (n,o)->
 #    return if n == null

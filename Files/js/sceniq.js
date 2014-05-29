@@ -140,7 +140,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreateScene, _DmxSet, _FaderList, _GetSceneList, _QuerySlider, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreateScene, _DmxSet, _FaderList, _GetSceneList, _QuerySlider, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -159,6 +159,11 @@
     _RecordSetting = $resource('/dmx/recordsetting/:fader/:setname');
     _GetSceneList = $resource('/cameleon/getscenelist');
     _CreateScene = $resource('/cameleon/createscene/:scene');
+    _RecordScene = $resource('/cameleon/recordscene', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -200,6 +205,12 @@
     datas.CreateScene = function(scene) {
       return _CreateScene.get({
         scene: scene
+      });
+    };
+    datas.RecordScene = function(scene, machines) {
+      return _RecordScene.set({
+        scene: scene,
+        machines: machines
       });
     };
     return datas;
@@ -768,12 +779,17 @@
       }
       return $scope.currentScene = $scope.scenesList[ix];
     });
-    return $scope.addScene = function(scene) {
+    $scope.addScene = function(scene) {
       return CameleonServer.CreateScene(scene).$promise.then(function(evt) {
         return CameleonServer.GetSceneList().$promise.then(function(res) {
           $scope.currentScene.id = scene;
           return $scope.scenesList = res.list;
         });
+      });
+    };
+    return $scope.record = function() {
+      return CameleonServer.RecordScene($scope.currentScene.id, $scope.machines).$promise.then(function(evt) {
+        return alert('Scene recorded !');
       });
     };
   };

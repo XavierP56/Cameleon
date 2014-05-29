@@ -25,6 +25,13 @@ def getscenelist():
 def createscene(scene):
     global scenes
 
-    e = { 'desc' :'TODO', 'list':[]}
-    scenes[scene] = []
+    entry = { 'desc' :'TODO', 'list':[]}
+    scenes[scene] = entry
     return {'res' : 'ok'}
+
+# /cameleon/recordscene
+def recordscene(request):
+    global scenes
+    id = request.json['scene']
+    scenes[id]['list'] = request.json['machines']
+    return {'res':'OK'}
