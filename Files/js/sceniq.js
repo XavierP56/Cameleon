@@ -321,14 +321,20 @@
             return "leftpos";
           }
         };
-        scope.SetSetting = function(fader, setting) {
+        scope.$watch('currentSetting', function(n, o) {
+          if (n === o) {
+            return;
+          }
           $parse(attrs.settingChanged)(scope, {
-            newSetting: setting
+            newSetting: n
           });
-          if (setting === '-------') {
+          if (n === '') {
             return;
           }
           return CameleonServer.SetFaderSetting(fader, setting);
+        });
+        scope.SetSetting = function(fader, setting) {
+          return scope.currentSetting = setting;
         };
         scope.RefreshDropBox = function() {
           var ix, n, _i, _len, _ref;

@@ -215,14 +215,19 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
       else
         return "leftpos"
 
-    # When the setting changes.
-    scope.SetSetting = (fader, setting) ->
+    scope.$watch 'currentSetting', (n,o)->
       # Call the function
-      $parse(attrs.settingChanged)(scope, {newSetting : setting})
+      if (n == o)
+        return
 
-      if setting == '-------'
+      $parse(attrs.settingChanged)(scope, {newSetting : n})
+      if n == ''
         return
       CameleonServer.SetFaderSetting(fader, setting)
+
+    # When the setting changes.
+    scope.SetSetting = (fader, setting) ->
+      scope.currentSetting = setting
 
     scope.RefreshDropBox = () ->
       ix = 0
