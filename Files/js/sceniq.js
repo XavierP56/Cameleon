@@ -234,7 +234,7 @@
     };
   });
 
-  app.directive("dmxSlider", function($resource, CameleonServer) {
+  app.directive("dmxSlider", function(CameleonServer) {
     return {
       restrict: 'E',
       templateUrl: '/sceniq/templates/dmxslider.html',
@@ -419,23 +419,6 @@
             scope.currentSetting = evt.setting;
             return scope.RefreshDropBox();
           }
-        });
-        scope.$on('updateDropBox', function(sender, evt) {
-          scope.RefreshDropBox();
-          return scope.SetSetting(scope.id, scope.currentSetting);
-        });
-        scope.$on('refreshDropBox', function(sender, evt) {
-          return scope.RefreshDropBox();
-        });
-        scope.$on('generateAll', function(sender, pref) {
-          if (scope.currentSetting === '-------') {
-            return;
-          }
-          return Generate.get({
-            fader: scope.id,
-            setting: scope.currentSetting,
-            prefix: pref
-          });
         });
         scope.$on('sliderChanged', function(sender, evt) {
           if (scope.id !== evt.id) {
@@ -628,41 +611,9 @@
     };
   });
 
-  this.FaderCtrl = function($scope, $http, $q, $resource, configMngr, CameleonServer) {
-    var FaderList, RecordSetting;
-    FaderList = $resource('/dmx/getfaderlist');
-    RecordSetting = $resource('/dmx/recordsetting/:fader/:setname');
-    $scope.record_done = function(res) {
-      var set_promise;
-      set_promise = configMngr.LoadSettingsList();
-      return set_promise.$promise.then(function(setv) {
-        var evt;
-        $scope.settingList = setv.settings;
-        evt = {
-          'id': res.fader,
-          'setting': res.name
-        };
-        $scope.$broadcast('setFaderSetting', evt);
-        alert(res.msg);
-        return $scope.updateall();
-      });
-    };
-    $scope.updateall = function() {
-      return $scope.$broadcast('updateDropBox');
-    };
-    $scope.generateall = function(prefix) {
-      if (prefix === void 0 || prefix === '') {
-        alert('Prefix must be specified !');
-        return;
-      }
-      $scope.$broadcast('generateAll', prefix);
-      return alert('Light button will be soon generated !');
-    };
-    CameleonServer.GetMachinesList().$promise.then(function(res) {
+  this.FaderCtrl = function($scope, CameleonServer) {
+    return CameleonServer.GetMachinesList().$promise.then(function(res) {
       return $scope.faderlist = res.list;
-    });
-    $scope.$on('recordDone', function(sender, evt) {
-      return $scope.record_done(evt);
     });
   };
 
@@ -793,7 +744,7 @@
 
   this.CameleonCtrl = function($scope, $http, $q, $resource) {
     $scope.machines = [];
-    return $scope.scene = "Current scene";
+    return $scope.curscene = "Current scene";
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

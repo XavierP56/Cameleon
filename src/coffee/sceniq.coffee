@@ -138,13 +138,12 @@ app.directive "fold", ->
     $scope.$on 'foldstop', (sender, evt) ->
       $scope.nb = $scope.nb - 1
 
-app.directive "dmxSlider", ($resource, CameleonServer) ->
+app.directive "dmxSlider", (CameleonServer) ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/dmxslider.html'
   scope: true
 
   link: (scope, elemt, attrs) ->
-
 
     scope.started = () ->
       CameleonServer.QuerySlider(scope.id, scope.key).$promise.then (res) ->
@@ -286,18 +285,6 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
       if evt.setting != scope.currentSetting
         scope.currentSetting = evt.setting
         scope.RefreshDropBox()
-
-    scope.$on 'updateDropBox', (sender, evt) ->
-      scope.RefreshDropBox()
-      scope.SetSetting(scope.id, scope.currentSetting)
-
-    scope.$on 'refreshDropBox', (sender, evt) ->
-      scope.RefreshDropBox()
-
-    scope.$on 'generateAll', (sender, pref) ->
-      if scope.currentSetting == '-------'
-        return
-      Generate.get {fader: scope.id, setting: scope.currentSetting, prefix:pref}
 
     scope.$on 'sliderChanged', (sender, evt) ->
       return if scope.id != evt.id
@@ -455,41 +442,12 @@ app.filter 'faderFilter', ->
     else
       return input
 
-@FaderCtrl = ($scope, $http, $q, $resource, configMngr, CameleonServer)->
+@FaderCtrl = ($scope, CameleonServer)->
   # Nothing. The broadcast is done my the MainCtrl.
-  FaderList = $resource('/dmx/getfaderlist')
-  RecordSetting = $resource('/dmx/recordsetting/:fader/:setname')
-
-
-
-  $scope.record_done = (res) ->
-    set_promise = configMngr.LoadSettingsList()
-    set_promise.$promise.then (setv) ->
-      $scope.settingList = setv.settings
-      evt = { 'id': res.fader, 'setting': res.name}
-      $scope.$broadcast('setFaderSetting', evt)
-      alert (res.msg)
-      #$timeout($scope.updateall)
-      $scope.updateall()
-
-  $scope.updateall = () ->
-    $scope.$broadcast('updateDropBox')
-
-  $scope.generateall = (prefix) ->
-    if (prefix is undefined or prefix == '')
-      alert ('Prefix must be specified !')
-      return
-    $scope.$broadcast('generateAll', prefix)
-    alert('Light button will be soon generated !')
 
   # Init of the controller.
   CameleonServer.GetMachinesList().$promise.then (res)->
     $scope.faderlist = res.list
-
-  # When a new entry is created, please update.
-  $scope.$on 'recordDone', (sender, evt)->
-    $scope.record_done (evt)
-  return
 
 @ConfigRoomCtrl = ($scope, $http, $q, $resource)->
   $scope.scenes = {}
@@ -590,7 +548,7 @@ app.filter 'faderFilter', ->
 
   # $scope.machines is the list of machines we do use in the current scene
   $scope.machines = []
-  $scope.scene = "Current scene"
+  $scope.curscene = "Current scene"
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')
