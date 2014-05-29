@@ -129,12 +129,18 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _FaderList, _SetFader, _SettingList, _SlidersList;
+    var datas, _DmxSet, _FaderList, _QuerySlider, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
     _SlidersList = $resource('/dmx/faders/:id');
     _SetFader = $resource('/dmx/setfader/:fader/:setting');
+    _QuerySlider = $resource('/dmx/query/:id/:key');
+    _DmxSet = $resource('/dmx/set', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -150,6 +156,18 @@
       return _SetFader.get({
         fader: fader,
         setting: setting
+      });
+    };
+    datas.QuerySlider = function(id, key) {
+      return _QuerySlider.get({
+        id: id,
+        key: key
+      });
+    };
+    datas.SetSliderCmd = function(id, cmds) {
+      return _DmxSet.set({
+        id: id,
+        cmds: cmds
       });
     };
     return datas;
@@ -195,26 +213,15 @@
     };
   });
 
-  app.directive("dmxSlider", function($resource) {
+  app.directive("dmxSlider", function($resource, CameleonServer) {
     return {
       restrict: 'E',
       templateUrl: '/sceniq/templates/dmxslider.html',
       scope: true,
       link: function(scope, elemt, attrs) {
-        var DmxSet, Query;
-        Query = $resource('/dmx/query/:id/:key');
-        DmxSet = $resource('/dmx/set', {}, {
-          set: {
-            method: 'POST'
-          }
-        });
         scope.started = function() {
-          return Query.get({
-            id: scope.id,
-            key: scope.key
-          }, function(res) {
+          return CameleonServer.QuerySlider(scope.id, scope.key).$promise.then(function(res) {
             scope.value = res[scope.key];
-            scope.send();
             scope.knobOptions = res['knob'];
             scope.$on('update', function(sender, evt) {
               if ((evt.id !== scope.id) || (evt.key !== scope.key)) {
@@ -229,11 +236,8 @@
           var cmd;
           cmd = {};
           cmd[scope.key] = scope.value;
-          return DmxSet.set({
-            id: scope.id,
-            cmds: cmd
-          }, function() {
-            scope.$emit('sliderChanged', {
+          return CameleonServer.SetSliderCmd(scope.id, cmd).$promise.then(function() {
+            return scope.$emit('sliderChanged', {
               'id': scope.id
             });
           });
@@ -325,6 +329,7 @@
         };
         scope.RefreshDropBox = function() {
           var ix, n, _i, _len, _ref;
+          alert(scope.currentSetting);
           ix = 0;
           _ref = scope.settings;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -341,6 +346,7 @@
         scope.setting.menu = {
           'name': 'me'
         };
+        scope.currentSetting = '-------';
         scope.InitMenu = function() {
           return scope.setting.menu = scope.settings[0];
         };
@@ -349,7 +355,6 @@
         });
         attrs.$observe('id', function(v) {
           scope.id = v;
-          scope.currentSetting = '-------';
           CameleonServer.GetSliderList(v).$promise.then(function(res) {
             scope.sliders = res.res;
             return scope.showIt = true;
@@ -386,7 +391,7 @@
           if (scope.id !== evt.id) {
             return;
           }
-          scope.currentSetting = '-------';
+          scope.currentSetting = '';
           return scope.RefreshDropBox();
         });
         return scope.showIt = false;
@@ -723,7 +728,8 @@
     $scope.curMachine = {};
     $scope.curSetting = {};
     return $scope.selectMachine = function(machine) {
-      return $scope.curMachine = machine;
+      $scope.curMachine = machine;
+      return CameleonServer.SetFaderSetting(machine.id, 'setting_red');
     };
   };
 

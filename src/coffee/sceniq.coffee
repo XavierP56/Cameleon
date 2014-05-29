@@ -80,6 +80,8 @@ app.factory 'CameleonServer', ($resource) ->
   _FaderList = $resource('/dmx/getfaderlist')
   _SlidersList  = $resource('/dmx/faders/:id')
   _SetFader = $resource('/dmx/setfader/:fader/:setting')
+  _QuerySlider = $resource('/dmx/query/:id/:key')
+  _DmxSet = $resource('/dmx/set', {}, {set: {method: 'POST'}})
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -89,6 +91,10 @@ app.factory 'CameleonServer', ($resource) ->
     return _SlidersList.get {id:id}
   datas.SetFaderSetting = (fader, setting) ->
     return _SetFader.get {fader: fader, setting:setting}
+  datas.QuerySlider = (id, key) ->
+    return _QuerySlider.get {id:id, key:key}
+  datas.SetSliderCmd = (id, cmds) ->
+    return _DmxSet.set {id: id, cmds: cmds}
 
   return datas
 
@@ -124,19 +130,17 @@ app.directive "fold", ->
     $scope.$on 'foldstop', (sender, evt) ->
       $scope.nb = $scope.nb - 1
 
-app.directive "dmxSlider", ($resource) ->
+app.directive "dmxSlider", ($resource, CameleonServer) ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/dmxslider.html'
   scope: true
 
   link: (scope, elemt, attrs) ->
-    Query = $resource('/dmx/query/:id/:key')
-    DmxSet = $resource('/dmx/set', {}, {set: {method: 'POST'}})
+
 
     scope.started = () ->
-      Query.get {id: scope.id, key: scope.key}, (res) ->
+      CameleonServer.QuerySlider(scope.id, scope.key).$promise.then (res) ->
         scope.value = res[scope.key]
-        scope.send()
         scope.knobOptions = res['knob']
 
         scope.$on 'update', (sender, evt) ->
@@ -148,9 +152,8 @@ app.directive "dmxSlider", ($resource) ->
     scope.send = () ->
       cmd = {}
       cmd[scope.key] = scope.value
-      DmxSet.set {id: scope.id, cmds: cmd}, ->
+      CameleonServer.SetSliderCmd(scope.id, cmd).$promise.then ()->
         scope.$emit('sliderChanged', {'id' : scope.id})
-        return
 
     scope.showMe = true
     scope.id = attrs.id
@@ -218,6 +221,7 @@ app.directive "dmxFader", (CameleonServer, $resource) ->
       CameleonServer.SetFaderSetting(fader, setting)
 
     scope.RefreshDropBox = () ->
+      alert(scope.currentSetting)
       ix = 0
       for n in scope.settings
         if n.name == scope.currentSetting
@@ -229,6 +233,7 @@ app.directive "dmxFader", (CameleonServer, $resource) ->
     # Init
     scope.setting = {}
     scope.setting.menu = {'name' :'me'}
+    scope.currentSetting = '-------'
 
     scope.InitMenu = () ->
       scope.setting.menu = scope.settings[0]
@@ -237,15 +242,14 @@ app.directive "dmxFader", (CameleonServer, $resource) ->
     scope.$watch 'settings', (n,o) ->
         scope.RefreshDropBox()
 
+    # Observe the id
     attrs.$observe 'id', (v) ->
       scope.id = v
-      scope.currentSetting = '-------'
       CameleonServer.GetSliderList(v).$promise.then (res)->
         scope.sliders = res.res
         scope.showIt = true
       CameleonServer.GetSettingList().$promise.then (res)->
         scope.settings = res.settings
-
 
     scope.$on 'setFaderSetting', (sender, evt) ->
       if (evt.id != scope.id)
@@ -267,7 +271,7 @@ app.directive "dmxFader", (CameleonServer, $resource) ->
 
     scope.$on 'sliderChanged', (sender, evt) ->
       return if scope.id != evt.id
-      scope.currentSetting = '-------'
+      scope.currentSetting = ''
       scope.RefreshDropBox()
 
     # Directive init
@@ -541,6 +545,7 @@ app.filter 'faderFilter', ->
 
   $scope.selectMachine = (machine) ->
     $scope.curMachine = machine
+    CameleonServer.SetFaderSetting(machine.id,'setting_red')
 
 @CameleonCtrl = ($scope, $http, $q, $resource)->
   # Init
