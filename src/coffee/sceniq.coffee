@@ -577,7 +577,9 @@ app.filter 'faderFilter', ->
 
   $scope.load = () ->
     return if $scope.currentScene.id == null
-    alert ('Load Scene !')
+    r = window.confirm ('Do you want to load ?')
+    if r == true
+      alert ('Load Scene !')
 #  $scope.$watch 'currentScene', (n,o)->
 #    return if n == null
 #    if n.id == null

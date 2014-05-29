@@ -793,10 +793,14 @@
       });
     };
     return $scope.load = function() {
+      var r;
       if ($scope.currentScene.id === null) {
         return;
       }
-      return alert('Load Scene !');
+      r = window.confirm('Do you want to load ?');
+      if (r === true) {
+        return alert('Load Scene !');
+      }
     };
   };
 
