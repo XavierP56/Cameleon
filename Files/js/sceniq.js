@@ -806,8 +806,8 @@
       r = window.confirm('Do you want to load ?');
       if (r === true) {
         alert('Load Scene !');
-        return CameleonServer.LoadScene($scope.currentScene.id).$promise.then(function(res) {
-          return $scope.$parent.machines = res.load.list;
+        return $scope.$emit('loadScene', {
+          'scene': $scope.currentScene.id
         });
       }
     };
@@ -819,8 +819,13 @@
       id: null,
       name: ''
     };
-    return CameleonServer.GetSceneList().$promise.then(function(res) {
+    CameleonServer.GetSceneList().$promise.then(function(res) {
       return $scope.scenesList = res.list;
+    });
+    return $scope.$on('loadScene', function(sender, evt) {
+      return CameleonServer.LoadScene(evt.scene).$promise.then(function(res) {
+        return $scope.machines = res.load.list;
+      });
     });
   };
 

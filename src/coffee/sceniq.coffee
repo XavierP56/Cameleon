@@ -584,8 +584,7 @@ app.filter 'faderFilter', ->
     r = window.confirm ('Do you want to load ?')
     if r == true
       alert ('Load Scene !')
-      CameleonServer.LoadScene($scope.currentScene.id).$promise.then (res)->
-        $scope.machines = res.load.list
+      $scope.$emit 'loadScene', {'scene':$scope.currentScene.id}
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
@@ -596,6 +595,10 @@ app.filter 'faderFilter', ->
 
   CameleonServer.GetSceneList().$promise.then (res)->
     $scope.scenesList = res.list
+
+  $scope.$on 'loadScene', (sender, evt) ->
+      CameleonServer.LoadScene(evt.scene).$promise.then (res)->
+        $scope.machines = res.load.list
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')
