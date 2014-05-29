@@ -807,7 +807,7 @@
       if (r === true) {
         alert('Load Scene !');
         return CameleonServer.LoadScene($scope.currentScene.id).$promise.then(function(res) {
-          return $scope.machines = res.load.list;
+          return $scope.$parent.machines = res.load.list;
         });
       }
     };
