@@ -207,6 +207,17 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
 
     Generate = $resource('/dmx/generate/:fader/:setting/:prefix')
 
+    scope.record = (fader, wrapper) ->
+      if (wrapper is undefined) or (wrapper == '')
+        #RecordSetting.get {fader: fader, setname: ''}
+        alert ('You must enter a setting name !')
+      else
+        CameleonServer.RecordFaderSetting(scope.id, wrapper.name).$promise.then (evt)->
+            CameleonServer.GetSettingList().$promise.then (res)->
+              scope.settings = res.settings
+              scope.currentSetting = wrapper.name
+              wrapper.name = ""
+
     scope.showMe = () ->
       return false if scope.settings == undefined
       return true
@@ -266,8 +277,9 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
     scope.$on 'setFaderSetting', (sender, evt) ->
       if (evt.id != scope.id)
         return
-      scope.currentSetting = evt.setting
-      scope.RefreshDropBox()
+      if evt.setting != scope.currentSetting
+        scope.currentSetting = evt.setting
+        scope.RefreshDropBox()
 
     scope.$on 'updateDropBox', (sender, evt) ->
       scope.RefreshDropBox()
@@ -442,12 +454,7 @@ app.filter 'faderFilter', ->
   FaderList = $resource('/dmx/getfaderlist')
   RecordSetting = $resource('/dmx/recordsetting/:fader/:setname')
 
-  $scope.record = (fader, wrapper) ->
-    if (wrapper is undefined) or (wrapper == '')
-      RecordSetting.get {fader: fader, setname: ''}
-    else
-      RecordSetting.get {fader: fader, setname: wrapper.name}
-      wrapper.name = ""
+
 
   $scope.record_done = (res) ->
     set_promise = configMngr.LoadSettingsList()

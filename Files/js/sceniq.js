@@ -319,6 +319,19 @@
       link: function(scope, elemt, attrs) {
         var Generate;
         Generate = $resource('/dmx/generate/:fader/:setting/:prefix');
+        scope.record = function(fader, wrapper) {
+          if ((wrapper === void 0) || (wrapper === '')) {
+            return alert('You must enter a setting name !');
+          } else {
+            return CameleonServer.RecordFaderSetting(scope.id, wrapper.name).$promise.then(function(evt) {
+              return CameleonServer.GetSettingList().$promise.then(function(res) {
+                scope.settings = res.settings;
+                scope.currentSetting = wrapper.name;
+                return wrapper.name = "";
+              });
+            });
+          }
+        };
         scope.showMe = function() {
           if (scope.settings === void 0) {
             return false;
@@ -392,8 +405,10 @@
           if (evt.id !== scope.id) {
             return;
           }
-          scope.currentSetting = evt.setting;
-          return scope.RefreshDropBox();
+          if (evt.setting !== scope.currentSetting) {
+            scope.currentSetting = evt.setting;
+            return scope.RefreshDropBox();
+          }
         });
         scope.$on('updateDropBox', function(sender, evt) {
           scope.RefreshDropBox();
@@ -607,20 +622,6 @@
     var FaderList, RecordSetting;
     FaderList = $resource('/dmx/getfaderlist');
     RecordSetting = $resource('/dmx/recordsetting/:fader/:setname');
-    $scope.record = function(fader, wrapper) {
-      if ((wrapper === void 0) || (wrapper === '')) {
-        return RecordSetting.get({
-          fader: fader,
-          setname: ''
-        });
-      } else {
-        RecordSetting.get({
-          fader: fader,
-          setname: wrapper.name
-        });
-        return wrapper.name = "";
-      }
-    };
     $scope.record_done = function(res) {
       var set_promise;
       set_promise = configMngr.LoadSettingsList();
