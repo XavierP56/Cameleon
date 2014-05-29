@@ -3,5 +3,5 @@
                     <button ng-click="selectMachine(m)">{{m.id}}</button>
             </li>
             <br/><br/>
-            <dmx-fader  id="{{curMachine.id}}""></dmx-fader>
+            <dmx-fader  id="{{curMachine.id}}" setting-changed="update_setting(newSetting)"></dmx-fader>
 </div>

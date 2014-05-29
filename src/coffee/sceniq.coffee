@@ -196,7 +196,7 @@ app.directive "dmxLight", ->
         $scope.active = "running"
     return
 
-app.directive "dmxFader", (CameleonServer, $resource) ->
+app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
   restrict: 'E'
   scope : true
   templateUrl: '/sceniq/templates/dmxfader.html'
@@ -215,7 +215,11 @@ app.directive "dmxFader", (CameleonServer, $resource) ->
       else
         return "leftpos"
 
+    # When the setting changes.
     scope.SetSetting = (fader, setting) ->
+      # Call the function
+      $parse(attrs.settingChanged)(scope, {newSetting : setting})
+
       if setting == '-------'
         return
       CameleonServer.SetFaderSetting(fader, setting)
@@ -546,6 +550,9 @@ app.filter 'faderFilter', ->
   $scope.selectMachine = (machine) ->
     $scope.curMachine = machine
     CameleonServer.SetFaderSetting(machine.id,'setting_red')
+
+  $scope.update_setting = (newSetting) ->
+    alert ('Setting changed !' + newSetting)
 
 @CameleonCtrl = ($scope, $http, $q, $resource)->
   # Init

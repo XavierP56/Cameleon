@@ -300,7 +300,7 @@
     };
   });
 
-  app.directive("dmxFader", function(CameleonServer, $resource) {
+  app.directive("dmxFader", function(CameleonServer, $resource, $parse) {
     return {
       restrict: 'E',
       scope: true,
@@ -322,6 +322,9 @@
           }
         };
         scope.SetSetting = function(fader, setting) {
+          $parse(attrs.settingChanged)(scope, {
+            newSetting: setting
+          });
           if (setting === '-------') {
             return;
           }
@@ -727,9 +730,12 @@
   this.CamScenesCtrl = function($scope, CameleonServer) {
     $scope.curMachine = {};
     $scope.curSetting = {};
-    return $scope.selectMachine = function(machine) {
+    $scope.selectMachine = function(machine) {
       $scope.curMachine = machine;
       return CameleonServer.SetFaderSetting(machine.id, 'setting_red');
+    };
+    return $scope.update_setting = function(newSetting) {
+      return alert('Setting changed !' + newSetting);
     };
   };
 
