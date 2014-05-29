@@ -252,6 +252,8 @@ class DmxHandler(object):
         id = request.json['id']
         if 'setting' in request.json:
             setting = request.json['setting']
+            if setting == '':
+                return
             cmds = models.dmx_setting[setting]
         else:
             setting = None
@@ -328,11 +330,10 @@ class DmxHandler(object):
                 # Simple light.
                 self.dmx_setonelight(light)
 
-    def dmx_setfader (self, fader, setting):
-        request = requests.FakeRequest()
-        request.json['id'] = fader
-        request.json['setting'] = setting
+    def dmx_setfader (self, request):
         self.dmx_set(request)
+        fader = request.json['id']
+        setting = request.json['setting']
         sessionsq.PostEvent('dmx',{'evt':'setFaderSetting', 'id':fader, 'setting':setting})
 
     def GetKnobs (self,id):

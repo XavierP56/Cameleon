@@ -134,7 +134,11 @@
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
     _SlidersList = $resource('/dmx/faders/:id');
-    _SetFader = $resource('/dmx/setfader/:fader/:setting');
+    _SetFader = $resource('/dmx/setfader', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     _QuerySlider = $resource('/dmx/query/:id/:key');
     _DmxSet = $resource('/dmx/set', {}, {
       set: {
@@ -153,8 +157,8 @@
       });
     };
     datas.SetFaderSetting = function(fader, setting) {
-      return _SetFader.get({
-        fader: fader,
+      return _SetFader.set({
+        id: fader,
         setting: setting
       });
     };
@@ -738,14 +742,12 @@
 
   this.CamScenesCtrl = function($scope, CameleonServer) {
     $scope.curMachine = {};
-    $scope.curSetting = {};
     $scope.selectMachine = function(machine) {
       $scope.curMachine = machine;
       return CameleonServer.SetFaderSetting(machine.id, machine.setting);
     };
     return $scope.update_setting = function(newSetting) {
       var m, _i, _len, _ref, _results;
-      $scope.currentset = newSetting;
       _ref = $scope.machines;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {

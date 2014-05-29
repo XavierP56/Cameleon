@@ -76,9 +76,9 @@ def dmx_faders(id):
 def dmx_getfaderlist():
     return dmxhandler.dmx_faders_list()
 
-@app.route('/dmx/setfader/:fader/:setting')
-def dmx_setfader(fader, setting):
-    return dmxhandler.dmx_setfader(fader, setting)
+@app.route('/dmx/setfader', method='POST')
+def dmx_setfader():
+    return dmxhandler.dmx_setfader(request)
 
 @app.route('/dmx/panic')
 def dmx_panic():

@@ -79,7 +79,7 @@ app.factory 'CameleonServer', ($resource) ->
   _SettingList = $resource('/cfg/getsettinglist')
   _FaderList = $resource('/dmx/getfaderlist')
   _SlidersList  = $resource('/dmx/faders/:id')
-  _SetFader = $resource('/dmx/setfader/:fader/:setting')
+  _SetFader = $resource('/dmx/setfader', {}, {set: {method: 'POST'}})
   _QuerySlider = $resource('/dmx/query/:id/:key')
   _DmxSet = $resource('/dmx/set', {}, {set: {method: 'POST'}})
 
@@ -90,7 +90,7 @@ app.factory 'CameleonServer', ($resource) ->
   datas.GetSliderList = (id) ->
     return _SlidersList.get {id:id}
   datas.SetFaderSetting = (fader, setting) ->
-    return _SetFader.get {fader: fader, setting:setting}
+    return _SetFader.set {id: fader, setting:setting}
   datas.QuerySlider = (id, key) ->
     return _QuerySlider.get {id:id, key:key}
   datas.SetSliderCmd = (id, cmds) ->
@@ -551,14 +551,12 @@ app.filter 'faderFilter', ->
 @CamScenesCtrl = ($scope, CameleonServer) ->
   #Init
   $scope.curMachine = {}
-  $scope.curSetting = {}
 
   $scope.selectMachine = (machine) ->
     $scope.curMachine = machine
     CameleonServer.SetFaderSetting(machine.id,machine.setting)
 
   $scope.update_setting = (newSetting) ->
-    $scope.currentset = newSetting
     for m in $scope.machines
       if m == $scope.curMachine
         m.setting = newSetting
