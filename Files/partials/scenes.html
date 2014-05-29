@@ -2,8 +2,12 @@
 <b>Scene management</b>
 <br/>
 <select  ng-model="currentScene" ng-options="c.name for c in scenesList"></select>
-
-The following describes the scene {{curscene}}
+<div ng-show="currentScene.id == null">
+    <input ng-model="newScene">
+    <button ng-click="addScene(newScene)">Add scene</button>
+</div>
+<br>
+The following describes the scene {{currentScene.id}}
 
     <li ng-repeat="m in machines">
         {{m.id}} has setting {{m.setting}}

@@ -164,6 +164,10 @@ def models_loaddrooms():
 def cameleon_getscenelist():
     return scenes.getscenelist()
 
+@app.route('/cameleon/createscene/:scene')
+def cameleon_createscene(scene):
+    return scenes.createscene(scene)
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")

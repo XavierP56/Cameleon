@@ -38,6 +38,7 @@ app.config ($stateProvider) ->
         controller : CamAssociateCtrl
       'scenes@cameleon.associate':
         templateUrl : 'partials/scenes.html'
+        controller : SceneCtrl
 
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
@@ -90,6 +91,7 @@ app.factory 'CameleonServer', ($resource) ->
   _DmxSet = $resource('/dmx/set', {}, {set: {method: 'POST'}})
   _RecordSetting = $resource('/dmx/recordsetting/:fader/:setname')
   _GetSceneList = $resource('/cameleon/getscenelist')
+  _CreateScene = $resource('/cameleon/createscene/:scene')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -107,6 +109,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _RecordSetting.get {fader:fader, setname: setname}
   datas.GetSceneList = ()->
     return _GetSceneList.get {}
+  datas.CreateScene = (scene) ->
+    return _CreateScene.get {scene: scene}
   return datas
 
 
@@ -546,12 +550,35 @@ app.filter 'faderFilter', ->
       if m == $scope.curMachine
         m.setting = newSetting
 
+@SceneCtrl = ($scope, CameleonServer)->
+
+    # As soon as the scope.settings changes, update the drop box menu.
+  $scope.$watch 'scenesList', (n,o) ->
+      ix = 0
+      for n in $scope.scenesList
+        if n.id == $scope.currentScene.id
+          break
+        else
+          ix++
+      $scope.currentScene = $scope.scenesList[ix]
+
+  $scope.addScene = (scene)->
+    CameleonServer.CreateScene(scene).$promise.then (evt)->
+        CameleonServer.GetSceneList().$promise.then (res)->
+          $scope.currentScene.id = scene
+          $scope.scenesList = res.list
+
+#  $scope.$watch 'currentScene', (n,o)->
+#    return if n == null
+#    if n.id == null
+#      alert ('Created !')
+
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
 
   # $scope.machines is the list of machines we do use in the current scene
   $scope.machines = []
-  $scope.curscene = "Current scene"
+  $scope.currentScene = { id : null, name : ''}
 
   CameleonServer.GetSceneList().$promise.then (res)->
     $scope.scenesList = res.list

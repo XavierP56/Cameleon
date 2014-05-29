@@ -87,7 +87,8 @@
           controller: CamAssociateCtrl
         },
         'scenes@cameleon.associate': {
-          templateUrl: 'partials/scenes.html'
+          templateUrl: 'partials/scenes.html',
+          controller: SceneCtrl
         }
       }
     };
@@ -139,7 +140,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _DmxSet, _FaderList, _GetSceneList, _QuerySlider, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreateScene, _DmxSet, _FaderList, _GetSceneList, _QuerySlider, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -157,6 +158,7 @@
     });
     _RecordSetting = $resource('/dmx/recordsetting/:fader/:setname');
     _GetSceneList = $resource('/cameleon/getscenelist');
+    _CreateScene = $resource('/cameleon/createscene/:scene');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -194,6 +196,11 @@
     };
     datas.GetSceneList = function() {
       return _GetSceneList.get({});
+    };
+    datas.CreateScene = function(scene) {
+      return _CreateScene.get({
+        scene: scene
+      });
     };
     return datas;
   });
@@ -746,9 +753,37 @@
     };
   };
 
+  this.SceneCtrl = function($scope, CameleonServer) {
+    $scope.$watch('scenesList', function(n, o) {
+      var ix, _i, _len, _ref;
+      ix = 0;
+      _ref = $scope.scenesList;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        n = _ref[_i];
+        if (n.id === $scope.currentScene.id) {
+          break;
+        } else {
+          ix++;
+        }
+      }
+      return $scope.currentScene = $scope.scenesList[ix];
+    });
+    return $scope.addScene = function(scene) {
+      return CameleonServer.CreateScene(scene).$promise.then(function(evt) {
+        return CameleonServer.GetSceneList().$promise.then(function(res) {
+          $scope.currentScene.id = scene;
+          return $scope.scenesList = res.list;
+        });
+      });
+    };
+  };
+
   this.CameleonCtrl = function($scope, CameleonServer) {
     $scope.machines = [];
-    $scope.curscene = "Current scene";
+    $scope.currentScene = {
+      id: null,
+      name: ''
+    };
     return CameleonServer.GetSceneList().$promise.then(function(res) {
       return $scope.scenesList = res.list;
     });
