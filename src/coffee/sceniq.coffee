@@ -29,7 +29,7 @@ app.config ($stateProvider) ->
     controller : CamMachinesCtrl
 
   camscenes =
-    'url' : '/scenes'
+    'url' : '/associate'
     'templateUrl': 'partials/associate.html'
     controller : CamAssociateCtrl
 
