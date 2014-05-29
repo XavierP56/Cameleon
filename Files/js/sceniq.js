@@ -139,7 +139,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _DmxSet, _FaderList, _QuerySlider, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _DmxSet, _FaderList, _GetSceneList, _QuerySlider, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -156,6 +156,7 @@
       }
     });
     _RecordSetting = $resource('/dmx/recordsetting/:fader/:setname');
+    _GetSceneList = $resource('/cameleon/getscenelist');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -190,6 +191,9 @@
         fader: fader,
         setname: setname
       });
+    };
+    datas.GetSceneList = function() {
+      return _GetSceneList.get({});
     };
     return datas;
   });
@@ -742,9 +746,12 @@
     };
   };
 
-  this.CameleonCtrl = function($scope, $http, $q, $resource) {
+  this.CameleonCtrl = function($scope, CameleonServer) {
     $scope.machines = [];
-    return $scope.curscene = "Current scene";
+    $scope.curscene = "Current scene";
+    return CameleonServer.GetSceneList().$promise.then(function(res) {
+      return $scope.scenesList = res.list;
+    });
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

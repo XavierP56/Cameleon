@@ -89,6 +89,7 @@ app.factory 'CameleonServer', ($resource) ->
   _QuerySlider = $resource('/dmx/query/:id/:key')
   _DmxSet = $resource('/dmx/set', {}, {set: {method: 'POST'}})
   _RecordSetting = $resource('/dmx/recordsetting/:fader/:setname')
+  _GetSceneList = $resource('/cameleon/getscenelist')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -104,6 +105,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _DmxSet.set {id: id, cmds: cmds}
   datas.RecordFaderSetting = (fader, setname) ->
     return _RecordSetting.get {fader:fader, setname: setname}
+  datas.GetSceneList = ()->
+    return _GetSceneList.get {}
   return datas
 
 
@@ -543,12 +546,15 @@ app.filter 'faderFilter', ->
       if m == $scope.curMachine
         m.setting = newSetting
 
-@CameleonCtrl = ($scope, $http, $q, $resource)->
+@CameleonCtrl = ($scope, CameleonServer)->
   # Init
 
   # $scope.machines is the list of machines we do use in the current scene
   $scope.machines = []
   $scope.curscene = "Current scene"
+
+  CameleonServer.GetSceneList().$promise.then (res)->
+    $scope.scenesList = res.list
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

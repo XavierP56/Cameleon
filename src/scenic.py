@@ -9,6 +9,7 @@ import dmxhandler
 import models
 import sessionsq
 import uuid
+import scenes
 
 from bottle import route, run, request, abort, static_file
 
@@ -158,6 +159,10 @@ def models_savedrooms():
 @app.route('/models/loadDrooms')
 def models_loaddrooms():
     return models.loadDRooms(args)
+
+@app.route('/cameleon/getscenelist')
+def cameleon_getscenelist():
+    return scenes.getscenelist()
 
 # Start swmixer
 parser = argparse.ArgumentParser()
