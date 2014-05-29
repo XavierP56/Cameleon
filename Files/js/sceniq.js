@@ -129,12 +129,15 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var FaderList, Query, datas;
+    var FaderList, SettingList, datas;
     datas = {};
-    Query = $resource('/cfg/getsettinglist');
+    SettingList = $resource('/cfg/getsettinglist');
     FaderList = $resource('/dmx/getfaderlist');
     datas.GetMachinesList = function() {
       return FaderList.get({});
+    };
+    datas.GetSettingList = function() {
+      return SettingList.get({});
     };
     return datas;
   });
@@ -280,7 +283,7 @@
     };
   });
 
-  app.directive("dmxFader", function($resource) {
+  app.directive("dmxFader", function(CameleonServer, $resource) {
     return {
       restrict: 'E',
       scope: true,
@@ -342,11 +345,15 @@
         attrs.$observe('id', function(v) {
           scope.id = v;
           scope.currentSetting = '-------';
-          return Sliders.get({
+          Sliders.get({
             id: scope.id
           }, function(res) {
             scope.sliders = res.res;
             return scope.showIt = true;
+          });
+          return CameleonServer.GetSettingList().$promise.then(function(res) {
+            scope.settings = res.settings;
+            return scope.RefreshDropBox();
           });
         });
         scope.$on('setFaderSetting', function(sender, evt) {

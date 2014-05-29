@@ -76,11 +76,13 @@ app.factory 'configMngr', ($resource) ->
 # Let's centralize all the communication to the server.
 app.factory 'CameleonServer', ($resource) ->
   datas = {}
-  Query = $resource('/cfg/getsettinglist')
+  SettingList = $resource('/cfg/getsettinglist')
   FaderList = $resource('/dmx/getfaderlist')
 
   datas.GetMachinesList = () ->
     return FaderList.get {}
+  datas.GetSettingList = () ->
+    return SettingList.get {}
 
   return datas
 
@@ -185,7 +187,7 @@ app.directive "dmxLight", ->
         $scope.active = "running"
     return
 
-app.directive "dmxFader", ($resource) ->
+app.directive "dmxFader", (CameleonServer, $resource) ->
   restrict: 'E'
   scope : true
   templateUrl: '/sceniq/templates/dmxfader.html'
@@ -237,6 +239,9 @@ app.directive "dmxFader", ($resource) ->
       Sliders.get {id: scope.id}, (res)->
         scope.sliders = res.res
         scope.showIt = true
+      CameleonServer.GetSettingList().$promise.then (res)->
+        scope.settings = res.settings
+        scope.RefreshDropBox()
 
     scope.$on 'setFaderSetting', (sender, evt) ->
       if (evt.id != scope.id)
