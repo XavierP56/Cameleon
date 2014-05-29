@@ -722,13 +722,26 @@
   };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {
+    $scope.findMachine = function(id) {
+      var ix, m, _i, _len, _ref;
+      ix = 0;
+      _ref = $scope.machines;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        m = _ref[_i];
+        if (m.id === id) {
+          return ix;
+        }
+        ix++;
+      }
+      return -1;
+    };
     CameleonServer.GetMachinesList().$promise.then(function(res) {
       $scope.machinesList = res.list;
       return $scope.currentMachine = $scope.machinesList[0];
     });
     $scope.addMachine = function(currentMachine) {
       var index;
-      index = $scope.machines.indexOf(currentMachine);
+      index = $scope.findMachine(currentMachine.id);
       if (index !== -1) {
         return;
       }
@@ -737,7 +750,7 @@
     };
     return $scope.removeMachine = function(currentMachine) {
       var index;
-      index = $scope.machines.indexOf(currentMachine);
+      index = $scope.findMachine(currentMachine.id);
       if (index === -1) {
         return;
       }

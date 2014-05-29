@@ -531,20 +531,29 @@ app.filter 'faderFilter', ->
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->
+
+  $scope.findMachine = (id) ->
+    ix = 0
+    for m in $scope.machines
+      if m.id == id
+        return ix
+      ix++
+    return -1
+
   # Get the list of machines.
   CameleonServer.GetMachinesList().$promise.then (res)->
     $scope.machinesList = res.list
     $scope.currentMachine = $scope.machinesList[0]
 
   $scope.addMachine = (currentMachine)->
-    index = $scope.machines.indexOf currentMachine
+    index = $scope.findMachine currentMachine.id
     return if index != -1
     currentMachine.setting = ''
     $scope.machines.push currentMachine
     return
 
   $scope.removeMachine = (currentMachine)->
-    index = $scope.machines.indexOf currentMachine
+    index = $scope.findMachine currentMachine.id
     return if index == -1
     $scope.machines.splice(index,1)
     return
