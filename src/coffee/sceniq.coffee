@@ -225,7 +225,6 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
       CameleonServer.SetFaderSetting(fader, setting)
 
     scope.RefreshDropBox = () ->
-      alert(scope.currentSetting)
       ix = 0
       for n in scope.settings
         if n.name == scope.currentSetting
@@ -237,7 +236,7 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
     # Init
     scope.setting = {}
     scope.setting.menu = {'name' :'me'}
-    scope.currentSetting = '-------'
+    scope.currentSetting = ''
 
     scope.InitMenu = () ->
       scope.setting.menu = scope.settings[0]
@@ -552,7 +551,7 @@ app.filter 'faderFilter', ->
     CameleonServer.SetFaderSetting(machine.id,'setting_red')
 
   $scope.update_setting = (newSetting) ->
-    alert ('Setting changed !' + newSetting)
+    $scope.currentset = newSetting
 
 @CameleonCtrl = ($scope, $http, $q, $resource)->
   # Init

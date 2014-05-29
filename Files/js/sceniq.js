@@ -332,7 +332,6 @@
         };
         scope.RefreshDropBox = function() {
           var ix, n, _i, _len, _ref;
-          alert(scope.currentSetting);
           ix = 0;
           _ref = scope.settings;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -349,7 +348,7 @@
         scope.setting.menu = {
           'name': 'me'
         };
-        scope.currentSetting = '-------';
+        scope.currentSetting = '';
         scope.InitMenu = function() {
           return scope.setting.menu = scope.settings[0];
         };
@@ -735,7 +734,7 @@
       return CameleonServer.SetFaderSetting(machine.id, 'setting_red');
     };
     return $scope.update_setting = function(newSetting) {
-      return alert('Setting changed !' + newSetting);
+      return $scope.currentset = newSetting;
     };
   };
 
