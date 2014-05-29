@@ -78,8 +78,8 @@
     };
     camscenes = {
       'url': '/scenes',
-      'templateUrl': 'partials/scenes.html',
-      controller: CamScenesCtrl
+      'templateUrl': 'partials/associate.html',
+      controller: CamAssociateCtrl
     };
     $stateProvider.state('room1', room1);
     $stateProvider.state('room2', room2);
@@ -759,7 +759,7 @@
     };
   };
 
-  this.CamScenesCtrl = function($scope, CameleonServer) {
+  this.CamAssociateCtrl = function($scope, CameleonServer) {
     $scope.curMachine = {};
     $scope.selectMachine = function(machine) {
       $scope.curMachine = machine;
@@ -783,7 +783,7 @@
 
   this.CameleonCtrl = function($scope, $http, $q, $resource) {
     $scope.machines = [];
-    return $scope.machinesSettings = {};
+    return $scope.scene = "Current scene";
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

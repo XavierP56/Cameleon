@@ -30,8 +30,8 @@ app.config ($stateProvider) ->
 
   camscenes =
     'url' : '/scenes'
-    'templateUrl': 'partials/scenes.html'
-    controller : CamScenesCtrl
+    'templateUrl': 'partials/associate.html'
+    controller : CamAssociateCtrl
 
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
@@ -566,7 +566,7 @@ app.filter 'faderFilter', ->
     return
 
 # This controller handles the scenes.
-@CamScenesCtrl = ($scope, CameleonServer) ->
+@CamAssociateCtrl = ($scope, CameleonServer) ->
   #Init
   $scope.curMachine = {}
 
@@ -584,7 +584,7 @@ app.filter 'faderFilter', ->
 
   # $scope.machines is the list of machines we do use in the current scene
   $scope.machines = []
-
+  $scope.scene = "Current scene"
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')
