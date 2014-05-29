@@ -223,13 +223,14 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
       $parse(attrs.settingChanged)(scope, {newSetting : n})
       if n == ''
         return
-      CameleonServer.SetFaderSetting(fader, setting)
+      CameleonServer.SetFaderSetting(scope.id, n)
 
     # When the setting changes.
     scope.SetSetting = (fader, setting) ->
       scope.currentSetting = setting
 
     scope.RefreshDropBox = () ->
+      return if scope.settings is undefined
       ix = 0
       for n in scope.settings
         if n.name == scope.currentSetting
@@ -532,6 +533,10 @@ app.filter 'faderFilter', ->
   # Get the list of machines.
   CameleonServer.GetMachinesList().$promise.then (res)->
     $scope.machinesList = res.list
+    # Define the current settings.
+    for machine in res.list
+      $scope.machinesSettings[machine.id] = {'setting': ''}
+
     $scope.currentMachine = $scope.machinesList[0]
 
   $scope.addMachine = (currentMachine)->
@@ -557,13 +562,14 @@ app.filter 'faderFilter', ->
 
   $scope.update_setting = (newSetting) ->
     $scope.currentset = newSetting
+    $scope.machinesSettings[$scope.curMachine.id].setting = newSetting
 
 @CameleonCtrl = ($scope, $http, $q, $resource)->
   # Init
 
   # $scope.machines is the list of machines we do use.
   $scope.machines = []
-
+  $scope.machinesSettings = {}
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

@@ -331,13 +331,16 @@
           if (n === '') {
             return;
           }
-          return CameleonServer.SetFaderSetting(fader, setting);
+          return CameleonServer.SetFaderSetting(scope.id, n);
         });
         scope.SetSetting = function(fader, setting) {
           return scope.currentSetting = setting;
         };
         scope.RefreshDropBox = function() {
           var ix, n, _i, _len, _ref;
+          if (scope.settings === void 0) {
+            return;
+          }
           ix = 0;
           _ref = scope.settings;
           for (_i = 0, _len = _ref.length; _i < _len; _i++) {
@@ -711,7 +714,15 @@
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {
     CameleonServer.GetMachinesList().$promise.then(function(res) {
+      var machine, _i, _len, _ref;
       $scope.machinesList = res.list;
+      _ref = res.list;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        machine = _ref[_i];
+        $scope.machinesSettings[machine.id] = {
+          'setting': ''
+        };
+      }
       return $scope.currentMachine = $scope.machinesList[0];
     });
     $scope.addMachine = function(currentMachine) {
@@ -740,12 +751,14 @@
       return CameleonServer.SetFaderSetting(machine.id, 'setting_red');
     };
     return $scope.update_setting = function(newSetting) {
-      return $scope.currentset = newSetting;
+      $scope.currentset = newSetting;
+      return $scope.machinesSettings[$scope.curMachine.id].setting = newSetting;
     };
   };
 
   this.CameleonCtrl = function($scope, $http, $q, $resource) {
-    return $scope.machines = [];
+    $scope.machines = [];
+    return $scope.machinesSettings = {};
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
