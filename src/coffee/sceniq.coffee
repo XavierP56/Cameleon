@@ -82,6 +82,7 @@ app.factory 'CameleonServer', ($resource) ->
   _SetFader = $resource('/dmx/setfader', {}, {set: {method: 'POST'}})
   _QuerySlider = $resource('/dmx/query/:id/:key')
   _DmxSet = $resource('/dmx/set', {}, {set: {method: 'POST'}})
+  _RecordSetting = $resource('/dmx/recordsetting/:fader/:setname')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -95,7 +96,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _QuerySlider.get {id:id, key:key}
   datas.SetSliderCmd = (id, cmds) ->
     return _DmxSet.set {id: id, cmds: cmds}
-
+  datas.RecordFaderSetting = (fader, setname) ->
+    return _RecordSetting.get {fader:fader, setname: setname}
   return datas
 
 
@@ -527,6 +529,7 @@ app.filter 'faderFilter', ->
     $scope.scenes = res.drooms
     $scope.InitMenu()
 
+# This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->
   # Get the list of machines.
   CameleonServer.GetMachinesList().$promise.then (res)->
@@ -546,6 +549,7 @@ app.filter 'faderFilter', ->
     $scope.machines.splice(index,1)
     return
 
+# This controller handles the scenes.
 @CamScenesCtrl = ($scope, CameleonServer) ->
   #Init
   $scope.curMachine = {}

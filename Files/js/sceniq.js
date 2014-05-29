@@ -129,7 +129,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _DmxSet, _FaderList, _QuerySlider, _SetFader, _SettingList, _SlidersList;
+    var datas, _DmxSet, _FaderList, _QuerySlider, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -145,6 +145,7 @@
         method: 'POST'
       }
     });
+    _RecordSetting = $resource('/dmx/recordsetting/:fader/:setname');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -172,6 +173,12 @@
       return _DmxSet.set({
         id: id,
         cmds: cmds
+      });
+    };
+    datas.RecordFaderSetting = function(fader, setname) {
+      return _RecordSetting.get({
+        fader: fader,
+        setname: setname
       });
     };
     return datas;
