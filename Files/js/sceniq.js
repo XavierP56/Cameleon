@@ -741,7 +741,7 @@
     $scope.curSetting = {};
     $scope.selectMachine = function(machine) {
       $scope.curMachine = machine;
-      return CameleonServer.SetFaderSetting(machine.id, 'setting_red');
+      return CameleonServer.SetFaderSetting(machine.id, machine.setting);
     };
     return $scope.update_setting = function(newSetting) {
       var m, _i, _len, _ref, _results;

@@ -555,7 +555,7 @@ app.filter 'faderFilter', ->
 
   $scope.selectMachine = (machine) ->
     $scope.curMachine = machine
-    CameleonServer.SetFaderSetting(machine.id,'setting_red')
+    CameleonServer.SetFaderSetting(machine.id,machine.setting)
 
   $scope.update_setting = (newSetting) ->
     $scope.currentset = newSetting
