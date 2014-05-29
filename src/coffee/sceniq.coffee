@@ -76,13 +76,19 @@ app.factory 'configMngr', ($resource) ->
 # Let's centralize all the communication to the server.
 app.factory 'CameleonServer', ($resource) ->
   datas = {}
-  SettingList = $resource('/cfg/getsettinglist')
-  FaderList = $resource('/dmx/getfaderlist')
+  _SettingList = $resource('/cfg/getsettinglist')
+  _FaderList = $resource('/dmx/getfaderlist')
+  _SlidersList  = $resource('/dmx/faders/:id')
+  _SetFader = $resource('/dmx/setfader/:fader/:setting')
 
   datas.GetMachinesList = () ->
-    return FaderList.get {}
+    return _FaderList.get {}
   datas.GetSettingList = () ->
-    return SettingList.get {}
+    return _SettingList.get {}
+  datas.GetSliderList = (id) ->
+    return _SlidersList.get {id:id}
+  datas.SetFaderSetting = (fader, setting) ->
+    return _SetFader.get {fader: fader, setting:setting}
 
   return datas
 
@@ -193,8 +199,7 @@ app.directive "dmxFader", (CameleonServer, $resource) ->
   templateUrl: '/sceniq/templates/dmxfader.html'
 
   link: (scope, elemt, attrs) ->
-    Sliders = $resource('/dmx/faders/:id')
-    SetFader = $resource('/dmx/setfader/:fader/:setting')
+
     Generate = $resource('/dmx/generate/:fader/:setting/:prefix')
 
     scope.showMe = () ->
@@ -210,7 +215,7 @@ app.directive "dmxFader", (CameleonServer, $resource) ->
     scope.SetSetting = (fader, setting) ->
       if setting == '-------'
         return
-      SetFader.get {fader: fader, setting: setting}
+      CameleonServer.SetFaderSetting(fader, setting)
 
     scope.RefreshDropBox = () ->
       ix = 0
@@ -228,20 +233,19 @@ app.directive "dmxFader", (CameleonServer, $resource) ->
     scope.InitMenu = () ->
       scope.setting.menu = scope.settings[0]
 
-    scope.$watch attrs.settings, (n,o) ->
-      if (n != undefined)
-        scope.settings = n
-        scope.setting.menu = scope.settings[0]
+    # As soon as the scope.settings changes, update the drop box menu.
+    scope.$watch 'settings', (n,o) ->
+        scope.RefreshDropBox()
 
     attrs.$observe 'id', (v) ->
       scope.id = v
       scope.currentSetting = '-------'
-      Sliders.get {id: scope.id}, (res)->
+      CameleonServer.GetSliderList(v).$promise.then (res)->
         scope.sliders = res.res
         scope.showIt = true
       CameleonServer.GetSettingList().$promise.then (res)->
         scope.settings = res.settings
-        scope.RefreshDropBox()
+
 
     scope.$on 'setFaderSetting', (sender, evt) ->
       if (evt.id != scope.id)

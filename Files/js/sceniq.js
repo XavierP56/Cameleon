@@ -129,15 +129,28 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var FaderList, SettingList, datas;
+    var datas, _FaderList, _SetFader, _SettingList, _SlidersList;
     datas = {};
-    SettingList = $resource('/cfg/getsettinglist');
-    FaderList = $resource('/dmx/getfaderlist');
+    _SettingList = $resource('/cfg/getsettinglist');
+    _FaderList = $resource('/dmx/getfaderlist');
+    _SlidersList = $resource('/dmx/faders/:id');
+    _SetFader = $resource('/dmx/setfader/:fader/:setting');
     datas.GetMachinesList = function() {
-      return FaderList.get({});
+      return _FaderList.get({});
     };
     datas.GetSettingList = function() {
-      return SettingList.get({});
+      return _SettingList.get({});
+    };
+    datas.GetSliderList = function(id) {
+      return _SlidersList.get({
+        id: id
+      });
+    };
+    datas.SetFaderSetting = function(fader, setting) {
+      return _SetFader.get({
+        fader: fader,
+        setting: setting
+      });
     };
     return datas;
   });
@@ -289,9 +302,7 @@
       scope: true,
       templateUrl: '/sceniq/templates/dmxfader.html',
       link: function(scope, elemt, attrs) {
-        var Generate, SetFader, Sliders;
-        Sliders = $resource('/dmx/faders/:id');
-        SetFader = $resource('/dmx/setfader/:fader/:setting');
+        var Generate;
         Generate = $resource('/dmx/generate/:fader/:setting/:prefix');
         scope.showMe = function() {
           if (scope.settings === void 0) {
@@ -310,10 +321,7 @@
           if (setting === '-------') {
             return;
           }
-          return SetFader.get({
-            fader: fader,
-            setting: setting
-          });
+          return CameleonServer.SetFaderSetting(fader, setting);
         };
         scope.RefreshDropBox = function() {
           var ix, n, _i, _len, _ref;
@@ -336,24 +344,18 @@
         scope.InitMenu = function() {
           return scope.setting.menu = scope.settings[0];
         };
-        scope.$watch(attrs.settings, function(n, o) {
-          if (n !== void 0) {
-            scope.settings = n;
-            return scope.setting.menu = scope.settings[0];
-          }
+        scope.$watch('settings', function(n, o) {
+          return scope.RefreshDropBox();
         });
         attrs.$observe('id', function(v) {
           scope.id = v;
           scope.currentSetting = '-------';
-          Sliders.get({
-            id: scope.id
-          }, function(res) {
+          CameleonServer.GetSliderList(v).$promise.then(function(res) {
             scope.sliders = res.res;
             return scope.showIt = true;
           });
           return CameleonServer.GetSettingList().$promise.then(function(res) {
-            scope.settings = res.settings;
-            return scope.RefreshDropBox();
+            return scope.settings = res.settings;
           });
         });
         scope.$on('setFaderSetting', function(sender, evt) {
