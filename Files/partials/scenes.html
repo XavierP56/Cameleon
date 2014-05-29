@@ -1,4 +1,7 @@
 <div>
-Here we define the scenes.
-{{machines[1]}}
+            <li class="menuli"  ng-repeat="m in machines ">
+                    <button ng-click="selectMachine(m)">{{m.id}}</button>
+            </li>
+            <br/><br/>
+            <dmx-fader settings="curSetting" id="{{curMachine.id}}"></dmx-fader>
 </div>

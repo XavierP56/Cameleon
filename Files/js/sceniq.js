@@ -78,7 +78,8 @@
     };
     camscenes = {
       'url': '/scenes',
-      'templateUrl': 'partials/scenes.html'
+      'templateUrl': 'partials/scenes.html',
+      controller: CamScenesCtrl
     };
     $stateProvider.state('room1', room1);
     $stateProvider.state('room2', room2);
@@ -282,10 +283,6 @@
   app.directive("dmxFader", function($resource) {
     return {
       restrict: 'E',
-      scope: {
-        id: '@',
-        settings: '='
-      },
       scope: true,
       templateUrl: '/sceniq/templates/dmxfader.html',
       link: function(scope, elemt, attrs) {
@@ -342,6 +339,16 @@
             return scope.setting.menu = scope.settings[0];
           }
         });
+        attrs.$observe('id', function(v) {
+          scope.id = v;
+          scope.currentSetting = '-------';
+          return Sliders.get({
+            id: scope.id
+          }, function(res) {
+            scope.sliders = res.res;
+            return scope.showIt = true;
+          });
+        });
         scope.$on('setFaderSetting', function(sender, evt) {
           if (evt.id !== scope.id) {
             return;
@@ -373,15 +380,7 @@
           scope.currentSetting = '-------';
           return scope.RefreshDropBox();
         });
-        scope.showIt = false;
-        scope.id = attrs.id;
-        scope.currentSetting = '-------';
-        return Sliders.get({
-          id: scope.id
-        }, function(res) {
-          scope.sliders = res.res;
-          return scope.showIt = true;
-        });
+        return scope.showIt = false;
       }
     };
   });
@@ -688,7 +687,7 @@
     });
   };
 
-  this.CamMachinesCtrl = function($scope, CameleonServer, $http, $q, $resource) {
+  this.CamMachinesCtrl = function($scope, CameleonServer) {
     CameleonServer.GetMachinesList().$promise.then(function(res) {
       $scope.machinesList = res.list;
       return $scope.currentMachine = $scope.machinesList[0];
@@ -708,6 +707,14 @@
         return;
       }
       $scope.machines.splice(index, 1);
+    };
+  };
+
+  this.CamScenesCtrl = function($scope, CameleonServer) {
+    $scope.curMachine = {};
+    $scope.curSetting = {};
+    return $scope.selectMachine = function(machine) {
+      return $scope.curMachine = machine;
     };
   };
 

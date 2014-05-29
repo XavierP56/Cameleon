@@ -31,6 +31,7 @@ app.config ($stateProvider) ->
   camscenes =
     'url' : '/scenes'
     'templateUrl': 'partials/scenes.html'
+    controller : CamScenesCtrl
 
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
@@ -186,7 +187,6 @@ app.directive "dmxLight", ->
 
 app.directive "dmxFader", ($resource) ->
   restrict: 'E'
-  scope: { id: '@', settings: '='}
   scope : true
   templateUrl: '/sceniq/templates/dmxfader.html'
 
@@ -231,6 +231,13 @@ app.directive "dmxFader", ($resource) ->
         scope.settings = n
         scope.setting.menu = scope.settings[0]
 
+    attrs.$observe 'id', (v) ->
+      scope.id = v
+      scope.currentSetting = '-------'
+      Sliders.get {id: scope.id}, (res)->
+        scope.sliders = res.res
+        scope.showIt = true
+
     scope.$on 'setFaderSetting', (sender, evt) ->
       if (evt.id != scope.id)
         return
@@ -256,11 +263,7 @@ app.directive "dmxFader", ($resource) ->
 
     # Directive init
     scope.showIt = false
-    scope.id = attrs.id
-    scope.currentSetting = '-------'
-    Sliders.get {id: scope.id}, (res)->
-      scope.sliders = res.res
-      scope.showIt = true
+
 
 app.directive "soundButton", ($resource)  ->
   restrict: 'E'
@@ -504,7 +507,7 @@ app.filter 'faderFilter', ->
     $scope.scenes = res.drooms
     $scope.InitMenu()
 
-@CamMachinesCtrl = ($scope, CameleonServer, $http, $q, $resource) ->
+@CamMachinesCtrl = ($scope, CameleonServer) ->
   # Get the list of machines.
   CameleonServer.GetMachinesList().$promise.then (res)->
     $scope.machinesList = res.list
@@ -521,6 +524,14 @@ app.filter 'faderFilter', ->
     return if index == -1
     $scope.machines.splice(index,1)
     return
+
+@CamScenesCtrl = ($scope, CameleonServer) ->
+  #Init
+  $scope.curMachine = {}
+  $scope.curSetting = {}
+
+  $scope.selectMachine = (machine) ->
+    $scope.curMachine = machine
 
 @CameleonCtrl = ($scope, $http, $q, $resource)->
   # Init
