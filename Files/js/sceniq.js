@@ -67,27 +67,27 @@
       controller: ConfigRoomCtrl
     };
     cameleon = {
-      'url': '/Cameleon',
+      url: '/Cameleon',
       templateUrl: "/sceniq/cameleon.html",
       controller: CameleonCtrl
     };
     cammachines = {
-      'url': '/machines',
-      'templateUrl': 'partials/machines.html',
+      url: '/machines',
+      templateUrl: 'partials/machines.html',
       controller: CamMachinesCtrl
     };
     camscenes = {
       'url': '/associate',
       views: {
         '': {
-          'templateUrl': 'partials/asso.html'
+          templateUrl: 'partials/asso.html'
         },
         'assettings@cameleon.associate': {
-          'templateUrl': 'partials/associate.html',
+          templateUrl: 'partials/associate.html',
           controller: CamAssociateCtrl
         },
         'scenes@cameleon.associate': {
-          'templateUrl': 'partials/scenes.html'
+          templateUrl: 'partials/scenes.html'
         }
       }
     };
