@@ -1,7 +1,7 @@
 <br>
 <b>Scene management</b>
 <br/>
-<select  ng-model="currentScene" ng-options="c.name for c in scenesList"></select>
+<select  ng-change="load()" ng-model="currentScene" ng-options="c.name for c in scenesList"></select>
 <div ng-show="currentScene.id == null">
     <input ng-model="newScene">
     <button ng-click="addScene(newScene)">Add scene</button>

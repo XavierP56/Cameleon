@@ -787,10 +787,16 @@
         });
       });
     };
-    return $scope.record = function() {
+    $scope.record = function() {
       return CameleonServer.RecordScene($scope.currentScene.id, $scope.machines).$promise.then(function(evt) {
         return alert('Scene recorded !');
       });
+    };
+    return $scope.load = function() {
+      if ($scope.currentScene.id === null) {
+        return;
+      }
+      return alert('Load Scene !');
     };
   };
 

@@ -575,6 +575,9 @@ app.filter 'faderFilter', ->
     CameleonServer.RecordScene($scope.currentScene.id, $scope.machines).$promise.then (evt)->
       alert ('Scene recorded !')
 
+  $scope.load = () ->
+    return if $scope.currentScene.id == null
+    alert ('Load Scene !')
 #  $scope.$watch 'currentScene', (n,o)->
 #    return if n == null
 #    if n.id == null
