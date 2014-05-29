@@ -253,6 +253,7 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
 
     # Observe the id
     attrs.$observe 'id', (v) ->
+      return if v == ''
       scope.id = v
       CameleonServer.GetSliderList(v).$promise.then (res)->
         scope.sliders = res.res

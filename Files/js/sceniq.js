@@ -369,6 +369,9 @@
           return scope.RefreshDropBox();
         });
         attrs.$observe('id', function(v) {
+          if (v === '') {
+            return;
+          }
           scope.id = v;
           CameleonServer.GetSliderList(v).$promise.then(function(res) {
             scope.sliders = res.res;
