@@ -30,8 +30,14 @@ app.config ($stateProvider) ->
 
   camscenes =
     'url' : '/associate'
-    'templateUrl': 'partials/associate.html'
-    controller : CamAssociateCtrl
+    views:
+      '' :
+        'templateUrl' : 'partials/asso.html'
+      'assettings@cameleon.associate':
+        'templateUrl' : 'partials/associate.html'
+        controller : CamAssociateCtrl
+      'scenes@cameleon.associate':
+        'templateUrl' : 'partials/scenes.html'
 
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
