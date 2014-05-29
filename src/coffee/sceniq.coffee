@@ -93,6 +93,7 @@ app.factory 'CameleonServer', ($resource) ->
   _GetSceneList = $resource('/cameleon/getscenelist')
   _CreateScene = $resource('/cameleon/createscene/:scene')
   _RecordScene = $resource('/cameleon/recordscene', {}, {set: {method: 'POST'}})
+  _LoadScene = $resource('/cameleon/loadscene/:scene')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -114,6 +115,9 @@ app.factory 'CameleonServer', ($resource) ->
     return _CreateScene.get {scene: scene}
   datas.RecordScene = (scene, machines)->
     return _RecordScene.set {scene: scene, machines: machines}
+  datas.LoadScene = (scene)->
+    return _LoadScene.get {scene: scene}
+
   return datas
 
 
@@ -580,10 +584,8 @@ app.filter 'faderFilter', ->
     r = window.confirm ('Do you want to load ?')
     if r == true
       alert ('Load Scene !')
-#  $scope.$watch 'currentScene', (n,o)->
-#    return if n == null
-#    if n.id == null
-#      alert ('Created !')
+      CameleonServer.LoadScene($scope.currentScene.id).$promise.then (res)->
+        $scope.machines = res.load.list
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init

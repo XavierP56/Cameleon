@@ -35,3 +35,9 @@ def recordscene(request):
     id = request.json['scene']
     scenes[id]['list'] = request.json['machines']
     return {'res':'OK'}
+
+# /cameleon/loadscene/:scene
+def loadscene(scene):
+    global scenes
+
+    return {'load': scenes[scene]}
