@@ -582,9 +582,9 @@ app.filter 'faderFilter', ->
 @CameleonCtrl = ($scope, $http, $q, $resource)->
   # Init
 
-  # $scope.machines is the list of machines we do use.
+  # $scope.machines is the list of machines we do use in the current scene
   $scope.machines = []
-  $scope.machinesSettings = {}
+
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')
