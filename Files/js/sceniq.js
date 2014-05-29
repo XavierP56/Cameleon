@@ -596,7 +596,7 @@
     };
   });
 
-  this.FaderCtrl = function($scope, $http, $q, $resource, configMngr) {
+  this.FaderCtrl = function($scope, $http, $q, $resource, configMngr, CameleonServer) {
     var FaderList, RecordSetting;
     FaderList = $resource('/dmx/getfaderlist');
     RecordSetting = $resource('/dmx/recordsetting/:fader/:setname');
@@ -640,13 +640,8 @@
       $scope.$broadcast('generateAll', prefix);
       return alert('Light button will be soon generated !');
     };
-    FaderList.get({}, function(res) {
-      var set_promise;
-      $scope.faderlist = res.list;
-      set_promise = configMngr.LoadSettingsList();
-      return set_promise.$promise.then(function(res) {
-        return $scope.settingList = res.settings;
-      });
+    CameleonServer.GetMachinesList().$promise.then(function(res) {
+      return $scope.faderlist = res.list;
     });
     $scope.$on('recordDone', function(sender, evt) {
       return $scope.record_done(evt);

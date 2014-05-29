@@ -435,7 +435,7 @@ app.filter 'faderFilter', ->
     else
       return input
 
-@FaderCtrl = ($scope, $http, $q, $resource, configMngr)->
+@FaderCtrl = ($scope, $http, $q, $resource, configMngr, CameleonServer)->
   # Nothing. The broadcast is done my the MainCtrl.
   FaderList = $resource('/dmx/getfaderlist')
   RecordSetting = $resource('/dmx/recordsetting/:fader/:setname')
@@ -468,11 +468,8 @@ app.filter 'faderFilter', ->
     alert('Light button will be soon generated !')
 
   # Init of the controller.
-  FaderList.get {}, (res)->
+  CameleonServer.GetMachinesList().$promise.then (res)->
     $scope.faderlist = res.list
-    set_promise = configMngr.LoadSettingsList()
-    set_promise.$promise.then (res) ->
-      $scope.settingList = res.settings
 
   # When a new entry is created, please update.
   $scope.$on 'recordDone', (sender, evt)->
