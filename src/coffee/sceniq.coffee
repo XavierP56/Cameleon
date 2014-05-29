@@ -533,15 +533,12 @@ app.filter 'faderFilter', ->
   # Get the list of machines.
   CameleonServer.GetMachinesList().$promise.then (res)->
     $scope.machinesList = res.list
-    # Define the current settings.
-    for machine in res.list
-      $scope.machinesSettings[machine.id] = {'setting': ''}
-
     $scope.currentMachine = $scope.machinesList[0]
 
   $scope.addMachine = (currentMachine)->
     index = $scope.machines.indexOf currentMachine
     return if index != -1
+    currentMachine.setting = ''
     $scope.machines.push currentMachine
     return
 
@@ -562,7 +559,9 @@ app.filter 'faderFilter', ->
 
   $scope.update_setting = (newSetting) ->
     $scope.currentset = newSetting
-    $scope.machinesSettings[$scope.curMachine.id].setting = newSetting
+    for m in $scope.machines
+      if m == $scope.curMachine
+        m.setting = newSetting
 
 @CameleonCtrl = ($scope, $http, $q, $resource)->
   # Init

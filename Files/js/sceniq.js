@@ -714,15 +714,7 @@
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {
     CameleonServer.GetMachinesList().$promise.then(function(res) {
-      var machine, _i, _len, _ref;
       $scope.machinesList = res.list;
-      _ref = res.list;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        machine = _ref[_i];
-        $scope.machinesSettings[machine.id] = {
-          'setting': ''
-        };
-      }
       return $scope.currentMachine = $scope.machinesList[0];
     });
     $scope.addMachine = function(currentMachine) {
@@ -731,6 +723,7 @@
       if (index !== -1) {
         return;
       }
+      currentMachine.setting = '';
       $scope.machines.push(currentMachine);
     };
     return $scope.removeMachine = function(currentMachine) {
@@ -751,8 +744,19 @@
       return CameleonServer.SetFaderSetting(machine.id, 'setting_red');
     };
     return $scope.update_setting = function(newSetting) {
+      var m, _i, _len, _ref, _results;
       $scope.currentset = newSetting;
-      return $scope.machinesSettings[$scope.curMachine.id].setting = newSetting;
+      _ref = $scope.machines;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        m = _ref[_i];
+        if (m === $scope.curMachine) {
+          _results.push(m.setting = newSetting);
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
     };
   };
 
