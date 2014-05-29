@@ -48,7 +48,7 @@ app.config ($stateProvider) ->
   # Declare the cameleon
   $stateProvider.state('cameleon', cameleon)
   $stateProvider.state('cameleon.machines', cammachines)
-  $stateProvider.state('cameleon.scenes', camscenes)
+  $stateProvider.state('cameleon.associate', camscenes)
 
 # Factories
 app.factory 'sessionMngr', () ->

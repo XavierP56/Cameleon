@@ -95,7 +95,7 @@
     $stateProvider.state('drooms', drooms);
     $stateProvider.state('cameleon', cameleon);
     $stateProvider.state('cameleon.machines', cammachines);
-    return $stateProvider.state('cameleon.scenes', camscenes);
+    return $stateProvider.state('cameleon.associate', camscenes);
   });
 
   app.factory('sessionMngr', function() {
