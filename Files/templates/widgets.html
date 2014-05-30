@@ -19,6 +19,11 @@
             <dmx-fader id="{{s.id}}"></dmx-fader>
         </span>
     </span>
+
+    <span ng-show="edit==true">
+       <button ng-click="backward($index)">-</button>
+       <button ng-click="forward($index)">+</button>
+    </span>
 </script>
 
 <span ng-repeat="s in stuff" ng-include="'widget_renderer'">

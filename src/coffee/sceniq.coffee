@@ -137,14 +137,22 @@ app.factory 'CameleonServer', ($resource) ->
   return datas
 
 
+Array::move = (old_index, new_index) ->
+  if new_index >= @length
+    k = new_index - @length
+    @push `undefined`  while (k--) + 1
+  @splice new_index, 0, @splice(old_index, 1)[0]
+  this
+
 # Directive
 app.directive "widgets", ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/widgets.html'
-  scope : {stuff : '=things'}
+  scope : {stuff : '=things', edit: '='}
 
   link: (scope, elemt, attrs) ->
-
+    scope.forward = (index)->
+      scope.stuff.move(index, index+1)
 
 
 app.directive "fold", ->
