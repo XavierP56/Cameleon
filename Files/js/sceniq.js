@@ -811,7 +811,7 @@
       }
       r = window.confirm('Do you want to load ?');
       if (r === true) {
-        return $scope.$emit('loadScene');
+        return $scope.LoadScene();
       } else {
         return alert('Beware !');
       }
@@ -830,11 +830,11 @@
     CameleonServer.GetSceneList().$promise.then(function(res) {
       return $scope.cameleon.scenesList = res.list;
     });
-    return $scope.$on('loadScene', function(sender, evt) {
+    return $scope.LoadScene = function() {
       return CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then(function(res) {
         return $scope.cameleon.machines = res.load.list;
       });
-    });
+    };
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

@@ -589,7 +589,7 @@ app.filter 'faderFilter', ->
     return if $scope.cameleon.currentScene.id == null
     r = window.confirm ('Do you want to load ?')
     if r == true
-      $scope.$emit 'loadScene'
+      $scope.LoadScene()
     else
       alert ('Beware !')
 
@@ -606,7 +606,7 @@ app.filter 'faderFilter', ->
   CameleonServer.GetSceneList().$promise.then (res)->
     $scope.cameleon.scenesList = res.list
 
-  $scope.$on 'loadScene', (sender, evt) ->
+  $scope.LoadScene = ()->
       CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then (res)->
         $scope.cameleon.machines = res.load.list
 
