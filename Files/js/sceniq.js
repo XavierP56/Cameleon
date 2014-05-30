@@ -832,7 +832,11 @@
       return $scope.LoadScene();
     };
     $scope.addScene = function() {
-      return $scope.cameleon.picturesScenes.push($scope.cameleon.currentScene);
+      var entry;
+      entry = {
+        'id': $scope.cameleon.currentScene.id
+      };
+      return $scope.cameleon.picturesScenes.push(entry);
     };
     return $scope.removeScene = function() {
       return alert('Remove');
