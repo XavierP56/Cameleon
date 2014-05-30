@@ -3,8 +3,8 @@
         <span ng-switch-when="sound">
             <sound-button  height=60 id="{{s.id}}"></sound-button>
         </span>
-        <span ng-switch-when="Light">
-            <dmx-light  id="{{s.id}}"></dmx-light>
+        <span ng-switch-when="scene">
+            <dmx-scene  id="{{s.id}}"></dmx-light>
         </span>
         <div ng-switch-when="Line">
             <b>{{s.msg}}</b>

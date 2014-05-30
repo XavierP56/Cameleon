@@ -2,11 +2,13 @@ __author__ = 'xavierpouyollon'
 
 import json
 import requests
-
+import sessionsq
 
 class Scenes:
     scenes = {}
     pictures = {}
+
+    scenesstates = {}
 
     dmx = None
     snd = None
@@ -79,13 +81,13 @@ class Scenes:
             res.append( {'id':k, 'name':k})
         return {'list' : res}
 
-    # '/cameleon/createpicture/:picture'
+    # /cameleon/createpicture/:picture
     def createpicture(self,picture):
         entry = { 'desc' :'TODO', 'list':[]}
         self.pictures[picture] = entry
         return {'res' : 'ok'}
 
-    # '/cameleon/recordpicture'
+    # /cameleon/recordpicture
     def recordpicture(self, request):
         id = request.json['picture']
         self.pictures[id]['list'] = request.json['stuff']
@@ -95,3 +97,21 @@ class Scenes:
     # '/cameleon/loadpicture/:picture'
     def loadpicture(self,picture):
         return {'load': self.pictures[picture]}
+
+    # /cameleon/dmxscene
+    def dmxscene(self, request):
+        scene = request.json['scene']
+        opts = request.json['opts']
+
+        if scene in self.scenesstates:
+            state = self.scenesstates[scene]
+            state = not state
+            self.scenesstates[scene] = state
+        else:
+            state = True
+            self.scenesstates[scene] = state
+
+        evt =  {'evt': 'sceneState', 'id': scene, 'state':state}
+        sessionsq.PostEvent ('dmx', evt)
+
+        return {'res': 'OK'}

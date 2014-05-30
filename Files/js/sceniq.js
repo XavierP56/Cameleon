@@ -136,7 +136,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -170,6 +170,11 @@
     });
     _LoadPicture = $resource('/cameleon/loadpicture/:picture');
     _GetSoundList = $resource('/cameleon/getsoundlist');
+    _DmxScene = $resource('/cameleon/dmxscene', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -245,6 +250,12 @@
     };
     datas.GetSoundList = function() {
       return _GetSoundList.get({});
+    };
+    datas.DmxScene = function(scene, opts) {
+      return _DmxScene.set({
+        scene: scene,
+        opts: opts
+      });
     };
     return datas;
   });
@@ -370,6 +381,33 @@
             return $scope.active = null;
           } else {
             return $scope.active = "running";
+          }
+        });
+      }
+    };
+  });
+
+  app.directive("dmxScene", function() {
+    return {
+      restrict: 'E',
+      templateUrl: '/sceniq/templates/dmxscene.html',
+      scope: {
+        id: '@'
+      },
+      controller: function($scope, CameleonServer) {
+        $scope.dmxstyle = 'dmx';
+        $scope["do"] = function() {
+          return CameleonServer.DmxScene($scope.id, null).$promise.then(function(evt) {});
+        };
+        $scope.$on('sceneState', function(sender, evt) {
+          if (evt.id !== $scope.id) {
+            return;
+          }
+          if (evt.state === true) {
+            $scope.active = "running";
+          }
+          if (evt.state === false) {
+            return $scope.active = null;
           }
         });
       }

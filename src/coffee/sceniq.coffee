@@ -98,6 +98,7 @@ app.factory 'CameleonServer', ($resource) ->
   _RecordPicture = $resource('/cameleon/recordpicture', {}, {set: {method: 'POST'}})
   _LoadPicture = $resource('/cameleon/loadpicture/:picture')
   _GetSoundList =  $resource('/cameleon/getsoundlist')
+  _DmxScene = $resource('/cameleon/dmxscene', {}, {set: {method: 'POST'}})
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -131,6 +132,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _LoadPicture.get {picture: picture}
   datas.GetSoundList = ()->
     return _GetSoundList.get {}
+  datas.DmxScene = (scene,opts)->
+    return _DmxScene.set {scene:scene, opts:opts}
   return datas
 
 
@@ -197,6 +200,9 @@ app.directive "dmxSlider", (CameleonServer) ->
 
     scope.started()
 
+# Keep it for now
+# TODO: Remove it once dmxScene is available.
+
 app.directive "dmxLight", ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/dmxlight.html'
@@ -228,6 +234,28 @@ app.directive "dmxLight", ->
         $scope.active = null
       else
         $scope.active = "running"
+    return
+
+# This asks the server to display the scene.
+app.directive "dmxScene", ->
+  restrict: 'E'
+  templateUrl: '/sceniq/templates/dmxscene.html'
+  scope: {id: '@'}
+
+  controller: ($scope, CameleonServer) ->
+
+    $scope.dmxstyle = 'dmx'
+
+    $scope.do = () ->
+      CameleonServer.DmxScene($scope.id, null).$promise.then (evt)->
+        return
+
+    $scope.$on 'sceneState', (sender, evt) ->
+      if (evt.id != $scope.id)
+        return
+      $scope.active = "running" if evt.state == true
+      $scope.active = null if evt.state == false
+
     return
 
 app.directive "dmxFader", (CameleonServer, $resource, $parse) ->

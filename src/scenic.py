@@ -200,6 +200,10 @@ def cameleon_loadpicture(picture):
 def cameleon_getsoundlist():
     return sndplayer.getsoundlist()
 
+@app.route('/cameleon/dmxscene', method='POST')
+def cameleon_dmxscene():
+    return scenes.dmxscene(request)
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
