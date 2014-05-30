@@ -122,5 +122,11 @@ class Scenes:
                 self.snd.snd_playSong(sound)
             else:
                 self.snd.snd_stopSong(sound)
-
         return {'res': 'OK'}
+
+    def dmx_panic(self):
+        for scene in self.scenes:
+            evt =  {'evt': 'sceneState', 'id': scene, 'state':False}
+            sessionsq.PostEvent ('dmx', evt)
+            if scene in self.scenesstates:
+                self.scenesstates[scene] = False

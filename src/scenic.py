@@ -83,6 +83,7 @@ def dmx_setfader():
 
 @app.route('/dmx/panic')
 def dmx_panic():
+    scenes.dmx_panic()
     return dmxhandler.dmx_panic()
 
 # Models
