@@ -146,7 +146,7 @@ Array::move = (old_index, new_index) ->
 app.directive "widgets", ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/widgets.html'
-  scope : {stuff : '=things', edit: '='}
+  scope : true
 
   link: (scope, elemt, attrs) ->
     scope.forward = (index)->
@@ -157,6 +157,11 @@ app.directive "widgets", ->
       scope.stuff.splice(index,0,{'msg':'', 'type':'line'})
     scope.remove = (index)->
       scope.stuff.splice(index, 1)
+    # Init
+    scope.$watch attrs.things, (n,o)->
+      scope.stuff = n
+    scope.$watch attrs.edit, (n,o)->
+      scope.edit = n
 
 app.directive "fold", ->
   restrict: 'E'
@@ -717,6 +722,11 @@ app.filter 'faderFilter', ->
   $scope.cameleon.currentSound = { id : null, name : ''}
   CameleonServer.GetSoundList().$promise.then (res)->
     $scope.cameleon.soundslist = res.list
+
+  $scope.cameleon.currentSound = { id : null, name : ''}
+  CameleonServer.GetSoundList(true).$promise.then (res)->
+    $scope.cameleon.associatesoundslist = res.list
+
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

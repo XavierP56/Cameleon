@@ -273,10 +273,7 @@
     return {
       restrict: 'E',
       templateUrl: '/sceniq/templates/widgets.html',
-      scope: {
-        stuff: '=things',
-        edit: '='
-      },
+      scope: true,
       link: function(scope, elemt, attrs) {
         scope.forward = function(index) {
           return scope.stuff.move(index, index + 1);
@@ -292,9 +289,15 @@
             'type': 'line'
           });
         };
-        return scope.remove = function(index) {
+        scope.remove = function(index) {
           return scope.stuff.splice(index, 1);
         };
+        scope.$watch(attrs.things, function(n, o) {
+          return scope.stuff = n;
+        });
+        return scope.$watch(attrs.edit, function(n, o) {
+          return scope.edit = n;
+        });
       }
     };
   });
@@ -1002,8 +1005,15 @@
       id: null,
       name: ''
     };
-    return CameleonServer.GetSoundList().$promise.then(function(res) {
+    CameleonServer.GetSoundList().$promise.then(function(res) {
       return $scope.cameleon.soundslist = res.list;
+    });
+    $scope.cameleon.currentSound = {
+      id: null,
+      name: ''
+    };
+    return CameleonServer.GetSoundList(true).$promise.then(function(res) {
+      return $scope.cameleon.associatesoundslist = res.list;
     });
   };
 

@@ -34,7 +34,7 @@
                </div>
                <div ng-switch-when="scene">
                    Associate songs <br/>
-                   <input ng-model="s.start">
+                   <select  ng-model="s.start" ng-options="c.name for c in cameleon.associatesoundslist"></select>
                </div>
            </div>
        </div>
