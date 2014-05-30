@@ -472,8 +472,6 @@ app.filter 'faderFilter', ->
       return input
 
 @FaderCtrl = ($scope, CameleonServer)->
-  # Nothing. The broadcast is done my the MainCtrl.
-
   # Init of the controller.
   CameleonServer.GetMachinesList().$promise.then (res)->
     $scope.faderlist = res.list
@@ -525,6 +523,9 @@ app.filter 'faderFilter', ->
   $scope.selectMachine = (machine) ->
     $scope.cameleon.curMachine = machine
     CameleonServer.SetFaderSetting(machine.id,machine.setting)
+
+  # Here lies all the magic : When a setting is changed, get the new setting
+  # and we can add it in the machine associated field.
 
   $scope.update_setting = (newSetting) ->
     for m in $scope.cameleon.machines
