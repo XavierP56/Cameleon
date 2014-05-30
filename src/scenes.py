@@ -6,6 +6,8 @@ import requests
 
 class Scenes:
     scenes = {}
+    pictures = {}
+
     dmx = None
     snd = None
 
@@ -33,7 +35,6 @@ class Scenes:
     # /cameleon/getscenelist
     def getscenelist(self):
         res = []
-        #res.append ( {'id' : None, 'name': '<Create a new scene>'})
         for k in self.scenes:
             res.append( {'id':k, 'name':k})
         return {'list' : res}
@@ -60,3 +61,10 @@ class Scenes:
             req.json['setting'] = entry['setting']
             self.dmx.dmx_setfader(req)
         return {'load': self.scenes[scene]}
+
+    # /cameleon/getpictureslist
+    def cameleon_getpictureslist(self):
+        res = []
+        for k in self.pictures:
+            res.append( {'id':k, 'name':k})
+        return {'list' : res}
