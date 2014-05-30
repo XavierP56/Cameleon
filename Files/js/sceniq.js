@@ -777,25 +777,34 @@
   };
 
   this.SceneCtrl = function($scope, CameleonServer) {
+    $scope.showCreate = false;
     $scope.$watch('cameleon.scenesList', function(n, o) {
-      var ix, _i, _len, _ref;
+      var found, ix, _i, _len, _ref;
       ix = 0;
+      found = false;
       _ref = $scope.cameleon.scenesList;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         n = _ref[_i];
         if (n.id === $scope.cameleon.currentScene.id) {
+          found = true;
           break;
         } else {
           ix++;
         }
       }
-      return $scope.cameleon.currentScene = $scope.cameleon.scenesList[ix];
+      if (found) {
+        return $scope.cameleon.currentScene = $scope.cameleon.scenesList[ix];
+      }
     });
+    $scope.showNew = function() {
+      return $scope.showCreate = true;
+    };
     $scope.addScene = function(scene) {
       return CameleonServer.CreateScene(scene).$promise.then(function(evt) {
         return CameleonServer.GetSceneList().$promise.then(function(res) {
           $scope.cameleon.currentScene.id = scene;
-          return $scope.cameleon.scenesList = res.list;
+          $scope.cameleon.scenesList = res.list;
+          return $scope.showCreate = false;
         });
       });
     };

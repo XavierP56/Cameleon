@@ -565,21 +565,31 @@ app.filter 'faderFilter', ->
 
 @SceneCtrl = ($scope, CameleonServer)->
 
+  $scope.showCreate = false
+
     # As soon as the scope.settings changes, update the drop box menu.
   $scope.$watch 'cameleon.scenesList', (n,o) ->
       ix = 0
+      found = false
       for n in $scope.cameleon.scenesList
         if n.id == $scope.cameleon.currentScene.id
+          found = true
           break
         else
           ix++
-      $scope.cameleon.currentScene = $scope.cameleon.scenesList[ix]
+      if found
+        $scope.cameleon.currentScene = $scope.cameleon.scenesList[ix]
+
+
+  $scope.showNew = ()->
+    $scope.showCreate = true
 
   $scope.addScene = (scene)->
     CameleonServer.CreateScene(scene).$promise.then (evt)->
         CameleonServer.GetSceneList().$promise.then (res)->
           $scope.cameleon.currentScene.id = scene
           $scope.cameleon.scenesList = res.list
+          $scope.showCreate = false
 
   $scope.record = () ->
     CameleonServer.RecordScene($scope.cameleon.currentScene.id, $scope.cameleon.machines).$promise.then (evt)->

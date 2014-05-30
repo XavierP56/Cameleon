@@ -2,7 +2,8 @@
 <b>Scene management</b>
 <br/>
 <select  ng-change="load()" ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
-<div ng-show="cameleon.currentScene.id == null">
+<button ng-click="showNew()">Add a new scene</button>
+<div ng-show="showCreate == true">
     <input ng-model="newScene">
     <button ng-click="addScene(newScene)">Add scene</button>
 </div>

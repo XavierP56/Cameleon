@@ -33,7 +33,7 @@ class Scenes:
     # /cameleon/getscenelist
     def getscenelist(self):
         res = []
-        res.append ( {'id' : None, 'name': '<Create a new scene>'})
+        #res.append ( {'id' : None, 'name': '<Create a new scene>'})
         for k in self.scenes:
             res.append( {'id':k, 'name':k})
         return {'list' : res}
