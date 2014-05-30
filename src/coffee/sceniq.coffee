@@ -584,7 +584,7 @@ app.filter 'faderFilter', ->
     r = window.confirm ('Do you want to load ?')
     if r == true
       alert ('Load Scene !')
-      $scope.$emit 'loadScene', {'scene':$scope.cameleon.currentScene.id}
+      $scope.$emit 'loadScene'
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
@@ -597,7 +597,7 @@ app.filter 'faderFilter', ->
     $scope.cameleon.scenesList = res.list
 
   $scope.$on 'loadScene', (sender, evt) ->
-      CameleonServer.LoadScene(evt.scene).$promise.then (res)->
+      CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then (res)->
         $scope.cameleon.machines = res.load.list
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
