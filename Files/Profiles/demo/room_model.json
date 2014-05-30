@@ -1,13 +1,5 @@
 [
     {
-        "link": "room1", 
-        "name": "Tableau 1"
-    }, 
-    {
-        "link": "room2", 
-        "name": "Tableau 2"
-    },
-    {
         "link" : "drooms",
         "name": "Rooms"
     },
