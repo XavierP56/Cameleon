@@ -426,3 +426,10 @@ class DmxHandler(object):
                 sessionsq.PostEvent('dmx',evt)
         self.datas = [0] * 513
         self.changed = True
+
+    def dmxscene (self, list):
+        for light in list:
+            request = requests.FakeRequest()
+            request.json['id'] = light['id']
+            request.json['setting'] = light['setting']
+            self.dmx_setfader(request)
