@@ -109,6 +109,7 @@ app.factory 'CameleonServer', ($resource) ->
   _LoadScene = $resource('/cameleon/loadscene/:scene')
   _GetPicturesList = $resource('/cameleon/getpictureslist')
   _CreatePicture = $resource('/cameleon/createpicture/:picture')
+  _RecordPicture = $resource('/cameleon/recordpicture', {}, {set: {method: 'POST'}})
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -136,7 +137,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _GetPicturesList.get {}
   datas.CreatePicture = (picture) ->
     return _CreatePicture.get {picture: picture}
-
+  datas.RecordPicture = (picture, stuff)->
+    return _RecordScene.set {picture: scene, stuff: stuff}
   return datas
 
 
@@ -563,6 +565,7 @@ app.filter 'faderFilter', ->
     return
 
 # This controller handles the scenes.
+# TODO: Rename me as SceneCtrl
 @CamAssociateCtrl = ($scope, CameleonServer) ->
   #Init
   $scope.cameleon.curMachine = {}
@@ -576,6 +579,7 @@ app.filter 'faderFilter', ->
       if m == $scope.cameleon.curMachine
         m.setting = newSetting
 
+# TODO: RenameMe as SceneMngrCtrl
 @SceneCtrl = ($scope, CameleonServer)->
 
   $scope.showCreate = false
@@ -665,6 +669,10 @@ app.filter 'faderFilter', ->
           $scope.cameleon.currentPicture.id = picture
           $scope.cameleon.picturesList = res.list
           $scope.showCreate = false
+
+  $scope.record = () ->
+    CameleonServer.RecordPicture($scope.cameleon.currentPicture.id, $scope.cameleon.picturesStuff).$promise.then (evt)->
+      alert ('Picture recorded !')
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
