@@ -2,62 +2,56 @@ __author__ = 'xavierpouyollon'
 
 import json
 
-scenes = {}
 
-args = None
 
-def Init(largs):
-    global args
+class Scenes:
+    scenes = {}
+    dmx = None
+    snd = None
 
-    args = largs
+    args = None
+    def __init__(self,largs,lsnd,ldmx):
+        self.args = largs
+        self.snd = lsnd
+        self.dmx = ldmx
 
-def LoadFromDisk():
-    global args
-    global scenes
-    # Save the scenes
-    ref = "../Files/Profiles/"+args.profile
-    fpath = ref + "/scenes.json"
-    with open(fpath) as datafile:
-        scenes = json.load(datafile)
-    return
+    def LoadFromDisk(self):
+        # Save the scenes
+        ref = "../Files/Profiles/"+self.args.profile
+        fpath = ref + "/scenes.json"
+        with open(fpath) as datafile:
+            self.scenes = json.load(datafile)
+        return
 
-def SaveToDisk():
-    global args
-    # Save the scenes
-    ref = "../Files/Profiles/"+args.profile
-    fpath = ref + "/scenes.json"
-    with open(fpath, "w") as outfile:
-        json.dump(scenes, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+    def SaveToDisk(self):
+        # Save the scenes
+        ref = "../Files/Profiles/"+self.args.profile
+        fpath = ref + "/scenes.json"
+        with open(fpath, "w") as outfile:
+            json.dump(self.scenes, outfile, sort_keys=True, indent=4,ensure_ascii=False)
 
-# /cameleon/getscenelist
-def getscenelist():
-    global scenes
+    # /cameleon/getscenelist
+    def getscenelist(self):
+        res = []
+        res.append ( {'id' : None, 'name': '<Create a new scene>'})
+        for k in self.scenes:
+            res.append( {'id':k, 'name':k})
+        return {'list' : res}
 
-    res = []
-    res.append ( {'id' : None, 'name': '<Create a new scene>'})
-    for k in scenes:
-        res.append( {'id':k, 'name':k})
-    return {'list' : res}
+    # /cameleon/createscene/:scene
+    def createscene(self,scene):
+        entry = { 'desc' :'TODO', 'list':[]}
+        self.scenes[scene] = entry
+        return {'res' : 'ok'}
 
-# /cameleon/createscene/:scene
-def createscene(scene):
-    global scenes
+    # /cameleon/recordscene
+    def recordscene(self,request):
+        id = request.json['scene']
+        self.scenes[id]['list'] = request.json['machines']
+        self.SaveToDisk()
+        return {'res':'OK'}
 
-    entry = { 'desc' :'TODO', 'list':[]}
-    scenes[scene] = entry
-    return {'res' : 'ok'}
-
-# /cameleon/recordscene
-def recordscene(request):
-    global scenes
-    id = request.json['scene']
-    scenes[id]['list'] = request.json['machines']
-    SaveToDisk()
-    return {'res':'OK'}
-
-# /cameleon/loadscene/:scene
-def loadscene(scene):
-    global scenes
-
-    list = scenes[scene]['list']
-    return {'load': scenes[scene]}
+    # /cameleon/loadscene/:scene
+    def loadscene(self,scene):
+        list = self.scenes[scene]['list']
+        return {'load': self.scenes[scene]}

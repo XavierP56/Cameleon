@@ -199,7 +199,7 @@ except:
 
 sndplayer = soundplayer.SoundPlayer(args)
 dmxhandler = dmxhandler.DmxHandler(args, sndplayer)
-scenes.Init(args)
+scenes = scenes.Scenes(args,sndplayer,dmxhandler)
 try:
     scenes.LoadFromDisk()
 except:
