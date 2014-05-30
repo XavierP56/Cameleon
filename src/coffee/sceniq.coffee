@@ -607,9 +607,19 @@ app.filter 'faderFilter', ->
   $scope.load = () ->
     $scope.LoadScene()
 
+  $scope.findStuff = (id, type) ->
+    ix = 0
+    for s in $scope.cameleon.picturesStuff
+      if (s.id == id) and (s.type == type)
+        return ix
+      ix++
+    return -1
+
   $scope.addScene = ()->
-    entry = {'id' : $scope.cameleon.currentScene.id}
-    $scope.cameleon.picturesScenes.push entry
+    entry = {'id' : $scope.cameleon.currentScene.id, 'type':'scene'}
+    index = $scope.findStuff(entry.id, entry.type)
+    return if index != -1
+    $scope.cameleon.picturesStuff.push entry
 
   $scope.removeScene = ()->
     alert ('Remove')
@@ -622,7 +632,7 @@ app.filter 'faderFilter', ->
   $scope.cameleon.currentScene = { id : null, name : ''}
 
   # Pictures
-  $scope.cameleon.picturesScenes = []
+  $scope.cameleon.picturesStuff = []
 
   CameleonServer.GetSceneList().$promise.then (res)->
     $scope.cameleon.scenesList = res.list

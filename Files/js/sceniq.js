@@ -831,12 +831,30 @@
     $scope.load = function() {
       return $scope.LoadScene();
     };
+    $scope.findStuff = function(id, type) {
+      var ix, s, _i, _len, _ref;
+      ix = 0;
+      _ref = $scope.cameleon.picturesStuff;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        s = _ref[_i];
+        if ((s.id === id) && (s.type === type)) {
+          return ix;
+        }
+        ix++;
+      }
+      return -1;
+    };
     $scope.addScene = function() {
-      var entry;
+      var entry, index;
       entry = {
-        'id': $scope.cameleon.currentScene.id
+        'id': $scope.cameleon.currentScene.id,
+        'type': 'scene'
       };
-      return $scope.cameleon.picturesScenes.push(entry);
+      index = $scope.findStuff(entry.id, entry.type);
+      if (index !== -1) {
+        return;
+      }
+      return $scope.cameleon.picturesStuff.push(entry);
     };
     return $scope.removeScene = function() {
       return alert('Remove');
@@ -850,7 +868,7 @@
       id: null,
       name: ''
     };
-    $scope.cameleon.picturesScenes = [];
+    $scope.cameleon.picturesStuff = [];
     CameleonServer.GetSceneList().$promise.then(function(res) {
       return $scope.cameleon.scenesList = res.list;
     });

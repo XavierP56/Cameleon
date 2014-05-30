@@ -5,9 +5,12 @@
     <button ng-click="addScene()">Add</button>
     <button ng-click="removeScene()">Remove</button>
     <br/>
-    List of scenes to use:
+    List of buttons to generate:
     <br>
-    <li class="menuli"  ng-repeat="s in cameleon.picturesScenes ">
-        <button ng-click="infos(s)">{{s.id}}</button>
+    <li class="menuli"  ng-repeat="s in cameleon.picturesStuff ">
+        <div>
+            <button ng-click="infos(s)">{{s.id}}</button><br/>
+            {{s.type}}
+        <div>
     </li>
 </div>
