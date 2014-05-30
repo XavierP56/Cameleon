@@ -157,7 +157,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _LoadScene, _QuerySlider, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreatePicture, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _LoadScene, _QuerySlider, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -183,6 +183,7 @@
     });
     _LoadScene = $resource('/cameleon/loadscene/:scene');
     _GetPicturesList = $resource('/cameleon/getpictureslist');
+    _CreatePicture = $resource('/cameleon/createpicture/:picture');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -239,6 +240,11 @@
     };
     datas.GetPicturesList = function() {
       return _GetPicturesList.get({});
+    };
+    datas.CreatePicture = function(picture) {
+      return _CreatePicture.get({
+        picture: picture
+      });
     };
     return datas;
   });
@@ -881,7 +887,20 @@
     };
   };
 
-  this.PicturesMngrCtrl = function($scope, CameleonServer) {};
+  this.PicturesMngrCtrl = function($scope, CameleonServer) {
+    $scope.showNew = function() {
+      return $scope.showCreate = true;
+    };
+    return $scope.addPicture = function(picture) {
+      return CameleonServer.CreatePicture(picture).$promise.then(function(evt) {
+        return CameleonServer.GetPicturesList().$promise.then(function(res) {
+          $scope.cameleon.currentPicture.id = picture;
+          $scope.cameleon.picturesList = res.list;
+          return $scope.showCreate = false;
+        });
+      });
+    };
+  };
 
   this.CameleonCtrl = function($scope, CameleonServer) {
     $scope.cameleon = {};

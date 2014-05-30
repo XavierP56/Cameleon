@@ -108,6 +108,7 @@ app.factory 'CameleonServer', ($resource) ->
   _RecordScene = $resource('/cameleon/recordscene', {}, {set: {method: 'POST'}})
   _LoadScene = $resource('/cameleon/loadscene/:scene')
   _GetPicturesList = $resource('/cameleon/getpictureslist')
+  _CreatePicture = $resource('/cameleon/createpicture/:picture')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -133,6 +134,9 @@ app.factory 'CameleonServer', ($resource) ->
     return _LoadScene.get {scene: scene}
   datas.GetPicturesList = ()->
     return _GetPicturesList.get {}
+  datas.CreatePicture = (picture) ->
+    return _CreatePicture.get {picture: picture}
+
   return datas
 
 
@@ -636,7 +640,17 @@ app.filter 'faderFilter', ->
     $scope.cameleon.picturesStuff.splice(index,1)
     return
 
+# This controller handles the picture (Tableaux) creations.
 @PicturesMngrCtrl = ($scope, CameleonServer)->
+  $scope.showNew = ()->
+    $scope.showCreate = true
+
+  $scope.addPicture = (picture)->
+    CameleonServer.CreatePicture(picture).$promise.then (evt)->
+        CameleonServer.GetPicturesList().$promise.then (res)->
+          $scope.cameleon.currentPicture.id = picture
+          $scope.cameleon.picturesList = res.list
+          $scope.showCreate = false
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init

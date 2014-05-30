@@ -68,3 +68,9 @@ class Scenes:
         for k in self.pictures:
             res.append( {'id':k, 'name':k})
         return {'list' : res}
+
+    # '/cameleon/createpicture/:picture'
+    def createpicture(self,picture):
+        entry = { 'desc' :'TODO', 'list':[]}
+        self.pictures[picture] = entry
+        return {'res' : 'ok'}
