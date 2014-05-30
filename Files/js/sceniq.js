@@ -871,6 +871,7 @@
 
   this.PicturesCtrl = function($scope, CameleonServer) {
     $scope.cameleon.currentScene = $scope.cameleon.scenesList[0];
+    $scope.cameleon.currentSound = $scope.cameleon.soundslist[0];
     $scope.load = function() {
       return $scope.LoadScene();
     };
@@ -986,8 +987,12 @@
         return $scope.cameleon.picturesStuff = res.load.list;
       });
     };
+    $scope.cameleon.currentSound = {
+      id: null,
+      name: ''
+    };
     return CameleonServer.GetSoundList().$promise.then(function(res) {
-      return $scope.cameleon.soundlist = res.list;
+      return $scope.cameleon.soundslist = res.list;
     });
   };
 

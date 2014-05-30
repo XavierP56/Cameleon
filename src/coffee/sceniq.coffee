@@ -629,6 +629,7 @@ app.filter 'faderFilter', ->
 @PicturesCtrl = ($scope, CameleonServer)->
   # Init
   $scope.cameleon.currentScene = $scope.cameleon.scenesList[0]
+  $scope.cameleon.currentSound = $scope.cameleon.soundslist[0]
 
   # When click on dropmenu, load the scene to see the projector.
   $scope.load = () ->
@@ -719,8 +720,9 @@ app.filter 'faderFilter', ->
         $scope.cameleon.picturesStuff = res.load.list
 
   # Sounds
+  $scope.cameleon.currentSound = { id : null, name : ''}
   CameleonServer.GetSoundList().$promise.then (res)->
-    $scope.cameleon.soundlist = res.list
+    $scope.cameleon.soundslist = res.list
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

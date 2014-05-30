@@ -7,8 +7,12 @@
         <button ng-click="addScene()">Add</button>
         <button ng-click="removeScene()">Remove</button>
     </div>
+    <div>
+        Sounds <br/>
+        <select  ng-model="cameleon.currentSound" ng-options="c.name for c in cameleon.soundslist"></select>
+    </div>
     <br/>
-    List of buttons to generate:
+    <b>List of buttons to generate:</b>
     <br>
     <li class="menuli"  ng-repeat="s in cameleon.picturesStuff ">
         <div>
