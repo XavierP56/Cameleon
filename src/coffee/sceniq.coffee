@@ -608,7 +608,8 @@ app.filter 'faderFilter', ->
     $scope.LoadScene()
 
   $scope.addScene = ()->
-    alert ('Add')
+    $scope.cameleon.picturesScenes.push $scope.cameleon.currentScene
+
   $scope.removeScene = ()->
     alert ('Remove')
 
