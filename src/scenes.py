@@ -1,7 +1,7 @@
 __author__ = 'xavierpouyollon'
 
 import json
-
+import requests
 
 
 class Scenes:
@@ -54,4 +54,9 @@ class Scenes:
     # /cameleon/loadscene/:scene
     def loadscene(self,scene):
         list = self.scenes[scene]['list']
+        for entry in list:
+            req = requests.FakeRequest()
+            req.json['id'] = entry['id']
+            req.json['setting'] = entry['setting']
+            self.dmx.dmx_setfader(req)
         return {'load': self.scenes[scene]}

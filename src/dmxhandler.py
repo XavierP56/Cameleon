@@ -330,6 +330,7 @@ class DmxHandler(object):
                 # Simple light.
                 self.dmx_setonelight(light)
 
+    # Used by Cameleon
     def dmx_setfader (self, request):
         self.dmx_set(request)
         fader = request.json['id']
