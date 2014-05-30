@@ -519,7 +519,7 @@ app.filter 'faderFilter', ->
 
   $scope.findMachine = (id) ->
     ix = 0
-    for m in $scope.machines
+    for m in $scope.cameleon.machines
       if m.id == id
         return ix
       ix++
@@ -527,78 +527,78 @@ app.filter 'faderFilter', ->
 
   # Get the list of machines.
   CameleonServer.GetMachinesList().$promise.then (res)->
-    $scope.machinesList = res.list
-    $scope.currentMachine = $scope.machinesList[0]
+    $scope.cameleon.machinesList = res.list
+    $scope.cameleon.currentMachine = $scope.cameleon.machinesList[0]
 
   $scope.addMachine = (currentMachine)->
     index = $scope.findMachine currentMachine.id
     return if index != -1
     currentMachine.setting = ''
-    $scope.machines.push currentMachine
+    $scope.cameleon.machines.push currentMachine
     return
 
   $scope.removeMachine = (currentMachine)->
     index = $scope.findMachine currentMachine.id
     return if index == -1
-    $scope.machines.splice(index,1)
+    $scope.cameleon.machines.splice(index,1)
     return
 
 # This controller handles the scenes.
 @CamAssociateCtrl = ($scope, CameleonServer) ->
   #Init
-  $scope.curMachine = {}
+  $scope.cameleon.curMachine = {}
 
   $scope.selectMachine = (machine) ->
-    $scope.curMachine = machine
+    $scope.cameleon.curMachine = machine
     CameleonServer.SetFaderSetting(machine.id,machine.setting)
 
   $scope.update_setting = (newSetting) ->
-    for m in $scope.machines
-      if m == $scope.curMachine
+    for m in $scope.cameleon.machines
+      if m == $scope.cameleon.curMachine
         m.setting = newSetting
 
 @SceneCtrl = ($scope, CameleonServer)->
 
     # As soon as the scope.settings changes, update the drop box menu.
-  $scope.$watch 'scenesList', (n,o) ->
+  $scope.$watch 'cameleon.scenesList', (n,o) ->
       ix = 0
-      for n in $scope.scenesList
-        if n.id == $scope.currentScene.id
+      for n in $scope.cameleon.scenesList
+        if n.id == $scope.cameleon.currentScene.id
           break
         else
           ix++
-      $scope.currentScene = $scope.scenesList[ix]
+      $scope.cameleon.currentScene = $scope.cameleon.scenesList[ix]
 
   $scope.addScene = (scene)->
     CameleonServer.CreateScene(scene).$promise.then (evt)->
         CameleonServer.GetSceneList().$promise.then (res)->
-          $scope.currentScene.id = scene
-          $scope.scenesList = res.list
+          $scope.cameleon.currentScene.id = scene
+          $scope.cameleon.scenesList = res.list
 
   $scope.record = () ->
-    CameleonServer.RecordScene($scope.currentScene.id, $scope.machines).$promise.then (evt)->
+    CameleonServer.RecordScene($scope.cameleon.currentScene.id, $scope.cameleon.machines).$promise.then (evt)->
       alert ('Scene recorded !')
 
   $scope.load = () ->
-    return if $scope.currentScene.id == null
+    return if $scope.cameleon.currentScene.id == null
     r = window.confirm ('Do you want to load ?')
     if r == true
       alert ('Load Scene !')
-      $scope.$emit 'loadScene', {'scene':$scope.currentScene.id}
+      $scope.$emit 'loadScene', {'scene':$scope.cameleon.currentScene.id}
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
-
+  $scope.cameleon = {}
   # $scope.machines is the list of machines we do use in the current scene
-  $scope.machines = []
-  $scope.currentScene = { id : null, name : ''}
+  $scope.cameleon.machines = []
+  $scope.cameleon.currentScene = { id : null, name : ''}
 
   CameleonServer.GetSceneList().$promise.then (res)->
-    $scope.scenesList = res.list
+    $scope.cameleon.scenesList = res.list
 
   $scope.$on 'loadScene', (sender, evt) ->
       CameleonServer.LoadScene(evt.scene).$promise.then (res)->
-        $scope.machines = res.load.list
+        $scope.cameleon.machines = res.load.list
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

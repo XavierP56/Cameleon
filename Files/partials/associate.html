@@ -1,8 +1,8 @@
 <div>
-            <li class="menuli"  ng-repeat="m in machines ">
+            <li class="menuli"  ng-repeat="m in cameleon.machines ">
                     <button ng-click="selectMachine(m)">{{m.id}}</button>
             </li>
             <br/><br/>
-            <dmx-fader  id="{{curMachine.id}}" setting-changed="update_setting(newSetting)"></dmx-fader>
+            <dmx-fader  id="{{cameleon.curMachine.id}}" setting-changed="update_setting(newSetting)"></dmx-fader>
             <br/>
 </div>

@@ -1,15 +1,15 @@
 <br>
 <b>Scene management</b>
 <br/>
-<select  ng-change="load()" ng-model="currentScene" ng-options="c.name for c in scenesList"></select>
-<div ng-show="currentScene.id == null">
+<select  ng-change="load()" ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
+<div ng-show="cameleon.currentScene.id == null">
     <input ng-model="newScene">
     <button ng-click="addScene(newScene)">Add scene</button>
 </div>
 <br>
-The following describes the scene {{currentScene.id}}
+The following describes the scene {{cameleon.currentScene.id}}
 
-    <li ng-repeat="m in machines">
+    <li ng-repeat="m in cameleon.machines">
         {{m.id}} has setting {{m.setting}}
     </li>
 <br/>

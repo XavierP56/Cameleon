@@ -715,7 +715,7 @@
     $scope.findMachine = function(id) {
       var ix, m, _i, _len, _ref;
       ix = 0;
-      _ref = $scope.machines;
+      _ref = $scope.cameleon.machines;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         m = _ref[_i];
         if (m.id === id) {
@@ -726,8 +726,8 @@
       return -1;
     };
     CameleonServer.GetMachinesList().$promise.then(function(res) {
-      $scope.machinesList = res.list;
-      return $scope.currentMachine = $scope.machinesList[0];
+      $scope.cameleon.machinesList = res.list;
+      return $scope.cameleon.currentMachine = $scope.cameleon.machinesList[0];
     });
     $scope.addMachine = function(currentMachine) {
       var index;
@@ -736,7 +736,7 @@
         return;
       }
       currentMachine.setting = '';
-      $scope.machines.push(currentMachine);
+      $scope.cameleon.machines.push(currentMachine);
     };
     return $scope.removeMachine = function(currentMachine) {
       var index;
@@ -744,23 +744,23 @@
       if (index === -1) {
         return;
       }
-      $scope.machines.splice(index, 1);
+      $scope.cameleon.machines.splice(index, 1);
     };
   };
 
   this.CamAssociateCtrl = function($scope, CameleonServer) {
-    $scope.curMachine = {};
+    $scope.cameleon.curMachine = {};
     $scope.selectMachine = function(machine) {
-      $scope.curMachine = machine;
+      $scope.cameleon.curMachine = machine;
       return CameleonServer.SetFaderSetting(machine.id, machine.setting);
     };
     return $scope.update_setting = function(newSetting) {
       var m, _i, _len, _ref, _results;
-      _ref = $scope.machines;
+      _ref = $scope.cameleon.machines;
       _results = [];
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         m = _ref[_i];
-        if (m === $scope.curMachine) {
+        if (m === $scope.cameleon.curMachine) {
           _results.push(m.setting = newSetting);
         } else {
           _results.push(void 0);
@@ -771,60 +771,61 @@
   };
 
   this.SceneCtrl = function($scope, CameleonServer) {
-    $scope.$watch('scenesList', function(n, o) {
+    $scope.$watch('cameleon.scenesList', function(n, o) {
       var ix, _i, _len, _ref;
       ix = 0;
-      _ref = $scope.scenesList;
+      _ref = $scope.cameleon.scenesList;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         n = _ref[_i];
-        if (n.id === $scope.currentScene.id) {
+        if (n.id === $scope.cameleon.currentScene.id) {
           break;
         } else {
           ix++;
         }
       }
-      return $scope.currentScene = $scope.scenesList[ix];
+      return $scope.cameleon.currentScene = $scope.cameleon.scenesList[ix];
     });
     $scope.addScene = function(scene) {
       return CameleonServer.CreateScene(scene).$promise.then(function(evt) {
         return CameleonServer.GetSceneList().$promise.then(function(res) {
-          $scope.currentScene.id = scene;
-          return $scope.scenesList = res.list;
+          $scope.cameleon.currentScene.id = scene;
+          return $scope.cameleon.scenesList = res.list;
         });
       });
     };
     $scope.record = function() {
-      return CameleonServer.RecordScene($scope.currentScene.id, $scope.machines).$promise.then(function(evt) {
+      return CameleonServer.RecordScene($scope.cameleon.currentScene.id, $scope.cameleon.machines).$promise.then(function(evt) {
         return alert('Scene recorded !');
       });
     };
     return $scope.load = function() {
       var r;
-      if ($scope.currentScene.id === null) {
+      if ($scope.cameleon.currentScene.id === null) {
         return;
       }
       r = window.confirm('Do you want to load ?');
       if (r === true) {
         alert('Load Scene !');
         return $scope.$emit('loadScene', {
-          'scene': $scope.currentScene.id
+          'scene': $scope.cameleon.currentScene.id
         });
       }
     };
   };
 
   this.CameleonCtrl = function($scope, CameleonServer) {
-    $scope.machines = [];
-    $scope.currentScene = {
+    $scope.cameleon = {};
+    $scope.cameleon.machines = [];
+    $scope.cameleon.currentScene = {
       id: null,
       name: ''
     };
     CameleonServer.GetSceneList().$promise.then(function(res) {
-      return $scope.scenesList = res.list;
+      return $scope.cameleon.scenesList = res.list;
     });
     return $scope.$on('loadScene', function(sender, evt) {
       return CameleonServer.LoadScene(evt.scene).$promise.then(function(res) {
-        return $scope.machines = res.load.list;
+        return $scope.cameleon.machines = res.load.list;
       });
     });
   };

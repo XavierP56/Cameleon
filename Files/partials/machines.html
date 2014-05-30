@@ -1,15 +1,15 @@
 <div style="text-align: center;">
 Select the machines you want to use:
 <br/>
-<select  ng-model="currentMachine" ng-options="c.id for c in machinesList"></select>
+<select  ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
 <br/>
-<button ng-click='addMachine(currentMachine)'>Add</button>
-<button ng-click='removeMachine(currentMachine)'>Remove</button>
+<button ng-click='addMachine(cameleon.currentMachine)'>Add</button>
+<button ng-click='removeMachine(cameleon.currentMachine)'>Remove</button>
 <br/><br/>
     List of selected machines:
     <br/>
 
-            <li class="menuli"  ng-repeat="m in machines ">
+            <li class="menuli"  ng-repeat="m in cameleon.machines ">
                     <button ng-click="infos(m)">{{m.id}}</button>
             </li>
 </div>
