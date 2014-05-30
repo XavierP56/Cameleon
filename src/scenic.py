@@ -192,6 +192,10 @@ def cameleon_createpicture(picture):
 def cameleon_recordpicture():
     return scenes.recordpicture(request)
 
+@app.route('/cameleon/loadpicture/:picture')
+def cameleon_loadpicture(picture):
+    return scenes.loadpicture(picture)
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")

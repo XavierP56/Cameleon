@@ -157,7 +157,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreatePicture, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -189,6 +189,7 @@
         method: 'POST'
       }
     });
+    _LoadPicture = $resource('/cameleon/loadpicture/:picture');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -255,6 +256,11 @@
       return _RecordPicture.set({
         picture: picture,
         stuff: stuff
+      });
+    };
+    datas.LoadPicture = function(picture) {
+      return _LoadPicture.get({
+        picture: picture
       });
     };
     return datas;
@@ -929,10 +935,22 @@
         });
       });
     };
-    return $scope.record = function() {
+    $scope.record = function() {
       return CameleonServer.RecordPicture($scope.cameleon.currentPicture.id, $scope.cameleon.picturesStuff).$promise.then(function(evt) {
         return alert('Picture recorded !');
       });
+    };
+    return $scope.load = function() {
+      var r;
+      if ($scope.cameleon.currentPicture.id === null) {
+        return;
+      }
+      r = window.confirm('Do you want to load ?');
+      if (r === true) {
+        return $scope.LoadPicture();
+      } else {
+        return alert('Beware !');
+      }
     };
   };
 
@@ -955,9 +973,14 @@
     $scope.cameleon.currentPicture = {
       id: null
     };
-    return CameleonServer.GetPicturesList().$promise.then(function(res) {
+    CameleonServer.GetPicturesList().$promise.then(function(res) {
       return $scope.cameleon.picturesList = res.list;
     });
+    return $scope.LoadPicture = function() {
+      return CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then(function(res) {
+        return $scope.cameleon.picturesStuff = res.load.list;
+      });
+    };
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

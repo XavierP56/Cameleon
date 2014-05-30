@@ -91,3 +91,7 @@ class Scenes:
         self.pictures[id]['list'] = request.json['stuff']
         self.SaveToDisk()
         return {'res':'OK'}
+
+    # '/cameleon/loadpicture/:picture'
+    def loadpicture(self,picture):
+        return {'load': self.pictures[picture]}
