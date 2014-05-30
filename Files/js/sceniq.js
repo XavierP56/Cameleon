@@ -157,7 +157,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreateScene, _DmxSet, _FaderList, _GetSceneList, _LoadScene, _QuerySlider, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _LoadScene, _QuerySlider, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -182,6 +182,7 @@
       }
     });
     _LoadScene = $resource('/cameleon/loadscene/:scene');
+    _GetPicturesList = $resource('/cameleon/getpictureslist');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -235,6 +236,9 @@
       return _LoadScene.get({
         scene: scene
       });
+    };
+    datas.GetPicturesList = function() {
+      return _GetPicturesList.get({});
     };
     return datas;
   });
@@ -886,15 +890,21 @@
       id: null,
       name: ''
     };
-    $scope.cameleon.picturesStuff = [];
     CameleonServer.GetSceneList().$promise.then(function(res) {
       return $scope.cameleon.scenesList = res.list;
     });
-    return $scope.LoadScene = function() {
+    $scope.LoadScene = function() {
       return CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then(function(res) {
         return $scope.cameleon.machines = res.load.list;
       });
     };
+    $scope.cameleon.picturesStuff = [];
+    $scope.cameleon.currentPicture = {
+      id: null
+    };
+    return CameleonServer.GetPicturesList().$promise.then(function(res) {
+      return $scope.cameleon.picturesList = res.list;
+    });
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

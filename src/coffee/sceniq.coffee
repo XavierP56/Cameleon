@@ -107,6 +107,7 @@ app.factory 'CameleonServer', ($resource) ->
   _CreateScene = $resource('/cameleon/createscene/:scene')
   _RecordScene = $resource('/cameleon/recordscene', {}, {set: {method: 'POST'}})
   _LoadScene = $resource('/cameleon/loadscene/:scene')
+  _GetPicturesList = $resource('/cameleon/getpictureslist')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -130,7 +131,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _RecordScene.set {scene: scene, machines: machines}
   datas.LoadScene = (scene)->
     return _LoadScene.get {scene: scene}
-
+  datas.GetPicturesList = ()->
+    return _GetPicturesList.get {}
   return datas
 
 
@@ -643,15 +645,21 @@ app.filter 'faderFilter', ->
   $scope.cameleon.machines = []
   $scope.cameleon.currentScene = { id : null, name : ''}
 
-  # Pictures
-  $scope.cameleon.picturesStuff = []
-
+  # Scenes
   CameleonServer.GetSceneList().$promise.then (res)->
     $scope.cameleon.scenesList = res.list
 
   $scope.LoadScene = ()->
       CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then (res)->
         $scope.cameleon.machines = res.load.list
+
+  # Pictures
+  $scope.cameleon.picturesStuff = []
+  $scope.cameleon.currentPicture = { id: null}
+
+  CameleonServer.GetPicturesList().$promise.then (res)->
+    $scope.cameleon.picturesList = res.list
+
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

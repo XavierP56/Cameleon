@@ -1,3 +1,13 @@
 <br>
 <b>Pictures management</b>
 <br/>
+<select  ng-change="load()" ng-model="cameleon.currentPicture" ng-options="c.name for c in cameleon.picturesList"></select>
+<button ng-click="showNew()">Add a new picture</button>
+<div ng-show="showCreate == true">
+    <input ng-model="newPicture">
+    <button ng-click="addPicture(newPicture)">Add Picture</button>
+</div>
+<br>
+The following describes the picture {{cameleon.currentPicture.id}}
+<br/>
+<button ng-click="record()">Record this picture !</button>
