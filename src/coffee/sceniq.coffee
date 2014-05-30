@@ -29,7 +29,7 @@ app.config ($stateProvider) ->
     controller : CamMachinesCtrl
 
   camscenes =
-    'url' : '/associate'
+    'url' : '/cam-associate'
     views:
       '' :
         templateUrl : 'partials/asso.html'
@@ -41,9 +41,15 @@ app.config ($stateProvider) ->
         controller : SceneCtrl
 
   campictures =
-    url: '/pictures'
-    templateUrl: 'partials/pictures.html'
-    controller : PicturesCtrl
+    url: '/cam-pictures'
+    views:
+      '' :
+        templateUrl : 'partials/pict.html'
+      'picture@cameleon.pictures':
+        templateUrl: 'partials/pictures.html'
+        controller : PicturesCtrl
+      'pictmngr@cameleon.pictures':
+        templateUrl : 'partials/picturesMngr.html'
 
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
