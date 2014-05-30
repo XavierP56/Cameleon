@@ -292,6 +292,14 @@
         scope.remove = function(index) {
           return scope.stuff.splice(index, 1);
         };
+        scope.setStart = function(stuff, wrapper) {
+          return stuff.startSong = wrapper.entry.id;
+        };
+        scope.getStartSound = function(stuff, wrapper) {
+          if ('startSong' in stuff) {
+            return alert('ICI LAPIN');
+          }
+        };
         scope.$watch(attrs.things, function(n, o) {
           return scope.stuff = n;
         });

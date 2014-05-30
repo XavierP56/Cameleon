@@ -157,6 +157,14 @@ app.directive "widgets", ->
       scope.stuff.splice(index,0,{'msg':'', 'type':'line'})
     scope.remove = (index)->
       scope.stuff.splice(index, 1)
+
+    scope.setStart = (stuff, wrapper)->
+      stuff.startSong = wrapper.entry.id
+
+    scope.getStartSound = (stuff, wrapper)->
+      if 'startSong' of stuff
+        alert ('ICI LAPIN')
+
     # Init
     scope.$watch attrs.things, (n,o)->
       scope.stuff = n
