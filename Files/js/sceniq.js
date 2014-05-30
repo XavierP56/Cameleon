@@ -888,6 +888,24 @@
   };
 
   this.PicturesMngrCtrl = function($scope, CameleonServer) {
+    $scope.$watch('cameleon.picturesList', function(n, o) {
+      var found, ix, _i, _len, _ref;
+      ix = 0;
+      found = false;
+      _ref = $scope.cameleon.picturesList;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        n = _ref[_i];
+        if (n.id === $scope.cameleon.currentPicture.id) {
+          found = true;
+          break;
+        } else {
+          ix++;
+        }
+      }
+      if (found) {
+        return $scope.cameleon.currentPicture = $scope.cameleon.picturesList[ix];
+      }
+    });
     $scope.showNew = function() {
       return $scope.showCreate = true;
     };
