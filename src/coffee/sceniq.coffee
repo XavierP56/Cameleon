@@ -155,6 +155,8 @@ app.directive "widgets", ->
       scope.stuff.move(index, index-1) if index > 0
     scope.separator = (index)->
       scope.stuff.splice(index,0,{'msg':'', 'type':'line'})
+    scope.remove = (index)->
+      scope.stuff.splice(index, 1)
 
 app.directive "fold", ->
   restrict: 'E'

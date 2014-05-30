@@ -281,11 +281,14 @@
             return scope.stuff.move(index, index - 1);
           }
         };
-        return scope.separator = function(index) {
+        scope.separator = function(index) {
           return scope.stuff.splice(index, 0, {
             'msg': '',
             'type': 'line'
           });
+        };
+        return scope.remove = function(index) {
+          return scope.stuff.splice(index, 1);
         };
       }
     };
