@@ -1,9 +1,12 @@
 <div>
     Here, we define the pictures.
     <br/>
-    <select ng-change="load()"  ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
-    <button ng-click="addScene()">Add</button>
-    <button ng-click="removeScene()">Remove</button>
+    <div>
+        Scenes (Projectors) <br/>
+        <select ng-change="load()"  ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
+        <button ng-click="addScene()">Add</button>
+        <button ng-click="removeScene()">Remove</button>
+    </div>
     <br/>
     List of buttons to generate:
     <br>

@@ -624,6 +624,10 @@ app.filter 'faderFilter', ->
       alert ('Beware !')
 
 @PicturesCtrl = ($scope, CameleonServer)->
+  # Init
+  $scope.cameleon.currentScene = $scope.cameleon.scenesList[0]
+
+  # When click on dropmenu, load the scene to see the projector.
   $scope.load = () ->
     $scope.LoadScene()
 

@@ -866,6 +866,7 @@
   };
 
   this.PicturesCtrl = function($scope, CameleonServer) {
+    $scope.cameleon.currentScene = $scope.cameleon.scenesList[0];
     $scope.load = function() {
       return $scope.LoadScene();
     };
