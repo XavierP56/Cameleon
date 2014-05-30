@@ -857,7 +857,12 @@
       return $scope.cameleon.picturesStuff.push(entry);
     };
     return $scope.removeScene = function() {
-      return alert('Remove');
+      var index;
+      index = $scope.findStuff($scope.cameleon.currentScene.id, 'scene');
+      if (index === -1) {
+        return;
+      }
+      $scope.cameleon.picturesStuff.splice(index, 1);
     };
   };
 

@@ -622,7 +622,10 @@ app.filter 'faderFilter', ->
     $scope.cameleon.picturesStuff.push entry
 
   $scope.removeScene = ()->
-    alert ('Remove')
+    index = $scope.findStuff($scope.cameleon.currentScene.id, 'scene')
+    return if index == -1
+    $scope.cameleon.picturesStuff.splice(index,1)
+    return
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
