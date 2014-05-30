@@ -14,7 +14,6 @@ app.config ($stateProvider) ->
   room8 = {url: "/Room8", templateUrl: "/profiles/room8.html", controller: RoomCtrl}
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
   faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html", controller: FaderCtrl}
-  confdrooms = {url: "/CRoom", templateUrl: "/sceniq/dconf.html", controller:ConfigRoomCtrl}
   drooms = {url: "/DRooms", templateUrl: "/sceniq/drooms.html", controller:ConfigRoomCtrl}
 
   # Cameleon
@@ -62,7 +61,6 @@ app.config ($stateProvider) ->
   $stateProvider.state('room8', room8)
   $stateProvider.state('config', config)
   $stateProvider.state('faders', faders)
-  $stateProvider.state('confdrooms', confdrooms)
   $stateProvider.state('drooms', drooms)
   # Declare the cameleon
   $stateProvider.state('cameleon', cameleon)

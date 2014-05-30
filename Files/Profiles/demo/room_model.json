@@ -20,10 +20,6 @@
         "name" : "Faders"
     },
     {
-        "link" : "confdrooms",
-        "name" : "RoomsConf"
-    },
-    {
         "link" : "cameleon",
         "name" : "Cameleon"
     }
