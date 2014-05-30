@@ -297,6 +297,9 @@
         };
         scope.getStartSound = function(stuff, wrapper) {
           var found, ix, n, _i, _len, _ref;
+          if (scope.edit === false) {
+            return;
+          }
           if ('startSong' in stuff) {
             ix = 0;
             found = false;
@@ -319,9 +322,13 @@
         scope.$watch(attrs.things, function(n, o) {
           return scope.stuff = n;
         });
-        return scope.$watch(attrs.edit, function(n, o) {
-          return scope.edit = n;
-        });
+        if ('edit' in attrs) {
+          scope.$watch(attrs.edit, function(n, o) {
+            return scope.edit = n;
+          });
+        } else {
+          scope.edit = false;
+        }
       }
     };
   });
@@ -447,12 +454,18 @@
       restrict: 'E',
       templateUrl: '/sceniq/templates/dmxscene.html',
       scope: {
-        id: '@'
+        id: '@',
+        'startsong': '@'
       },
       controller: function($scope, CameleonServer) {
         $scope.dmxstyle = 'dmx';
         $scope["do"] = function() {
-          return CameleonServer.DmxScene($scope.id, null).$promise.then(function(evt) {});
+          var opts;
+          opts = {
+            'startsong': $scope.startsong,
+            'endsong': ''
+          };
+          return CameleonServer.DmxScene($scope.id, opts).$promise.then(function(evt) {});
         };
         $scope.$on('sceneState', function(sender, evt) {
           if (evt.id !== $scope.id) {

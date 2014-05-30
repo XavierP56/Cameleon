@@ -162,6 +162,7 @@ app.directive "widgets", ->
       stuff.startSong = wrapper.entry.id
 
     scope.getStartSound = (stuff, wrapper)->
+      return if scope.edit == false
       if 'startSong' of stuff
         ix = 0
         found = false
@@ -178,8 +179,13 @@ app.directive "widgets", ->
     # Init
     scope.$watch attrs.things, (n,o)->
       scope.stuff = n
-    scope.$watch attrs.edit, (n,o)->
-      scope.edit = n
+
+    if 'edit' of attrs
+      scope.$watch attrs.edit, (n,o)->
+        scope.edit = n
+    else
+        scope.edit = false
+    return
 
 app.directive "fold", ->
   restrict: 'E'
@@ -274,14 +280,18 @@ app.directive "dmxLight", ->
 app.directive "dmxScene", ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/dmxscene.html'
-  scope: {id: '@'}
+  scope: {id: '@', 'startsong' : '@'}
 
   controller: ($scope, CameleonServer) ->
 
     $scope.dmxstyle = 'dmx'
 
     $scope.do = () ->
-      CameleonServer.DmxScene($scope.id, null).$promise.then (evt)->
+      opts =
+        'startsong' : $scope.startsong
+        'endsong' : ''
+
+      CameleonServer.DmxScene($scope.id, opts).$promise.then (evt)->
         return
 
     $scope.$on 'sceneState', (sender, evt) ->
