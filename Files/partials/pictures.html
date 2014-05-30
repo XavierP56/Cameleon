@@ -15,6 +15,7 @@
     </div>
     <br/>
     <b>List of buttons to generate:</b>
-    <br>
-    <widgets edit="true" things="cameleon.picturesStuff"></widgets>
+    <button ng-click="editMode = !editMode">Edit mode</button>
+    <br/><br/>
+    <widgets edit="editMode" things="cameleon.picturesStuff"></widgets>
 </div>

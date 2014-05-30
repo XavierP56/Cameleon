@@ -21,12 +21,18 @@
     </span>
 
     <span ng-show="edit==true">
-       <button ng-click="showMe = !showMe">E</button>
+       <button ng-init="showMe=false" ng-click="showMe = !showMe">E</button>
        <div ng-show="showMe">
            <button ng-click="backward($index)">Move to left</button>
            <button ng-click="separator($index)">Insert Line</button>
            <button ng-click="forward($index)">Move to right</button>
            <button ng-click="remove($index)">Remove this</button>
+           <ng-switch="s.tye">
+           <div ng-switch="s.type">
+               <div ng-switch-when="line">
+                   <input ng-model="s.msg">
+               </div>
+           </div>
        </div>
     </span>
 </script>
