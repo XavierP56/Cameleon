@@ -111,7 +111,7 @@ class Scenes:
             state = True
             self.scenesstates[scene] = state
 
-        self.dmx.dmxscene(self.scenes[scene]['list'])
+        self.dmx.dmxscene(self.scenes[scene]['list'],state)
 
         evt =  {'evt': 'sceneState', 'id': scene, 'state':state}
         sessionsq.PostEvent ('dmx', evt)

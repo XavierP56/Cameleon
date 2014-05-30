@@ -427,9 +427,19 @@ class DmxHandler(object):
         self.datas = [0] * 513
         self.changed = True
 
-    def dmxscene (self, list):
+
+    def dmxscene (self, list, state):
         for light in list:
             request = requests.FakeRequest()
             request.json['id'] = light['id']
-            request.json['setting'] = light['setting']
-            self.dmx_setfader(request)
+            if state is True:
+                request.json['setting'] = light['setting']
+                self.dmx_setfader(request)
+            else:
+                # Generate cmd to reset all the fixtures keys.
+                defs = self.GetDefs(light['id'])
+                cmds = {}
+                for k in defs:
+                    cmds[k] = 0
+                request.json['cmds'] = cmds
+                self.dmx_set(request)
