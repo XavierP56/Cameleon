@@ -115,5 +115,12 @@ class Scenes:
 
         evt =  {'evt': 'sceneState', 'id': scene, 'state':state}
         sessionsq.PostEvent ('dmx', evt)
+        # Start song
+        if opts['startsong'] is not "":
+            sound = opts['startsong']
+            if state is True:
+                self.snd.snd_playSong(sound)
+            else:
+                self.snd.snd_stopSong(sound)
 
         return {'res': 'OK'}
