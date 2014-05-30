@@ -33,7 +33,7 @@
                    <input ng-model="s.msg">
                </div>
                <div ng-switch-when="scene">
-                   Associate songs <br/>
+                   Associate song: <br/>
                    <select ng-model="wrapper.entry" ng-init="wrapper.entry={};getStartSound(s,wrapper)"  ng-change="setStart(s,wrapper)" ng-options="c.name for c in cameleon.associatesoundslist"></select>
                </div>
            </div>
