@@ -5,7 +5,7 @@
   app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
 
   app.config(function($stateProvider) {
-    var cameleon, cammachines, camscenes, confdrooms, config, drooms, faders, room1, room2, room3, room4, room5, room6, room7, room8;
+    var cameleon, cammachines, campictures, camscenes, confdrooms, config, drooms, faders, room1, room2, room3, room4, room5, room6, room7, room8;
     room1 = {
       url: "/Room1",
       templateUrl: "/profiles/room1.html",
@@ -92,6 +92,11 @@
         }
       }
     };
+    campictures = {
+      url: '/pictures',
+      templateUrl: 'partials/pictures.html',
+      controller: PicturesCtrl
+    };
     $stateProvider.state('room1', room1);
     $stateProvider.state('room2', room2);
     $stateProvider.state('room3', room3);
@@ -106,7 +111,8 @@
     $stateProvider.state('drooms', drooms);
     $stateProvider.state('cameleon', cameleon);
     $stateProvider.state('cameleon.machines', cammachines);
-    return $stateProvider.state('cameleon.associate', camscenes);
+    $stateProvider.state('cameleon.associate', camscenes);
+    return $stateProvider.state('cameleon.pictures', campictures);
   });
 
   app.factory('sessionMngr', function() {
@@ -811,6 +817,8 @@
       }
     };
   };
+
+  this.PicturesCtrl = function($scope, CameleonServer) {};
 
   this.CameleonCtrl = function($scope, CameleonServer) {
     $scope.cameleon = {};

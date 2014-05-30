@@ -40,6 +40,11 @@ app.config ($stateProvider) ->
         templateUrl : 'partials/scenes.html'
         controller : SceneCtrl
 
+  campictures =
+    url: '/pictures'
+    templateUrl: 'partials/pictures.html'
+    controller : PicturesCtrl
+
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
   $stateProvider.state('room3', room3)
@@ -56,6 +61,7 @@ app.config ($stateProvider) ->
   $stateProvider.state('cameleon', cameleon)
   $stateProvider.state('cameleon.machines', cammachines)
   $stateProvider.state('cameleon.associate', camscenes)
+  $stateProvider.state('cameleon.pictures', campictures)
 
 # Factories
 app.factory 'sessionMngr', () ->
@@ -586,6 +592,9 @@ app.filter 'faderFilter', ->
       $scope.$emit 'loadScene'
     else
       alert ('Beware !')
+
+@PicturesCtrl = ($scope, CameleonServer)->
+
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
