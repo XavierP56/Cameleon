@@ -1023,7 +1023,8 @@
     });
     $scope.LoadScene = function() {
       return CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then(function(res) {
-        return $scope.cameleon.machines = res.load.list;
+        $scope.cameleon.machines = res.load.list;
+        return $scope.cameleon.curMachine = $scope.cameleon.machines[0];
       });
     };
     $scope.cameleon.picturesStuff = [];

@@ -161,3 +161,9 @@ span.clear
     background-color: lightgreen;
     clear: both;
 }
+
+#footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

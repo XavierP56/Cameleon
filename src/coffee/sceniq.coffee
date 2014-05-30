@@ -734,6 +734,8 @@ app.filter 'faderFilter', ->
   $scope.LoadScene = ()->
       CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then (res)->
         $scope.cameleon.machines = res.load.list
+        # Once loaded, take the first machine.
+        $scope.cameleon.curMachine = $scope.cameleon.machines[0]
 
   # Pictures
   $scope.cameleon.picturesStuff = []
