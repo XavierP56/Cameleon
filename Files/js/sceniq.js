@@ -157,7 +157,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreatePicture, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -190,6 +190,7 @@
       }
     });
     _LoadPicture = $resource('/cameleon/loadpicture/:picture');
+    _GetSoundList = $resource('/cameleon/getsoundlist');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -262,6 +263,9 @@
       return _LoadPicture.get({
         picture: picture
       });
+    };
+    datas.GetSoundList = function() {
+      return _GetSoundList.get({});
     };
     return datas;
   });

@@ -167,3 +167,11 @@ class SoundPlayer:
 
     def snd_stopSong(self,id):
         self.sounds_stop(id)
+
+    # '/cameleon/getsoundlist'
+    def getsoundlist(self):
+        list = []
+        for s in models.sounds:
+            v = { 'id' : s, 'name': models.sounds['songName']}
+            list.append(v)
+        return {'list' : list}
