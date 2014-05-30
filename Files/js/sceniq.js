@@ -805,8 +805,9 @@
       }
       r = window.confirm('Do you want to load ?');
       if (r === true) {
-        alert('Load Scene !');
         return $scope.$emit('loadScene');
+      } else {
+        return alert('Beware !');
       }
     };
   };

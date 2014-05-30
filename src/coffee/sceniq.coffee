@@ -583,8 +583,9 @@ app.filter 'faderFilter', ->
     return if $scope.cameleon.currentScene.id == null
     r = window.confirm ('Do you want to load ?')
     if r == true
-      alert ('Load Scene !')
       $scope.$emit 'loadScene'
+    else
+      alert ('Beware !')
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
