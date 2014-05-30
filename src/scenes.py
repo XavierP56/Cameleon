@@ -1,15 +1,33 @@
 __author__ = 'xavierpouyollon'
 
-import sessionsq
-import threading
-import time
-import thread
-import models
-import serial
-import requests
-import pprint
+import json
 
 scenes = {}
+
+args = None
+
+def Init(largs):
+    global args
+
+    args = largs
+
+def LoadFromDisk():
+    global args
+    global scenes
+    # Save the scenes
+    ref = "../Files/Profiles/"+args.profile
+    fpath = ref + "/scenes.json"
+    with open(fpath) as datafile:
+        scenes = json.load(datafile)
+    return
+
+def SaveToDisk():
+    global args
+    # Save the scenes
+    ref = "../Files/Profiles/"+args.profile
+    fpath = ref + "/scenes.json"
+    with open(fpath, "w") as outfile:
+        json.dump(scenes, outfile, sort_keys=True, indent=4,ensure_ascii=False)
 
 # /cameleon/getscenelist
 def getscenelist():
@@ -34,10 +52,12 @@ def recordscene(request):
     global scenes
     id = request.json['scene']
     scenes[id]['list'] = request.json['machines']
+    SaveToDisk()
     return {'res':'OK'}
 
 # /cameleon/loadscene/:scene
 def loadscene(scene):
     global scenes
 
+    list = scenes[scene]['list']
     return {'load': scenes[scene]}

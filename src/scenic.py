@@ -199,6 +199,11 @@ except:
 
 sndplayer = soundplayer.SoundPlayer(args)
 dmxhandler = dmxhandler.DmxHandler(args, sndplayer)
+scenes.Init(args)
+try:
+    scenes.LoadFromDisk()
+except:
+    pass
 
 # Start the bottle server.
 bottle.run(app, port=8080, host='0.0.0.0', server='cherrypy')
