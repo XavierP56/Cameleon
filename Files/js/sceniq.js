@@ -827,7 +827,17 @@
     };
   };
 
-  this.PicturesCtrl = function($scope, CameleonServer) {};
+  this.PicturesCtrl = function($scope, CameleonServer) {
+    $scope.load = function() {
+      return $scope.LoadScene();
+    };
+    $scope.addScene = function() {
+      return alert('Add');
+    };
+    return $scope.removeScene = function() {
+      return alert('Remove');
+    };
+  };
 
   this.CameleonCtrl = function($scope, CameleonServer) {
     $scope.cameleon = {};
@@ -836,6 +846,7 @@
       id: null,
       name: ''
     };
+    $scope.cameleon.picturesScenes = [];
     CameleonServer.GetSceneList().$promise.then(function(res) {
       return $scope.cameleon.scenesList = res.list;
     });

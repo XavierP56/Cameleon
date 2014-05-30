@@ -604,7 +604,13 @@ app.filter 'faderFilter', ->
       alert ('Beware !')
 
 @PicturesCtrl = ($scope, CameleonServer)->
+  $scope.load = () ->
+    $scope.LoadScene()
 
+  $scope.addScene = ()->
+    alert ('Add')
+  $scope.removeScene = ()->
+    alert ('Remove')
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
@@ -612,6 +618,9 @@ app.filter 'faderFilter', ->
   # $scope.machines is the list of machines we do use in the current scene
   $scope.cameleon.machines = []
   $scope.cameleon.currentScene = { id : null, name : ''}
+
+  # Pictures
+  $scope.cameleon.picturesScenes = []
 
   CameleonServer.GetSceneList().$promise.then (res)->
     $scope.cameleon.scenesList = res.list

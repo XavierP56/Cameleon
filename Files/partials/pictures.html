@@ -1,5 +1,13 @@
 <div>
     Here, we define the pictures.
     <br/>
-    <select  ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
+    <select ng-change="load()"  ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
+    <button ng-click="addScene()">Add</button>
+    <button ng-click="removeScene()">Remove</button>
+    <br/>
+    List of scenes to use:
+    <br>
+    <li class="menuli"  ng-repeat="s in cameleon.picturesScenes ">
+        <button ng-click="infos(m)">{{m.id}}</button>
+    </li>
 </div>
