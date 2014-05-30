@@ -169,8 +169,11 @@ class SoundPlayer:
         self.sounds_stop(id)
 
     # '/cameleon/getsoundlist'
-    def getsoundlist(self):
+    def getsoundlist(self,empty):
         list = []
+        if empty == 'true':
+            v = { 'id': None, 'name': '<No song>'}
+            list.append(v)
         for s in models.sounds:
             v = { 'id' : s, 'name': models.sounds[s]['songName']}
             list.append(v)

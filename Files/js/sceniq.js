@@ -169,7 +169,7 @@
       }
     });
     _LoadPicture = $resource('/cameleon/loadpicture/:picture');
-    _GetSoundList = $resource('/cameleon/getsoundlist');
+    _GetSoundList = $resource('/cameleon/getsoundlist/:empty');
     _DmxScene = $resource('/cameleon/dmxscene', {}, {
       set: {
         method: 'POST'
@@ -248,8 +248,13 @@
         picture: picture
       });
     };
-    datas.GetSoundList = function() {
-      return _GetSoundList.get({});
+    datas.GetSoundList = function(empty) {
+      if (empty == null) {
+        empty = false;
+      }
+      return _GetSoundList.get({
+        empty: empty
+      });
     };
     datas.DmxScene = function(scene, opts) {
       return _DmxScene.set({

@@ -97,7 +97,7 @@ app.factory 'CameleonServer', ($resource) ->
   _CreatePicture = $resource('/cameleon/createpicture/:picture')
   _RecordPicture = $resource('/cameleon/recordpicture', {}, {set: {method: 'POST'}})
   _LoadPicture = $resource('/cameleon/loadpicture/:picture')
-  _GetSoundList =  $resource('/cameleon/getsoundlist')
+  _GetSoundList =  $resource('/cameleon/getsoundlist/:empty')
   _DmxScene = $resource('/cameleon/dmxscene', {}, {set: {method: 'POST'}})
 
   datas.GetMachinesList = () ->
@@ -130,8 +130,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _RecordPicture.set {picture: picture, stuff: stuff}
   datas.LoadPicture = (picture)->
     return _LoadPicture.get {picture: picture}
-  datas.GetSoundList = ()->
-    return _GetSoundList.get {}
+  datas.GetSoundList = (empty = false)->
+    return _GetSoundList.get {empty : empty}
   datas.DmxScene = (scene,opts)->
     return _DmxScene.set {scene:scene, opts:opts}
   return datas

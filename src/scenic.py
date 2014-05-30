@@ -196,9 +196,9 @@ def cameleon_recordpicture():
 def cameleon_loadpicture(picture):
     return scenes.loadpicture(picture)
 
-@app.route('/cameleon/getsoundlist')
-def cameleon_getsoundlist():
-    return sndplayer.getsoundlist()
+@app.route('/cameleon/getsoundlist/:empty')
+def cameleon_getsoundlist(empty):
+    return sndplayer.getsoundlist(empty)
 
 @app.route('/cameleon/dmxscene', method='POST')
 def cameleon_dmxscene():
