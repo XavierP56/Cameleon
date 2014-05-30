@@ -18,11 +18,16 @@ class Scenes:
         self.dmx = ldmx
 
     def LoadFromDisk(self):
-        # Save the scenes
+        # Load the scenes
         ref = "../Files/Profiles/"+self.args.profile
         fpath = ref + "/scenes.json"
         with open(fpath) as datafile:
             self.scenes = json.load(datafile)
+        # Load the pictures
+        ref = "../Files/Profiles/"+self.args.profile
+        fpath = ref + "/pictures.json"
+        with open(fpath) as datafile:
+            self.pictures = json.load(datafile)
         return
 
     def SaveToDisk(self):
@@ -31,6 +36,11 @@ class Scenes:
         fpath = ref + "/scenes.json"
         with open(fpath, "w") as outfile:
             json.dump(self.scenes, outfile, sort_keys=True, indent=4,ensure_ascii=False)
+        # Save the pictures
+        ref = "../Files/Profiles/"+self.args.profile
+        fpath = ref + "/pictures.json"
+        with open(fpath, "w") as outfile:
+            json.dump(self.pictures, outfile, sort_keys=True, indent=4,ensure_ascii=False)
 
     # /cameleon/getscenelist
     def getscenelist(self):
@@ -74,3 +84,10 @@ class Scenes:
         entry = { 'desc' :'TODO', 'list':[]}
         self.pictures[picture] = entry
         return {'res' : 'ok'}
+
+    # '/cameleon/recordpicture'
+    def recordpicture(self, request):
+        id = request.json['picture']
+        self.pictures[id]['list'] = request.json['stuff']
+        self.SaveToDisk()
+        return {'res':'OK'}

@@ -138,7 +138,7 @@ app.factory 'CameleonServer', ($resource) ->
   datas.CreatePicture = (picture) ->
     return _CreatePicture.get {picture: picture}
   datas.RecordPicture = (picture, stuff)->
-    return _RecordScene.set {picture: scene, stuff: stuff}
+    return _RecordPicture.set {picture: picture, stuff: stuff}
   return datas
 
 

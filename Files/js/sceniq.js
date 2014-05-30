@@ -157,7 +157,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _LoadScene, _QuerySlider, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreatePicture, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -184,6 +184,11 @@
     _LoadScene = $resource('/cameleon/loadscene/:scene');
     _GetPicturesList = $resource('/cameleon/getpictureslist');
     _CreatePicture = $resource('/cameleon/createpicture/:picture');
+    _RecordPicture = $resource('/cameleon/recordpicture', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -244,6 +249,12 @@
     datas.CreatePicture = function(picture) {
       return _CreatePicture.get({
         picture: picture
+      });
+    };
+    datas.RecordPicture = function(picture, stuff) {
+      return _RecordPicture.set({
+        picture: picture,
+        stuff: stuff
       });
     };
     return datas;
@@ -909,13 +920,18 @@
     $scope.showNew = function() {
       return $scope.showCreate = true;
     };
-    return $scope.addPicture = function(picture) {
+    $scope.addPicture = function(picture) {
       return CameleonServer.CreatePicture(picture).$promise.then(function(evt) {
         return CameleonServer.GetPicturesList().$promise.then(function(res) {
           $scope.cameleon.currentPicture.id = picture;
           $scope.cameleon.picturesList = res.list;
           return $scope.showCreate = false;
         });
+      });
+    };
+    return $scope.record = function() {
+      return CameleonServer.RecordPicture($scope.cameleon.currentPicture.id, $scope.cameleon.picturesStuff).$promise.then(function(evt) {
+        return alert('Picture recorded !');
       });
     };
   };

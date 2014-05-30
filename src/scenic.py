@@ -160,6 +160,10 @@ def models_savedrooms():
 def models_loaddrooms():
     return models.loadDRooms(args)
 
+#
+# Cameleon
+#
+
 @app.route('/cameleon/getscenelist')
 def cameleon_getscenelist():
     return scenes.getscenelist()
@@ -183,6 +187,10 @@ def cameleon_getpictureslist():
 @app.route('/cameleon/createpicture/:picture')
 def cameleon_createpicture(picture):
     return scenes.createpicture(picture)
+
+@app.route('/cameleon/recordpicture', method='POST')
+def cameleon_recordpicture():
+    return scenes.recordpicture(request)
 
 # Start swmixer
 parser = argparse.ArgumentParser()
