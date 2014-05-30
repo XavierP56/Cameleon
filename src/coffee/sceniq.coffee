@@ -50,6 +50,7 @@ app.config ($stateProvider) ->
         controller : PicturesCtrl
       'pictmngr@cameleon.pictures':
         templateUrl : 'partials/picturesMngr.html'
+        controller: PicturesMngrCtrl
 
   $stateProvider.state('room1', room1)
   $stateProvider.state('room2', room2)
@@ -632,6 +633,8 @@ app.filter 'faderFilter', ->
     return if index == -1
     $scope.cameleon.picturesStuff.splice(index,1)
     return
+
+@PicturesMngrCtrl = ($scope, CameleonServer)->
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init

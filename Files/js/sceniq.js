@@ -103,7 +103,8 @@
           controller: PicturesCtrl
         },
         'pictmngr@cameleon.pictures': {
-          templateUrl: 'partials/picturesMngr.html'
+          templateUrl: 'partials/picturesMngr.html',
+          controller: PicturesMngrCtrl
         }
       }
     };
@@ -875,6 +876,8 @@
       $scope.cameleon.picturesStuff.splice(index, 1);
     };
   };
+
+  this.PicturesMngrCtrl = function($scope, CameleonServer) {};
 
   this.CameleonCtrl = function($scope, CameleonServer) {
     $scope.cameleon = {};
