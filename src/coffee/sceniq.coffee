@@ -138,11 +138,7 @@ app.factory 'CameleonServer', ($resource) ->
 
 
 Array::move = (old_index, new_index) ->
-  if new_index >= @length
-    k = new_index - @length
-    @push `undefined`  while (k--) + 1
   @splice new_index, 0, @splice(old_index, 1)[0]
-  this
 
 # Directive
 app.directive "widgets", ->
@@ -153,7 +149,8 @@ app.directive "widgets", ->
   link: (scope, elemt, attrs) ->
     scope.forward = (index)->
       scope.stuff.move(index, index+1)
-
+    scope.backward = (index)->
+      scope.stuff.move(index, index-1) if index > 0
 
 app.directive "fold", ->
   restrict: 'E'
