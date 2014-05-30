@@ -21,9 +21,12 @@
     </span>
 
     <span ng-show="edit==true">
-       <button ng-click="backward($index)">-</button>
-       <button ng-click="separator($index)">L</button>
-       <button ng-click="forward($index)">+</button>
+       <button ng-click="showMe = !showMe">E</button>
+       <div ng-show="showMe">
+           <button ng-click="backward($index)">Move to left</button>
+           <button ng-click="separator($index)">Insert Line</button>
+           <button ng-click="forward($index)">Move to right</button>
+       </div>
     </span>
 </script>
 
