@@ -296,8 +296,24 @@
           return stuff.startSong = wrapper.entry.id;
         };
         scope.getStartSound = function(stuff, wrapper) {
+          var found, ix, n, _i, _len, _ref;
           if ('startSong' in stuff) {
-            return alert('ICI LAPIN');
+            ix = 0;
+            found = false;
+            _ref = scope.cameleon.associatesoundslist;
+            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+              n = _ref[_i];
+              if (n.id === stuff.startSong) {
+                found = true;
+                break;
+              } else {
+                ix++;
+              }
+            }
+            if (found) {
+              wrapper.entry = {};
+              return wrapper.entry = scope.cameleon.associatesoundslist[ix];
+            }
           }
         };
         scope.$watch(attrs.things, function(n, o) {

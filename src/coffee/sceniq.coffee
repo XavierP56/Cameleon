@@ -163,7 +163,17 @@ app.directive "widgets", ->
 
     scope.getStartSound = (stuff, wrapper)->
       if 'startSong' of stuff
-        alert ('ICI LAPIN')
+        ix = 0
+        found = false
+        for n in scope.cameleon.associatesoundslist
+          if n.id == stuff.startSong
+            found = true
+            break
+          else
+            ix++
+        if found
+          wrapper.entry = {}
+          wrapper.entry = scope.cameleon.associatesoundslist[ix]
 
     # Init
     scope.$watch attrs.things, (n,o)->
