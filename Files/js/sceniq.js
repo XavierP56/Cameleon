@@ -141,21 +141,6 @@
     return mngr;
   });
 
-  app.factory('configMngr', function($resource) {
-    var Query, datas;
-    datas = {};
-    Query = $resource('/cfg/getsettinglist');
-    datas.LoadSettingsList = function() {
-      return Query.get({}, function(res) {
-        return datas.settingLst = res.settings;
-      });
-    };
-    datas.GetSettingList = function() {
-      return datas.settingLst;
-    };
-    return datas;
-  });
-
   app.factory('CameleonServer', function($resource) {
     var datas, _CreatePicture, _CreateScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
@@ -693,70 +678,16 @@
     });
   };
 
-  this.ConfigRoomCtrl = function($scope, $http, $q, $resource) {
-    var Load, Save;
-    $scope.scenes = {};
-    Save = $resource('/models/saveDrooms', {}, {
-      set: {
-        method: 'POST'
-      }
+  this.ConfigRoomCtrl = function($scope, CameleonServer) {
+    $scope.cameleon = {};
+    CameleonServer.GetPicturesList().$promise.then(function(res) {
+      return $scope.cameleon.picturesList = res.list;
     });
-    Load = $resource('/models/loadDrooms');
-    $scope.current = '';
-    $scope.setting = {};
-    $scope.InitMenu = function() {
-      var ix, keys, n, scene, _i, _j, _len, _len1, _ref;
-      $scope.list = [];
-      keys = Object.keys($scope.scenes).sort();
-      for (_i = 0, _len = keys.length; _i < _len; _i++) {
-        scene = keys[_i];
-        $scope.list.push({
-          'name': scene
-        });
-      }
-      ix = 0;
-      _ref = $scope.list;
-      for (_j = 0, _len1 = _ref.length; _j < _len1; _j++) {
-        n = _ref[_j];
-        if (n.name === $scope.current) {
-          break;
-        } else {
-          ix++;
-        }
-      }
-      return $scope.setting.scene = $scope.list[ix];
-    };
-    $scope.update = function(name) {
-      return $scope.stuff = angular.copy($scope.scenes[name]);
-    };
-    $scope.refresh = function(name) {
-      $scope.InitMenu();
-      return $scope.update(name);
-    };
-    $scope.SetScene = function(scene) {
-      $scope.current = scene.name;
-      return $scope.update($scope.current);
-    };
-    $scope.save = function() {
-      var cmd;
-      cmd = {
-        'drooms': $scope.scenes
-      };
-      $scope.setDone = Save.set(cmd, function() {});
-      return $scope.setDone.$promise.then(function() {
-        return alert('Dynamic Rooms saved !');
+    return $scope.load = function() {
+      return CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then(function(res) {
+        return $scope.cameleon.picturesStuff = res.load.list;
       });
     };
-    $scope.reload = function() {
-      return Load.get(function(res) {
-        $scope.scenes = res.drooms;
-        return $scope.refresh($scope.current);
-      });
-    };
-    return Load.get(function(res) {
-      $scope.scenes = res.drooms;
-      return $scope.InitMenu();
-    });
   };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {

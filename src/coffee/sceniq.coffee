@@ -80,18 +80,6 @@ app.factory 'sessionMngr', () ->
     mngr.sessionId = sessionId
   return mngr
 
-app.factory 'configMngr', ($resource) ->
-  datas = {}
-  Query = $resource('/cfg/getsettinglist')
-
-  datas.LoadSettingsList = () ->
-    return Query.get {}, (res) ->
-      datas.settingLst = res.settings
-
-  datas.GetSettingList = () ->
-    return datas.settingLst
-
-  return datas
 
 # Let's centralize all the communication to the server.
 app.factory 'CameleonServer', ($resource) ->
@@ -490,56 +478,14 @@ app.filter 'faderFilter', ->
   CameleonServer.GetMachinesList().$promise.then (res)->
     $scope.faderlist = res.list
 
-@ConfigRoomCtrl = ($scope, $http, $q, $resource)->
-  $scope.scenes = {}
+@ConfigRoomCtrl = ($scope, CameleonServer)->
+  $scope.cameleon = {}
+  CameleonServer.GetPicturesList().$promise.then (res)->
+    $scope.cameleon.picturesList = res.list
 
-  Save = $resource('/models/saveDrooms', {}, {set: {method: 'POST'}})
-  Load = $resource('/models/loadDrooms')
-
-  $scope.current = ''
-  $scope.setting = {}
-  $scope.InitMenu = () ->
-    $scope.list = []
-    keys = Object.keys($scope.scenes).sort()
-    for scene in keys
-      $scope.list.push({'name' : scene})
-
-    ix = 0
-    for n in $scope.list
-      if n.name == $scope.current
-        break
-      else
-        ix++
-    $scope.setting.scene = $scope.list[ix]
-
-  $scope.update = (name) ->
-    $scope.stuff = angular.copy($scope.scenes[name])
-
-  $scope.refresh = (name) ->
-    $scope.InitMenu()
-    $scope.update(name)
-
-  $scope.SetScene = (scene) ->
-    $scope.current = scene.name
-    $scope.update($scope.current)
-
-  $scope.save = () ->
-    cmd = 'drooms' : $scope.scenes
-
-    $scope.setDone = Save.set cmd, ()->
-      return
-    $scope.setDone.$promise.then () ->
-        alert('Dynamic Rooms saved !')
-
-  $scope.reload = () ->
-    Load.get (res) ->
-      $scope.scenes = res.drooms
-      $scope.refresh($scope.current)
-
-  # Init
-  Load.get (res) ->
-    $scope.scenes = res.drooms
-    $scope.InitMenu()
+  $scope.load = ()->
+      CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
+        $scope.cameleon.picturesStuff = res.load.list
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->

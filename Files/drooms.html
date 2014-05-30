@@ -1,9 +1,9 @@
 <div>
     <div style="text-align: center;">
-    <select  ng-model="setting.scene" ng-options="c.name for c in list" ng-change="SetScene(setting.scene)"></select>
+    <select  ng-change="load()" ng-model="cameleon.currentPicture" ng-options="c.name for c in cameleon.picturesList"></select>
     </div>
     <br/>
     <div style="text-align: center;">
-        <widgets things="stuff"></widgets>
+        <widgets things="cameleon.picturesStuff"></widgets>
     </div>
 </div>
