@@ -653,7 +653,17 @@ app.filter 'faderFilter', ->
     index = $scope.findStuff($scope.cameleon.currentScene.id, 'scene')
     return if index == -1
     $scope.cameleon.picturesStuff.splice(index,1)
-    return
+
+  $scope.addSound = ()->
+    entry = {'id' : $scope.cameleon.currentSound.id, 'type':'sound'}
+    index = $scope.findStuff(entry.id, entry.type)
+    return if index != -1
+    $scope.cameleon.picturesStuff.push entry
+
+  $scope.removeSound = ()->
+    index = $scope.findStuff($scope.cameleon.currentSound.id, 'sound')
+    return if index == -1
+    $scope.cameleon.picturesStuff.splice(index,1)
 
 # This controller handles the picture (Tableaux) creations.
 @PicturesMngrCtrl = ($scope, CameleonServer)->

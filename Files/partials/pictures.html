@@ -10,6 +10,8 @@
     <div>
         Sounds <br/>
         <select  ng-model="cameleon.currentSound" ng-options="c.name for c in cameleon.soundslist"></select>
+        <button ng-click="addSound()">Add</button>
+        <button ng-click="removeSound()">Remove</button>
     </div>
     <br/>
     <b>List of buttons to generate:</b>

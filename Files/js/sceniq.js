@@ -900,13 +900,33 @@
       }
       return $scope.cameleon.picturesStuff.push(entry);
     };
-    return $scope.removeScene = function() {
+    $scope.removeScene = function() {
       var index;
       index = $scope.findStuff($scope.cameleon.currentScene.id, 'scene');
       if (index === -1) {
         return;
       }
-      $scope.cameleon.picturesStuff.splice(index, 1);
+      return $scope.cameleon.picturesStuff.splice(index, 1);
+    };
+    $scope.addSound = function() {
+      var entry, index;
+      entry = {
+        'id': $scope.cameleon.currentSound.id,
+        'type': 'sound'
+      };
+      index = $scope.findStuff(entry.id, entry.type);
+      if (index !== -1) {
+        return;
+      }
+      return $scope.cameleon.picturesStuff.push(entry);
+    };
+    return $scope.removeSound = function() {
+      var index;
+      index = $scope.findStuff($scope.cameleon.currentSound.id, 'sound');
+      if (index === -1) {
+        return;
+      }
+      return $scope.cameleon.picturesStuff.splice(index, 1);
     };
   };
 
