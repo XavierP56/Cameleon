@@ -6,7 +6,7 @@
         <span ng-switch-when="scene">
             <dmx-scene  id="{{s.id}}"></dmx-light>
         </span>
-        <div ng-switch-when="Line">
+        <div ng-switch-when="line">
             <b>{{s.msg}}</b>
             <br/>
         </div>
@@ -22,6 +22,7 @@
 
     <span ng-show="edit==true">
        <button ng-click="backward($index)">-</button>
+       <button ng-click="separator($index)">L</button>
        <button ng-click="forward($index)">+</button>
     </span>
 </script>

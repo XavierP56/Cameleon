@@ -276,10 +276,16 @@
         scope.forward = function(index) {
           return scope.stuff.move(index, index + 1);
         };
-        return scope.backward = function(index) {
+        scope.backward = function(index) {
           if (index > 0) {
             return scope.stuff.move(index, index - 1);
           }
+        };
+        return scope.separator = function(index) {
+          return scope.stuff.splice(index, 0, {
+            'msg': '',
+            'type': 'line'
+          });
         };
       }
     };

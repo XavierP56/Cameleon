@@ -141,6 +141,8 @@ Array::move = (old_index, new_index) ->
   @splice new_index, 0, @splice(old_index, 1)[0]
 
 # Directive
+
+# Display the various dynamic buttons.
 app.directive "widgets", ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/widgets.html'
@@ -151,6 +153,8 @@ app.directive "widgets", ->
       scope.stuff.move(index, index+1)
     scope.backward = (index)->
       scope.stuff.move(index, index-1) if index > 0
+    scope.separator = (index)->
+      scope.stuff.splice(index,0,{'msg':'', 'type':'line'})
 
 app.directive "fold", ->
   restrict: 'E'
