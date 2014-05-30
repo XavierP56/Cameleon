@@ -981,11 +981,14 @@
     CameleonServer.GetPicturesList().$promise.then(function(res) {
       return $scope.cameleon.picturesList = res.list;
     });
-    return $scope.LoadPicture = function() {
+    $scope.LoadPicture = function() {
       return CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then(function(res) {
         return $scope.cameleon.picturesStuff = res.load.list;
       });
     };
+    return CameleonServer.GetSoundList().$promise.then(function(res) {
+      return $scope.cameleon.soundlist = res.list;
+    });
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {

@@ -172,6 +172,6 @@ class SoundPlayer:
     def getsoundlist(self):
         list = []
         for s in models.sounds:
-            v = { 'id' : s, 'name': models.sounds['songName']}
+            v = { 'id' : s, 'name': models.sounds[s]['songName']}
             list.append(v)
         return {'list' : list}

@@ -718,6 +718,10 @@ app.filter 'faderFilter', ->
       CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
         $scope.cameleon.picturesStuff = res.load.list
 
+  # Sounds
+  CameleonServer.GetSoundList().$promise.then (res)->
+    $scope.cameleon.soundlist = res.list
+
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')
   DmxPanic = $resource('/dmx/panic')
