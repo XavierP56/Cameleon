@@ -576,10 +576,14 @@ app.filter 'faderFilter', ->
     $scope.fixtureInfo = list
 
   $scope.updateFixture = (id, fixinfo)->
+    $scope.fixtures[id].defs = {}
     for e in fixinfo
       $scope.fixtures[id].defs[e.k] = e.v
     CameleonServer.UpdateFixtures($scope.fixtures)
     alert ('Updated !')
+
+  $scope.remove = (index, fixinfo)->
+    fixinfo.splice(index,1)
 
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer, MenuUtils) ->

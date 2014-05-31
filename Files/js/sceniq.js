@@ -805,14 +805,18 @@
       }
       return $scope.fixtureInfo = list;
     };
-    return $scope.updateFixture = function(id, fixinfo) {
+    $scope.updateFixture = function(id, fixinfo) {
       var e, _i, _len;
+      $scope.fixtures[id].defs = {};
       for (_i = 0, _len = fixinfo.length; _i < _len; _i++) {
         e = fixinfo[_i];
         $scope.fixtures[id].defs[e.k] = e.v;
       }
       CameleonServer.UpdateFixtures($scope.fixtures);
       return alert('Updated !');
+    };
+    return $scope.remove = function(index, fixinfo) {
+      return fixinfo.splice(index, 1);
     };
   };
 
