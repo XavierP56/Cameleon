@@ -227,6 +227,11 @@ def cameleon_updatefixtures():
 def cameleon_getsounds():
     return { 'sounds' : models.sounds}
 
+@app.route('/cameleon/updatesounds', method='POST')
+def cameleon_updatesounds():
+    models.sounds = request.json['sounds']
+    return { 'res' : 'OK'}
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")

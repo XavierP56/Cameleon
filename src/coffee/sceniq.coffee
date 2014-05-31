@@ -129,6 +129,7 @@ app.factory 'CameleonServer', ($resource) ->
   _UpdateDevices = $resource('/cameleon/updatedevices', {}, {set: {method: 'POST'}})
   _UpdateFixtures = $resource('/cameleon/updatefixtures', {}, {set: {method: 'POST'}})
   _GetSounds = $resource('/cameleon/getsounds')
+  _UpdateSounds = $resource('/cameleon/updatesounds', {}, {set: {method: 'POST'}})
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -174,6 +175,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _UpdateFixtures.set {fixtures: fixtures}
   datas.GetSounds = ()->
     return _GetSounds.get {}
+  datas.UpdateSounds = (sounds) ->
+    return _UpdateSounds.set {sounds: sounds}
   return datas
 
 
@@ -592,8 +595,8 @@ app.filter 'faderFilter', ->
     $scope.fixtures[id].defs = {}
     for e in fixinfo
       $scope.fixtures[id].defs[e.k] = e.v
-    CameleonServer.UpdateFixtures($scope.fixtures)
-    alert ('Updated !')
+    CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
+      alert ('Updated !')
 
   $scope.remove = (index, fixinfo)->
     fixinfo.splice(index,1)
@@ -681,6 +684,13 @@ app.filter 'faderFilter', ->
       for k,v of res.sounds
         list.push {'id': k, 'v':v}
       $scope.soundlist = list
+
+  $scope.updateSounds = (id, soundinfo)->
+    #$scope.sounds[id] = {}
+    #for e in soundinfo
+    #  $scope.sounds[id][e.k] = e.v
+    CameleonServer.UpdateSounds($scope.sounds).$promise.then (res)->
+      alert ('Updated !')
 
   # Inits
   $scope.getsounds()

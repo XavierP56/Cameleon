@@ -135,7 +135,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices, _UpdateFixtures;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -187,6 +187,11 @@
       }
     });
     _GetSounds = $resource('/cameleon/getsounds');
+    _UpdateSounds = $resource('/cameleon/updatesounds', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -292,6 +297,11 @@
     };
     datas.GetSounds = function() {
       return _GetSounds.get({});
+    };
+    datas.UpdateSounds = function(sounds) {
+      return _UpdateSounds.set({
+        sounds: sounds
+      });
     };
     return datas;
   });
@@ -822,8 +832,9 @@
         e = fixinfo[_i];
         $scope.fixtures[id].defs[e.k] = e.v;
       }
-      CameleonServer.UpdateFixtures($scope.fixtures);
-      return alert('Updated !');
+      return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
+        return alert('Updated !');
+      });
     };
     $scope.remove = function(index, fixinfo) {
       return fixinfo.splice(index, 1);
@@ -947,6 +958,11 @@
           });
         }
         return $scope.soundlist = list;
+      });
+    };
+    $scope.updateSounds = function(id, soundinfo) {
+      return CameleonServer.UpdateSounds($scope.sounds).$promise.then(function(res) {
+        return alert('Updated !');
       });
     };
     return $scope.getsounds();

@@ -1,5 +1,4 @@
-Here, we define the sounds.
-<div>
+<div style="text-align: center;">
     <select  ng-change="selected(soundEntry)" ng-model="soundEntry"  ng-options="c.id for c in soundlist"></select>
     <div ng-show="soundEntry != null">
         <br/>
@@ -23,6 +22,9 @@ Here, we define the sounds.
         <br/>
         songName: <input ng-model="soundEntry.v.songName">
         <br/>
+
+    <br/>
+        <button ng-click="updateSounds(soundEntry.id, soundEntry.v)">Update !</button>
     </div>
 
 </div>
