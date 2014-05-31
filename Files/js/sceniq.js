@@ -129,7 +129,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices, _UpdateFixtures;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -171,6 +171,11 @@
     _GetDevices = $resource('/cameleon/getdevices');
     _GetFixtures = $resource('/cameleon/getfixtures');
     _UpdateDevices = $resource('/cameleon/updatedevices', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
+    _UpdateFixtures = $resource('/cameleon/updatefixtures', {}, {
       set: {
         method: 'POST'
       }
@@ -271,6 +276,11 @@
     datas.UpdateDevices = function(devices) {
       return _UpdateDevices.set({
         devices: devices
+      });
+    };
+    datas.UpdateFixtures = function(fixtures) {
+      return _UpdateFixtures.set({
+        fixtures: fixtures
       });
     };
     return datas;
@@ -784,7 +794,7 @@
   };
 
   this.FixturesCtrl = function($scope, CameleonServer) {
-    return $scope.selected = function(fixture) {
+    $scope.selected = function(fixture) {
       var k, list;
       list = [];
       for (k in fixture.v.defs) {
@@ -794,6 +804,15 @@
         });
       }
       return $scope.fixtureInfo = list;
+    };
+    return $scope.updateFixture = function(id, fixinfo) {
+      var e, _i, _len;
+      for (_i = 0, _len = fixinfo.length; _i < _len; _i++) {
+        e = fixinfo[_i];
+        $scope.fixtures[id].defs[e.k] = e.v;
+      }
+      CameleonServer.UpdateFixtures($scope.fixtures);
+      return alert('Updated !');
     };
   };
 

@@ -117,6 +117,7 @@ app.factory 'CameleonServer', ($resource) ->
   _GetDevices = $resource('/cameleon/getdevices')
   _GetFixtures = $resource('/cameleon/getfixtures')
   _UpdateDevices = $resource('/cameleon/updatedevices', {}, {set: {method: 'POST'}})
+  _UpdateFixtures = $resource('/cameleon/updatefixtures', {}, {set: {method: 'POST'}})
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -158,6 +159,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _GetFixtures.get {}
   datas.UpdateDevices = (devices) ->
     return _UpdateDevices.set {devices: devices}
+  datas.UpdateFixtures = (fixtures) ->
+    return _UpdateFixtures.set {fixtures: fixtures}
   return datas
 
 
@@ -571,6 +574,12 @@ app.filter 'faderFilter', ->
     for k of fixture.v.defs
       list.push({'k': k, 'v': fixture.v.defs[k]})
     $scope.fixtureInfo = list
+
+  $scope.updateFixture = (id, fixinfo)->
+    for e in fixinfo
+      $scope.fixtures[id].defs[e.k] = e.v
+    CameleonServer.UpdateFixtures($scope.fixtures)
+    alert ('Updated !')
 
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer, MenuUtils) ->

@@ -4,7 +4,8 @@
     <select  ng-change="selected(fixtureEntry)" ng-model="fixtureEntry"  ng-options="c.id for c in cameleon.fixtureList"></select>
     <div ng-show="fixtureEntry != null">
         <div ng-repeat="f in fixtureInfo">
-            {{f.k}} is {{f.v}}
+            {{f.k}} is <input ng-model="f.v"> <button ng-click="remove($index)">Remove</button>
         </div>
     </div>
+    <button ng-click="updateFixture(fixtureEntry.id, fixtureInfo)">Update !</button>
 </div>
