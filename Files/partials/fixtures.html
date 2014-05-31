@@ -6,7 +6,6 @@
         <div ng-repeat="f in fixtureInfo">
             {{f.k}} is <input ng-model="f.v"> <button ng-click="remove($index,fixtureInfo)">Remove</button>
         </div><br/>
-        <button ng-click="updateFixture(fixtureEntry.id, fixtureInfo)">Update !</button>
 
         <div>
             <select ng-model="stuff">
@@ -17,6 +16,9 @@
                 <option value='{"v":"orange","k":"Strobe"}'>Strobe</option>
             </select>
             <button ng-click="addKey(stuff,fixtureEntry.id)">Add key</button>
+            <br/>
+            <button ng-click="updateFixture(fixtureEntry.id, fixtureInfo)">Update !</button>
+
         </div>
     </div>
 </div>
