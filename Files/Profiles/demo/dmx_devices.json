@@ -17,5 +17,9 @@
     "Pj2": {
         "channel": 10, 
         "fixture": "Ibiza"
+    }, 
+    "Pj3": {
+        "channel": "64", 
+        "fixture": "Ibiza"
     }
 }
