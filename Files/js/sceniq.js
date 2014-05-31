@@ -145,7 +145,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -185,6 +185,7 @@
       }
     });
     _GetDevices = $resource('/cameleon/getdevices');
+    _GetFixtures = $resource('/cameleon/getfixtures');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -274,6 +275,9 @@
     };
     datas.GetDevices = function() {
       return _GetDevices.get({});
+    };
+    datas.GetFixtures = function() {
+      return _GetFixtures.get({});
     };
     return datas;
   });

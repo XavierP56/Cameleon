@@ -209,6 +209,10 @@ def cameleon_dmxscene():
 def cameleon_getdevices():
     return { 'devices' : models.dmx_devices}
 
+@app.route('/cameleon/getfixtures')
+def cameleon_getfixtures():
+    return { 'fixtures' : models.dmx_fixtures}
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")

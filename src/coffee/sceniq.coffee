@@ -109,6 +109,7 @@ app.factory 'CameleonServer', ($resource) ->
   _GetSoundList =  $resource('/cameleon/getsoundlist/:empty')
   _DmxScene = $resource('/cameleon/dmxscene', {}, {set: {method: 'POST'}})
   _GetDevices = $resource('/cameleon/getdevices')
+  _GetFixtures = $resource('/cameleon/getfixtures')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -146,6 +147,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _DmxScene.set {scene:scene, opts:opts}
   datas.GetDevices = ()->
     return _GetDevices.get {}
+  datas.GetFixtures = ()->
+    return _GetFixtures.get {}
   return datas
 
 
