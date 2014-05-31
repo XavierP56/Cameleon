@@ -19,6 +19,7 @@ app.config ($stateProvider) ->
     views:
       '':
         templateUrl: 'partials/devs.html'
+        controller : DevFixCtrl
       'fixtures@cameleon.devices':
         templateUrl: 'partials/fixtures.html'
         controller: FixturesCtrl
@@ -568,22 +569,6 @@ app.filter 'faderFilter', ->
 
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer, MenuUtils) ->
-
-  CameleonServer.GetFixtures().$promise.then (res)->
-    $scope.fixtures = res.fixtures
-    list = []
-    for k,v of res.fixtures
-      list.push {'id': k, 'v':v}
-    $scope.cameleon.fixtureList = list
-
-  $scope.getdevices = ()->
-    CameleonServer.GetDevices().$promise.then (res)->
-      $scope.devices = res.devices
-      list = []
-      for k,v of res.devices
-        list.push {'id': k, 'v':v}
-      $scope.cameleon.machinesList = list
-
   $scope.updateFixture = (machine)->
     machine.v.fixture = $scope.fixtureEntry.id
 
@@ -602,9 +587,27 @@ app.filter 'faderFilter', ->
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
       alert 'Update done !'
 
+  $scope.fixtureEntry = {}
+
+@DevFixCtrl = ($scope, CameleonServer) ->
+
+  CameleonServer.GetFixtures().$promise.then (res)->
+    $scope.fixtures = res.fixtures
+    list = []
+    for k,v of res.fixtures
+      list.push {'id': k, 'v':v}
+    $scope.cameleon.fixtureList = list
+
+  $scope.getdevices = ()->
+    CameleonServer.GetDevices().$promise.then (res)->
+      $scope.devices = res.devices
+      list = []
+      for k,v of res.devices
+        list.push {'id': k, 'v':v}
+      $scope.cameleon.machinesList = list
+
   # Init
   $scope.getdevices()
-  $scope.fixtureEntry = {}
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->

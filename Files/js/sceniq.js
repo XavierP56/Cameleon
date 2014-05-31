@@ -30,7 +30,8 @@
       url: '/Devices',
       views: {
         '': {
-          templateUrl: 'partials/devs.html'
+          templateUrl: 'partials/devs.html',
+          controller: DevFixCtrl
         },
         'fixtures@cameleon.devices': {
           templateUrl: 'partials/fixtures.html',
@@ -785,6 +786,31 @@
   this.FixturesCtrl = function($scope, CameleonServer) {};
 
   this.DevicesCtrl = function($scope, CameleonServer, MenuUtils) {
+    $scope.updateFixture = function(machine) {
+      return machine.v.fixture = $scope.fixtureEntry.id;
+    };
+    $scope.selected = function(machine) {
+      return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, machine.v.fixture);
+    };
+    $scope.addDevice = function() {
+      $scope.devices[$scope.devName] = {
+        channel: '',
+        fixture: ''
+      };
+      $scope.createDevice = false;
+      return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
+        return $scope.getdevices();
+      });
+    };
+    $scope.updateDevices = function() {
+      return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
+        return alert('Update done !');
+      });
+    };
+    return $scope.fixtureEntry = {};
+  };
+
+  this.DevFixCtrl = function($scope, CameleonServer) {
     CameleonServer.GetFixtures().$promise.then(function(res) {
       var k, list, v, _ref;
       $scope.fixtures = res.fixtures;
@@ -815,29 +841,7 @@
         return $scope.cameleon.machinesList = list;
       });
     };
-    $scope.updateFixture = function(machine) {
-      return machine.v.fixture = $scope.fixtureEntry.id;
-    };
-    $scope.selected = function(machine) {
-      return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, machine.v.fixture);
-    };
-    $scope.addDevice = function() {
-      $scope.devices[$scope.devName] = {
-        channel: '',
-        fixture: ''
-      };
-      $scope.createDevice = false;
-      return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
-        return $scope.getdevices();
-      });
-    };
-    $scope.updateDevices = function() {
-      return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
-        return alert('Update done !');
-      });
-    };
-    $scope.getdevices();
-    return $scope.fixtureEntry = {};
+    return $scope.getdevices();
   };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {
