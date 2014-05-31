@@ -76,7 +76,7 @@ app.factory 'sessionMngr', () ->
 app.factory 'MenuUtils', ()->
   menus = {}
 
-  menus.UpdateMenu =(list, what, entry)->
+  menus.UpdateMenu =(list, what)->
       ix = 0
       found = false
       for n in list
@@ -655,23 +655,13 @@ app.filter 'faderFilter', ->
         m.setting = newSetting
 
 # TODO: RenameMe as SceneMngrCtrl
-@SceneCtrl = ($scope, CameleonServer)->
+@SceneCtrl = ($scope, CameleonServer, MenuUtils)->
 
   $scope.showCreate = false
 
     # As soon as the scope.settings changes, update the drop box menu.
   $scope.$watch 'cameleon.scenesList', (n,o) ->
-      ix = 0
-      found = false
-      for n in $scope.cameleon.scenesList
-        if n.id == $scope.cameleon.currentScene.id
-          found = true
-          break
-        else
-          ix++
-      if found
-        $scope.cameleon.currentScene = $scope.cameleon.scenesList[ix]
-
+      $scope.cameleon.currentScene = MenuUtils.UpdateMenu($scope.cameleon.scenesList, $scope.cameleon.currentScene.id)
 
   $scope.showNew = ()->
     $scope.showCreate = true

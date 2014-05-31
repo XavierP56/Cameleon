@@ -105,7 +105,7 @@
   app.factory('MenuUtils', function() {
     var menus;
     menus = {};
-    menus.UpdateMenu = function(list, what, entry) {
+    menus.UpdateMenu = function(list, what) {
       var found, ix, n, _i, _len;
       ix = 0;
       found = false;
@@ -900,25 +900,10 @@
     };
   };
 
-  this.SceneCtrl = function($scope, CameleonServer) {
+  this.SceneCtrl = function($scope, CameleonServer, MenuUtils) {
     $scope.showCreate = false;
     $scope.$watch('cameleon.scenesList', function(n, o) {
-      var found, ix, _i, _len, _ref;
-      ix = 0;
-      found = false;
-      _ref = $scope.cameleon.scenesList;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        n = _ref[_i];
-        if (n.id === $scope.cameleon.currentScene.id) {
-          found = true;
-          break;
-        } else {
-          ix++;
-        }
-      }
-      if (found) {
-        return $scope.cameleon.currentScene = $scope.cameleon.scenesList[ix];
-      }
+      return $scope.cameleon.currentScene = MenuUtils.UpdateMenu($scope.cameleon.scenesList, $scope.cameleon.currentScene.id);
     });
     $scope.showNew = function() {
       return $scope.showCreate = true;
