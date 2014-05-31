@@ -1,7 +1,11 @@
 In this page, we do add devices.
 <br/>
 <select ng-change="selected(cameleon.currentMachine)"" ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
-<button ng-add="addDevice()">Add new machine</button>
+<button ng-click="createDevice = true">Add new machine</button>
+    <div ng-show="createDevice == true">
+        <input ng-model="devName">
+        <button ng-click="addDevice()">Add !</button>
+    </div>
 <br/><br/>
 <div>
     Base channel:

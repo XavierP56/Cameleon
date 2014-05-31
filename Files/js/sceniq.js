@@ -832,20 +832,22 @@
       }
       return $scope.cameleon.fixtureList = list;
     });
-    CameleonServer.GetDevices().$promise.then(function(res) {
-      var k, list, v, _ref;
-      $scope.devices = res.devices;
-      list = [];
-      _ref = res.devices;
-      for (k in _ref) {
-        v = _ref[k];
-        list.push({
-          'id': k,
-          'v': v
-        });
-      }
-      return $scope.cameleon.machinesList = list;
-    });
+    $scope.getdevices = function() {
+      return CameleonServer.GetDevices().$promise.then(function(res) {
+        var k, list, v, _ref;
+        $scope.devices = res.devices;
+        list = [];
+        _ref = res.devices;
+        for (k in _ref) {
+          v = _ref[k];
+          list.push({
+            'id': k,
+            'v': v
+          });
+        }
+        return $scope.cameleon.machinesList = list;
+      });
+    };
     $scope.updateFixture = function(machine) {
       return machine.v.fixture = $scope.fixtureEntry.id;
     };
@@ -869,11 +871,22 @@
         return $scope.fixtureEntry = $scope.cameleon.fixtureList[ix];
       }
     };
-    return $scope.updateDevices = function() {
+    $scope.addDevice = function() {
+      $scope.devices[$scope.devName] = {
+        channel: '',
+        fixture: ''
+      };
+      $scope.createDevice = false;
+      return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
+        return $scope.getdevices();
+      });
+    };
+    $scope.updateDevices = function() {
       return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
         return alert('Update done !');
       });
     };
+    return $scope.getdevices();
   };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {

@@ -583,13 +583,13 @@ app.filter 'faderFilter', ->
       list.push {'id': k, 'v':v}
     $scope.cameleon.fixtureList = list
 
-  CameleonServer.GetDevices().$promise.then (res)->
-    $scope.devices = res.devices
-    list = []
-    for k,v of res.devices
-      list.push {'id': k, 'v':v}
-    $scope.cameleon.machinesList = list
-    #$scope.cameleon.currentMachine = $scope.cameleon.machinesList[0]
+  $scope.getdevices = ()->
+    CameleonServer.GetDevices().$promise.then (res)->
+      $scope.devices = res.devices
+      list = []
+      for k,v of res.devices
+        list.push {'id': k, 'v':v}
+      $scope.cameleon.machinesList = list
 
   $scope.updateFixture = (machine)->
     machine.v.fixture = $scope.fixtureEntry.id
@@ -608,9 +608,20 @@ app.filter 'faderFilter', ->
         $scope.fixtureEntry = {}
         $scope.fixtureEntry = $scope.cameleon.fixtureList[ix]
 
+  $scope.addDevice = ()->
+    $scope.devices[$scope.devName] =
+      channel : ''
+      fixture : ''
+    $scope.createDevice = false
+    CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
+      $scope.getdevices()
+
   $scope.updateDevices = () ->
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
       alert 'Update done !'
+
+  # Init
+  $scope.getdevices()
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->
