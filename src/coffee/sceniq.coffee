@@ -589,6 +589,14 @@ app.filter 'faderFilter', ->
   $scope.remove = (index, fixinfo)->
     fixinfo.splice(index,1)
 
+  $scope.addFixture = (name)->
+    $scope.fixtures[name] = {'defs' : {}, 'knobs': {}}
+
+    CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
+      $scope.getfixtures(()->
+        $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,name)
+      )
+
   $scope.addKey = (stuff,id)->
     obj = JSON.parse(stuff)
     $scope.fixtures[id].defs[obj.k] = ''
@@ -598,6 +606,7 @@ app.filter 'faderFilter', ->
       $scope.getfixtures(()->
         $scope.selected($scope.fixtureEntry)
         $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,id)
+        createFixture = false
       )
 
   $scope.addCustom = (stuff,id)->

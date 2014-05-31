@@ -2,6 +2,11 @@
     Here we define the fixtures.
     <br/>
     <select  ng-change="selected(fixtureEntry)" ng-model="fixtureEntry"  ng-options="c.id for c in cameleon.fixtureList"></select>
+    <button ng-click="createFixture = true;fixtureEntry = null;">Add new fixture</button>
+        <div ng-show="createFixture == true">
+            <input ng-model="fixName">
+            <button ng-click="addFixture(fixName)">Add !</button>
+        </div>
     <div ng-show="fixtureEntry != null">
         <div ng-repeat="f in fixtureInfo">
             {{f.k}} is <input ng-model="f.v"> <button ng-click="remove($index,fixtureInfo)">Remove</button>

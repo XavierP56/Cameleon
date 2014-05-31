@@ -818,6 +818,17 @@
     $scope.remove = function(index, fixinfo) {
       return fixinfo.splice(index, 1);
     };
+    $scope.addFixture = function(name) {
+      $scope.fixtures[name] = {
+        'defs': {},
+        'knobs': {}
+      };
+      return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
+        return $scope.getfixtures(function() {
+          return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name);
+        });
+      });
+    };
     $scope.addKey = function(stuff, id) {
       var obj;
       obj = JSON.parse(stuff);
@@ -829,8 +840,10 @@
       }
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
         return $scope.getfixtures(function() {
+          var createFixture;
           $scope.selected($scope.fixtureEntry);
-          return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, id);
+          $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, id);
+          return createFixture = false;
         });
       });
     };
