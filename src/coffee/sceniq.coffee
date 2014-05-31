@@ -585,6 +585,9 @@ app.filter 'faderFilter', ->
   $scope.remove = (index, fixinfo)->
     fixinfo.splice(index,1)
 
+  $scope.addKey = ()->
+    alert('Key !')
+
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer, MenuUtils) ->
   $scope.updateFixture = (machine)->

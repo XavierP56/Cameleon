@@ -5,7 +5,18 @@
     <div ng-show="fixtureEntry != null">
         <div ng-repeat="f in fixtureInfo">
             {{f.k}} is <input ng-model="f.v"> <button ng-click="remove($index,fixtureInfo)">Remove</button>
+        </div><br/>
+        <button ng-click="updateFixture(fixtureEntry.id, fixtureInfo)">Update !</button>
+
+        <div>
+            <select ng-model="stuff">
+                <option value="red">Red</option>
+                <option value="green">Green</option>
+                <option value="blue">Blue</option>
+                <option value="yellow">Dimmer</option>
+                <option value="">Strobe</option>
+            </select>
+            <button ng-click="addKey()">Add key</button>
         </div>
     </div>
-    <button ng-click="updateFixture(fixtureEntry.id, fixtureInfo)">Update !</button>
 </div>

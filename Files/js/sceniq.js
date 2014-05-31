@@ -815,8 +815,11 @@
       CameleonServer.UpdateFixtures($scope.fixtures);
       return alert('Updated !');
     };
-    return $scope.remove = function(index, fixinfo) {
+    $scope.remove = function(index, fixinfo) {
       return fixinfo.splice(index, 1);
+    };
+    return $scope.addKey = function() {
+      return alert('Key !');
     };
   };
 
