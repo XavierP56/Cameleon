@@ -166,7 +166,7 @@ Array::move = (old_index, new_index) ->
 # Directive
 
 # Display the various dynamic buttons.
-app.directive "widgets", ->
+app.directive "widgets", (MenuUtils) ->
   restrict: 'E'
   templateUrl: '/sceniq/templates/widgets.html'
   scope : true
@@ -187,17 +187,7 @@ app.directive "widgets", ->
     scope.getStartSound = (stuff, wrapper)->
       return if scope.edit == false
       if 'startSong' of stuff
-        ix = 0
-        found = false
-        for n in scope.cameleon.associatesoundslist
-          if n.id == stuff.startSong
-            found = true
-            break
-          else
-            ix++
-        if found
-          wrapper.entry = {}
-          wrapper.entry = scope.cameleon.associatesoundslist[ix]
+        wrapper.entry = MenuUtils.UpdateMenu(scope.cameleon.associatesoundslist,stuff.startSong)
 
     # Init
     scope.$watch attrs.things, (n,o)->

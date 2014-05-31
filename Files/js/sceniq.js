@@ -279,7 +279,7 @@
     return this.splice(new_index, 0, this.splice(old_index, 1)[0]);
   };
 
-  app.directive("widgets", function() {
+  app.directive("widgets", function(MenuUtils) {
     return {
       restrict: 'E',
       templateUrl: '/sceniq/templates/widgets.html',
@@ -306,27 +306,11 @@
           return stuff.startSong = wrapper.entry.id;
         };
         scope.getStartSound = function(stuff, wrapper) {
-          var found, ix, n, _i, _len, _ref;
           if (scope.edit === false) {
             return;
           }
           if ('startSong' in stuff) {
-            ix = 0;
-            found = false;
-            _ref = scope.cameleon.associatesoundslist;
-            for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-              n = _ref[_i];
-              if (n.id === stuff.startSong) {
-                found = true;
-                break;
-              } else {
-                ix++;
-              }
-            }
-            if (found) {
-              wrapper.entry = {};
-              return wrapper.entry = scope.cameleon.associatesoundslist[ix];
-            }
+            return wrapper.entry = MenuUtils.UpdateMenu(scope.cameleon.associatesoundslist, stuff.startSong);
           }
         };
         scope.$watch(attrs.things, function(n, o) {
