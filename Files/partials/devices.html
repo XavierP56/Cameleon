@@ -1,9 +1,12 @@
 In this page, we do add devices.
 <br/>
-<select ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
+<select ng-change="selected(cameleon.currentMachine)"" ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
 <button ng-add="addDevice()">Add new machine</button>
-<br/>
+<br/><br/>
 <div>
     Base channel:
         <input ng-model="cameleon.currentMachine.v.channel">
+    <br/><br/>
+    Fixture:
+        <select ng-change="updateFixture(cameleon.currentMachine)" ng-model="fixtureEntry"  ng-options="c.id for c in cameleon.fixtureList"></select>
 </div>

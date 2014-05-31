@@ -809,7 +809,18 @@
 
   this.DevicesCtrl = function($scope, CameleonServer) {
     CameleonServer.GetFixtures().$promise.then(function(res) {
-      return $scope.fixtures = res.fixtures;
+      var k, list, v, _ref;
+      $scope.fixtures = res.fixtures;
+      list = [];
+      _ref = res.fixtures;
+      for (k in _ref) {
+        v = _ref[k];
+        list.push({
+          'id': k,
+          'v': v
+        });
+      }
+      return $scope.cameleon.fixtureList = list;
     });
     CameleonServer.GetDevices().$promise.then(function(res) {
       var k, list, v, _ref;
@@ -823,10 +834,31 @@
           'v': v
         });
       }
-      $scope.cameleon.machinesList = list;
-      return $scope.cameleon.currentMachine = $scope.cameleon.machinesList[0];
+      return $scope.cameleon.machinesList = list;
     });
-    return $scope.deviceEdit = function(machine) {};
+    $scope.updateFixture = function(machine) {
+      return machine.v.fixture = $scope.fixtureEntry.id;
+    };
+    return $scope.selected = function(machine) {
+      var fixture, found, ix, n, _i, _len, _ref;
+      fixture = machine.v.fixture;
+      ix = 0;
+      found = false;
+      _ref = $scope.cameleon.fixtureList;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        n = _ref[_i];
+        if (n.id === fixture) {
+          found = true;
+          break;
+        } else {
+          ix++;
+        }
+      }
+      if (found) {
+        $scope.fixtureEntry = {};
+        return $scope.fixtureEntry = $scope.cameleon.fixtureList[ix];
+      }
+    };
   };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {
