@@ -793,7 +793,7 @@
     };
   };
 
-  this.FixturesCtrl = function($scope, CameleonServer) {
+  this.FixturesCtrl = function($scope, CameleonServer, MenuUtils) {
     $scope.selected = function(fixture) {
       var k, list;
       list = [];
@@ -826,7 +826,10 @@
         'fgColor': obj.v
       };
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
-        return $scope;
+        return $scope.getfixtures(function() {
+          $scope.selected($scope.fixtureEntry);
+          return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, id);
+        });
       });
     };
   };
@@ -857,7 +860,7 @@
   };
 
   this.DevFixCtrl = function($scope, CameleonServer) {
-    $scope.getfixtures = function() {
+    $scope.getfixtures = function(cb) {
       return CameleonServer.GetFixtures().$promise.then(function(res) {
         var k, list, v, _ref;
         $scope.fixtures = res.fixtures;
@@ -870,7 +873,8 @@
             'v': v
           });
         }
-        return $scope.cameleon.fixtureList = list;
+        $scope.cameleon.fixtureList = list;
+        return cb();
       });
     };
     $scope.getdevices = function() {
@@ -890,7 +894,7 @@
       });
     };
     $scope.getdevices();
-    return $scope.getfixtures();
+    return $scope.getfixtures(function() {});
   };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {

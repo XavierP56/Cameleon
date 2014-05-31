@@ -568,7 +568,7 @@ app.filter 'faderFilter', ->
         $scope.cameleon.picturesStuff = res.load.list
 
 # This controller defines the fixtures
-@FixturesCtrl = ($scope, CameleonServer)->
+@FixturesCtrl = ($scope, CameleonServer, MenuUtils)->
   $scope.selected = (fixture)->
     list = []
     for k of fixture.v.defs
@@ -590,7 +590,10 @@ app.filter 'faderFilter', ->
     $scope.fixtures[id].defs[obj.k] = ''
     $scope.fixtures[id].knobs[obj.k] = { 'fgColor' : obj.v}
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
-      $scope.getfixtures()
+      $scope.getfixtures(()->
+        $scope.selected($scope.fixtureEntry)
+        $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,id)
+      )
 
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer, MenuUtils) ->
@@ -615,13 +618,14 @@ app.filter 'faderFilter', ->
   $scope.fixtureEntry = {}
 
 @DevFixCtrl = ($scope, CameleonServer) ->
-  $scope.getfixtures = ()->
+  $scope.getfixtures = (cb)->
     CameleonServer.GetFixtures().$promise.then (res)->
       $scope.fixtures = res.fixtures
       list = []
       for k,v of res.fixtures
         list.push {'id': k, 'v':v}
       $scope.cameleon.fixtureList = list
+      cb()
 
   $scope.getdevices = ()->
     CameleonServer.GetDevices().$promise.then (res)->
@@ -633,7 +637,7 @@ app.filter 'faderFilter', ->
 
   # Init
   $scope.getdevices()
-  $scope.getfixtures()
+  $scope.getfixtures(()->)
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->
