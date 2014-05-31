@@ -818,8 +818,9 @@
     $scope.remove = function(index, fixinfo) {
       return fixinfo.splice(index, 1);
     };
-    return $scope.addKey = function() {
-      return alert('Key !');
+    return $scope.addKey = function(stuff) {
+      var obj;
+      return obj = JSON.parse(stuff);
     };
   };
 

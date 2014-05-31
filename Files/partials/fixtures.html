@@ -10,13 +10,13 @@
 
         <div>
             <select ng-model="stuff">
-                <option value="red">Red</option>
-                <option value="green">Green</option>
-                <option value="blue">Blue</option>
-                <option value="yellow">Dimmer</option>
-                <option value="">Strobe</option>
+                <option value='{"v":"red","k":"Red"}'>Red</option>
+                <option value='{"v":"green","k":"Green"}'>Green</option>
+                <option value='{"v":"blue","k":"Blue"}'>Blue</option>
+                <option value='{"v":"yellow","k":"Dimmer"}'>Dimmer</option>
+                <option value='{"v":"orange","k":"Strobe"}'>Strobe</option>
             </select>
-            <button ng-click="addKey()">Add key</button>
+            <button ng-click="addKey(stuff)">Add key</button>
         </div>
     </div>
 </div>
