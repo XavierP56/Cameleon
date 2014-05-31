@@ -102,6 +102,31 @@
     return mngr;
   });
 
+  app.factory('MenuUtils', function() {
+    var menus;
+    menus = {};
+    menus.UpdateMenu = function(list, what, entry) {
+      var found, ix, n, _i, _len;
+      ix = 0;
+      found = false;
+      for (_i = 0, _len = list.length; _i < _len; _i++) {
+        n = list[_i];
+        if (n.id === what) {
+          found = true;
+          break;
+        } else {
+          ix++;
+        }
+      }
+      if (found) {
+        return list[ix];
+      } else {
+        return null;
+      }
+    };
+    return menus;
+  });
+
   app.factory('CameleonServer', function($resource) {
     var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices;
     datas = {};
@@ -775,7 +800,7 @@
 
   this.FixturesCtrl = function($scope, CameleonServer) {};
 
-  this.DevicesCtrl = function($scope, CameleonServer) {
+  this.DevicesCtrl = function($scope, CameleonServer, MenuUtils) {
     CameleonServer.GetFixtures().$promise.then(function(res) {
       var k, list, v, _ref;
       $scope.fixtures = res.fixtures;
@@ -810,25 +835,7 @@
       return machine.v.fixture = $scope.fixtureEntry.id;
     };
     $scope.selected = function(machine) {
-      var fixture, found, ix, n, _i, _len, _ref;
-      fixture = machine.v.fixture;
-      ix = 0;
-      found = false;
-      _ref = $scope.cameleon.fixtureList;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        n = _ref[_i];
-        if (n.id === fixture) {
-          found = true;
-          break;
-        } else {
-          ix++;
-        }
-      }
-      if (found) {
-        return $scope.fixtureEntry = $scope.cameleon.fixtureList[ix];
-      } else {
-        return $scope.fixtureEntry = null;
-      }
+      return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, machine.v.fixture);
     };
     $scope.addDevice = function() {
       $scope.devices[$scope.devName] = {
@@ -845,7 +852,8 @@
         return alert('Update done !');
       });
     };
-    return $scope.getdevices();
+    $scope.getdevices();
+    return $scope.fixtureEntry = {};
   };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {

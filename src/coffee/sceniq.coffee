@@ -73,6 +73,26 @@ app.factory 'sessionMngr', () ->
   return mngr
 
 
+app.factory 'MenuUtils', ()->
+  menus = {}
+
+  menus.UpdateMenu =(list, what, entry)->
+      ix = 0
+      found = false
+      for n in list
+        if n.id == what
+          found = true
+          break
+        else
+          ix++
+      if found
+        list[ix]
+      else
+        null
+
+
+  return menus
+
 # Let's centralize all the communication to the server.
 app.factory 'CameleonServer', ($resource) ->
   datas = {}
@@ -557,7 +577,7 @@ app.filter 'faderFilter', ->
 @FixturesCtrl = ($scope, CameleonServer)->
 
 # This controller creates new devices.
-@DevicesCtrl = ($scope, CameleonServer) ->
+@DevicesCtrl = ($scope, CameleonServer, MenuUtils) ->
 
   CameleonServer.GetFixtures().$promise.then (res)->
     $scope.fixtures = res.fixtures
@@ -578,19 +598,7 @@ app.filter 'faderFilter', ->
     machine.v.fixture = $scope.fixtureEntry.id
 
   $scope.selected = (machine)->
-      fixture = machine.v.fixture
-      ix = 0
-      found = false
-      for n in $scope.cameleon.fixtureList
-        if n.id == fixture
-          found = true
-          break
-        else
-          ix++
-      if found
-        $scope.fixtureEntry = $scope.cameleon.fixtureList[ix]
-      else
-        $scope.fixtureEntry = null
+    $scope.fixtureEntry =MenuUtils.UpdateMenu($scope.cameleon.fixtureList, machine.v.fixture)
 
   $scope.addDevice = ()->
     $scope.devices[$scope.devName] =
@@ -606,6 +614,7 @@ app.filter 'faderFilter', ->
 
   # Init
   $scope.getdevices()
+  $scope.fixtureEntry = {}
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->
