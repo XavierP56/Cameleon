@@ -22,6 +22,11 @@ app.config ($stateProvider) ->
     templateUrl: "/sceniq/cameleon.html"
     controller: CameleonCtrl
 
+  camdevices =
+    url : '/Devices'
+    templateUrl: 'partials/devices.html'
+    controller : DevicesCtrl
+
   cammachines =
     url: '/machines'
     templateUrl: 'partials/machines.html'
@@ -64,6 +69,7 @@ app.config ($stateProvider) ->
   $stateProvider.state('drooms', drooms)
   # Declare the cameleon
   $stateProvider.state('cameleon', cameleon)
+  $stateProvider.state('cameleon.devices', camdevices)
   $stateProvider.state('cameleon.machines', cammachines)
   $stateProvider.state('cameleon.associate', camscenes)
   $stateProvider.state('cameleon.pictures', campictures)
@@ -99,6 +105,7 @@ app.factory 'CameleonServer', ($resource) ->
   _LoadPicture = $resource('/cameleon/loadpicture/:picture')
   _GetSoundList =  $resource('/cameleon/getsoundlist/:empty')
   _DmxScene = $resource('/cameleon/dmxscene', {}, {set: {method: 'POST'}})
+  _GetDevices = $resource('/cameleon/getdevices')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -134,6 +141,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _GetSoundList.get {empty : empty}
   datas.DmxScene = (scene,opts)->
     return _DmxScene.set {scene:scene, opts:opts}
+  datas.GetDevices = ()->
+    return _GetDevices.get {}
   return datas
 
 
@@ -554,6 +563,19 @@ app.filter 'faderFilter', ->
   $scope.load = ()->
       CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
         $scope.cameleon.picturesStuff = res.load.list
+
+# This controller creates new devices.
+@DevicesCtrl = ($scope, CameleonServer) ->
+  CameleonServer.GetDevices().$promise.then (res)->
+    $scope.devices = res.devices
+    list = []
+    for k,v of res.devices
+      list.push {'id': k, 'v':v}
+    $scope.cameleon.machinesList = list
+    $scope.cameleon.currentMachine = $scope.cameleon.machinesList[0]
+
+  $scope.deviceEdit = (machine)->
+
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->

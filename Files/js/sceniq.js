@@ -5,7 +5,7 @@
   app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
 
   app.config(function($stateProvider) {
-    var cameleon, cammachines, campictures, camscenes, config, drooms, faders, room1, room2, room3, room4, room5, room6, room7, room8;
+    var camdevices, cameleon, cammachines, campictures, camscenes, config, drooms, faders, room1, room2, room3, room4, room5, room6, room7, room8;
     room1 = {
       url: "/Room1",
       templateUrl: "/profiles/room1.html",
@@ -66,6 +66,11 @@
       templateUrl: "/sceniq/cameleon.html",
       controller: CameleonCtrl
     };
+    camdevices = {
+      url: '/Devices',
+      templateUrl: 'partials/devices.html',
+      controller: DevicesCtrl
+    };
     cammachines = {
       url: '/machines',
       templateUrl: 'partials/machines.html',
@@ -115,6 +120,7 @@
     $stateProvider.state('faders', faders);
     $stateProvider.state('drooms', drooms);
     $stateProvider.state('cameleon', cameleon);
+    $stateProvider.state('cameleon.devices', camdevices);
     $stateProvider.state('cameleon.machines', cammachines);
     $stateProvider.state('cameleon.associate', camscenes);
     return $stateProvider.state('cameleon.pictures', campictures);
@@ -136,7 +142,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -175,6 +181,7 @@
         method: 'POST'
       }
     });
+    _GetDevices = $resource('/cameleon/getdevices');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -261,6 +268,9 @@
         scene: scene,
         opts: opts
       });
+    };
+    datas.GetDevices = function() {
+      return _GetDevices.get({});
     };
     return datas;
   });
@@ -788,6 +798,25 @@
         return $scope.cameleon.picturesStuff = res.load.list;
       });
     };
+  };
+
+  this.DevicesCtrl = function($scope, CameleonServer) {
+    CameleonServer.GetDevices().$promise.then(function(res) {
+      var k, list, v, _ref;
+      $scope.devices = res.devices;
+      list = [];
+      _ref = res.devices;
+      for (k in _ref) {
+        v = _ref[k];
+        list.push({
+          'id': k,
+          'v': v
+        });
+      }
+      $scope.cameleon.machinesList = list;
+      return $scope.cameleon.currentMachine = $scope.cameleon.machinesList[0];
+    });
+    return $scope.deviceEdit = function(machine) {};
   };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {

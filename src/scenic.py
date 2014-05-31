@@ -205,6 +205,10 @@ def cameleon_getsoundlist(empty):
 def cameleon_dmxscene():
     return scenes.dmxscene(request)
 
+@app.route('/cameleon/getdevices')
+def cameleon_getdevices():
+    return { 'devices' : models.dmx_devices}
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
