@@ -5,7 +5,7 @@
   app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
 
   app.config(function($stateProvider) {
-    var camdevices, cameleon, campictures, camscenes, config, drooms, faders;
+    var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, config, drooms, faders;
     config = {
       url: "/Config",
       templateUrl: "/sceniq/config.html",
@@ -26,22 +26,19 @@
       templateUrl: "/sceniq/cameleon.html",
       controller: CameleonCtrl
     };
+    camsettings = {
+      url: '/Settings',
+      templateUrl: 'partials/devs.html'
+    };
+    camfixtures = {
+      url: '/Fixtures',
+      templateUrl: 'partials/fixtures.html',
+      controller: FixturesCtrl
+    };
     camdevices = {
       url: '/Devices',
-      views: {
-        '': {
-          templateUrl: 'partials/devs.html',
-          controller: DevFixCtrl
-        },
-        'fixtures@cameleon.devices': {
-          templateUrl: 'partials/fixtures.html',
-          controller: FixturesCtrl
-        },
-        'machines@cameleon.devices': {
-          templateUrl: 'partials/devices.html',
-          controller: DevicesCtrl
-        }
-      }
+      templateUrl: 'partials/devices.html',
+      controller: DevicesCtrl
     };
     camscenes = {
       'url': '/cam-associate',
@@ -83,7 +80,9 @@
     $stateProvider.state('faders', faders);
     $stateProvider.state('drooms', drooms);
     $stateProvider.state('cameleon', cameleon);
-    $stateProvider.state('cameleon.devices', camdevices);
+    $stateProvider.state('cameleon.settings', camsettings);
+    $stateProvider.state('cameleon.settings.fixtures', camfixtures);
+    $stateProvider.state('cameleon.settings.devices', camdevices);
     $stateProvider.state('cameleon.associate', camscenes);
     return $stateProvider.state('cameleon.pictures', campictures);
   });
