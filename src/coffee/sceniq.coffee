@@ -37,6 +37,9 @@ app.config ($stateProvider) ->
     views:
       '' :
         templateUrl : 'partials/asso.html'
+      'machines@cameleon.associate':
+        templateUrl: 'partials/machines.html'
+        controller : CamMachinesCtrl
       'assettings@cameleon.associate':
         templateUrl : 'partials/associate.html'
         controller : CamAssociateCtrl
@@ -70,7 +73,7 @@ app.config ($stateProvider) ->
   # Declare the cameleon
   $stateProvider.state('cameleon', cameleon)
   $stateProvider.state('cameleon.devices', camdevices)
-  $stateProvider.state('cameleon.machines', cammachines)
+  #$stateProvider.state('cameleon.machines', cammachines)
   $stateProvider.state('cameleon.associate', camscenes)
   $stateProvider.state('cameleon.pictures', campictures)
 

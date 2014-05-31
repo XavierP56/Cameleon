@@ -82,6 +82,10 @@
         '': {
           templateUrl: 'partials/asso.html'
         },
+        'machines@cameleon.associate': {
+          templateUrl: 'partials/machines.html',
+          controller: CamMachinesCtrl
+        },
         'assettings@cameleon.associate': {
           templateUrl: 'partials/associate.html',
           controller: CamAssociateCtrl
@@ -121,7 +125,6 @@
     $stateProvider.state('drooms', drooms);
     $stateProvider.state('cameleon', cameleon);
     $stateProvider.state('cameleon.devices', camdevices);
-    $stateProvider.state('cameleon.machines', cammachines);
     $stateProvider.state('cameleon.associate', camscenes);
     return $stateProvider.state('cameleon.pictures', campictures);
   });
