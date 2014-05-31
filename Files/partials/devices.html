@@ -1,18 +1,20 @@
-In this page, we do add devices.
-<br/>
-<select ng-change="selected(cameleon.currentMachine)" ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
-<button ng-click="createDevice = true;cameleon.currentMachine = null;">Add new machine</button>
-    <div ng-show="createDevice == true">
-        <input ng-model="devName">
-        <button ng-click="addDevice()">Add !</button>
-    </div>
-<br/><br/>
-<div ng-show="cameleon.currentMachine != null">
-    Base channel:
-        <input ng-model="cameleon.currentMachine.v.channel">
-    <br/><br/>
-    Fixture:
-        <select ng-change="updateFixture(cameleon.currentMachine)" ng-model="fixtureEntry"  ng-options="c.id for c in cameleon.fixtureList"></select>
+<div style="text-align: center;">
+    <b>Define the machines</b>
     <br/>
-    <button ng-click="updateDevices()">Update</button>
+    <select ng-change="selected(cameleon.currentMachine)" ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
+    <button ng-click="createDevice = true;cameleon.currentMachine = null;">Add new machine</button>
+        <div ng-show="createDevice == true">
+            <input ng-model="devName">
+            <button ng-click="addDevice()">Add !</button>
+        </div>
+    <br/><br/>
+    <div ng-show="cameleon.currentMachine != null">
+        Base channel:
+            <input ng-model="cameleon.currentMachine.v.channel">
+        <br/><br/>
+        Fixture:
+            <select ng-change="updateFixture(cameleon.currentMachine)" ng-model="fixtureEntry"  ng-options="c.id for c in cameleon.fixtureList"></select>
+        <br/>
+        <button ng-click="updateDevices()">Update</button>
+    </div>
 </div>

@@ -811,20 +811,22 @@
   };
 
   this.DevFixCtrl = function($scope, CameleonServer) {
-    CameleonServer.GetFixtures().$promise.then(function(res) {
-      var k, list, v, _ref;
-      $scope.fixtures = res.fixtures;
-      list = [];
-      _ref = res.fixtures;
-      for (k in _ref) {
-        v = _ref[k];
-        list.push({
-          'id': k,
-          'v': v
-        });
-      }
-      return $scope.cameleon.fixtureList = list;
-    });
+    $scope.getfixtures = function() {
+      return CameleonServer.GetFixtures().$promise.then(function(res) {
+        var k, list, v, _ref;
+        $scope.fixtures = res.fixtures;
+        list = [];
+        _ref = res.fixtures;
+        for (k in _ref) {
+          v = _ref[k];
+          list.push({
+            'id': k,
+            'v': v
+          });
+        }
+        return $scope.cameleon.fixtureList = list;
+      });
+    };
     $scope.getdevices = function() {
       return CameleonServer.GetDevices().$promise.then(function(res) {
         var k, list, v, _ref;
@@ -841,7 +843,8 @@
         return $scope.cameleon.machinesList = list;
       });
     };
-    return $scope.getdevices();
+    $scope.getdevices();
+    return $scope.getfixtures();
   };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {
@@ -1003,6 +1006,9 @@
 
   this.PicturesMngrCtrl = function($scope, CameleonServer, MenuUtils) {
     $scope.$watch('cameleon.picturesList', function(n, o) {
+      if ($scope.cameleon.currentPicture === null) {
+        return;
+      }
       return $scope.cameleon.currentPicture = MenuUtils.UpdateMenu($scope.cameleon.picturesList, $scope.cameleon.currentPicture.id);
     });
     $scope.showNew = function() {

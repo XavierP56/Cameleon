@@ -590,13 +590,13 @@ app.filter 'faderFilter', ->
   $scope.fixtureEntry = {}
 
 @DevFixCtrl = ($scope, CameleonServer) ->
-
-  CameleonServer.GetFixtures().$promise.then (res)->
-    $scope.fixtures = res.fixtures
-    list = []
-    for k,v of res.fixtures
-      list.push {'id': k, 'v':v}
-    $scope.cameleon.fixtureList = list
+  $scope.getfixtures = ()->
+    CameleonServer.GetFixtures().$promise.then (res)->
+      $scope.fixtures = res.fixtures
+      list = []
+      for k,v of res.fixtures
+        list.push {'id': k, 'v':v}
+      $scope.cameleon.fixtureList = list
 
   $scope.getdevices = ()->
     CameleonServer.GetDevices().$promise.then (res)->
@@ -608,6 +608,7 @@ app.filter 'faderFilter', ->
 
   # Init
   $scope.getdevices()
+  $scope.getfixtures()
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->
@@ -732,6 +733,7 @@ app.filter 'faderFilter', ->
 
     # As soon as the scope.settings changes, update the drop box menu.
   $scope.$watch 'cameleon.picturesList', (n,o) ->
+      return if $scope.cameleon.currentPicture == null
       $scope.cameleon.currentPicture = MenuUtils.UpdateMenu($scope.cameleon.picturesList, $scope.cameleon.currentPicture.id)
 
   $scope.showNew = ()->
