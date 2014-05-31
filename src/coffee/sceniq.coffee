@@ -725,20 +725,11 @@ app.filter 'faderFilter', ->
     $scope.cameleon.picturesStuff.splice(index,1)
 
 # This controller handles the picture (Tableaux) creations.
-@PicturesMngrCtrl = ($scope, CameleonServer)->
+@PicturesMngrCtrl = ($scope, CameleonServer, MenuUtils)->
 
     # As soon as the scope.settings changes, update the drop box menu.
   $scope.$watch 'cameleon.picturesList', (n,o) ->
-      ix = 0
-      found = false
-      for n in $scope.cameleon.picturesList
-        if n.id == $scope.cameleon.currentPicture.id
-          found = true
-          break
-        else
-          ix++
-      if found
-        $scope.cameleon.currentPicture = $scope.cameleon.picturesList[ix]
+      $scope.cameleon.currentPicture = MenuUtils.UpdateMenu($scope.cameleon.picturesList, $scope.cameleon.currentPicture.id)
 
   $scope.showNew = ()->
     $scope.showCreate = true
