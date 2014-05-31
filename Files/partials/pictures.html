@@ -1,14 +1,16 @@
-<div>
+<div style="text-align: center;">
     Here, we define the pictures.
     <br/>
     <div>
-        Scenes (Projectors) <br/>
+        <b>Scenes</b>
+        <br/>
         <select ng-change="load()"  ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
         <button ng-click="addScene()">Add</button>
         <button ng-click="removeScene()">Remove</button>
     </div>
     <div>
-        Sounds <br/>
+        <b>Sounds</b>
+        <br/>
         <select  ng-model="cameleon.currentSound" ng-options="c.name for c in cameleon.soundslist"></select>
         <button ng-click="addSound()">Add</button>
         <button ng-click="removeSound()">Remove</button>
