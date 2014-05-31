@@ -566,6 +566,11 @@ app.filter 'faderFilter', ->
 
 # This controller defines the fixtures
 @FixturesCtrl = ($scope, CameleonServer)->
+  $scope.selected = (fixture)->
+    list = []
+    for k of fixture.v.defs
+      list.push({'k': k, 'v': fixture.v.defs[k]})
+    $scope.fixtureInfo = list
 
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer, MenuUtils) ->

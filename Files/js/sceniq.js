@@ -783,7 +783,19 @@
     };
   };
 
-  this.FixturesCtrl = function($scope, CameleonServer) {};
+  this.FixturesCtrl = function($scope, CameleonServer) {
+    return $scope.selected = function(fixture) {
+      var k, list;
+      list = [];
+      for (k in fixture.v.defs) {
+        list.push({
+          'k': k,
+          'v': fixture.v.defs[k]
+        });
+      }
+      return $scope.fixtureInfo = list;
+    };
+  };
 
   this.DevicesCtrl = function($scope, CameleonServer, MenuUtils) {
     $scope.updateFixture = function(machine) {
