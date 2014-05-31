@@ -5,47 +5,7 @@
   app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
 
   app.config(function($stateProvider) {
-    var camdevices, cameleon, cammachines, campictures, camscenes, config, drooms, faders, room1, room2, room3, room4, room5, room6, room7, room8;
-    room1 = {
-      url: "/Room1",
-      templateUrl: "/profiles/room1.html",
-      controller: RoomCtrl
-    };
-    room2 = {
-      url: "/Room2",
-      templateUrl: "/profiles/room2.html",
-      controller: RoomCtrl
-    };
-    room3 = {
-      url: "/Room3",
-      templateUrl: "/profiles/room3.html",
-      controller: RoomCtrl
-    };
-    room4 = {
-      url: "/Room4",
-      templateUrl: "/profiles/room4.html",
-      controller: RoomCtrl
-    };
-    room5 = {
-      url: "/Room5",
-      templateUrl: "/profiles/room5.html",
-      controller: RoomCtrl
-    };
-    room6 = {
-      url: "/Room6",
-      templateUrl: "/profiles/room6.html",
-      controller: RoomCtrl
-    };
-    room7 = {
-      url: "/Room7",
-      templateUrl: "/profiles/room7.html",
-      controller: RoomCtrl
-    };
-    room8 = {
-      url: "/Room8",
-      templateUrl: "/profiles/room8.html",
-      controller: RoomCtrl
-    };
+    var camdevices, cameleon, cammachines, campictures, camscenes, config, drooms, faders;
     config = {
       url: "/Config",
       templateUrl: "/sceniq/config.html",
@@ -112,14 +72,6 @@
         }
       }
     };
-    $stateProvider.state('room1', room1);
-    $stateProvider.state('room2', room2);
-    $stateProvider.state('room3', room3);
-    $stateProvider.state('room4', room4);
-    $stateProvider.state('room5', room5);
-    $stateProvider.state('room6', room6);
-    $stateProvider.state('room7', room7);
-    $stateProvider.state('room8', room8);
     $stateProvider.state('config', config);
     $stateProvider.state('faders', faders);
     $stateProvider.state('drooms', drooms);
@@ -732,8 +684,6 @@
       }
     };
   });
-
-  this.RoomCtrl = function($scope, $http, $q, $resource) {};
 
   this.ConfigCtrl = function($scope, $http, $q, $resource) {
     var Query, Save, Update;
