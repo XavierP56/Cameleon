@@ -588,7 +588,16 @@ app.filter 'faderFilter', ->
   $scope.addKey = (stuff,id)->
     obj = JSON.parse(stuff)
     $scope.fixtures[id].defs[obj.k] = ''
-    $scope.fixtures[id].knobs[obj.k] = { 'fgColor' : obj.v}
+    if obj.v != ''
+      $scope.fixtures[id].knobs[obj.k] = { 'fgColor' : obj.v}
+    CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
+      $scope.getfixtures(()->
+        $scope.selected($scope.fixtureEntry)
+        $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,id)
+      )
+
+  $scope.addCustom = (stuff,id)->
+    $scope.fixtures[id].defs[stuff] = ''
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
       $scope.getfixtures(()->
         $scope.selected($scope.fixtureEntry)

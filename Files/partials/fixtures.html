@@ -17,6 +17,9 @@
             </select>
             <button ng-click="addKey(stuff,fixtureEntry.id)">Add key</button>
             <br/>
+            <input ng-model="custom">
+            <button ng-click="addCustom(custom, fixtureEntry.id)">Add custom key</button>
+            <br/><br/>
             <button ng-click="updateFixture(fixtureEntry.id, fixtureInfo)">Update !</button>
 
         </div>

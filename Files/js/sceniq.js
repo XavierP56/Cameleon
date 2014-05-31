@@ -818,13 +818,24 @@
     $scope.remove = function(index, fixinfo) {
       return fixinfo.splice(index, 1);
     };
-    return $scope.addKey = function(stuff, id) {
+    $scope.addKey = function(stuff, id) {
       var obj;
       obj = JSON.parse(stuff);
       $scope.fixtures[id].defs[obj.k] = '';
-      $scope.fixtures[id].knobs[obj.k] = {
-        'fgColor': obj.v
-      };
+      if (obj.v !== '') {
+        $scope.fixtures[id].knobs[obj.k] = {
+          'fgColor': obj.v
+        };
+      }
+      return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
+        return $scope.getfixtures(function() {
+          $scope.selected($scope.fixtureEntry);
+          return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, id);
+        });
+      });
+    };
+    return $scope.addCustom = function(stuff, id) {
+      $scope.fixtures[id].defs[stuff] = '';
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
         return $scope.getfixtures(function() {
           $scope.selected($scope.fixtureEntry);
