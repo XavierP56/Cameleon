@@ -5,7 +5,7 @@
   app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
 
   app.config(function($stateProvider) {
-    var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, config, drooms, faders;
+    var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, camsounds, config, drooms, faders;
     config = {
       url: "/Config",
       templateUrl: "/sceniq/config.html",
@@ -40,6 +40,11 @@
       url: '/Devices',
       templateUrl: 'partials/devices.html',
       controller: DevicesCtrl
+    };
+    camsounds = {
+      url: '/Sounds',
+      templateUrl: 'partials/sounds.html',
+      controller: SoundsCtrl
     };
     camscenes = {
       'url': '/cam-associate',
@@ -84,6 +89,7 @@
     $stateProvider.state('cameleon.settings', camsettings);
     $stateProvider.state('cameleon.settings.fixtures', camfixtures);
     $stateProvider.state('cameleon.settings.devices', camdevices);
+    $stateProvider.state('cameleon.settings.sounds', camsounds);
     $stateProvider.state('cameleon.associate', camscenes);
     return $stateProvider.state('cameleon.pictures', campictures);
   });
@@ -921,6 +927,8 @@
     $scope.getdevices();
     return $scope.getfixtures(function() {});
   };
+
+  this.SoundsCtrl = function($scope, CameleonServer) {};
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {
     $scope.findMachine = function(id) {

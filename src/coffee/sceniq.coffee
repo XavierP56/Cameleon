@@ -29,6 +29,11 @@ app.config ($stateProvider) ->
     templateUrl: 'partials/devices.html'
     controller : DevicesCtrl
 
+  camsounds =
+    url : '/Sounds'
+    templateUrl: 'partials/sounds.html'
+    controller : SoundsCtrl
+
   camscenes =
     'url' : '/cam-associate'
     views:
@@ -64,6 +69,7 @@ app.config ($stateProvider) ->
   $stateProvider.state('cameleon.settings', camsettings)
   $stateProvider.state('cameleon.settings.fixtures', camfixtures)
   $stateProvider.state('cameleon.settings.devices', camdevices)
+  $stateProvider.state('cameleon.settings.sounds', camsounds)
   $stateProvider.state('cameleon.associate', camscenes)
   $stateProvider.state('cameleon.pictures', campictures)
 
@@ -661,6 +667,9 @@ app.filter 'faderFilter', ->
   # Init
   $scope.getdevices()
   $scope.getfixtures(()->)
+
+# This controller adds sounds
+@SoundsCtrl = ($scope, CameleonServer) ->
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->
