@@ -17,6 +17,7 @@ app.config ($stateProvider) ->
   camsettings =
     url : '/Settings'
     templateUrl: 'partials/devs.html'
+    controller: DevFixCtrl
 
   camfixtures =
     url : '/Fixtures'
