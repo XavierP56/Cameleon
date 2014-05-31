@@ -16,13 +16,15 @@ app.config ($stateProvider) ->
 
   camdevices =
     url : '/Devices'
-    templateUrl: 'partials/devices.html'
-    controller : DevicesCtrl
-
-  cammachines =
-    url: '/machines'
-    templateUrl: 'partials/machines.html'
-    controller : CamMachinesCtrl
+    views:
+      '':
+        templateUrl: 'partials/devs.html'
+      'fixtures@cameleon.devices':
+        templateUrl: 'partials/fixtures.html'
+        controller: FixturesCtrl
+      'machines@cameleon.devices':
+        templateUrl: 'partials/devices.html'
+        controller : DevicesCtrl
 
   camscenes =
     'url' : '/cam-associate'
@@ -57,7 +59,6 @@ app.config ($stateProvider) ->
   # Declare the cameleon
   $stateProvider.state('cameleon', cameleon)
   $stateProvider.state('cameleon.devices', camdevices)
-  #$stateProvider.state('cameleon.machines', cammachines)
   $stateProvider.state('cameleon.associate', camscenes)
   $stateProvider.state('cameleon.pictures', campictures)
 
@@ -552,6 +553,9 @@ app.filter 'faderFilter', ->
       CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
         $scope.cameleon.picturesStuff = res.load.list
 
+# This controller defines the fixtures
+@FixturesCtrl = ($scope, CameleonServer)->
+
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer) ->
 
@@ -584,8 +588,9 @@ app.filter 'faderFilter', ->
         else
           ix++
       if found
-        $scope.fixtureEntry = {}
         $scope.fixtureEntry = $scope.cameleon.fixtureList[ix]
+      else
+        $scope.fixtureEntry = null
 
   $scope.addDevice = ()->
     $scope.devices[$scope.devName] =

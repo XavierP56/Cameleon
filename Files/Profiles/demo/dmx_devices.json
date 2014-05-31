@@ -21,5 +21,25 @@
     "Pj3": {
         "channel": "64", 
         "fixture": "Ibiza"
+    }, 
+    "Pj4": {
+        "channel": "32", 
+        "fixture": "LedParZoom"
+    }, 
+    "Pj5": {
+        "channel": "11", 
+        "fixture": "Ibiza"
+    }, 
+    "Pj6": {
+        "channel": "", 
+        "fixture": ""
+    }, 
+    "Pj7": {
+        "channel": "27", 
+        "fixture": "Ibiza"
+    }, 
+    "Pj8": {
+        "channel": "44", 
+        "fixture": ""
     }
 }

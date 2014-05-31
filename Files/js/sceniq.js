@@ -5,7 +5,7 @@
   app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
 
   app.config(function($stateProvider) {
-    var camdevices, cameleon, cammachines, campictures, camscenes, config, drooms, faders;
+    var camdevices, cameleon, campictures, camscenes, config, drooms, faders;
     config = {
       url: "/Config",
       templateUrl: "/sceniq/config.html",
@@ -28,13 +28,19 @@
     };
     camdevices = {
       url: '/Devices',
-      templateUrl: 'partials/devices.html',
-      controller: DevicesCtrl
-    };
-    cammachines = {
-      url: '/machines',
-      templateUrl: 'partials/machines.html',
-      controller: CamMachinesCtrl
+      views: {
+        '': {
+          templateUrl: 'partials/devs.html'
+        },
+        'fixtures@cameleon.devices': {
+          templateUrl: 'partials/fixtures.html',
+          controller: FixturesCtrl
+        },
+        'machines@cameleon.devices': {
+          templateUrl: 'partials/devices.html',
+          controller: DevicesCtrl
+        }
+      }
     };
     camscenes = {
       'url': '/cam-associate',
@@ -767,6 +773,8 @@
     };
   };
 
+  this.FixturesCtrl = function($scope, CameleonServer) {};
+
   this.DevicesCtrl = function($scope, CameleonServer) {
     CameleonServer.GetFixtures().$promise.then(function(res) {
       var k, list, v, _ref;
@@ -817,8 +825,9 @@
         }
       }
       if (found) {
-        $scope.fixtureEntry = {};
         return $scope.fixtureEntry = $scope.cameleon.fixtureList[ix];
+      } else {
+        return $scope.fixtureEntry = null;
       }
     };
     $scope.addDevice = function() {
