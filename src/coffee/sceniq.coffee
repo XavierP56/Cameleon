@@ -594,6 +594,7 @@ app.filter 'faderFilter', ->
 
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
       $scope.getfixtures(()->
+        $scope.fixtureInfo = null
         $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,name)
       )
 

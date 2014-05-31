@@ -825,6 +825,7 @@
       };
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
         return $scope.getfixtures(function() {
+          $scope.fixtureInfo = null;
           return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name);
         });
       });
