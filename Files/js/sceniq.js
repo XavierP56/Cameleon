@@ -145,7 +145,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -186,6 +186,11 @@
     });
     _GetDevices = $resource('/cameleon/getdevices');
     _GetFixtures = $resource('/cameleon/getfixtures');
+    _UpdateDevices = $resource('/cameleon/updatedevices', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -278,6 +283,11 @@
     };
     datas.GetFixtures = function() {
       return _GetFixtures.get({});
+    };
+    datas.UpdateDevices = function(devices) {
+      return _UpdateDevices.set({
+        devices: devices
+      });
     };
     return datas;
   });
@@ -839,7 +849,7 @@
     $scope.updateFixture = function(machine) {
       return machine.v.fixture = $scope.fixtureEntry.id;
     };
-    return $scope.selected = function(machine) {
+    $scope.selected = function(machine) {
       var fixture, found, ix, n, _i, _len, _ref;
       fixture = machine.v.fixture;
       ix = 0;
@@ -858,6 +868,11 @@
         $scope.fixtureEntry = {};
         return $scope.fixtureEntry = $scope.cameleon.fixtureList[ix];
       }
+    };
+    return $scope.updateDevices = function() {
+      return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
+        return alert('Update done !');
+      });
     };
   };
 

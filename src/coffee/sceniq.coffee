@@ -110,6 +110,7 @@ app.factory 'CameleonServer', ($resource) ->
   _DmxScene = $resource('/cameleon/dmxscene', {}, {set: {method: 'POST'}})
   _GetDevices = $resource('/cameleon/getdevices')
   _GetFixtures = $resource('/cameleon/getfixtures')
+  _UpdateDevices = $resource('/cameleon/updatedevices', {}, {set: {method: 'POST'}})
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -149,6 +150,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _GetDevices.get {}
   datas.GetFixtures = ()->
     return _GetFixtures.get {}
+  datas.UpdateDevices = (devices) ->
+    return _UpdateDevices.set {devices: devices}
   return datas
 
 
@@ -604,6 +607,10 @@ app.filter 'faderFilter', ->
       if found
         $scope.fixtureEntry = {}
         $scope.fixtureEntry = $scope.cameleon.fixtureList[ix]
+
+  $scope.updateDevices = () ->
+    CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
+      alert 'Update done !'
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->
