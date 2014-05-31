@@ -135,7 +135,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices, _UpdateFixtures;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices, _UpdateFixtures;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -186,6 +186,7 @@
         method: 'POST'
       }
     });
+    _GetSounds = $resource('/cameleon/getsounds');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -288,6 +289,9 @@
       return _UpdateFixtures.set({
         fixtures: fixtures
       });
+    };
+    datas.GetSounds = function() {
+      return _GetSounds.get({});
     };
     return datas;
   });
@@ -928,7 +932,25 @@
     return $scope.getfixtures(function() {});
   };
 
-  this.SoundsCtrl = function($scope, CameleonServer) {};
+  this.SoundsCtrl = function($scope, CameleonServer) {
+    $scope.getsounds = function() {
+      return CameleonServer.GetSounds().$promise.then(function(res) {
+        var k, list, v, _ref;
+        $scope.sounds = res.sounds;
+        list = [];
+        _ref = res.sounds;
+        for (k in _ref) {
+          v = _ref[k];
+          list.push({
+            'id': k,
+            'v': v
+          });
+        }
+        return $scope.soundlist = list;
+      });
+    };
+    return $scope.getsounds();
+  };
 
   this.CamMachinesCtrl = function($scope, CameleonServer) {
     $scope.findMachine = function(id) {

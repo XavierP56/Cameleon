@@ -128,6 +128,7 @@ app.factory 'CameleonServer', ($resource) ->
   _GetFixtures = $resource('/cameleon/getfixtures')
   _UpdateDevices = $resource('/cameleon/updatedevices', {}, {set: {method: 'POST'}})
   _UpdateFixtures = $resource('/cameleon/updatefixtures', {}, {set: {method: 'POST'}})
+  _GetSounds = $resource('/cameleon/getsounds')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -171,6 +172,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _UpdateDevices.set {devices: devices}
   datas.UpdateFixtures = (fixtures) ->
     return _UpdateFixtures.set {fixtures: fixtures}
+  datas.GetSounds = ()->
+    return _GetSounds.get {}
   return datas
 
 
@@ -670,6 +673,17 @@ app.filter 'faderFilter', ->
 
 # This controller adds sounds
 @SoundsCtrl = ($scope, CameleonServer) ->
+
+  $scope.getsounds = ()->
+    CameleonServer.GetSounds().$promise.then (res)->
+      $scope.sounds = res.sounds
+      list = []
+      for k,v of res.sounds
+        list.push {'id': k, 'v':v}
+      $scope.soundlist = list
+
+  # Inits
+  $scope.getsounds()
 
 # This controller adds or removes machines.
 @CamMachinesCtrl = ($scope, CameleonServer) ->
