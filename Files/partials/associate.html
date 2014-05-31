@@ -3,6 +3,8 @@
                     <button ng-click="selectMachine(m)">{{m.id}}</button>
             </li>
             <br/><br/>
-            <dmx-fader  id="{{cameleon.curMachine.id}}" setting-changed="update_setting(newSetting)"></dmx-fader>
+            <div ng-show="cameleon.curMachine != null">
+                <dmx-fader  id="{{cameleon.curMachine.id}}" setting-changed="update_setting(newSetting)"></dmx-fader>
+            </div>
             <br/>
 </div>

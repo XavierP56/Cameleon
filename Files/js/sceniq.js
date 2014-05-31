@@ -808,6 +808,9 @@
   };
 
   this.DevicesCtrl = function($scope, CameleonServer) {
+    CameleonServer.GetFixtures().$promise.then(function(res) {
+      return $scope.fixtures = res.fixtures;
+    });
     CameleonServer.GetDevices().$promise.then(function(res) {
       var k, list, v, _ref;
       $scope.devices = res.devices;
@@ -860,11 +863,12 @@
         return;
       }
       $scope.cameleon.machines.splice(index, 1);
+      $scope.cameleon.curMachine = null;
     };
   };
 
   this.CamAssociateCtrl = function($scope, CameleonServer) {
-    $scope.cameleon.curMachine = {};
+    $scope.cameleon.curMachine = null;
     $scope.selectMachine = function(machine) {
       $scope.cameleon.curMachine = machine;
       return CameleonServer.SetFaderSetting(machine.id, machine.setting);

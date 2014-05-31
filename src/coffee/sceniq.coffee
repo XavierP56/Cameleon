@@ -572,6 +572,9 @@ app.filter 'faderFilter', ->
 
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer) ->
+  CameleonServer.GetFixtures().$promise.then (res)->
+    $scope.fixtures = res.fixtures
+
   CameleonServer.GetDevices().$promise.then (res)->
     $scope.devices = res.devices
     list = []
@@ -610,13 +613,14 @@ app.filter 'faderFilter', ->
     index = $scope.findMachine currentMachine.id
     return if index == -1
     $scope.cameleon.machines.splice(index,1)
+    $scope.cameleon.curMachine = null
     return
 
 # This controller handles the scenes.
 # TODO: Rename me as SceneCtrl
 @CamAssociateCtrl = ($scope, CameleonServer) ->
   #Init
-  $scope.cameleon.curMachine = {}
+  $scope.cameleon.curMachine = null
 
   $scope.selectMachine = (machine) ->
     $scope.cameleon.curMachine = machine
