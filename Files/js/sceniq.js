@@ -818,9 +818,16 @@
     $scope.remove = function(index, fixinfo) {
       return fixinfo.splice(index, 1);
     };
-    return $scope.addKey = function(stuff) {
+    return $scope.addKey = function(stuff, id) {
       var obj;
-      return obj = JSON.parse(stuff);
+      obj = JSON.parse(stuff);
+      $scope.fixtures[id].defs[obj.k] = '';
+      $scope.fixtures[id].knobs[obj.k] = {
+        'fgColor': obj.v
+      };
+      return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
+        return $scope;
+      });
     };
   };
 

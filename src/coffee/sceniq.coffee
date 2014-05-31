@@ -585,9 +585,12 @@ app.filter 'faderFilter', ->
   $scope.remove = (index, fixinfo)->
     fixinfo.splice(index,1)
 
-  $scope.addKey = (stuff)->
+  $scope.addKey = (stuff,id)->
     obj = JSON.parse(stuff)
-
+    $scope.fixtures[id].defs[obj.k] = ''
+    $scope.fixtures[id].knobs[obj.k] = { 'fgColor' : obj.v}
+    CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
+      $scope.getfixtures()
 
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer, MenuUtils) ->
