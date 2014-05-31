@@ -93,7 +93,7 @@ app.factory 'MenuUtils', ()->
       if found
         list[ix]
       else
-        null
+        {}
 
 
   return menus
@@ -717,6 +717,7 @@ app.filter 'faderFilter', ->
 
     # As soon as the scope.settings changes, update the drop box menu.
   $scope.$watch 'cameleon.scenesList', (n,o) ->
+      return if $scope.cameleon.currentScene == null
       $scope.cameleon.currentScene = MenuUtils.UpdateMenu($scope.cameleon.scenesList, $scope.cameleon.currentScene.id)
 
   $scope.showNew = ()->

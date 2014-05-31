@@ -122,7 +122,7 @@
       if (found) {
         return list[ix];
       } else {
-        return null;
+        return {};
       }
     };
     return menus;
@@ -985,6 +985,9 @@
   this.SceneCtrl = function($scope, CameleonServer, MenuUtils) {
     $scope.showCreate = false;
     $scope.$watch('cameleon.scenesList', function(n, o) {
+      if ($scope.cameleon.currentScene === null) {
+        return;
+      }
       return $scope.cameleon.currentScene = MenuUtils.UpdateMenu($scope.cameleon.scenesList, $scope.cameleon.currentScene.id);
     });
     $scope.showNew = function() {
