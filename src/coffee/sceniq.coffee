@@ -736,6 +736,7 @@ app.filter 'faderFilter', ->
 @CamAssociateCtrl = ($scope, CameleonServer) ->
   #Init
   $scope.cameleon.curMachine = null
+  $scope.LoadAllCameleon()
 
   $scope.selectMachine = (machine) ->
     $scope.cameleon.curMachine = machine
@@ -783,6 +784,7 @@ app.filter 'faderFilter', ->
 
 @PicturesCtrl = ($scope, CameleonServer)->
   # Init
+  $scope.LoadAllCameleon()
   $scope.cameleon.currentScene = $scope.cameleon.scenesList[0]
   $scope.cameleon.currentSound = $scope.cameleon.soundslist[0]
 
@@ -853,40 +855,44 @@ app.filter 'faderFilter', ->
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
   $scope.cameleon = {}
-  # $scope.machines is the list of machines we do use in the current scene
-  $scope.cameleon.machines = []
-  $scope.cameleon.currentScene = { id : null, name : ''}
 
-  # Scenes
-  CameleonServer.GetSceneList().$promise.then (res)->
-    $scope.cameleon.scenesList = res.list
+  $scope.LoadAllCameleon = ()->
+    # $scope.machines is the list of machines we do use in the current scene
+    $scope.cameleon.machines = []
+    $scope.cameleon.currentScene = { id : null, name : ''}
 
-  $scope.LoadScene = ()->
-      CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then (res)->
-        $scope.cameleon.machines = res.load.list
-        # Once loaded, take the first machine.
-        $scope.cameleon.curMachine = $scope.cameleon.machines[0]
+    # Scenes
+    CameleonServer.GetSceneList().$promise.then (res)->
+      $scope.cameleon.scenesList = res.list
 
-  # Pictures
-  $scope.cameleon.picturesStuff = []
-  $scope.cameleon.currentPicture = { id: null}
+    $scope.LoadScene = ()->
+        CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then (res)->
+          $scope.cameleon.machines = res.load.list
+          # Once loaded, take the first machine.
+          $scope.cameleon.curMachine = $scope.cameleon.machines[0]
 
-  CameleonServer.GetPicturesList().$promise.then (res)->
-    $scope.cameleon.picturesList = res.list
+    # Pictures
+    $scope.cameleon.picturesStuff = []
+    $scope.cameleon.currentPicture = { id: null}
 
-  $scope.LoadPicture = ()->
-      CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
-        $scope.cameleon.picturesStuff = res.load.list
+    CameleonServer.GetPicturesList().$promise.then (res)->
+      $scope.cameleon.picturesList = res.list
 
-  # Sounds
-  $scope.cameleon.currentSound = { id : null, name : ''}
-  CameleonServer.GetSoundList().$promise.then (res)->
-    $scope.cameleon.soundslist = res.list
+    $scope.LoadPicture = ()->
+        CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
+          $scope.cameleon.picturesStuff = res.load.list
 
-  $scope.cameleon.currentSound = { id : null, name : ''}
-  CameleonServer.GetSoundList(true).$promise.then (res)->
-    $scope.cameleon.associatesoundslist = res.list
+    # Sounds
+    $scope.cameleon.currentSound = { id : null, name : ''}
+    CameleonServer.GetSoundList().$promise.then (res)->
+      $scope.cameleon.soundslist = res.list
 
+    $scope.cameleon.currentSound = { id : null, name : ''}
+    CameleonServer.GetSoundList(true).$promise.then (res)->
+      $scope.cameleon.associatesoundslist = res.list
+
+  # Init
+  $scope.LoadAllCameleon()
 
 @MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
   SndPanic = $resource('/sounds/panic')

@@ -995,6 +995,7 @@
 
   this.CamAssociateCtrl = function($scope, CameleonServer) {
     $scope.cameleon.curMachine = null;
+    $scope.LoadAllCameleon();
     $scope.selectMachine = function(machine) {
       $scope.cameleon.curMachine = machine;
       return CameleonServer.SetFaderSetting(machine.id, machine.setting);
@@ -1055,6 +1056,7 @@
   };
 
   this.PicturesCtrl = function($scope, CameleonServer) {
+    $scope.LoadAllCameleon();
     $scope.cameleon.currentScene = $scope.cameleon.scenesList[0];
     $scope.cameleon.currentSound = $scope.cameleon.soundslist[0];
     $scope.load = function() {
@@ -1155,46 +1157,49 @@
 
   this.CameleonCtrl = function($scope, CameleonServer) {
     $scope.cameleon = {};
-    $scope.cameleon.machines = [];
-    $scope.cameleon.currentScene = {
-      id: null,
-      name: ''
-    };
-    CameleonServer.GetSceneList().$promise.then(function(res) {
-      return $scope.cameleon.scenesList = res.list;
-    });
-    $scope.LoadScene = function() {
-      return CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then(function(res) {
-        $scope.cameleon.machines = res.load.list;
-        return $scope.cameleon.curMachine = $scope.cameleon.machines[0];
+    $scope.LoadAllCameleon = function() {
+      $scope.cameleon.machines = [];
+      $scope.cameleon.currentScene = {
+        id: null,
+        name: ''
+      };
+      CameleonServer.GetSceneList().$promise.then(function(res) {
+        return $scope.cameleon.scenesList = res.list;
+      });
+      $scope.LoadScene = function() {
+        return CameleonServer.LoadScene($scope.cameleon.currentScene.id).$promise.then(function(res) {
+          $scope.cameleon.machines = res.load.list;
+          return $scope.cameleon.curMachine = $scope.cameleon.machines[0];
+        });
+      };
+      $scope.cameleon.picturesStuff = [];
+      $scope.cameleon.currentPicture = {
+        id: null
+      };
+      CameleonServer.GetPicturesList().$promise.then(function(res) {
+        return $scope.cameleon.picturesList = res.list;
+      });
+      $scope.LoadPicture = function() {
+        return CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then(function(res) {
+          return $scope.cameleon.picturesStuff = res.load.list;
+        });
+      };
+      $scope.cameleon.currentSound = {
+        id: null,
+        name: ''
+      };
+      CameleonServer.GetSoundList().$promise.then(function(res) {
+        return $scope.cameleon.soundslist = res.list;
+      });
+      $scope.cameleon.currentSound = {
+        id: null,
+        name: ''
+      };
+      return CameleonServer.GetSoundList(true).$promise.then(function(res) {
+        return $scope.cameleon.associatesoundslist = res.list;
       });
     };
-    $scope.cameleon.picturesStuff = [];
-    $scope.cameleon.currentPicture = {
-      id: null
-    };
-    CameleonServer.GetPicturesList().$promise.then(function(res) {
-      return $scope.cameleon.picturesList = res.list;
-    });
-    $scope.LoadPicture = function() {
-      return CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then(function(res) {
-        return $scope.cameleon.picturesStuff = res.load.list;
-      });
-    };
-    $scope.cameleon.currentSound = {
-      id: null,
-      name: ''
-    };
-    CameleonServer.GetSoundList().$promise.then(function(res) {
-      return $scope.cameleon.soundslist = res.list;
-    });
-    $scope.cameleon.currentSound = {
-      id: null,
-      name: ''
-    };
-    return CameleonServer.GetSoundList(true).$promise.then(function(res) {
-      return $scope.cameleon.associatesoundslist = res.list;
-    });
+    return $scope.LoadAllCameleon();
   };
 
   this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
