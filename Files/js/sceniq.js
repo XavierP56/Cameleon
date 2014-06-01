@@ -977,6 +977,7 @@
           console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
         }).success(function(data, status, headers, config) {
           console.log(data);
+          $scope.soundEntry.v.songFile = file.name;
         });
         i++;
       }

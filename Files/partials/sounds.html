@@ -17,14 +17,14 @@
             <option value="r">Right</option>
             <option value="l">Left</option>
         </datalist>
+
+        <br/>
+        songName: <input ng-model="soundEntry.v.songName">
+        <br/><br/>
+        <input type="file" ng-file-select="onFileSelect($files)">
         <br/>
         songFile : <input ng-model="soundEntry.v.songFile">
         <br/>
-        songName: <input ng-model="soundEntry.v.songName">
-        <br/>
-
-        <input type="file" ng-file-select="onFileSelect($files)">
-    <br/>
         <button ng-click="updateSounds(soundEntry.id, soundEntry.v)">Update !</button>
     </div>
 

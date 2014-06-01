@@ -10,6 +10,7 @@ import models
 import sessionsq
 import uuid
 import scenes
+import os
 
 from bottle import route, run, request, abort, static_file
 
@@ -234,11 +235,11 @@ def cameleon_updatesounds():
 
 @app.route('/cameleon/upload', method='POST')
 def cameleon_upload():
-    print 'HALT !'
     upload = request.files.get('file')
     filename = upload.filename
-    print filename
-
+    saveTo = os.path.join ('../Files/waves',filename)
+    upload.save(saveTo,overwrite=True)
+    return {'res': 'OK'}
 
 # Start swmixer
 parser = argparse.ArgumentParser()
