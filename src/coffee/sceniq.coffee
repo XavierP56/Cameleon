@@ -692,7 +692,7 @@ app.filter 'faderFilter', ->
       ).success((data, status, headers, config) ->
         # file is uploaded successfully
         console.log data
-        $scope.soundEntry.v.songFile = file.name
+        $scope.soundEntry.v.songFile = data.name
         return
       )
       i++

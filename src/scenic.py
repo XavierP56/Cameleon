@@ -246,7 +246,7 @@ def cameleon_upload():
     filename = upload.filename
     saveTo = os.path.join ('../Files/waves',filename)
     upload.save(saveTo,overwrite=True)
-    return {'res': 'OK'}
+    return {'res': 'OK', 'name':filename}
 
 # Start swmixer
 parser = argparse.ArgumentParser()
