@@ -4,6 +4,13 @@
     <button ng-click="save()">Save</button>
     <br/><br/>
 
+    <fold fold-name="Sound buttons">
+    <b>Sound settings : Define the various sound buttons</b>
+        <div class="jsonView" defocus>
+            <json collapse=true child="sndSetting" type="'object'"></json>
+        </div>
+    </fold>
+
     <fold fold-name="Dmx Fixtures">
         <b>Dmx Fixtures : Define the projector specifications</b>
             <div class="jsonView" defocus>
@@ -22,20 +29,20 @@
         <br/>
     </fold>
 
+    <fold fold-name="Dmx Settings">
+        <b>Dmx settings : Define the various DMX settings used by the lights</b>
+            <div class="jsonView" defocus>
+                <json collapse=true child="dmxSetting" type="'object'"></json>
+            </div>
+        <br/>
+    </fold>
+
     <fold fold-name="Dmx Groups">
         <b>Dmx groups : Define the projector group</b>
             <div class="jsonView" defocus>
                 <json collapse=true child="dmxGroup" type="'object'"></json>
             </div>
 
-        <br/>
-    </fold>
-
-    <fold fold-name="Dmx Settings">
-        <b>Dmx settings : Define the various DMX settings used by the lights</b>
-            <div class="jsonView" defocus>
-                <json collapse=true child="dmxSetting" type="'object'"></json>
-            </div>
         <br/>
     </fold>
 
@@ -47,10 +54,4 @@
         <br/>
     </fold>
 
-    <fold fold-name="Sound buttons">
-    <b>Sound settings : Define the various sound buttons</b>
-        <div class="jsonView" defocus>
-            <json collapse=true child="sndSetting" type="'object'"></json>
-        </div>
-    </fold>
 </div>

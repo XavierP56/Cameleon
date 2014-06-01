@@ -4,10 +4,6 @@
         "name": "Rooms"
     },
     {
-        "link" : "faders",
-        "name" : "Faders"
-    },
-    {
         "link" : "cameleon",
         "name" : "Cameleon"
     }

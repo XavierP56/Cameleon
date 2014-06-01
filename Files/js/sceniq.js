@@ -82,13 +82,13 @@
         }
       }
     };
-    $stateProvider.state('faders', faders);
     $stateProvider.state('drooms', drooms);
     $stateProvider.state('cameleon', cameleon);
     $stateProvider.state('cameleon.settings', camsettings);
     $stateProvider.state('cameleon.settings.fixtures', camfixtures);
     $stateProvider.state('cameleon.settings.devices', camdevices);
     $stateProvider.state('cameleon.settings.sounds', camsounds);
+    $stateProvider.state('cameleon.faders', faders);
     $stateProvider.state('cameleon.config', config);
     $stateProvider.state('cameleon.associate', camscenes);
     return $stateProvider.state('cameleon.pictures', campictures);
