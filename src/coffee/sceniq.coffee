@@ -658,6 +658,18 @@ app.filter 'faderFilter', ->
     CameleonServer.UpdateSounds($scope.sounds).$promise.then (res)->
       alert ('Updated !')
 
+  $scope.addSound = ()->
+    $scope.sounds[$scope.sndName] =
+      card: ''
+      defLevel: ''
+      loop: false
+      position: ''
+      songFile: ''
+      songName: ''
+
+    $scope.createSound = false
+    CameleonServer.UpdateSounds($scope.sounds).$promise.then (evt)->
+      $scope.getsounds()
 
   $scope.onFileSelect = ($files) ->
     i = 0

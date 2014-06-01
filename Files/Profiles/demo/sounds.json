@@ -55,6 +55,14 @@
         "songFile": "11_ Taupe.wav", 
         "songName": "Taupe (boucle)"
     }, 
+    "TestMe": {
+        "card": "", 
+        "defLevel": "", 
+        "loop": false, 
+        "position": "", 
+        "songFile": "", 
+        "songName": ""
+    }, 
     "Visiteurs": {
         "card": 0, 
         "defLevel": 100, 

@@ -921,6 +921,20 @@
         return alert('Updated !');
       });
     };
+    $scope.addSound = function() {
+      $scope.sounds[$scope.sndName] = {
+        card: '',
+        defLevel: '',
+        loop: false,
+        position: '',
+        songFile: '',
+        songName: ''
+      };
+      $scope.createSound = false;
+      return CameleonServer.UpdateSounds($scope.sounds).$promise.then(function(evt) {
+        return $scope.getsounds();
+      });
+    };
     $scope.onFileSelect = function($files) {
       var file, i;
       i = 0;
