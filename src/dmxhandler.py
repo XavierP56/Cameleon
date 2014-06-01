@@ -89,7 +89,7 @@ class DmxHandler(object):
         if (self.dmxoutput is  not None):
             self.tr_thread = thread.start_new_thread(self.transition_thread, ())
             self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
-            self.refresh_thread = thread.start_new_thread(self.refresh_thread())
+            self.refresh_thread = thread.start_new_thread(self.refresh_thread, ())
 
         # Init the model
         for id in models.dmx_devices:
