@@ -162,10 +162,10 @@ class DmxHandler(object):
             print
             print '      ',
             for ix in range(16):
-                print ' {:02d} '.format(ix),
+                print ' {:02d} '.format(ix+1),
             print
             for ix in range(16):
-                print '{:03d} : '.format((ix*16)+1),
+                print '{:03d} : '.format((ix*16)),
                 for jx in range(16):
                     print disp[(ix*16)+jx+1],
                 print

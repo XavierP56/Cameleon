@@ -123,11 +123,15 @@ def dmx_events():
 
 @app.route ('/dmx/recordsetting/:fader/:setname')
 def dmx_recordsetting (fader,setname):
-    return dmxhandler.dmx_recordsetting(fader,setname)
+    res = dmxhandler.dmx_recordsetting(fader,setname)
+    models.saveModel(args)
+    return res
 
 @app.route ('/dmx/recordsetting/:fader')
 def dmx_recordsetting1 (fader):
-    return dmxhandler.dmx_recordsetting(fader,'')
+    res = dmxhandler.dmx_recordsetting(fader,'')
+    models.saveModel(args)
+    return res
 
 @app.route('/dmx/generate/:fader/:setting/:prefix')
 def dmx_generate (fader, setting,prefix):
