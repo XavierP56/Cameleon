@@ -104,6 +104,8 @@ def models_setdefs():
     dmxhandler.dmx_setdefs(request)
     sndplayer.snd_setdefs(request)
     models.dmx_fixtures = request.json['dmx_fixtures']
+    scenes.scenes = request.json['camscenes']
+    scenes.pictures = request.json['campictures']
     return
 
 @app.route('/models/save')

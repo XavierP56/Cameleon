@@ -135,7 +135,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -193,6 +193,11 @@
       }
     });
     _GetDebugDatas = $resource('/models/getdefs');
+    _UpdateDebugDatas = $resource('/models/setdefs', {}, {
+      set: {
+        method: 'POST'
+      }
+    });
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -306,6 +311,9 @@
     };
     datas.GetDebugDatas = function() {
       return _GetDebugDatas.get({});
+    };
+    datas.UpdateDebugDatas = function(cmd) {
+      return _UpdateDebugDatas.set(cmd);
     };
     return datas;
   });
@@ -736,35 +744,31 @@
   });
 
   this.ConfigCtrl = function($scope, CameleonServer, $resource) {
-    var Save, Update;
-    Update = $resource('/models/setdefs', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
+    var Save;
     Save = $resource('/models/save');
     $scope.update = function() {
       var cmd;
       cmd = {
+        'snd_setting': $scope.sndSetting,
+        'dmx_fixtures': $scope.dmxFixtures,
         'dmx_model': $scope.dmxModel,
         'dmx_setting': $scope.dmxSetting,
-        'snd_setting': $scope.sndSetting,
-        'dmx_light': $scope.dmxLight,
-        'cam_scenes': $scope.camScenes,
-        'dmx_fixtures': $scope.dmxFixtures
+        'camscenes': $scope.camscenes,
+        'campictures': $scope.campictures
       };
-      Update.set(cmd, function() {});
-      return alert('Settings updated !');
+      return CameleonServer.UpdateDebugDatas(cmd).$promise.then(function(evt) {
+        return alert('Settings updated !');
+      });
     };
     $scope.save = function() {
       var cmd;
       cmd = {
+        'snd_setting': $scope.sndSetting,
+        'dmx_fixtures': $scope.dmxFixtures,
         'dmx_model': $scope.dmxModel,
         'dmx_setting': $scope.dmxSetting,
-        'snd_setting': $scope.sndSetting,
-        'dmx_light': $scope.dmxLight,
-        'dmx_group': $scope.dmxGroup,
-        'dmx_fixtures': $scope.dmxFixtures
+        'camscenes': $scope.camscenes,
+        'campictures': $scope.campictures
       };
       $scope.setDone = Update.set(cmd, function() {});
       return $scope.setDone.$promise.then(function() {

@@ -204,8 +204,6 @@ class DmxHandler(object):
         with self.lock:
             models.dmx_devices = request.json['dmx_model']
             models.dmx_setting = request.json['dmx_setting']
-            models.dmx_light = request.json['dmx_light']
-            models.dmx_group = request.json['dmx_group']
             return
 
     def dmx_getdefs (self):

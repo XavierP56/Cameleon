@@ -101,7 +101,6 @@ app.factory 'MenuUtils', ()->
       else
         {}
 
-
   return menus
 
 # Let's centralize all the communication to the server.
@@ -131,6 +130,7 @@ app.factory 'CameleonServer', ($resource) ->
   _GetSounds = $resource('/cameleon/getsounds')
   _UpdateSounds = $resource('/cameleon/updatesounds', {}, {set: {method: 'POST'}})
   _GetDebugDatas = $resource('/models/getdefs')
+  _UpdateDebugDatas = $resource('/models/setdefs', {}, {set: {method: 'POST'}})
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -180,6 +180,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _UpdateSounds.set {sounds: sounds}
   datas.GetDebugDatas = ()->
     return _GetDebugDatas.get {}
+  datas.UpdateDebugDatas = (cmd)->
+    return _UpdateDebugDatas.set cmd
   return datas
 
 
@@ -522,30 +524,28 @@ app.directive "soundButton", ($resource)  ->
 
 @ConfigCtrl = ($scope, CameleonServer, $resource)->
   # DMX Stuff.
-
-  Update = $resource('/models/setdefs', {}, {set: {method: 'POST'}})
   Save = $resource('/models/save')
 
   $scope.update = () ->
     cmd =
+      'snd_setting': $scope.sndSetting
+      'dmx_fixtures' : $scope.dmxFixtures
       'dmx_model': $scope.dmxModel
       'dmx_setting': $scope.dmxSetting
-      'snd_setting': $scope.sndSetting
-      'dmx_light': $scope.dmxLight
-      'cam_scenes': $scope.camScenes
-      'dmx_fixtures' : $scope.dmxFixtures
+      'camscenes': $scope.camscenes
+      'campictures': $scope.campictures
 
-    Update.set cmd, ()->
-    alert('Settings updated !')
+    CameleonServer.UpdateDebugDatas(cmd).$promise.then (evt)->
+      alert('Settings updated !')
 
   $scope.save = () ->
     cmd =
+      'snd_setting': $scope.sndSetting
+      'dmx_fixtures' : $scope.dmxFixtures
       'dmx_model': $scope.dmxModel
       'dmx_setting': $scope.dmxSetting
-      'snd_setting': $scope.sndSetting
-      'dmx_light': $scope.dmxLight
-      'dmx_group': $scope.dmxGroup
-      'dmx_fixtures' : $scope.dmxFixtures
+      'camscenes': $scope.camscenes
+      'campictures': $scope.campictures
 
     $scope.setDone = Update.set cmd, ()->
       return
