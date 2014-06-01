@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']);
+  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload']);
 
   app.config(function($stateProvider) {
     var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, camsounds, config, drooms, faders;
@@ -943,7 +943,7 @@
     return $scope.getfixtures(function() {});
   };
 
-  this.SoundsCtrl = function($scope, CameleonServer) {
+  this.SoundsCtrl = function($scope, CameleonServer, $upload) {
     $scope.getsounds = function() {
       return CameleonServer.GetSounds().$promise.then(function(res) {
         var k, list, v, _ref;
@@ -964,6 +964,22 @@
       return CameleonServer.UpdateSounds($scope.sounds).$promise.then(function(res) {
         return alert('Updated !');
       });
+    };
+    $scope.onFileSelect = function($files) {
+      var file, i;
+      i = 0;
+      while (i < $files.length) {
+        file = $files[i];
+        $scope.upload = $upload.upload({
+          url: "/cameleon/upload",
+          file: file
+        }).progress(function(evt) {
+          console.log("percent: " + parseInt(100.0 * evt.loaded / evt.total));
+        }).success(function(data, status, headers, config) {
+          console.log(data);
+        });
+        i++;
+      }
     };
     return $scope.getsounds();
   };

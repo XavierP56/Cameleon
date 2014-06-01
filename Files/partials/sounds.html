@@ -23,6 +23,7 @@
         songName: <input ng-model="soundEntry.v.songName">
         <br/>
 
+        <input type="file" ng-file-select="onFileSelect($files)">
     <br/>
         <button ng-click="updateSounds(soundEntry.id, soundEntry.v)">Update !</button>
     </div>

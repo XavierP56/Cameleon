@@ -232,6 +232,14 @@ def cameleon_updatesounds():
     models.sounds = request.json['sounds']
     return { 'res' : 'OK'}
 
+@app.route('/cameleon/upload', method='POST')
+def cameleon_upload():
+    print 'HALT !'
+    upload = request.files.get('file')
+    filename = upload.filename
+    print filename
+
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")

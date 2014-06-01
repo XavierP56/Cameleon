@@ -1,7 +1,7 @@
 # Copyright Xavier Pouyollon 2014
 # GPL v3 License
 
-app = angular.module 'myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'ngCookies']
+app = angular.module 'myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload']
 
 app.config ($stateProvider) ->
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
@@ -675,7 +675,7 @@ app.filter 'faderFilter', ->
   $scope.getfixtures(()->)
 
 # This controller adds sounds
-@SoundsCtrl = ($scope, CameleonServer) ->
+@SoundsCtrl = ($scope, CameleonServer,$upload) ->
 
   $scope.getsounds = ()->
     CameleonServer.GetSounds().$promise.then (res)->
@@ -691,6 +691,33 @@ app.filter 'faderFilter', ->
     #  $scope.sounds[id][e.k] = e.v
     CameleonServer.UpdateSounds($scope.sounds).$promise.then (res)->
       alert ('Updated !')
+
+
+  $scope.onFileSelect = ($files) ->
+    i = 0
+    while i < $files.length
+      file = $files[i]
+      #upload.php script, node.js route, or servlet url
+      # or list of files: $files for html5 only
+      # set the file formData name ('Content-Desposition'). Default is 'file'
+
+      #fileFormDataName: myFile, //or a list of names for multiple files (html5).
+      # customize how data is added to formData. See #40#issuecomment-28612000 for sample code
+
+      #formDataAppender: function(formData, key, val){}
+      $scope.upload = $upload.upload(
+        url: "/cameleon/upload"
+        file: file
+      ).progress((evt) ->
+        console.log "percent: " + parseInt(100.0 * evt.loaded / evt.total)
+        return
+      ).success((data, status, headers, config) ->
+        # file is uploaded successfully
+        console.log data
+        return
+      )
+      i++
+    return
 
   # Inits
   $scope.getsounds()
@@ -945,3 +972,12 @@ app.filter 'faderFilter', ->
 # $scope.$on '$stateChangeStart', (event) ->
 #  SndCancel.resolve()
 #  DmxCancel.resolve()
+
+
+
+
+
+
+
+
+
