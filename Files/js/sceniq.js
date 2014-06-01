@@ -135,7 +135,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SaveDebugDatas, _SetFader, _SettingList, _SlidersList, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -198,6 +198,7 @@
         method: 'POST'
       }
     });
+    _SaveDebugDatas = $resource('/models/save');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -314,6 +315,9 @@
     };
     datas.UpdateDebugDatas = function(cmd) {
       return _UpdateDebugDatas.set(cmd);
+    };
+    datas.SaveDebugDatas = function() {
+      return _SaveDebugDatas.get({});
     };
     return datas;
   });
@@ -744,8 +748,6 @@
   });
 
   this.ConfigCtrl = function($scope, CameleonServer, $resource) {
-    var Save;
-    Save = $resource('/models/save');
     $scope.update = function() {
       var cmd;
       cmd = {
@@ -770,9 +772,8 @@
         'camscenes': $scope.camscenes,
         'campictures': $scope.campictures
       };
-      $scope.setDone = Update.set(cmd, function() {});
-      return $scope.setDone.$promise.then(function() {
-        return Save.get({}, function() {
+      return CameleonServer.UpdateDebugDatas(cmd).$promise.then(function() {
+        return CameleonServer.SaveDebugDatas().$promise.then(function() {
           return alert('Settings saved !');
         });
       });

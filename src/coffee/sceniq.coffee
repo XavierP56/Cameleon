@@ -131,6 +131,7 @@ app.factory 'CameleonServer', ($resource) ->
   _UpdateSounds = $resource('/cameleon/updatesounds', {}, {set: {method: 'POST'}})
   _GetDebugDatas = $resource('/models/getdefs')
   _UpdateDebugDatas = $resource('/models/setdefs', {}, {set: {method: 'POST'}})
+  _SaveDebugDatas = $resource('/models/save')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -182,6 +183,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _GetDebugDatas.get {}
   datas.UpdateDebugDatas = (cmd)->
     return _UpdateDebugDatas.set cmd
+  datas.SaveDebugDatas = ()->
+    return _SaveDebugDatas.get {}
   return datas
 
 
@@ -524,8 +527,6 @@ app.directive "soundButton", ($resource)  ->
 
 @ConfigCtrl = ($scope, CameleonServer, $resource)->
   # DMX Stuff.
-  Save = $resource('/models/save')
-
   $scope.update = () ->
     cmd =
       'snd_setting': $scope.sndSetting
@@ -547,10 +548,8 @@ app.directive "soundButton", ($resource)  ->
       'camscenes': $scope.camscenes
       'campictures': $scope.campictures
 
-    $scope.setDone = Update.set cmd, ()->
-      return
-    $scope.setDone.$promise.then () ->
-      Save.get {}, ->
+    CameleonServer.UpdateDebugDatas(cmd).$promise.then ()->
+      CameleonServer.SaveDebugDatas().$promise.then ()->
         alert('Settings saved !')
 
   CameleonServer.GetDebugDatas().$promise.then (res)->
