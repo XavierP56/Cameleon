@@ -57,28 +57,43 @@ def loadModel(args):
     global dmx_fixtures
 
     # Load the fixtures
-    ref = "../Files/Fixtures"
-    fpath = ref + "/fixtures.json"
-    with open(fpath) as datafile:
-        dmx_fixtures = json.load(datafile)
+    try:
+        ref = "../Files/Fixtures"
+        fpath = ref + "/fixtures.json"
+        with open(fpath) as datafile:
+            dmx_fixtures = json.load(datafile)
+    except:
+        pass
 
     # Load the profile
-    ref = "../Files/Profiles/"+args.profile
-    fpath = ref + "/dmx_devices.json"
-    with open(fpath) as datafile:
-        dmx_devices = json.load(datafile)
+    try:
+        ref = "../Files/Profiles/"+args.profile
+        fpath = ref + "/dmx_devices.json"
+        with open(fpath) as datafile:
+            dmx_devices = json.load(datafile)
+    except:
+        pass
 
-    fpath = ref + "/dmx_setting.json"
-    with open(fpath) as datafile:
-        dmx_setting = json.load(datafile)
+    try:
+        fpath = ref + "/dmx_setting.json"
+        with open(fpath) as datafile:
+            dmx_setting = json.load(datafile)
+    except:
+        pass
 
-    fpath = ref + "/sounds.json"
-    with open(fpath) as datafile:
-        sounds = json.load(datafile)
+    try:
+        fpath = ref + "/sounds.json"
+        with open(fpath) as datafile:
+            sounds = json.load(datafile)
+    except:
+        pass
 
-    fpath = ref + "/knobs.json"
-    with open(fpath) as datafile:
-        knobs_model = json.load(datafile)
+    try:
+        fpath = ref + "/knobs.json"
+        with open(fpath) as datafile:
+            knobs_model = json.load(datafile)
+    except:
+        pass
 
     # Generate the default group
     GenerateDefaultGroup()

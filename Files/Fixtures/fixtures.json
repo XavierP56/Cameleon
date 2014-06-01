@@ -1,50 +1,22 @@
 {
-    "Ibiza": {
+    "ElectroDepot": {
         "defs": {
-            "blue": 5, 
-            "dimmer": 1, 
-            "green": 4, 
-            "red": 3
+            "Blue": "4", 
+            "Dimmer": "1", 
+            "Green": "3", 
+            "Red": "2"
         }, 
         "knobs": {
-            "blue": {
+            "Blue": {
                 "fgColor": "blue"
             }, 
-            "dimmer": {
-                "cursor": 40, 
+            "Dimmer": {
                 "fgColor": "yellow"
             }, 
-            "green": {
+            "Green": {
                 "fgColor": "green"
             }, 
-            "red": {
-                "fgColor": "red"
-            }
-        }
-    }, 
-    "LedParZoom": {
-        "defs": {
-            "blue": 7, 
-            "colormacro": 8, 
-            "green": 6, 
-            "pano": 1, 
-            "panofin": 2, 
-            "red": 5, 
-            "tilt": 3, 
-            "tiltfin": 4
-        }, 
-        "knobs": {
-            "blue": {
-                "fgColor": "blue"
-            }, 
-            "dimmer": {
-                "cursor": 40, 
-                "fgColor": "yellow"
-            }, 
-            "green": {
-                "fgColor": "green"
-            }, 
-            "red": {
+            "Red": {
                 "fgColor": "red"
             }
         }
