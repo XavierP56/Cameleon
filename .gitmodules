@@ -11,3 +11,6 @@
 [submodule "Files/local_components/ui-sortable"]
 	path = Files/local_components/ui-sortable
 	url = https://github.com/angular-ui/ui-sortable.git
+[submodule "Files/local_components/angular-file-upload"]
+	path = Files/local_components/angular-file-upload
+	url = https://github.com/danialfarid/angular-file-upload.git
