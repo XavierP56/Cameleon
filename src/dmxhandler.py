@@ -434,7 +434,9 @@ class DmxHandler(object):
 
 
     def dmxscene (self, list, state):
+        pjs=[]
         for light in list:
+            pjs.append(light['id'])
             request = requests.FakeRequest()
             request.json['id'] = light['id']
             if state is True:
@@ -448,3 +450,4 @@ class DmxHandler(object):
                     cmds[k] = 0
                 request.json['cmds'] = cmds
                 self.dmx_set(request)
+        return pjs

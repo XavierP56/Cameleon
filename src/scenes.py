@@ -111,10 +111,23 @@ class Scenes:
             state = True
             self.scenesstates[scene] = state
 
-        self.dmx.dmxscene(self.scenes[scene]['list'],state)
+        # We'll get a list of machines that are used.
+        pjs = self.dmx.dmxscene(self.scenes[scene]['list'],state)
 
-        evt =  {'evt': 'sceneState', 'id': scene, 'state':state}
-        sessionsq.PostEvent ('dmx', evt)
+        for other in self.scenes:
+            if other == scene:
+                # Send the event for this scene.
+                evt =  {'evt': 'sceneState', 'id': scene, 'state':state}
+                sessionsq.PostEvent ('dmx', evt)
+            else:
+                otherpslist = self.scenes[other]['list']
+                for opj in otherpslist:
+                    if opj['id'] in pjs:
+                        # The projetor is used elsewhere, notify scene is not 'active'.
+                        evt =  {'evt': 'sceneState', 'id': other, 'state':False}
+                        sessionsq.PostEvent ('dmx', evt)
+                        self.scenesstates[other] = False
+
         # Start song
         if opts['startsong'] is not "":
             sound = opts['startsong']
