@@ -123,6 +123,7 @@ app.factory 'CameleonServer', ($resource) ->
   _LoadPicture = $resource('/cameleon/loadpicture/:picture')
   _GetSoundList =  $resource('/cameleon/getsoundlist/:empty')
   _DmxScene = $resource('/cameleon/dmxscene', {}, {set: {method: 'POST'}})
+  _GetSceneState = $resource('/cameleon/getscenestate/:scene')
   _GetDevices = $resource('/cameleon/getdevices')
   _GetFixtures = $resource('/cameleon/getfixtures')
   _UpdateDevices = $resource('/cameleon/updatedevices', {}, {set: {method: 'POST'}})
@@ -185,6 +186,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _UpdateDebugDatas.set cmd
   datas.SaveDebugDatas = ()->
     return _SaveDebugDatas.get {}
+  datas.GetSceneState = (scene)->
+    return _GetSceneState.get {scene : scene}
   return datas
 
 
@@ -290,6 +293,9 @@ app.directive "dmxScene", ->
   controller: ($scope, CameleonServer) ->
 
     $scope.dmxstyle = 'dmx'
+    CameleonServer.GetSceneState($scope.id).$promise.then (evt)->
+      $scope.active = "running" if evt.state == true
+      $scope.active = null if evt.state == false
 
     $scope.do = () ->
       opts =

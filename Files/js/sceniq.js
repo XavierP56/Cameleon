@@ -135,7 +135,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SaveDebugDatas, _SetFader, _SettingList, _SlidersList, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSceneState, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SaveDebugDatas, _SetFader, _SettingList, _SlidersList, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -174,6 +174,7 @@
         method: 'POST'
       }
     });
+    _GetSceneState = $resource('/cameleon/getscenestate/:scene');
     _GetDevices = $resource('/cameleon/getdevices');
     _GetFixtures = $resource('/cameleon/getfixtures');
     _UpdateDevices = $resource('/cameleon/updatedevices', {}, {
@@ -319,6 +320,11 @@
     datas.SaveDebugDatas = function() {
       return _SaveDebugDatas.get({});
     };
+    datas.GetSceneState = function(scene) {
+      return _GetSceneState.get({
+        scene: scene
+      });
+    };
     return datas;
   });
 
@@ -452,6 +458,14 @@
       },
       controller: function($scope, CameleonServer) {
         $scope.dmxstyle = 'dmx';
+        CameleonServer.GetSceneState($scope.id).$promise.then(function(evt) {
+          if (evt.state === true) {
+            $scope.active = "running";
+          }
+          if (evt.state === false) {
+            return $scope.active = null;
+          }
+        });
         $scope["do"] = function() {
           var opts;
           opts = {

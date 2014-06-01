@@ -252,6 +252,10 @@ def cameleon_upload():
     upload.save(saveTo,overwrite=True)
     return {'res': 'OK', 'name':filename}
 
+@app.route('/cameleon/getscenestate/:scene')
+def cameleon_getscenestate(scene):
+    return scenes.getscenestate(scene)
+
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")

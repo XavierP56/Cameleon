@@ -143,3 +143,11 @@ class Scenes:
             sessionsq.PostEvent ('dmx', evt)
             if scene in self.scenesstates:
                 self.scenesstates[scene] = False
+
+    # /cameleon/getscenestate/:scene
+    def getscenestate(self,scene):
+        if scene in self.scenesstates:
+            state = self.scenesstates[scene]
+        else:
+            state = False
+        return {'state' : state}
