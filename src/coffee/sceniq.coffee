@@ -61,7 +61,6 @@ app.config ($stateProvider) ->
         templateUrl : 'partials/picturesMngr.html'
         controller: PicturesMngrCtrl
 
-  $stateProvider.state('config', config)
   $stateProvider.state('faders', faders)
   $stateProvider.state('drooms', drooms)
   # Declare the cameleon
@@ -70,6 +69,7 @@ app.config ($stateProvider) ->
   $stateProvider.state('cameleon.settings.fixtures', camfixtures)
   $stateProvider.state('cameleon.settings.devices', camdevices)
   $stateProvider.state('cameleon.settings.sounds', camsounds)
+  $stateProvider.state('cameleon.config', config)
   $stateProvider.state('cameleon.associate', camscenes)
   $stateProvider.state('cameleon.pictures', campictures)
 

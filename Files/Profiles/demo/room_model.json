@@ -4,10 +4,6 @@
         "name": "Rooms"
     },
     {
-        "link": "config", 
-        "name": "Config"
-    },
-    {
         "link" : "faders",
         "name" : "Faders"
     },
