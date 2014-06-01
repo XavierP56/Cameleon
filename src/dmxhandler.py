@@ -33,6 +33,12 @@ class DmxHandler(object):
     dmxoutput = None
     activeGroup = {}
 
+    def refresh_thread(self):
+        while True:
+            # Handle the DMX transition.
+            self.changed = True
+            time.sleep(float(PERIOD) / 1000)
+
     def transition_thread(self):
         while True:
             # Handle the DMX transition.
@@ -83,6 +89,7 @@ class DmxHandler(object):
         if (self.dmxoutput is  not None):
             self.tr_thread = thread.start_new_thread(self.transition_thread, ())
             self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
+            self.refresh_thread = thread.start_new_thread(self.refresh_thread())
 
         # Init the model
         for id in models.dmx_devices:
