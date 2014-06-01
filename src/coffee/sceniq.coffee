@@ -281,42 +281,6 @@ app.directive "dmxSlider", (CameleonServer) ->
 
     scope.started()
 
-# Keep it for now
-# TODO: Remove it once dmxScene is available.
-
-app.directive "dmxLight", ->
-  restrict: 'E'
-  templateUrl: '/sceniq/templates/dmxlight.html'
-  scope: {id: '@'}
-
-  controller: ($scope, $resource) ->
-    LightQuery = $resource('/dmx/light/:id')
-    DmxSetLight = $resource('/dmx/setLight/:light')
-
-    LightQuery.get {id: $scope.id}, (res)->
-      $scope.light = res.light
-      if $scope.light.hasOwnProperty('transition')
-        $scope.dmxstyle = 'dmx' if $scope.light.transition == "False"
-        $scope.dmxstyle = 'transit' if $scope.light.transition == "True"
-      else
-        $scope.dmxstyle = 'list'
-
-      if res.active == true
-        $scope.active = "running"
-
-    $scope.do = () ->
-      DmxSetLight.get {light: $scope.id}, (res)->
-        return
-
-    $scope.$on 'activeLight', (sender, evt) ->
-      if (evt.group != $scope.light.group)
-        return
-      if (evt.light != $scope.id)
-        $scope.active = null
-      else
-        $scope.active = "running"
-    return
-
 # This asks the server to display the scene.
 app.directive "dmxScene", ->
   restrict: 'E'

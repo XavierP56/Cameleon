@@ -221,11 +221,13 @@ def cameleon_getfixtures():
 @app.route('/cameleon/updatedevices', method='POST')
 def cameleon_updatedevices():
     models.dmx_devices = request.json['devices']
+    models.saveModel(args)
     return { 'res' : 'OK'}
 
 @app.route('/cameleon/updatefixtures', method='POST')
 def cameleon_updatefixtures():
     models.dmx_fixtures = request.json['fixtures']
+    models.saveModel(args)
     return { 'res' : 'OK'}
 
 @app.route('/cameleon/getsounds')
@@ -235,6 +237,7 @@ def cameleon_getsounds():
 @app.route('/cameleon/updatesounds', method='POST')
 def cameleon_updatesounds():
     models.sounds = request.json['sounds']
+    models.saveModel(args)
     return { 'res' : 'OK'}
 
 @app.route('/cameleon/upload', method='POST')

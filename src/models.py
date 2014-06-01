@@ -31,14 +31,6 @@ def saveModel(args):
     with open(fpath, "w") as outfile:
         json.dump(dmx_setting, outfile, sort_keys=True, indent=4,ensure_ascii=False)
 
-    fpath = ref + "/dmx_light.json"
-    with open(fpath, "w") as outfile:
-        json.dump(dmx_light, outfile, sort_keys=True, indent=4,ensure_ascii=False)
-
-    fpath = ref + "/dmx_group.json"
-    with open(fpath, "w") as outfile:
-        json.dump(dmx_group, outfile, sort_keys=True, indent=4,ensure_ascii=False)
-
     fpath = ref + "/sounds.json"
     with open(fpath, "w") as outfile:
         json.dump(sounds, outfile, sort_keys=True, indent=4,ensure_ascii=False)
@@ -79,14 +71,6 @@ def loadModel(args):
     fpath = ref + "/dmx_setting.json"
     with open(fpath) as datafile:
         dmx_setting = json.load(datafile)
-
-    fpath = ref + "/dmx_light.json"
-    with open(fpath) as datafile:
-        dmx_light = json.load(datafile)
-
-    fpath = ref + "/dmx_group.json"
-    with open(fpath) as datafile:
-        dmx_group = json.load(datafile)
 
     fpath = ref + "/sounds.json"
     with open(fpath) as datafile:

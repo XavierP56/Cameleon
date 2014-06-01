@@ -442,54 +442,6 @@
     };
   });
 
-  app.directive("dmxLight", function() {
-    return {
-      restrict: 'E',
-      templateUrl: '/sceniq/templates/dmxlight.html',
-      scope: {
-        id: '@'
-      },
-      controller: function($scope, $resource) {
-        var DmxSetLight, LightQuery;
-        LightQuery = $resource('/dmx/light/:id');
-        DmxSetLight = $resource('/dmx/setLight/:light');
-        LightQuery.get({
-          id: $scope.id
-        }, function(res) {
-          $scope.light = res.light;
-          if ($scope.light.hasOwnProperty('transition')) {
-            if ($scope.light.transition === "False") {
-              $scope.dmxstyle = 'dmx';
-            }
-            if ($scope.light.transition === "True") {
-              $scope.dmxstyle = 'transit';
-            }
-          } else {
-            $scope.dmxstyle = 'list';
-          }
-          if (res.active === true) {
-            return $scope.active = "running";
-          }
-        });
-        $scope["do"] = function() {
-          return DmxSetLight.get({
-            light: $scope.id
-          }, function(res) {});
-        };
-        $scope.$on('activeLight', function(sender, evt) {
-          if (evt.group !== $scope.light.group) {
-            return;
-          }
-          if (evt.light !== $scope.id) {
-            return $scope.active = null;
-          } else {
-            return $scope.active = "running";
-          }
-        });
-      }
-    };
-  });
-
   app.directive("dmxScene", function() {
     return {
       restrict: 'E',
