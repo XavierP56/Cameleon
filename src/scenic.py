@@ -89,12 +89,14 @@ def dmx_panic():
 
 # Models
 
-@app.route('/models/getdefs', method='POST')
+@app.route('/models/getdefs')
 def models_getdefs():
     dmx = dmxhandler.dmx_getdefs()
     snd = sndplayer.snd_getdefs()
     fixtures = { 'dmx_fixtures' : models.dmx_fixtures}
-    res = dict(dmx.items() + snd.items() + fixtures.items())
+    camscenes = { 'camscenes' : scenes.scenes}
+    campict = {'campictures': scenes.pictures}
+    res = dict(dmx.items() + snd.items() + fixtures.items() + camscenes.items() + campict.items())
     return res
 
 @app.route('/models/setdefs', method='POST')

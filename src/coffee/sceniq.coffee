@@ -130,6 +130,7 @@ app.factory 'CameleonServer', ($resource) ->
   _UpdateFixtures = $resource('/cameleon/updatefixtures', {}, {set: {method: 'POST'}})
   _GetSounds = $resource('/cameleon/getsounds')
   _UpdateSounds = $resource('/cameleon/updatesounds', {}, {set: {method: 'POST'}})
+  _GetDebugDatas = $resource('/models/getdefs')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -177,6 +178,8 @@ app.factory 'CameleonServer', ($resource) ->
     return _GetSounds.get {}
   datas.UpdateSounds = (sounds) ->
     return _UpdateSounds.set {sounds: sounds}
+  datas.GetDebugDatas = ()->
+    return _GetDebugDatas.get {}
   return datas
 
 
@@ -517,9 +520,9 @@ app.directive "soundButton", ($resource)  ->
     scope.started()
 
 
-@ConfigCtrl = ($scope, $http, $q, $resource)->
+@ConfigCtrl = ($scope, CameleonServer, $resource)->
   # DMX Stuff.
-  Query = $resource('/models/getdefs', {}, {set: {method: 'POST'}})
+
   Update = $resource('/models/setdefs', {}, {set: {method: 'POST'}})
   Save = $resource('/models/save')
 
@@ -529,7 +532,7 @@ app.directive "soundButton", ($resource)  ->
       'dmx_setting': $scope.dmxSetting
       'snd_setting': $scope.sndSetting
       'dmx_light': $scope.dmxLight
-      'dmx_group': $scope.dmxGroup
+      'cam_scenes': $scope.camScenes
       'dmx_fixtures' : $scope.dmxFixtures
 
     Update.set cmd, ()->
@@ -550,13 +553,13 @@ app.directive "soundButton", ($resource)  ->
       Save.get {}, ->
         alert('Settings saved !')
 
-  Query.set {}, (res) ->
-    $scope.dmxModel = res.dmx_model
-    $scope.dmxGroup = res.dmx_group
-    $scope.dmxSetting = res.dmx_setting
-    $scope.dmxLight = res.dmx_light
+  CameleonServer.GetDebugDatas().$promise.then (res)->
     $scope.sndSetting = res.snd_setting
     $scope.dmxFixtures = res.dmx_fixtures
+    $scope.dmxModel = res.dmx_model
+    $scope.dmxSetting = res.dmx_setting
+    $scope.camscenes = res.camscenes
+    $scope.campictures = res.campictures
     return
 
   $scope.$on '$stateChangeStart', (event) ->

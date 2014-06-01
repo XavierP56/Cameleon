@@ -135,7 +135,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SetFader, _SettingList, _SlidersList, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -192,6 +192,7 @@
         method: 'POST'
       }
     });
+    _GetDebugDatas = $resource('/models/getdefs');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -302,6 +303,9 @@
       return _UpdateSounds.set({
         sounds: sounds
       });
+    };
+    datas.GetDebugDatas = function() {
+      return _GetDebugDatas.get({});
     };
     return datas;
   });
@@ -731,13 +735,8 @@
     };
   });
 
-  this.ConfigCtrl = function($scope, $http, $q, $resource) {
-    var Query, Save, Update;
-    Query = $resource('/models/getdefs', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
+  this.ConfigCtrl = function($scope, CameleonServer, $resource) {
+    var Save, Update;
     Update = $resource('/models/setdefs', {}, {
       set: {
         method: 'POST'
@@ -751,7 +750,7 @@
         'dmx_setting': $scope.dmxSetting,
         'snd_setting': $scope.sndSetting,
         'dmx_light': $scope.dmxLight,
-        'dmx_group': $scope.dmxGroup,
+        'cam_scenes': $scope.camScenes,
         'dmx_fixtures': $scope.dmxFixtures
       };
       Update.set(cmd, function() {});
@@ -774,13 +773,13 @@
         });
       });
     };
-    Query.set({}, function(res) {
-      $scope.dmxModel = res.dmx_model;
-      $scope.dmxGroup = res.dmx_group;
-      $scope.dmxSetting = res.dmx_setting;
-      $scope.dmxLight = res.dmx_light;
+    CameleonServer.GetDebugDatas().$promise.then(function(res) {
       $scope.sndSetting = res.snd_setting;
       $scope.dmxFixtures = res.dmx_fixtures;
+      $scope.dmxModel = res.dmx_model;
+      $scope.dmxSetting = res.dmx_setting;
+      $scope.camscenes = res.camscenes;
+      $scope.campictures = res.campictures;
     });
     return $scope.$on('$stateChangeStart', function(event) {});
   };
