@@ -265,6 +265,8 @@ parser.add_argument('-p', '--profile', help="Profile subdirectory", default="dem
 # /dev/tty.usbmodemfa121
 parser.add_argument('-i', '--wireless', help="Wireless", default=None)
 parser.add_argument('-v', '--view', help="View DMX frame", default=False,type=bool)
+# /dev/ttyUSB0 for Enttec Pro on VCP.
+parser.add_argument('-e', '--enttec', help="Enttec Pro on vcp", default=None)
 args = parser.parse_args()
 
 try:

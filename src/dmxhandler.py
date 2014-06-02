@@ -10,6 +10,9 @@ import thread
 import models
 import serial
 import requests
+import sys
+sys.path.append('../Files/local_components/pySimpleDMX')
+import pysimpledmx
 import pprint
 
 import uuid
@@ -32,6 +35,8 @@ class DmxHandler(object):
     changed = False
     dmxoutput = None
     activeGroup = {}
+    enttecpro = None
+
 
     def refresh_thread(self):
         while True:
@@ -51,10 +56,14 @@ class DmxHandler(object):
             # print 'DMX Acquire'
             if (self.changed == False ):
                 self.dmxCond.wait()
-            if (self.dmxFull is True):
+
+            if (self.enttecpro is not None):
+                self.flushDmxEnttecPro()
+            elif (self.dmxFull is True):
                 self.flushDmxFull()
             else:
                 self.flushDmxPartial()
+
             # print 'DMX Release'
             self.changed = False
             self.dmxCond.release()
@@ -75,7 +84,7 @@ class DmxHandler(object):
             self.dmxview = True
 
         if self.args.dmx is not None and self.args.wireless is None:
-            print "DMX on wire"
+            print "DMX on OpenDMX"
             self.dmxoutput = open(self.args.dmx, 'wb')
             self.dmxFull = True
 
@@ -86,10 +95,19 @@ class DmxHandler(object):
 
         self.dmxCond = threading.Condition()
 
-        if (self.dmxoutput is  not None):
+        # Enttec OpenDMX / USB DMX cable.
+        if self.dmxoutput is  not None:
             self.tr_thread = thread.start_new_thread(self.transition_thread, ())
             self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
             self.refresh_thread = thread.start_new_thread(self.refresh_thread, ())
+
+        # Enttec Pro support through VCP
+        if self.args.enttec is not None:
+            print 'DMX on Enttec Pro'
+            self.enttecpro = pysimpledmx.DMXConnection(self.args.enttec)
+            self.tr_thread = thread.start_new_thread(self.transition_thread, ())
+            self.dm_thread = thread.start_new_thread(self.dmx_thread, ())
+            # Refresh is done by the Enttec Pro.
 
         # Init the model
         for id in models.dmx_devices:
@@ -150,7 +168,35 @@ class DmxHandler(object):
             self.dmxCond.notify()
         self.dmxCond.release()
 
+    # Flush on Enttec Pro.
+    def flushDmxEnttecPro(self):
+        if (self.args.dmx == False):
+            return
+        if (self.changed == False):
+            return
+
+        self.DisplayDMX()
+
+        for ix in self.datas[1,513]:
+            self.enttecpro.setChannel(1, self.datas[ix])
+        self.enttecpro.render()
+
     # Flush DMX in fullmode.
+    def DisplayDMX(self):
+        disp = ['{:03d} '.format(x) for x in self.datas]
+        # Debug DMX
+        if (self.dmxview):
+            print
+            print '      ',
+            for ix in range(16):
+                print ' {:02d} '.format(ix + 1),
+            print
+            for ix in range(16):
+                print '{:03d} : '.format((ix * 16)),
+                for jx in range(16):
+                    print disp[(ix * 16) + jx + 1],
+                print
+
     def flushDmxFull(self):
         if (self.args.dmx == False):
             return
@@ -167,20 +213,8 @@ class DmxHandler(object):
         self.dmxoutput.write(ba)
         self.dmxoutput.flush()
 
-        disp = ['{:03d} '.format(x) for x in ba]
+        self.DisplayDMX()
 
-        # Debug DMX
-        if (self.dmxview):
-            print
-            print '      ',
-            for ix in range(16):
-                print ' {:02d} '.format(ix+1),
-            print
-            for ix in range(16):
-                print '{:03d} : '.format((ix*16)),
-                for jx in range(16):
-                    print disp[(ix*16)+jx+1],
-                print
         self.changed = False
 
     # Flush DMX in small trunck
