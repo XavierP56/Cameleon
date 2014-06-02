@@ -177,8 +177,8 @@ class DmxHandler(object):
 
         self.DisplayDMX()
 
-        for ix in self.datas[1,513]:
-            self.enttecpro.setChannel(1, self.datas[ix])
+        for ix in range(1,513):
+            self.enttecpro.setChannel(ix, self.datas[ix])
         self.enttecpro.render()
 
     # Flush DMX in fullmode.
@@ -462,12 +462,15 @@ class DmxHandler(object):
         print 'In DMX Panic'
         for id in models.dmx_devices:
             defs = self.GetDefs(id)
-            for key in defs:
-                dstchan = self.GetChannel(id, key)
-                val = 0
-                self.datas[dstchan] = val
-                evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
-                sessionsq.PostEvent('dmx',evt)
+            try:
+                for key in defs:
+                    dstchan = self.GetChannel(id, key)
+                    val = 0
+                    self.datas[dstchan] = val
+                    evt = {'evt': 'update', 'id': id, 'key': key, 'val': val}
+                    sessionsq.PostEvent('dmx',evt)
+            except:
+                pass
         self.datas = [0] * 513
         self.changed = True
 
