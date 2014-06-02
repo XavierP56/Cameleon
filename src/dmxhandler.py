@@ -76,7 +76,7 @@ class DmxHandler(object):
 
         if self.args.dmx is not None and self.args.wireless is None:
             print "DMX on wire"
-            self.dmxoutput = open(self.args.dmx, 'wb', 513)
+            self.dmxoutput = open(self.args.dmx, 'wb')
             self.dmxFull = True
 
         if self.args.wireless is not None:
@@ -157,7 +157,12 @@ class DmxHandler(object):
         if (self.changed == False):
             return
 
-        self.datas[0] = ord('F')
+        #
+        # DO NOT DO THIS :
+        # With linux /dev/dmx driver (dmx_usb.ko for Enttec OpenDMX)
+        # the first byte MUST be 0 !!!!!
+        # self.datas[0] = ord('F')
+        #
         ba = bytearray(self.datas)
         self.dmxoutput.write(ba)
         self.dmxoutput.flush()
