@@ -1,17 +1,18 @@
-SceniQ
-======
+Cameleon
+=========
 
 Developper : Xavier Pouyollon
 Ideas : Ludovic Girard
 
-Play multiples sounds and control DMX from your tablet.
+Control DMX machines and trigger sound from a tablet.
 
-Create a few HTML with Sound button. Use your tablet as a remote control.
-Create a few DMX buttons and slider. Use your tablet to control DMX projectors.
+Define some DMX fixture, machines and define scenes.
+A scene is a set of DMX machines with settings.
 
-Python, bottle, cherrypy, bower, angularjs, swmixer and port audio.
-Contains a modified version of swmixer.
+Define some pictures. A picture is a set of scenes and sounds.
 
-Made to work for a Linux or PCDuino with USB DMX Cable based on Enttec Open USB.
+Use these pictures from your tablet. Trigger your sounds and light.
+
+Works on PCDuino with either Enttec OpenDMX or Enttec DMX Pro.
 
 Work in progress for renowned French composer Ludovic Girard.
