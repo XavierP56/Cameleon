@@ -14,3 +14,6 @@
 [submodule "Files/local_components/angular-file-upload"]
 	path = Files/local_components/angular-file-upload
 	url = https://github.com/danialfarid/angular-file-upload.git
+[submodule "Files/local_components/pySimpleDMX"]
+	path = Files/local_components/pySimpleDMX
+	url = https://github.com/XavierP56/pySimpleDMX.git
