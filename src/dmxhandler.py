@@ -113,10 +113,13 @@ class DmxHandler(object):
         for id in models.dmx_devices:
             models.dmx_devices[id] = models.dmx_devices[id]
             if 'inits' in models.dmx_devices[id]:
-                for key in models.dmx_devices[id]['inits']:
-                    dstchan = self.GetChannel(id, key)
-                    val = int(models.dmx_devices[id]['inits'][key])
-                    self.datas[dstchan] = val
+                try:
+                    for key in models.dmx_devices[id]['inits']:
+                        dstchan = self.GetChannel(id, key)
+                        val = int(models.dmx_devices[id]['inits'][key])
+                        self.datas[dstchan] = val
+                except:
+                    pass
 
     def handle_transition(self):
         with self.lock:
