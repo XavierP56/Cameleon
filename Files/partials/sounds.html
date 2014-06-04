@@ -28,6 +28,11 @@
         <br/><br/>
         <input type="file" ng-file-select="onFileSelect($files)">
         <br/>
+        <div id="progress">
+            <p>Retrieving data...<strong>{{progessupload}} %</strong></p>
+            <progress value="{{progessupload}}" min="0" max="100"> </progress>
+        </div>
+
         songFile : <input ng-model="soundEntry.v.songFile">
         <br/><br/>
         <button ng-click="updateSounds(soundEntry.id, soundEntry.v)">Update !</button>

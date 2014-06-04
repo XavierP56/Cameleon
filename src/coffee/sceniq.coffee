@@ -693,12 +693,13 @@ app.filter 'faderFilter', ->
         url: "/cameleon/upload"
         file: file
       ).progress((evt) ->
-        console.log "percent: " + parseInt(100.0 * evt.loaded / evt.total)
+        $scope.progessupload = parseInt(100.0 * evt.loaded / evt.total)
         return
       ).success((data, status, headers, config) ->
         # file is uploaded successfully
         console.log data
         $scope.soundEntry.v.songFile = data.name
+        $scope.progessupload = 100
         return
       )
       i++
