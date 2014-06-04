@@ -135,7 +135,7 @@
   });
 
   app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSceneState, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _RecordPicture, _RecordScene, _RecordSetting, _SaveDebugDatas, _SetFader, _SettingList, _SlidersList, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
+    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSceneState, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _Reboot, _RecordPicture, _RecordScene, _RecordSetting, _SaveDebugDatas, _SetFader, _SettingList, _SlidersList, _TurnOff, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
     datas = {};
     _SettingList = $resource('/cfg/getsettinglist');
     _FaderList = $resource('/dmx/getfaderlist');
@@ -200,6 +200,8 @@
       }
     });
     _SaveDebugDatas = $resource('/models/save');
+    _TurnOff = $resource('/cameleon/turnoff');
+    _Reboot = $resource('/cameleon/reboot');
     datas.GetMachinesList = function() {
       return _FaderList.get({});
     };
@@ -324,6 +326,12 @@
       return _GetSceneState.get({
         scene: scene
       });
+    };
+    datas.TurnOff = function() {
+      return _TurnOff.get({});
+    };
+    datas.Reboot = function() {
+      return _Reboot.get({});
     };
     return datas;
   });
@@ -1217,7 +1225,7 @@
     return $scope.LoadAllCameleon();
   };
 
-  this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr) {
+  this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr, CameleonServer) {
     var CreateSession, DmxCancel, DmxEvents, DmxPanic, Events, Query, ReloadProfile, SndCancel, SndPanic, dmxpromise, sndpromise;
     SndPanic = $resource('/sounds/panic');
     DmxPanic = $resource('/dmx/panic');
@@ -1245,6 +1253,16 @@
     sndpromise.then(function() {});
     dmxpromise = DmxCancel.promise;
     dmxpromise.then(function() {});
+    $scope.turnoff = function() {
+      return CameleonServer.TurnOff().$promise.then(function(evt) {
+        return alert("You can turn off power safely in about 1 minute");
+      });
+    };
+    $scope.reboot = function() {
+      return CameleonServer.Reboot().$promise.then(function(evt) {
+        return alert("You can refresh in a few minutes");
+      });
+    };
     $scope.reloadProfile = function() {
       return ReloadProfile.get({}, function() {
         return alert('Profiles loaded !');

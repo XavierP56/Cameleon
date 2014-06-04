@@ -3,7 +3,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <body>
     <div ng-controller="MainCtrl">
-        <img src="images/cameleon.png">
+        <img src="images/cameleon.png" ng-init="showOffOptions=false" ng-dblclick="showOffOptions=!showOffOptions">
+        <div ng-show="showOffOptions">
+            <button ng-click="turnoff()">Turn Off</button>
+            <button ng-click="reboot()">Reboot</button>
+            <br/><br/>
+        </div>
         <!---
         <button ng-click="reloadProfile()">Reload profile</button>
         --->
@@ -25,7 +30,6 @@
     <script src="/sceniq/local_components/angular-file-upload/dist/angular-file-upload.min.js"></script>
 	<script src="/sceniq/bower_components/angular-resource/angular-resource.js"></script>
 	<script src="/sceniq/bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-    <script src="/sceniq/bower_components/angular-cookies/angular-cookies.min.js"></script>
 
     <script src="/sceniq/local_components/jQuery-Knob/js/jquery.knob.js"></script>
     <script src="/sceniq/local_components/angular-knob/src/angular-knob.js"></script>

@@ -133,6 +133,8 @@ app.factory 'CameleonServer', ($resource) ->
   _GetDebugDatas = $resource('/models/getdefs')
   _UpdateDebugDatas = $resource('/models/setdefs', {}, {set: {method: 'POST'}})
   _SaveDebugDatas = $resource('/models/save')
+  _TurnOff = $resource('/cameleon/turnoff')
+  _Reboot =  $resource('/cameleon/reboot')
 
   datas.GetMachinesList = () ->
     return _FaderList.get {}
@@ -188,6 +190,10 @@ app.factory 'CameleonServer', ($resource) ->
     return _SaveDebugDatas.get {}
   datas.GetSceneState = (scene)->
     return _GetSceneState.get {scene : scene}
+  datas.TurnOff = ()->
+    return _TurnOff.get {}
+  datas.Reboot = ()->
+    return _Reboot.get {}
   return datas
 
 
@@ -901,7 +907,7 @@ app.filter 'faderFilter', ->
   # Init
   $scope.LoadAllCameleon()
 
-@MainCtrl = ($scope, $http, $q, $resource, sessionMngr)->
+@MainCtrl = ($scope, $http, $q, $resource, sessionMngr,CameleonServer)->
   SndPanic = $resource('/sounds/panic')
   DmxPanic = $resource('/dmx/panic')
   Query = $resource('/models/scenes')
@@ -933,6 +939,14 @@ app.filter 'faderFilter', ->
 
   dmxpromise = DmxCancel.promise
   dmxpromise.then () ->
+
+  $scope.turnoff = ()->
+    CameleonServer.TurnOff().$promise.then (evt)->
+      alert ("You can turn off power safely in about 1 minute")
+
+  $scope.reboot = ()->
+    CameleonServer.Reboot().$promise.then (evt)->
+      alert("You can refresh in a few minutes")
 
   $scope.reloadProfile = () ->
     ReloadProfile.get {}, () ->
