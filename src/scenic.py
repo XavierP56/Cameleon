@@ -11,6 +11,7 @@ import sessionsq
 import uuid
 import scenes
 import os
+from subprocess import call
 
 from bottle import route, run, request, abort, static_file
 
@@ -255,6 +256,16 @@ def cameleon_upload():
 @app.route('/cameleon/getscenestate/:scene')
 def cameleon_getscenestate(scene):
     return scenes.getscenestate(scene)
+
+@app.route('/cameleon/reboot')
+def cameleon_reboot():
+    print 'reboot !'
+    call(["./reboot.sh"])
+
+@app.route('/cameleon/turnoff')
+def cameleon_turnoff():
+    print 'off !'
+    call(["./turnoff.sh"])
 
 # Start swmixer
 parser = argparse.ArgumentParser()
