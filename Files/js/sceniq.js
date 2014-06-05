@@ -885,15 +885,30 @@
     };
   };
 
-  this.DevicesCtrl = function($scope, CameleonServer, MenuUtils) {
+  this.DevicesCtrl = function($scope, CameleonServer, MenuUtils, $modal) {
     $scope.updateFixture = function(machine) {
       return machine.v.fixture = $scope.fixtureEntry.id;
     };
     $scope.selected = function(machine) {
       return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, machine.v.fixture);
     };
-    $scope.addDevice = function() {
-      $scope.devices[$scope.devName] = {
+    $scope.createDevice = function() {
+      var modalInstance;
+      modalInstance = $modal.open({
+        templateUrl: 'partials/ModalName.html',
+        controller: NameCtrl,
+        resolve: {
+          headerName: function() {
+            return 'Pleaser enter device name';
+          }
+        }
+      });
+      return modalInstance.result.then(function(name) {
+        return $scope.addDevice(name);
+      }, function(name) {});
+    };
+    $scope.addDevice = function(name) {
+      $scope.devices[name] = {
         channel: '',
         fixture: ''
       };

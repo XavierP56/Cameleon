@@ -629,15 +629,26 @@ app.filter 'faderFilter', ->
       )
 
 # This controller creates new devices.
-@DevicesCtrl = ($scope, CameleonServer, MenuUtils) ->
+@DevicesCtrl = ($scope, CameleonServer, MenuUtils,$modal) ->
   $scope.updateFixture = (machine)->
     machine.v.fixture = $scope.fixtureEntry.id
 
   $scope.selected = (machine)->
     $scope.fixtureEntry =MenuUtils.UpdateMenu($scope.cameleon.fixtureList, machine.v.fixture)
 
-  $scope.addDevice = ()->
-    $scope.devices[$scope.devName] =
+  $scope.createDevice = ()->
+     modalInstance = $modal.open(
+       templateUrl: 'partials/ModalName.html'
+       controller : NameCtrl,
+       resolve :
+          headerName : () -> 'Pleaser enter device name'
+     )
+     modalInstance.result.then (name)->
+       $scope.addDevice(name)
+     , (name)->
+
+  $scope.addDevice = (name)->
+    $scope.devices[name] =
       channel : ''
       fixture : ''
     $scope.createDevice = false

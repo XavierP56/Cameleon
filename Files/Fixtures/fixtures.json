@@ -4,8 +4,14 @@
         "knobs": {}
     }, 
     "Antoine": {
-        "defs": {}, 
-        "knobs": {}
+        "defs": {
+            "Red": "1"
+        }, 
+        "knobs": {
+            "Red": {
+                "fgColor": "red"
+            }
+        }
     }, 
     "Boo": {
         "defs": {}, 
@@ -15,6 +21,7 @@
         "defs": {
             "Blue": "3", 
             "Dimmer": "4", 
+            "Fg": "", 
             "Green": "2", 
             "Red": "1", 
             "Strobe": "5"
@@ -38,6 +45,10 @@
         }
     }, 
     "Feu": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "LeMonde": {
         "defs": {}, 
         "knobs": {}
     }, 
