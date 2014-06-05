@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload']);
+  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'ui.bootstrap']);
 
   app.config(function($stateProvider) {
     var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, camsounds, config, drooms, faders;
@@ -791,7 +791,17 @@
     };
   };
 
-  this.FixturesCtrl = function($scope, CameleonServer, MenuUtils) {
+  this.NameCtrl = function($scope, $modal, $modalInstance, headerName) {
+    $scope.headerName = headerName;
+    $scope.ok = function() {
+      return $modalInstance.close($scope.name);
+    };
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
+  };
+
+  this.FixturesCtrl = function($scope, CameleonServer, MenuUtils, $modal) {
     $scope.selected = function(fixture) {
       var k, list;
       list = [];
@@ -816,6 +826,18 @@
     };
     $scope.remove = function(index, fixinfo) {
       return fixinfo.splice(index, 1);
+    };
+    $scope.showModal = function() {
+      var modalInstance;
+      return modalInstance = $modal.open({
+        templateUrl: 'partials/ModalName.html',
+        controller: NameCtrl,
+        resolve: {
+          headerName: function() {
+            return 'Pleaser enter fixture name';
+          }
+        }
+      });
     };
     $scope.addFixture = function(name) {
       $scope.fixtures[name] = {

@@ -168,3 +168,6 @@ span.clear
     width: 100%;
 }
 
+.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+
+

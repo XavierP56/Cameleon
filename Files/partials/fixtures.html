@@ -3,6 +3,7 @@
     <br/>
     <select  ng-change="selected(fixtureEntry)" ng-model="fixtureEntry"  ng-options="c.id for c in cameleon.fixtureList"></select>
     <button ng-click="createFixture = true;fixtureEntry = null;">Add new fixture</button>
+    <button ng-click="showModal()">Add new fixture</button>
         <div ng-show="createFixture == true">
             <input ng-model="fixName">
             <button ng-click="addFixture(fixName)">Add !</button>

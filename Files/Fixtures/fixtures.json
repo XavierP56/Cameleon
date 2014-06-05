@@ -1,4 +1,8 @@
 {
+    "Boo": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
     "EuroLite": {
         "defs": {
             "Blue": "3", 
@@ -24,5 +28,21 @@
                 "fgColor": "orange"
             }
         }
+    }, 
+    "Feu": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "fsdfsfsff": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "fsfsfs": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "undefined": {
+        "defs": {}, 
+        "knobs": {}
     }
 }

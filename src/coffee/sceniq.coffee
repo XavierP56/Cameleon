@@ -1,7 +1,7 @@
 # Copyright Xavier Pouyollon 2014
 # GPL v3 License
 
-app = angular.module 'myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload']
+app = angular.module 'myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'ui.bootstrap' ]
 
 app.config ($stateProvider) ->
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
@@ -561,8 +561,16 @@ app.filter 'faderFilter', ->
       CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
         $scope.cameleon.picturesStuff = res.load.list
 
+@NameCtrl = ($scope, $modal, $modalInstance,headerName)->
+  $scope.headerName = headerName
+
+  $scope.ok = () ->
+    $modalInstance.close($scope.name);
+  $scope.cancel =  () ->
+    $modalInstance.dismiss('cancel')
+
 # This controller defines the fixtures
-@FixturesCtrl = ($scope, CameleonServer, MenuUtils)->
+@FixturesCtrl = ($scope, CameleonServer, MenuUtils,$modal)->
   $scope.selected = (fixture)->
     list = []
     for k of fixture.v.defs
@@ -578,6 +586,14 @@ app.filter 'faderFilter', ->
 
   $scope.remove = (index, fixinfo)->
     fixinfo.splice(index,1)
+
+  $scope.showModal = ()->
+     modalInstance = $modal.open(
+       templateUrl: 'partials/ModalName.html'
+       controller : NameCtrl,
+       resolve :
+          headerName : () -> 'Pleaser enter fixture name'
+     )
 
   $scope.addFixture = (name)->
     $scope.fixtures[name] = {'defs' : {}, 'knobs': {}}
