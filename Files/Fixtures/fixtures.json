@@ -21,7 +21,7 @@
         "defs": {
             "Blue": "3", 
             "Dimmer": "4", 
-            "Fg": "", 
+            "Fg": "4", 
             "Green": "2", 
             "Red": "1", 
             "Strobe": "5"

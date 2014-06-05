@@ -10,27 +10,50 @@
     </div>
     <br/>
     <div ng-show="fixtureEntry != null">
+        <br/>
         <div ng-repeat="f in fixtureInfo">
-            {{f.k}} is <input ng-model="f.v"> <button ng-click="remove($index,fixtureInfo)">Remove</button>
-        </div><br/>
+            <div class="row">
+                <div class="col-md-1">
+                    {{f.k}}
+                </div>
+                <div class="col-md-1">
+                    <input size='3' ng-model="f.v">
+                </div>
+                <div class="col-md-1">
+                    <button class="btn btn-danger" ng-click="remove($index,fixtureInfo)">Remove</button>
+                </div>
+           </div>
+        </div>
+        <br/>
 
         <div>
             <br/>
             <b>Beware : Update before adding a new key !!</b>
             <br/>
-            <select ng-model="stuff">
-                <option value='{"v":"red","k":"Red"}'>Red</option>
-                <option value='{"v":"green","k":"Green"}'>Green</option>
-                <option value='{"v":"blue","k":"Blue"}'>Blue</option>
-                <option value='{"v":"yellow","k":"Dimmer"}'>Dimmer</option>
-                <option value='{"v":"orange","k":"Strobe"}'>Strobe</option>
-            </select>
-            <button ng-click="addKey(stuff,fixtureEntry.id)">Add key</button>
-            <br/>
-            <input ng-model="custom">
-            <button ng-click="addCustom(custom, fixtureEntry.id)">Add custom key</button>
+            <div class="form-group">
+                <div class="col-md-2">
+                    <select class="form-control" ng-model="stuff">
+                        <option value='{"v":"red","k":"Red"}'>Red</option>
+                        <option value='{"v":"green","k":"Green"}'>Green</option>
+                        <option value='{"v":"blue","k":"Blue"}'>Blue</option>
+                        <option value='{"v":"yellow","k":"Dimmer"}'>Dimmer</option>
+                        <option value='{"v":"orange","k":"Strobe"}'>Strobe</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success" ng-click="addKey(stuff,fixtureEntry.id)">Add key</button>
+                </div>
+            </div>
             <br/><br/>
-            <button ng-click="updateFixture(fixtureEntry.id, fixtureInfo)">Update !</button>
+            <div class="form-group">
+                <div class="col-md-2">
+                    <input ng-model="custom">
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-success" ng-click="addCustom(custom, fixtureEntry.id)">Add custom key</button>
+                </div>
+            <br/><br/>
+            <button class="btn btn-primary" ng-click="updateFixture(fixtureEntry.id, fixtureInfo)">Update !</button>
 
         </div>
     </div>
