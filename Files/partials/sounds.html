@@ -1,38 +1,86 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
-<div style="text-align: center;">
+
+<div class="container">
     <select  ng-change="selected(soundEntry)" ng-model="soundEntry"  ng-options="c.id for c in soundlist"></select>
     <button ng-click="createSound()">Add new sound</button>
     <div ng-show="soundEntry != null">
         <br/>
         <br/>
-        <b>Sound specification:</b>
+        <h1>Sound specification:</h1>
         <br/>
-        card: <input type="number" ng-model="soundEntry.v.card">
-        <br/>
-        defLevel : <input type="number" ng-model="soundEntry.v.defLevel">
-        <br/>
-        loop : <input type="checkbox" ng-model="soundEntry.v.loop">
-        <br/>
-        position : <input list="soundModes" ng-model="soundEntry.v.position">
-        <datalist id = 'soundModes'>
-            <option value="s">Stereo</option>
-            <option value="r">Right</option>
-            <option value="l">Left</option>
-        </datalist>
 
-        <br/>
-        songName: <input ng-model="soundEntry.v.songName">
-        <br/><br/>
-        <input type="file" ng-file-select="onFileSelect($files)">
-        <br/>
-        <div>
-            <p>Retrieving data...<strong> {{progressupload}} %</strong></p>
-            <progressbar class="col-sm-4" value="progressupload" min="0" max="100"><span style="color:black; white-space:nowrap;">{{progressupload}} %</span> </progressbar>
+        <div class="row">
+            <div class="col-md-1">
+                card:
+            </div>
+            <div class="col-md-1">
+                <input type="number" ng-model="soundEntry.v.card">
+            </div>
         </div>
 
-        songFile : <input ng-model="soundEntry.v.songFile">
-        <br/><br/>
-        <button ng-click="updateSounds(soundEntry.id, soundEntry.v)">Update !</button>
+        <div class="row">
+            <div class="col-md-1">
+                defLevel :
+            </div>
+            <div class="col-md-1">
+                <input type="number" ng-model="soundEntry.v.defLevel">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                loop :
+            </div>
+            <div class="col-md-1">
+                 <input type="checkbox" ng-model="soundEntry.v.loop">
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                position :
+            </div>
+            <div class="col-md-1">
+                <input list="soundModes" ng-model="soundEntry.v.position">
+                <datalist id = 'soundModes'>
+                <option value="s">Stereo</option>
+                <option value="r">Right</option>
+                <option value="l">Left</option>
+                </datalist>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                songName:
+            </div>
+            <div class="col-md-1">
+                <input ng-model="soundEntry.v.songName">
+            </div>
+        </div>
+
+        <br/>
+        <div class="row">
+            <div class="col-md-3">
+               <input type="file" ng-file-select="onFileSelect($files)">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <progressbar value="progressupload" min="0" max="100"><span style="color:black; white-space:nowrap;">{{progressupload}} %</span> </progressbar>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-1">
+                songFile:
+            </div>
+            <div class="col-md-1">
+                <input readonly ng-model="soundEntry.v.songFile">
+            </div>
+        </div>
+        <br/>
+        <button class="btn btn-primary" ng-click="updateSounds(soundEntry.id, soundEntry.v)">Update !</button>
     </div>
 
 </div>
