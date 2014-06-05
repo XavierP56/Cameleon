@@ -793,6 +793,7 @@
 
   this.NameCtrl = function($scope, $modal, $modalInstance, headerName) {
     $scope.headerName = headerName;
+    $scope.name = '<enter name>';
     $scope.ok = function() {
       return $modalInstance.close($scope.name);
     };
@@ -829,7 +830,7 @@
     };
     $scope.showModal = function() {
       var modalInstance;
-      return modalInstance = $modal.open({
+      modalInstance = $modal.open({
         templateUrl: 'partials/ModalName.html',
         controller: NameCtrl,
         resolve: {
@@ -837,6 +838,11 @@
             return 'Pleaser enter fixture name';
           }
         }
+      });
+      return modalInstance.result.then(function(name) {
+        return alert('Name');
+      }, function(name) {
+        return alert('Cancel');
       });
     };
     $scope.addFixture = function(name) {

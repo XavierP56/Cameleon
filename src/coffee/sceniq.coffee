@@ -563,7 +563,7 @@ app.filter 'faderFilter', ->
 
 @NameCtrl = ($scope, $modal, $modalInstance,headerName)->
   $scope.headerName = headerName
-
+  $scope.name = '<enter name>'
   $scope.ok = () ->
     $modalInstance.close($scope.name);
   $scope.cancel =  () ->
@@ -594,6 +594,11 @@ app.filter 'faderFilter', ->
        resolve :
           headerName : () -> 'Pleaser enter fixture name'
      )
+     modalInstance.result.then (name)->
+       alert 'Name'
+     , (name)->
+       alert 'Cancel'
+
 
   $scope.addFixture = (name)->
     $scope.fixtures[name] = {'defs' : {}, 'knobs': {}}
