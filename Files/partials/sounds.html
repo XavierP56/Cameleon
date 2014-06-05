@@ -11,7 +11,7 @@
 
         <div class="row">
             <div class="col-md-1">
-                card:
+                Card
             </div>
             <div class="col-md-1">
                 <input type="number" ng-model="soundEntry.v.card">
@@ -20,7 +20,7 @@
 
         <div class="row">
             <div class="col-md-1">
-                defLevel :
+                Level
             </div>
             <div class="col-md-1">
                 <input type="number" ng-model="soundEntry.v.defLevel">
@@ -29,7 +29,7 @@
 
         <div class="row">
             <div class="col-md-1">
-                loop :
+                Loop
             </div>
             <div class="col-md-1">
                  <input type="checkbox" ng-model="soundEntry.v.loop">
@@ -38,7 +38,7 @@
 
         <div class="row">
             <div class="col-md-1">
-                position :
+                Position
             </div>
             <div class="col-md-1">
                 <input list="soundModes" ng-model="soundEntry.v.position">
@@ -52,7 +52,7 @@
 
         <div class="row">
             <div class="col-md-1">
-                songName:
+                Nom
             </div>
             <div class="col-md-1">
                 <input ng-model="soundEntry.v.songName">
@@ -73,14 +73,14 @@
 
         <div class="row">
             <div class="col-md-1">
-                songFile:
+                Fichier
             </div>
             <div class="col-md-1">
                 <input readonly ng-model="soundEntry.v.songFile">
             </div>
         </div>
         <br/>
-        <button class="btn btn-primary" ng-click="updateSounds(soundEntry.id, soundEntry.v)">Update !</button>
+        <button type="button" class="btn btn-primary" ng-click="updateSounds(soundEntry.id, soundEntry.v)">Update !</button>
     </div>
 
 </div>
