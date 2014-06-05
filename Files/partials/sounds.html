@@ -1,10 +1,6 @@
 <div style="text-align: center;">
     <select  ng-change="selected(soundEntry)" ng-model="soundEntry"  ng-options="c.id for c in soundlist"></select>
-    <button ng-click="createSound = true;soundEntry = null;">Add new sound</button>
-        <div ng-show="createSound == true">
-            <input ng-model="sndName">
-            <button ng-click="addSound()">Add !</button>
-        </div>
+    <button ng-click="createSound()">Add new sound</button>
     <div ng-show="soundEntry != null">
         <br/>
         <br/>

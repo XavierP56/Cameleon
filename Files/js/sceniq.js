@@ -963,7 +963,7 @@
     return $scope.getfixtures(function() {});
   };
 
-  this.SoundsCtrl = function($scope, CameleonServer, $upload) {
+  this.SoundsCtrl = function($scope, CameleonServer, $upload, $modal) {
     $scope.getsounds = function() {
       return CameleonServer.GetSounds().$promise.then(function(res) {
         var k, list, v, _ref;
@@ -985,8 +985,23 @@
         return alert('Updated !');
       });
     };
-    $scope.addSound = function() {
-      $scope.sounds[$scope.sndName] = {
+    $scope.createSound = function() {
+      var modalInstance;
+      modalInstance = $modal.open({
+        templateUrl: 'partials/ModalName.html',
+        controller: NameCtrl,
+        resolve: {
+          headerName: function() {
+            return 'Pleaser enter sound name';
+          }
+        }
+      });
+      return modalInstance.result.then(function(name) {
+        return $scope.addSound(name);
+      }, function(name) {});
+    };
+    $scope.addSound = function(name) {
+      $scope.sounds[name] = {
         card: '',
         defLevel: '',
         loop: false,

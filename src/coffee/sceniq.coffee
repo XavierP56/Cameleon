@@ -684,7 +684,7 @@ app.filter 'faderFilter', ->
   $scope.getfixtures(()->)
 
 # This controller adds sounds
-@SoundsCtrl = ($scope, CameleonServer,$upload) ->
+@SoundsCtrl = ($scope, CameleonServer,$upload,$modal) ->
 
   $scope.getsounds = ()->
     CameleonServer.GetSounds().$promise.then (res)->
@@ -701,8 +701,19 @@ app.filter 'faderFilter', ->
     CameleonServer.UpdateSounds($scope.sounds).$promise.then (res)->
       alert ('Updated !')
 
-  $scope.addSound = ()->
-    $scope.sounds[$scope.sndName] =
+  $scope.createSound = ()->
+     modalInstance = $modal.open(
+       templateUrl: 'partials/ModalName.html'
+       controller : NameCtrl,
+       resolve :
+          headerName : () -> 'Pleaser enter sound name'
+     )
+     modalInstance.result.then (name)->
+       $scope.addSound(name)
+     , (name)->
+
+  $scope.addSound = (name)->
+    $scope.sounds[name] =
       card: ''
       defLevel: ''
       loop: false
