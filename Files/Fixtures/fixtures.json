@@ -93,8 +93,14 @@
         }
     }, 
     "fsfsfs": {
-        "defs": {}, 
-        "knobs": {}
+        "defs": {
+            "Green": ""
+        }, 
+        "knobs": {
+            "Green": {
+                "fgColor": "green"
+            }
+        }
     }, 
     "undefined": {
         "defs": {}, 

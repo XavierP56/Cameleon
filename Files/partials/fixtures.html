@@ -1,8 +1,14 @@
-<div style="text-align: center;">
-    Here we define the fixtures.
+<div class="container">
+    <p1>Here we define the fixtures.</p1>
+    <div class="form-group">
+        <div class="col-md-2">
+            <select  class="form-control" ng-change="selected(fixtureEntry)" ng-model="fixtureEntry"  ng-options="c.id for c in cameleon.fixtureList"></select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" ng-click="createFixture()">Add new fixture</button>
+        </div>
+    </div>
     <br/>
-    <select  ng-change="selected(fixtureEntry)" ng-model="fixtureEntry"  ng-options="c.id for c in cameleon.fixtureList"></select>
-    <button ng-click="createFixture()">Add new fixture</button>
     <div ng-show="fixtureEntry != null">
         <div ng-repeat="f in fixtureInfo">
             {{f.k}} is <input ng-model="f.v"> <button ng-click="remove($index,fixtureInfo)">Remove</button>
