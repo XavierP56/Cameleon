@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'ui.bootstrap']);
+  app = angular.module('myApp', ['ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload']);
 
   app.config(function($stateProvider) {
     var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, camsounds, config, drooms, faders;
@@ -1023,7 +1023,7 @@
           url: "/cameleon/upload",
           file: file
         }).progress(function(evt) {
-          $scope.progessupload = parseInt(100.0 * evt.loaded / evt.total);
+          $scope.progressupload = parseInt(100.0 * evt.loaded / evt.total);
         }).success(function(data, status, headers, config) {
           console.log(data);
           $scope.soundEntry.v.songFile = data.name;

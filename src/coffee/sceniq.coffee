@@ -1,7 +1,7 @@
 # Copyright Xavier Pouyollon 2014
 # GPL v3 License
 
-app = angular.module 'myApp', ['ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'ui.bootstrap' ]
+app = angular.module 'myApp', ['ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload' ]
 
 app.config ($stateProvider) ->
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
@@ -741,7 +741,7 @@ app.filter 'faderFilter', ->
         url: "/cameleon/upload"
         file: file
       ).progress((evt) ->
-        $scope.progessupload = parseInt(100.0 * evt.loaded / evt.total)
+        $scope.progressupload = parseInt(100.0 * evt.loaded / evt.total)
         return
       ).success((data, status, headers, config) ->
         # file is uploaded successfully
