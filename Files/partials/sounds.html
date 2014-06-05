@@ -1,8 +1,15 @@
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
 
 <div class="container">
-    <select  ng-change="selected(soundEntry)" ng-model="soundEntry"  ng-options="c.id for c in soundlist"></select>
-    <button type="button" class="btn btn-default" ng-click="createSound()">Add new sound</button>
+    <div class="form-group">
+        <div class="col-md-2">
+        <select  class="form-control" ng-change="selected(soundEntry)" ng-model="soundEntry"  ng-options="c.id for c in soundlist"></select>
+        </div>
+        <div class="col-md-2">
+        <button type="button" class="btn btn-success" ng-click="createSound()">Add new sound</button>
+        </div>
+    </div>
+
     <div ng-show="soundEntry != null">
         <br/>
         <br/>
