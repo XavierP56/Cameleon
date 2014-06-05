@@ -60,8 +60,22 @@
         "knobs": {}
     }, 
     "fsdfsfsff": {
-        "defs": {}, 
-        "knobs": {}
+        "defs": {
+            "Blue": "", 
+            "Dimmer": "", 
+            "Red": ""
+        }, 
+        "knobs": {
+            "Blue": {
+                "fgColor": "blue"
+            }, 
+            "Dimmer": {
+                "fgColor": "yellow"
+            }, 
+            "Red": {
+                "fgColor": "red"
+            }
+        }
     }, 
     "fsfsfs": {
         "defs": {}, 

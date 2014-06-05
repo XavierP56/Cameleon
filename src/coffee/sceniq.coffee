@@ -561,6 +561,7 @@ app.filter 'faderFilter', ->
       CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
         $scope.cameleon.picturesStuff = res.load.list
 
+# Defines the name controller.
 @NameCtrl = ($scope, $modal, $modalInstance,headerName)->
   $scope.headerName = headerName
   $scope.data = {}
