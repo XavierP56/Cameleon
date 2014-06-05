@@ -563,9 +563,10 @@ app.filter 'faderFilter', ->
 
 @NameCtrl = ($scope, $modal, $modalInstance,headerName)->
   $scope.headerName = headerName
-  $scope.name = '<enter name>'
+  $scope.data = {}
+  $scope.data.name = ''
   $scope.ok = () ->
-    $modalInstance.close($scope.name);
+    $modalInstance.close($scope.data.name);
   $scope.cancel =  () ->
     $modalInstance.dismiss('cancel')
 
@@ -587,7 +588,7 @@ app.filter 'faderFilter', ->
   $scope.remove = (index, fixinfo)->
     fixinfo.splice(index,1)
 
-  $scope.showModal = ()->
+  $scope.createFixture = ()->
      modalInstance = $modal.open(
        templateUrl: 'partials/ModalName.html'
        controller : NameCtrl,
@@ -595,14 +596,11 @@ app.filter 'faderFilter', ->
           headerName : () -> 'Pleaser enter fixture name'
      )
      modalInstance.result.then (name)->
-       alert 'Name'
+       $scope.addFixture(name)
      , (name)->
-       alert 'Cancel'
-
 
   $scope.addFixture = (name)->
     $scope.fixtures[name] = {'defs' : {}, 'knobs': {}}
-
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
       $scope.getfixtures(()->
         $scope.fixtureInfo = null

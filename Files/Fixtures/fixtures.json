@@ -1,4 +1,12 @@
 {
+    "<enter name>": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "Antoine": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
     "Boo": {
         "defs": {}, 
         "knobs": {}
@@ -30,6 +38,24 @@
         }
     }, 
     "Feu": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "ThomasLapin": {
+        "defs": {
+            "Blue": "", 
+            "Dimmer": ""
+        }, 
+        "knobs": {
+            "Blue": {
+                "fgColor": "blue"
+            }, 
+            "Dimmer": {
+                "fgColor": "yellow"
+            }
+        }
+    }, 
+    "Xavier": {
         "defs": {}, 
         "knobs": {}
     }, 

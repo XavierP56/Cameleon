@@ -793,9 +793,10 @@
 
   this.NameCtrl = function($scope, $modal, $modalInstance, headerName) {
     $scope.headerName = headerName;
-    $scope.name = '<enter name>';
+    $scope.data = {};
+    $scope.data.name = '';
     $scope.ok = function() {
-      return $modalInstance.close($scope.name);
+      return $modalInstance.close($scope.data.name);
     };
     return $scope.cancel = function() {
       return $modalInstance.dismiss('cancel');
@@ -828,7 +829,7 @@
     $scope.remove = function(index, fixinfo) {
       return fixinfo.splice(index, 1);
     };
-    $scope.showModal = function() {
+    $scope.createFixture = function() {
       var modalInstance;
       modalInstance = $modal.open({
         templateUrl: 'partials/ModalName.html',
@@ -840,10 +841,8 @@
         }
       });
       return modalInstance.result.then(function(name) {
-        return alert('Name');
-      }, function(name) {
-        return alert('Cancel');
-      });
+        return $scope.addFixture(name);
+      }, function(name) {});
     };
     $scope.addFixture = function(name) {
       $scope.fixtures[name] = {
