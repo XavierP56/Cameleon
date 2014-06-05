@@ -1,8 +1,13 @@
-<div style="text-align: center;">
-    <b>Define the machines</b>
-    <br/>
-    <select ng-change="selected(cameleon.currentMachine)" ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
-    <button ng-click="createDevice()">Add new device</button>
+<div class="container">
+    <h1>Define the machines</h1>
+    <div class="form-group">
+        <div class="col-md-2">
+            <select class="form-control" ng-change="selected(cameleon.currentMachine)" ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-success" ng-click="createDevice()">Add new device</button>
+        </div>
+    </div>
     <br/><br/>
     <div ng-show="cameleon.currentMachine != null">
         Base channel:
