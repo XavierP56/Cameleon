@@ -710,7 +710,8 @@ app.filter 'faderFilter', ->
       fixture : ''
     $scope.createDevice = false
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
-      $scope.getdevices()
+      $scope.getdevices().promise.then ()->
+        MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name)
 
   $scope.updateDevices = () ->
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
@@ -727,23 +728,26 @@ app.filter 'faderFilter', ->
 
   $scope.fixtureEntry = {}
 
-@DevFixCtrl = ($scope, CameleonServer,CameleonUtils) ->
+@DevFixCtrl = ($scope, CameleonServer,CameleonUtils,$q) ->
   $scope.getfixtures = (cb)->
     CameleonServer.GetFixtures().$promise.then (res)->
       $scope.fixtures = res.fixtures
       list = []
-      for k,v in CameleonUtils.sortedKeys(res.fixtures)
-        list.push {'id': k, 'v':v}
+      for k in CameleonUtils.sortedKeys(res.fixtures)
+        list.push {'id': k, 'v':res.fixtures[k]}
       $scope.cameleon.fixtureList = list
       cb()
 
   $scope.getdevices = ()->
+    promise = $q.defer()
     CameleonServer.GetDevices().$promise.then (res)->
       $scope.devices = res.devices
       list = []
       for k,v of res.devices
         list.push {'id': k, 'v':v}
       $scope.cameleon.machinesList = list
+      promise.resolve()
+    return promise
 
   # Init
   $scope.getdevices()

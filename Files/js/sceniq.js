@@ -996,7 +996,9 @@
       };
       $scope.createDevice = false;
       return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
-        return $scope.getdevices();
+        return $scope.getdevices().promise.then(function() {
+          return MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name);
+        });
       });
     };
     $scope.updateDevices = function() {
@@ -1019,18 +1021,18 @@
     return $scope.fixtureEntry = {};
   };
 
-  this.DevFixCtrl = function($scope, CameleonServer, CameleonUtils) {
+  this.DevFixCtrl = function($scope, CameleonServer, CameleonUtils, $q) {
     $scope.getfixtures = function(cb) {
       return CameleonServer.GetFixtures().$promise.then(function(res) {
-        var k, list, v, _i, _len, _ref;
+        var k, list, _i, _len, _ref;
         $scope.fixtures = res.fixtures;
         list = [];
         _ref = CameleonUtils.sortedKeys(res.fixtures);
-        for (v = _i = 0, _len = _ref.length; _i < _len; v = ++_i) {
-          k = _ref[v];
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          k = _ref[_i];
           list.push({
             'id': k,
-            'v': v
+            'v': res.fixtures[k]
           });
         }
         $scope.cameleon.fixtureList = list;
@@ -1038,7 +1040,9 @@
       });
     };
     $scope.getdevices = function() {
-      return CameleonServer.GetDevices().$promise.then(function(res) {
+      var promise;
+      promise = $q.defer();
+      CameleonServer.GetDevices().$promise.then(function(res) {
         var k, list, v, _ref;
         $scope.devices = res.devices;
         list = [];
@@ -1050,8 +1054,10 @@
             'v': v
           });
         }
-        return $scope.cameleon.machinesList = list;
+        $scope.cameleon.machinesList = list;
+        return promise.resolve();
       });
+      return promise;
     };
     $scope.getdevices();
     return $scope.getfixtures(function() {});

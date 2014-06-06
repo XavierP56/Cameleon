@@ -1,4 +1,12 @@
 {
+    "2Yamaha": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "3Yamaha": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
     "<enter name>": {
         "defs": {}, 
         "knobs": {}
@@ -84,6 +92,10 @@
         }
     }, 
     "Xavier": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "Yamaha": {
         "defs": {}, 
         "knobs": {}
     }, 
