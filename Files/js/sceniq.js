@@ -144,6 +144,9 @@
         resolve: {
           bodyText: function() {
             return msg;
+          },
+          onlyOK: function() {
+            return true;
           }
         }
       });
@@ -822,9 +825,10 @@
     };
   };
 
-  this.ConfirmCtrl = function($scope, $modal, $modalInstance, bodyText) {
+  this.ConfirmCtrl = function($scope, $modal, $modalInstance, bodyText, onlyOK) {
     $scope.bodyText = {};
     $scope.bodyText.text = bodyText;
+    $scope.bodyText.onlyOK = onlyOK;
     $scope.ok = function() {
       return $modalInstance.close('');
     };

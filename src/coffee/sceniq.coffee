@@ -112,6 +112,7 @@ app.factory 'AlertUtils', ($modal)->
        controller : ConfirmCtrl,
        resolve :
           bodyText : () -> msg
+          onlyOK : ()->true
      )
   return alert
 
@@ -583,9 +584,10 @@ app.filter 'faderFilter', ->
         $scope.cameleon.picturesStuff = res.load.list
 
 # Defines the confirm controller.
-@ConfirmCtrl = ($scope, $modal, $modalInstance, bodyText)->
+@ConfirmCtrl = ($scope, $modal, $modalInstance, bodyText, onlyOK)->
   $scope.bodyText = {}
   $scope.bodyText.text = bodyText
+  $scope.bodyText.onlyOK = onlyOK
   $scope.ok = () ->
     $modalInstance.close('');
   $scope.cancel =  () ->
