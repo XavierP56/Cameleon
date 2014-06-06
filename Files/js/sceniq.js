@@ -1005,18 +1005,18 @@
       });
     };
     $scope.checkStuff = function() {
+      if ($scope.fixtureEntry === null) {
+        return true;
+      }
       if ($scope.cameleon.currentMachine === void 0) {
         return true;
       }
       if ($scope.cameleon.currentMachine.v.channel === '') {
         return true;
       }
-      if ($scope.fixtureEntry === null) {
-        return true;
-      }
       return false;
     };
-    return $scope.fixtureEntry = {};
+    return $scope.fixtureEntry = null;
   };
 
   this.DevFixCtrl = function($scope, CameleonServer, CameleonUtils, $q) {

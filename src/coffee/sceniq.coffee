@@ -715,15 +715,15 @@ app.filter 'faderFilter', ->
       AlertUtils.showMsg 'Update done !'
 
   $scope.checkStuff = ()->
+    if $scope.fixtureEntry == null
+      return true
     if $scope.cameleon.currentMachine == undefined
       return true
     if $scope.cameleon.currentMachine.v.channel == ''
       return true
-    if $scope.fixtureEntry == null
-      return true
     return false
 
-  $scope.fixtureEntry = {}
+  $scope.fixtureEntry = null
 
 @DevFixCtrl = ($scope, CameleonServer,CameleonUtils,$q) ->
   $scope.getfixtures = ()->
