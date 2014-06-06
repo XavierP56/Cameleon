@@ -571,6 +571,14 @@ app.filter 'faderFilter', ->
       CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
         $scope.cameleon.picturesStuff = res.load.list
 
+# Defines the confirm controller.
+@ConfirmCtrl = ($scope, $modal, $modalInstance, bodyText)->
+  $scope.bodyText = bodyText
+  $scope.ok = () ->
+    $modalInstance.close('');
+  $scope.cancel =  () ->
+    $modalInstance.dismiss('cancel')
+
 # Defines the name controller.
 @NameCtrl = ($scope, $modal, $modalInstance,headerName)->
   $scope.headerName = headerName
@@ -604,7 +612,7 @@ app.filter 'faderFilter', ->
        templateUrl: 'partials/ModalName.html'
        controller : NameCtrl,
        resolve :
-          headerName : () -> 'Pleaser enter fixture name'
+          headerName : () -> 'Please enter fixture name'
      )
      modalInstance.result.then (name)->
        $scope.addFixture(name)

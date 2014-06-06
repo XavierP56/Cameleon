@@ -805,6 +805,16 @@
     };
   };
 
+  this.ConfirmCtrl = function($scope, $modal, $modalInstance, bodyText) {
+    $scope.bodyText = bodyText;
+    $scope.ok = function() {
+      return $modalInstance.close('');
+    };
+    return $scope.cancel = function() {
+      return $modalInstance.dismiss('cancel');
+    };
+  };
+
   this.NameCtrl = function($scope, $modal, $modalInstance, headerName) {
     $scope.headerName = headerName;
     $scope.data = {};
@@ -850,7 +860,7 @@
         controller: NameCtrl,
         resolve: {
           headerName: function() {
-            return 'Pleaser enter fixture name';
+            return 'Please enter fixture name';
           }
         }
       });
