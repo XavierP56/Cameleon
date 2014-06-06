@@ -711,7 +711,7 @@ app.filter 'faderFilter', ->
     $scope.createDevice = false
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
       $scope.getdevices().promise.then ()->
-        MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name)
+        $scope.cameleon.currentMachine = MenuUtils.UpdateMenu($scope.cameleon.machinesList, name)
 
   $scope.updateDevices = () ->
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->

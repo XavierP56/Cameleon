@@ -997,7 +997,7 @@
       $scope.createDevice = false;
       return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
         return $scope.getdevices().promise.then(function() {
-          return MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name);
+          return $scope.cameleon.currentMachine = MenuUtils.UpdateMenu($scope.cameleon.machinesList, name);
         });
       });
     };
