@@ -497,7 +497,7 @@
     };
   });
 
-  app.directive("dmxFader", function(CameleonServer, $resource, $parse) {
+  app.directive("dmxFader", function(CameleonServer, $resource, $parse, $modal) {
     return {
       restrict: 'E',
       scope: true,
@@ -505,15 +505,29 @@
       link: function(scope, elemt, attrs) {
         var Generate;
         Generate = $resource('/dmx/generate/:fader/:setting/:prefix');
-        scope.record = function(fader, wrapper) {
-          if ((wrapper === void 0) || (wrapper === '')) {
+        scope.createSetting = function(fader, wrapper) {
+          var modalInstance;
+          modalInstance = $modal.open({
+            templateUrl: 'partials/ModalName.html',
+            controller: NameCtrl,
+            resolve: {
+              headerName: function() {
+                return 'Pleaser enter setting name';
+              }
+            }
+          });
+          return modalInstance.result.then(function(name) {
+            return scope.record(fader, name);
+          }, function(name) {});
+        };
+        scope.record = function(fader, name) {
+          if ((name === void 0) || (name === '')) {
             return alert('You must enter a setting name !');
           } else {
-            return CameleonServer.RecordFaderSetting(scope.id, wrapper.name).$promise.then(function(evt) {
+            return CameleonServer.RecordFaderSetting(scope.id, name).$promise.then(function(evt) {
               return CameleonServer.GetSettingList().$promise.then(function(res) {
                 scope.settings = res.settings;
-                scope.currentSetting = wrapper.name;
-                return wrapper.name = "";
+                return scope.currentSetting = name;
               });
             });
           }

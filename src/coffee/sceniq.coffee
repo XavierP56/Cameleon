@@ -319,7 +319,7 @@ app.directive "dmxScene", ->
 
     return
 
-app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
+app.directive "dmxFader", (CameleonServer, $resource, $parse,$modal) ->
   restrict: 'E'
   scope : true
   templateUrl: '/sceniq/templates/dmxfader.html'
@@ -328,16 +328,26 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse) ->
 
     Generate = $resource('/dmx/generate/:fader/:setting/:prefix')
 
-    scope.record = (fader, wrapper) ->
-      if (wrapper is undefined) or (wrapper == '')
+    scope.createSetting = (fader, wrapper)->
+     modalInstance = $modal.open(
+       templateUrl: 'partials/ModalName.html'
+       controller : NameCtrl,
+       resolve :
+          headerName : () -> 'Pleaser enter setting name'
+     )
+     modalInstance.result.then (name)->
+       scope.record(fader, name)
+     , (name)->
+
+    scope.record = (fader, name) ->
+      if (name is undefined) or (name == '')
         #RecordSetting.get {fader: fader, setname: ''}
         alert ('You must enter a setting name !')
       else
-        CameleonServer.RecordFaderSetting(scope.id, wrapper.name).$promise.then (evt)->
+        CameleonServer.RecordFaderSetting(scope.id, name).$promise.then (evt)->
             CameleonServer.GetSettingList().$promise.then (res)->
               scope.settings = res.settings
-              scope.currentSetting = wrapper.name
-              wrapper.name = ""
+              scope.currentSetting = name
 
     scope.showMe = () ->
       return false if scope.settings == undefined

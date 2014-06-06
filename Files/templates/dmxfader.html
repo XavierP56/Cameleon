@@ -1,11 +1,15 @@
 <div class="soundbutton">
     <b>DMX Fader projector {{id}}</b>
     <div ng-show="showIt">
-    <select ng-show="showMe()" ng-model="setting.menu" ng-options="c.name for c in settings" ng-change="SetSetting(id,setting.menu.name)"></select>
-    <div ng-show="currentSetting == ''">
-        <input ng-model="wrapper.name">
-        <button ng-click="record(id,wrapper)">Record new setting</button><br/>
+    <div class="form-group">
+        <div class="col-md-4">
+         <select class="form-control"  ng-show="showMe()" ng-model="setting.menu" ng-options="c.name for c in settings" ng-change="SetSetting(id,setting.menu.name)"></select>
+        </div>
+        <div  ng-show="currentSetting == ''" class="col-md-2">
+            <button class="btn btn-success" ng-click="createSetting(id)">Record new setting</button><br/>
+        </div>
     </div>
+    <br/>
     <br/>
     <span ng-repeat="s in sliders">
         <dmx-slider ng-class="computeCssClass($last)" id="{{s.id}}" name="{{s.name}}" key="{{s.key}}"></dmx-slider>
