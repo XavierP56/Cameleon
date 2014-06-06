@@ -1,9 +1,16 @@
-<div>
-    <div style="text-align: center;">
-    <select  ng-change="load()" ng-model="cameleon.currentPicture" ng-options="c.name for c in cameleon.picturesList"></select>
+<div class="container" style="text-align: center;">
+    <div>
+        <div class="form-group">
+            <div class="col-md-2">
+                <label>Select the picture</label>
+            </div>
+            <div class="col-md-2">
+                <select  class="form-control" ng-change="load()" ng-model="cameleon.currentPicture" ng-options="c.name for c in cameleon.picturesList"></select>
+            </div>
+        </div>
     </div>
-    <br/>
-    <div style="text-align: center;">
+    <br/><br/>
+    <div>
         <widgets things="cameleon.picturesStuff"></widgets>
     </div>
 </div>
