@@ -53,8 +53,18 @@
         "knobs": {}
     }, 
     "NEwFix": {
-        "defs": {}, 
-        "knobs": {}
+        "defs": {
+            "Blue": "", 
+            "Dimmer": "3"
+        }, 
+        "knobs": {
+            "Blue": {
+                "fgColor": "blue"
+            }, 
+            "Dimmer": {
+                "fgColor": "yellow"
+            }
+        }
     }, 
     "ThomasLapin": {
         "defs": {
