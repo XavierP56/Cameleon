@@ -103,6 +103,18 @@ app.factory 'MenuUtils', ()->
 
   return menus
 
+app.factory 'AlertUtils', ($modal)->
+  alert = {}
+
+  alert.showMsg = (msg)->
+    return $modal.open(
+       templateUrl: 'partials/Confirm.html'
+       controller : ConfirmCtrl,
+       resolve :
+          bodyText : () -> msg
+     )
+  return alert
+
 # Let's centralize all the communication to the server.
 app.factory 'CameleonServer', ($resource) ->
   datas = {}
@@ -573,7 +585,8 @@ app.filter 'faderFilter', ->
 
 # Defines the confirm controller.
 @ConfirmCtrl = ($scope, $modal, $modalInstance, bodyText)->
-  $scope.bodyText = bodyText
+  $scope.bodyText = {}
+  $scope.bodyText.text = bodyText
   $scope.ok = () ->
     $modalInstance.close('');
   $scope.cancel =  () ->
@@ -590,7 +603,7 @@ app.filter 'faderFilter', ->
     $modalInstance.dismiss('cancel')
 
 # This controller defines the fixtures
-@FixturesCtrl = ($scope, CameleonServer, MenuUtils,$modal)->
+@FixturesCtrl = ($scope, CameleonServer, MenuUtils,$modal,AlertUtils)->
   $scope.selected = (fixture)->
     list = []
     for k of fixture.v.defs
@@ -602,7 +615,7 @@ app.filter 'faderFilter', ->
     for e in fixinfo
       $scope.fixtures[id].defs[e.k] = e.v
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
-      alert ('Updated !')
+      AlertUtils.showMsg ('Updated !')
 
   $scope.remove = (index, fixinfo)->
     fixinfo.splice(index,1)

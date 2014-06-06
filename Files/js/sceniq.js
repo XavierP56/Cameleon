@@ -134,6 +134,23 @@
     return menus;
   });
 
+  app.factory('AlertUtils', function($modal) {
+    var alert;
+    alert = {};
+    alert.showMsg = function(msg) {
+      return $modal.open({
+        templateUrl: 'partials/Confirm.html',
+        controller: ConfirmCtrl,
+        resolve: {
+          bodyText: function() {
+            return msg;
+          }
+        }
+      });
+    };
+    return alert;
+  });
+
   app.factory('CameleonServer', function($resource) {
     var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSceneState, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _Reboot, _RecordPicture, _RecordScene, _RecordSetting, _SaveDebugDatas, _SetFader, _SettingList, _SlidersList, _TurnOff, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
     datas = {};
@@ -806,7 +823,8 @@
   };
 
   this.ConfirmCtrl = function($scope, $modal, $modalInstance, bodyText) {
-    $scope.bodyText = bodyText;
+    $scope.bodyText = {};
+    $scope.bodyText.text = bodyText;
     $scope.ok = function() {
       return $modalInstance.close('');
     };
@@ -827,7 +845,7 @@
     };
   };
 
-  this.FixturesCtrl = function($scope, CameleonServer, MenuUtils, $modal) {
+  this.FixturesCtrl = function($scope, CameleonServer, MenuUtils, $modal, AlertUtils) {
     $scope.selected = function(fixture) {
       var k, list;
       list = [];
@@ -847,7 +865,7 @@
         $scope.fixtures[id].defs[e.k] = e.v;
       }
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
-        return alert('Updated !');
+        return AlertUtils.showMsg('Updated !');
       });
     };
     $scope.remove = function(index, fixinfo) {
