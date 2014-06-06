@@ -1110,7 +1110,7 @@
     };
   };
 
-  this.SceneCtrl = function($scope, CameleonServer, MenuUtils) {
+  this.SceneCtrl = function($scope, CameleonServer, MenuUtils, $modal) {
     $scope.showCreate = false;
     $scope.$watch('cameleon.scenesList', function(n, o) {
       if ($scope.cameleon.currentScene === null) {
@@ -1120,6 +1120,21 @@
     });
     $scope.showNew = function() {
       return $scope.showCreate = true;
+    };
+    $scope.createScene = function() {
+      var modalInstance;
+      modalInstance = $modal.open({
+        templateUrl: 'partials/ModalName.html',
+        controller: NameCtrl,
+        resolve: {
+          headerName: function() {
+            return 'Pleaser enter fixture name';
+          }
+        }
+      });
+      return modalInstance.result.then(function(name) {
+        return $scope.addScene(name);
+      }, function(name) {});
     };
     $scope.addScene = function(scene) {
       return CameleonServer.CreateScene(scene).$promise.then(function(evt) {

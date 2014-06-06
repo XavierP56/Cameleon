@@ -816,7 +816,7 @@ app.filter 'faderFilter', ->
         m.setting = newSetting
 
 # TODO: RenameMe as SceneMngrCtrl
-@SceneCtrl = ($scope, CameleonServer, MenuUtils)->
+@SceneCtrl = ($scope, CameleonServer, MenuUtils,$modal)->
 
   $scope.showCreate = false
 
@@ -827,6 +827,17 @@ app.filter 'faderFilter', ->
 
   $scope.showNew = ()->
     $scope.showCreate = true
+
+  $scope.createScene =()->
+     modalInstance = $modal.open(
+       templateUrl: 'partials/ModalName.html'
+       controller : NameCtrl,
+       resolve :
+          headerName : () -> 'Pleaser enter fixture name'
+     )
+     modalInstance.result.then (name)->
+       $scope.addScene(name)
+     , (name)->
 
   $scope.addScene = (scene)->
     CameleonServer.CreateScene(scene).$promise.then (evt)->

@@ -1,19 +1,20 @@
-<div style="text-align: center;">
+<div class="container" style="text-align: center;">
     <br>
     <b>Scene management</b>
     <br/>
-    <select  ng-change="load()" ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
-    <button ng-click="showNew()">Add a new scene</button>
-    <div ng-show="showCreate == true">
-        <input ng-model="newScene">
-        <button ng-click="addScene(newScene)">Add scene</button>
-    </div>
-    <br>
+    <div class="form-group">
+        <div class="col-md-2">
+            <select class="form-control" ng-change="load()" ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
+        </div>
+         <div class="col-md-2">
+            <button class="btn btn-success" ng-click="createScene()">Add a new scene</button>
+          </div>
+    <br/><br/>
     The following describes the scene {{cameleon.currentScene.id}}
 
         <li ng-repeat="m in cameleon.machines">
             {{m.id}} has setting {{m.setting}}
         </li>
     <br/>
-    <button ng-click="record()">Record this scene !</button>
+    <button class="btn btn-primary" ng-click="record()">Record this scene !</button>
  </div>
