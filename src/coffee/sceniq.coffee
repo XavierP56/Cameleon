@@ -716,6 +716,13 @@ app.filter 'faderFilter', ->
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
       AlertUtils.showMsg 'Update done !'
 
+  $scope.checkStuff = ()->
+    if $scope.cameleon.currentMachine.v.channel == ''
+      return true
+    if $scope.fixtureEntry == null
+      return true
+    return false
+
   $scope.fixtureEntry = {}
 
 @DevFixCtrl = ($scope, CameleonServer) ->

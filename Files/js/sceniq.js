@@ -1004,6 +1004,15 @@
         return AlertUtils.showMsg('Update done !');
       });
     };
+    $scope.checkStuff = function() {
+      if ($scope.cameleon.currentMachine.v.channel === '') {
+        return true;
+      }
+      if ($scope.fixtureEntry === null) {
+        return true;
+      }
+      return false;
+    };
     return $scope.fixtureEntry = {};
   };
 
