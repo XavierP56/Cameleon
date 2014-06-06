@@ -77,6 +77,14 @@
             }
         }
     }, 
+    "T1": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "T2": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
     "ThomasLapin": {
         "defs": {
             "Blue": "", 
@@ -100,6 +108,22 @@
         "knobs": {}
     }, 
     "Yamaha": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "Z1": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "Z2": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "Z44": {
+        "defs": {}, 
+        "knobs": {}
+    }, 
+    "Z55": {
         "defs": {}, 
         "knobs": {}
     }, 

@@ -1063,9 +1063,11 @@
     return $scope.getfixtures(function() {});
   };
 
-  this.SoundsCtrl = function($scope, CameleonServer, $upload, $modal, AlertUtils) {
+  this.SoundsCtrl = function($scope, CameleonServer, $upload, $modal, AlertUtils, MenuUtils, $q) {
     $scope.getsounds = function() {
-      return CameleonServer.GetSounds().$promise.then(function(res) {
+      var promise;
+      promise = $q.defer();
+      CameleonServer.GetSounds().$promise.then(function(res) {
         var k, list, v, _ref;
         $scope.sounds = res.sounds;
         list = [];
@@ -1077,8 +1079,10 @@
             'v': v
           });
         }
-        return $scope.soundlist = list;
+        $scope.soundlist = list;
+        return promise.resolve();
       });
+      return promise;
     };
     $scope.updateSounds = function(id, soundinfo) {
       return CameleonServer.UpdateSounds($scope.sounds).$promise.then(function(res) {
@@ -1102,16 +1106,18 @@
     };
     $scope.addSound = function(name) {
       $scope.sounds[name] = {
-        card: '',
-        defLevel: '',
+        card: '0',
+        defLevel: '100',
         loop: false,
-        position: '',
+        position: 's',
         songFile: '',
         songName: ''
       };
       $scope.createSound = false;
       return CameleonServer.UpdateSounds($scope.sounds).$promise.then(function(evt) {
-        return $scope.getsounds();
+        return $scope.getsounds().promise.then(function() {
+          return $scope.soundEntry = MenuUtils.UpdateMenu($scope.soundlist, name);
+        });
       });
     };
     $scope.onFileSelect = function($files) {

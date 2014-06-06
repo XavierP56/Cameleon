@@ -656,14 +656,15 @@ app.filter 'faderFilter', ->
      modalInstance.result.then (name)->
        $scope.addFixture(name)
      , (name)->
+    return
 
   $scope.addFixture = (name)->
     $scope.fixtures[name] = {'defs' : {}, 'knobs': {}}
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
-      $scope.getfixtures(()->
+      $scope.getfixtures().promise.then ()->
         $scope.fixtureInfo = null
         $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,name)
-      )
+
 
   $scope.addKey = (stuff,id)->
     obj = JSON.parse(stuff)
@@ -671,19 +672,18 @@ app.filter 'faderFilter', ->
     if obj.v != ''
       $scope.fixtures[id].knobs[obj.k] = { 'fgColor' : obj.v}
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
-      $scope.getfixtures(()->
+      $scope.getfixtures().promise.then ()->
         $scope.selected($scope.fixtureEntry)
         $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,id)
-        createFixture = false
-      )
+
 
   $scope.addCustom = (stuff,id)->
     $scope.fixtures[id].defs[stuff] = ''
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
-      $scope.getfixtures(()->
+      $scope.getfixtures().promise.then ()->
         $scope.selected($scope.fixtureEntry)
         $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,id)
-      )
+
 
 # This controller creates new devices.
 @DevicesCtrl = ($scope, CameleonServer, MenuUtils,$modal,AlertUtils) ->
@@ -729,14 +729,16 @@ app.filter 'faderFilter', ->
   $scope.fixtureEntry = {}
 
 @DevFixCtrl = ($scope, CameleonServer,CameleonUtils,$q) ->
-  $scope.getfixtures = (cb)->
+  $scope.getfixtures = ()->
+    promise = $q.defer()
     CameleonServer.GetFixtures().$promise.then (res)->
       $scope.fixtures = res.fixtures
       list = []
       for k in CameleonUtils.sortedKeys(res.fixtures)
         list.push {'id': k, 'v':res.fixtures[k]}
       $scope.cameleon.fixtureList = list
-      cb()
+      promise.resolve()
+    return promise
 
   $scope.getdevices = ()->
     promise = $q.defer()
@@ -751,18 +753,21 @@ app.filter 'faderFilter', ->
 
   # Init
   $scope.getdevices()
-  $scope.getfixtures(()->)
+  $scope.getfixtures()
 
 # This controller adds sounds
-@SoundsCtrl = ($scope, CameleonServer,$upload,$modal,AlertUtils) ->
+@SoundsCtrl = ($scope, CameleonServer,$upload,$modal,AlertUtils,MenuUtils,$q) ->
 
   $scope.getsounds = ()->
+    promise = $q.defer()
     CameleonServer.GetSounds().$promise.then (res)->
       $scope.sounds = res.sounds
       list = []
       for k,v of res.sounds
         list.push {'id': k, 'v':v}
       $scope.soundlist = list
+      promise.resolve()
+    return promise
 
   $scope.updateSounds = (id, soundinfo)->
     #$scope.sounds[id] = {}
@@ -784,16 +789,17 @@ app.filter 'faderFilter', ->
 
   $scope.addSound = (name)->
     $scope.sounds[name] =
-      card: ''
-      defLevel: ''
+      card: '0'
+      defLevel: '100'
       loop: false
-      position: ''
+      position: 's'
       songFile: ''
       songName: ''
 
     $scope.createSound = false
     CameleonServer.UpdateSounds($scope.sounds).$promise.then (evt)->
-      $scope.getsounds()
+      $scope.getsounds().promise.then ()->
+        $scope.soundEntry = MenuUtils.UpdateMenu($scope.soundlist,name)
 
   $scope.onFileSelect = ($files) ->
     i = 0
