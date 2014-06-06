@@ -661,9 +661,7 @@ app.filter 'faderFilter', ->
     $scope.fixtures[name] = {'defs' : {}, 'knobs': {}}
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
       $scope.getfixtures().promise.then ()->
-        $scope.fixtureInfo = null
         $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,name)
-
 
   $scope.addKey = (stuff,id)->
     obj = JSON.parse(stuff)
@@ -702,12 +700,10 @@ app.filter 'faderFilter', ->
      modalInstance.result.then (name)->
        $scope.addDevice(name)
 
-
   $scope.addDevice = (name)->
     $scope.devices[name] =
       channel : ''
       fixture : ''
-    $scope.createDevice = false
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
       $scope.getdevices().promise.then ()->
         $scope.cameleon.currentMachine = MenuUtils.UpdateMenu($scope.cameleon.machinesList, name)
@@ -788,8 +784,8 @@ app.filter 'faderFilter', ->
 
   $scope.addSound = (name)->
     $scope.sounds[name] =
-      card: '0'
-      defLevel: '100'
+      card: 0
+      defLevel: 100
       loop: false
       position: 's'
       songFile: ''

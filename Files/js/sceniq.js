@@ -933,7 +933,6 @@
       };
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
         return $scope.getfixtures().promise.then(function() {
-          $scope.fixtureInfo = null;
           return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name);
         });
       });
@@ -992,7 +991,6 @@
         channel: '',
         fixture: ''
       };
-      $scope.createDevice = false;
       return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
         return $scope.getdevices().promise.then(function() {
           return $scope.cameleon.currentMachine = MenuUtils.UpdateMenu($scope.cameleon.machinesList, name);
@@ -1107,8 +1105,8 @@
     };
     $scope.addSound = function(name) {
       $scope.sounds[name] = {
-        card: '0',
-        defLevel: '100',
+        card: 0,
+        defLevel: 100,
         loop: false,
         position: 's',
         songFile: '',
