@@ -1,9 +1,17 @@
-<div style="text-align: center;">
+<div class="container" style="text-align: center;">
 Select the machines you want to use:
 <br/>
-<select  ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
-<br/>
-<button ng-click='addMachine(cameleon.currentMachine)'>Add</button>
-<button ng-click='removeMachine(cameleon.currentMachine)'>Remove</button>
-<br/>
+
+    <div class="form-group">
+        <div class="col-md-2">
+            <select class="form-control" ng-model="cameleon.currentMachine" ng-options="c.id for c in cameleon.machinesList"></select>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-success" ng-click='addMachine(cameleon.currentMachine)'>Add</button>
+        </div>
+        <div class="col-md-1">
+            <button class="btn btn-success" ng-click='removeMachine(cameleon.currentMachine)'>Remove</button>
+        </div>
+    <br/>
+    </div>
 </div>

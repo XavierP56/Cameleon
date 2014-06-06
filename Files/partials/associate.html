@@ -1,6 +1,6 @@
 <div style="text-align: center;">
             <li class="menuli"  ng-repeat="m in cameleon.machines ">
-                    <button ng-click="selectMachine(m)">{{m.id}}</button>
+                    <button class="btn btn-info" ng-click="selectMachine(m)">{{m.id}}</button>
             </li>
             <br/><br/>
             <div ng-show="cameleon.curMachine != null">
