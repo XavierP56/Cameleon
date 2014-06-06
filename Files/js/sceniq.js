@@ -924,7 +924,7 @@
       });
       return modalInstance.result.then(function(name) {
         return $scope.addFixture(name);
-      }, function(name) {});
+      });
     };
     $scope.addFixture = function(name) {
       $scope.fixtures[name] = {
@@ -932,7 +932,7 @@
         'knobs': {}
       };
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
-        return $scope.getfixtures(function() {
+        return $scope.getfixtures().promise.then(function() {
           $scope.fixtureInfo = null;
           return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name);
         });
@@ -948,18 +948,16 @@
         };
       }
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
-        return $scope.getfixtures(function() {
-          var createFixture;
+        return $scope.getfixtures().promise.then(function() {
           $scope.selected($scope.fixtureEntry);
-          $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, id);
-          return createFixture = false;
+          return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, id);
         });
       });
     };
     return $scope.addCustom = function(stuff, id) {
       $scope.fixtures[id].defs[stuff] = '';
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
-        return $scope.getfixtures(function() {
+        return $scope.getfixtures().promise.then(function() {
           $scope.selected($scope.fixtureEntry);
           return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, id);
         });
@@ -981,13 +979,13 @@
         controller: NameCtrl,
         resolve: {
           headerName: function() {
-            return 'Pleaser enter device name';
+            return 'Please enter device name';
           }
         }
       });
       return modalInstance.result.then(function(name) {
         return $scope.addDevice(name);
-      }, function(name) {});
+      });
     };
     $scope.addDevice = function(name) {
       $scope.devices[name] = {
@@ -1022,8 +1020,10 @@
   };
 
   this.DevFixCtrl = function($scope, CameleonServer, CameleonUtils, $q) {
-    $scope.getfixtures = function(cb) {
-      return CameleonServer.GetFixtures().$promise.then(function(res) {
+    $scope.getfixtures = function() {
+      var promise;
+      promise = $q.defer();
+      CameleonServer.GetFixtures().$promise.then(function(res) {
         var k, list, _i, _len, _ref;
         $scope.fixtures = res.fixtures;
         list = [];
@@ -1036,8 +1036,9 @@
           });
         }
         $scope.cameleon.fixtureList = list;
-        return cb();
+        return promise.resolve();
       });
+      return promise;
     };
     $scope.getdevices = function() {
       var promise;
@@ -1060,7 +1061,7 @@
       return promise;
     };
     $scope.getdevices();
-    return $scope.getfixtures(function() {});
+    return $scope.getfixtures();
   };
 
   this.SoundsCtrl = function($scope, CameleonServer, $upload, $modal, AlertUtils, MenuUtils, $q) {
@@ -1091,6 +1092,7 @@
     };
     $scope.createSound = function() {
       var modalInstance;
+      alert('boo');
       modalInstance = $modal.open({
         templateUrl: 'partials/ModalName.html',
         controller: NameCtrl,
@@ -1102,7 +1104,7 @@
       });
       return modalInstance.result.then(function(name) {
         return $scope.addSound(name);
-      }, function(name) {});
+      });
     };
     $scope.addSound = function(name) {
       $scope.sounds[name] = {

@@ -651,12 +651,11 @@ app.filter 'faderFilter', ->
        templateUrl: 'partials/ModalName.html'
        controller : NameCtrl,
        resolve :
-          headerName : () -> 'Please enter fixture name'
+          headerName : ()-> 'Please enter fixture name'
      )
      modalInstance.result.then (name)->
        $scope.addFixture(name)
-     , (name)->
-    return
+
 
   $scope.addFixture = (name)->
     $scope.fixtures[name] = {'defs' : {}, 'knobs': {}}
@@ -698,11 +697,11 @@ app.filter 'faderFilter', ->
        templateUrl: 'partials/ModalName.html'
        controller : NameCtrl,
        resolve :
-          headerName : () -> 'Pleaser enter device name'
+          headerName : ()-> 'Please enter device name'
      )
      modalInstance.result.then (name)->
        $scope.addDevice(name)
-     , (name)->
+
 
   $scope.addDevice = (name)->
     $scope.devices[name] =
@@ -777,6 +776,7 @@ app.filter 'faderFilter', ->
       AlertUtils.showMsg 'Updated !'
 
   $scope.createSound = ()->
+     alert 'boo'
      modalInstance = $modal.open(
        templateUrl: 'partials/ModalName.html'
        controller : NameCtrl,
@@ -785,7 +785,7 @@ app.filter 'faderFilter', ->
      )
      modalInstance.result.then (name)->
        $scope.addSound(name)
-     , (name)->
+
 
   $scope.addSound = (name)->
     $scope.sounds[name] =
