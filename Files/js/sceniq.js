@@ -1092,13 +1092,12 @@
     };
     $scope.createSound = function() {
       var modalInstance;
-      alert('boo');
       modalInstance = $modal.open({
         templateUrl: 'partials/ModalName.html',
         controller: NameCtrl,
         resolve: {
           headerName: function() {
-            return 'Pleaser enter sound name';
+            return 'Please enter sound name';
           }
         }
       });
@@ -1115,7 +1114,6 @@
         songFile: '',
         songName: ''
       };
-      $scope.createSound = false;
       return CameleonServer.UpdateSounds($scope.sounds).$promise.then(function(evt) {
         return $scope.getsounds().promise.then(function() {
           return $scope.soundEntry = MenuUtils.UpdateMenu($scope.soundlist, name);

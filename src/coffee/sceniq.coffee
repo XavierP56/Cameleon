@@ -776,12 +776,11 @@ app.filter 'faderFilter', ->
       AlertUtils.showMsg 'Updated !'
 
   $scope.createSound = ()->
-     alert 'boo'
      modalInstance = $modal.open(
        templateUrl: 'partials/ModalName.html'
        controller : NameCtrl,
        resolve :
-          headerName : () -> 'Pleaser enter sound name'
+          headerName : () -> 'Please enter sound name'
      )
      modalInstance.result.then (name)->
        $scope.addSound(name)
@@ -796,7 +795,6 @@ app.filter 'faderFilter', ->
       songFile: ''
       songName: ''
 
-    $scope.createSound = false
     CameleonServer.UpdateSounds($scope.sounds).$promise.then (evt)->
       $scope.getsounds().promise.then ()->
         $scope.soundEntry = MenuUtils.UpdateMenu($scope.soundlist,name)
