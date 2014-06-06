@@ -1365,6 +1365,20 @@
         });
       });
     };
+    $scope.checkRecord = function() {
+      var v;
+      v = 'id' in $scope.cameleon.currentPicture;
+      if (v === false) {
+        return true;
+      }
+      if ($scope.cameleon.pictureStuff === null) {
+        return true;
+      }
+      if ($scope.cameleon.picturesStuff.length === 0) {
+        return true;
+      }
+      return false;
+    };
     $scope.record = function() {
       return CameleonServer.RecordPicture($scope.cameleon.currentPicture.id, $scope.cameleon.picturesStuff).$promise.then(function(evt) {
         return AlertUtils.showMsg('Picture recorded !');

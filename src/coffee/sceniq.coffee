@@ -996,6 +996,16 @@ app.filter 'faderFilter', ->
           $scope.cameleon.picturesList = res.list
           $scope.showCreate = false
 
+  $scope.checkRecord = ()->
+    v = 'id' of $scope.cameleon.currentPicture
+    if v == false
+      return true
+    if $scope.cameleon.pictureStuff == null
+      return true
+    if $scope.cameleon.picturesStuff.length == 0
+      return true
+    return false
+
   $scope.record = () ->
     CameleonServer.RecordPicture($scope.cameleon.currentPicture.id, $scope.cameleon.picturesStuff).$promise.then (evt)->
       AlertUtils.showMsg 'Picture recorded !'
