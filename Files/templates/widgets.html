@@ -22,11 +22,11 @@
 
     <span ng-show="edit==true">
        <button ng-init="showMe=false" ng-click="showMe = !showMe">E</button>
-       <div ng-show="showMe">
-           <button ng-click="backward($index)">Move to left</button>
-           <button ng-click="separator($index)">Insert Line</button>
-           <button ng-click="forward($index)">Move to right</button>
-           <button ng-click="remove($index)">Remove this</button>
+       <div ng-show="showMe" style="margin:5px;">
+           <button class="btn btn-info btn-sm" ng-click="backward($index)">Move to left</button>
+           <button class="btn btn btn-success btn-sm" ng-click="separator($index)">Insert Line</button>
+           <button class="btn btn-info btn-sm" ng-click="forward($index)">Move to right</button>
+           <button class="btn btn-danger btn-sm" ng-click="remove($index)">Remove this</button>
            <ng-switch="s.tye">
            <div ng-switch="s.type">
                <div ng-switch-when="line">
