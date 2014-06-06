@@ -151,6 +151,26 @@
         }
       });
     };
+    alert.showConfirm = function(msg, ok, notok) {
+      var modalInstance;
+      modalInstance = $modal.open({
+        templateUrl: 'partials/Confirm.html',
+        controller: ConfirmCtrl,
+        resolve: {
+          bodyText: function() {
+            return msg;
+          },
+          onlyOK: function() {
+            return false;
+          }
+        }
+      });
+      modalInstance.result.then(function(name) {
+        return ok();
+      }, function(name) {
+        return notok();
+      });
+    };
     return alert;
   });
 
@@ -1183,16 +1203,14 @@
       });
     };
     return $scope.load = function() {
-      var r;
       if ($scope.cameleon.currentScene.id === null) {
         return;
       }
-      r = window.confirm('Do you want to load ?');
-      if (r === true) {
+      return AlertUtils.showConfirm('Do you want to load ?', function() {
         return $scope.LoadScene();
-      } else {
+      }, function() {
         return AlertUtils.showMsg('Beware you are updating an existing scene !');
-      }
+      });
     };
   };
 
@@ -1298,16 +1316,14 @@
       });
     };
     return $scope.load = function() {
-      var r;
       if ($scope.cameleon.currentPicture.id === null) {
         return;
       }
-      r = window.confirm('Do you want to load ?');
-      if (r === true) {
+      return AlertUtils.showConfirm('Do you want to load ?', function() {
         return $scope.LoadPicture();
-      } else {
+      }, function() {
         return AlertUtils.showMsg('Beware you are editing an existing picture !');
-      }
+      });
     };
   };
 

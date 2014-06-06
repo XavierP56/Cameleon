@@ -114,6 +114,21 @@ app.factory 'AlertUtils', ($modal)->
           bodyText : () -> msg
           onlyOK : ()->true
      )
+
+  alert.showConfirm = (msg,ok,notok)->
+    modalInstance = $modal.open(
+       templateUrl: 'partials/Confirm.html'
+       controller : ConfirmCtrl,
+       resolve :
+          bodyText : () -> msg
+          onlyOK : ()->false
+    )
+    modalInstance.result.then (name)->
+      ok()
+    , (name)->
+      notok()
+    return
+
   return alert
 
 # Let's centralize all the communication to the server.
@@ -874,10 +889,9 @@ app.filter 'faderFilter', ->
 
   $scope.load = () ->
     return if $scope.cameleon.currentScene.id == null
-    r = window.confirm ('Do you want to load ?')
-    if r == true
+    AlertUtils.showConfirm 'Do you want to load ?',()->
       $scope.LoadScene()
-    else
+    , ()->
       AlertUtils.showMsg 'Beware you are updating an existing scene !'
 
 @PicturesCtrl = ($scope, CameleonServer)->
@@ -955,10 +969,9 @@ app.filter 'faderFilter', ->
 
   $scope.load = () ->
     return if $scope.cameleon.currentPicture.id == null
-    r = window.confirm ('Do you want to load ?')
-    if r == true
+    AlertUtils.showConfirm 'Do you want to load ?',()->
       $scope.LoadPicture()
-    else
+    ,()->
       AlertUtils.showMsg 'Beware you are editing an existing picture !'
 
 @CameleonCtrl = ($scope, CameleonServer)->
