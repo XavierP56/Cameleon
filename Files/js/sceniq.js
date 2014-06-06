@@ -1005,6 +1005,9 @@
       });
     };
     $scope.checkStuff = function() {
+      if ($scope.cameleon.currentMachine === void 0) {
+        return true;
+      }
       if ($scope.cameleon.currentMachine.v.channel === '') {
         return true;
       }
@@ -1016,15 +1019,15 @@
     return $scope.fixtureEntry = {};
   };
 
-  this.DevFixCtrl = function($scope, CameleonServer) {
+  this.DevFixCtrl = function($scope, CameleonServer, CameleonUtils) {
     $scope.getfixtures = function(cb) {
       return CameleonServer.GetFixtures().$promise.then(function(res) {
-        var k, list, v, _ref;
+        var k, list, v, _i, _len, _ref;
         $scope.fixtures = res.fixtures;
         list = [];
-        _ref = res.fixtures;
-        for (k in _ref) {
-          v = _ref[k];
+        _ref = CameleonUtils.sortedKeys(res.fixtures);
+        for (v = _i = 0, _len = _ref.length; _i < _len; v = ++_i) {
+          k = _ref[v];
           list.push({
             'id': k,
             'v': v

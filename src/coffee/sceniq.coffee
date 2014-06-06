@@ -717,6 +717,8 @@ app.filter 'faderFilter', ->
       AlertUtils.showMsg 'Update done !'
 
   $scope.checkStuff = ()->
+    if $scope.cameleon.currentMachine == undefined
+      return true
     if $scope.cameleon.currentMachine.v.channel == ''
       return true
     if $scope.fixtureEntry == null
@@ -725,12 +727,12 @@ app.filter 'faderFilter', ->
 
   $scope.fixtureEntry = {}
 
-@DevFixCtrl = ($scope, CameleonServer) ->
+@DevFixCtrl = ($scope, CameleonServer,CameleonUtils) ->
   $scope.getfixtures = (cb)->
     CameleonServer.GetFixtures().$promise.then (res)->
       $scope.fixtures = res.fixtures
       list = []
-      for k,v of res.fixtures
+      for k,v in CameleonUtils.sortedKeys(res.fixtures)
         list.push {'id': k, 'v':v}
       $scope.cameleon.fixtureList = list
       cb()

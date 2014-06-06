@@ -20,7 +20,7 @@
                 Card
             </div>
             <div class="col-md-1">
-                <input type="number" ng-model="soundEntry.v.card">
+                <input type="number" ng-init="0" ng-model="soundEntry.v.card">
             </div>
         </div>
 
@@ -29,7 +29,7 @@
                 Level
             </div>
             <div class="col-md-1">
-                <input type="number" ng-model="soundEntry.v.defLevel">
+                <input type="number" ng-init="100" ng-model="soundEntry.v.defLevel">
             </div>
         </div>
 
@@ -47,7 +47,7 @@
                 Position
             </div>
             <div class="col-md-1">
-                <input list="soundModes" ng-model="soundEntry.v.position">
+                <input list="soundModes" ng-init="s" ng-model="soundEntry.v.position">
                 <datalist id = 'soundModes'>
                 <option value="s">Stereo</option>
                 <option value="r">Right</option>
