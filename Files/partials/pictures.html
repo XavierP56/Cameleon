@@ -1,23 +1,36 @@
-<div style="text-align: center;">
+<div class="container" style="text-align: center;">
     Here, we define the pictures.
     <br/>
     <div>
-        <b>Scenes</b>
-        <br/>
-        <select ng-change="load()"  ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
-        <button ng-click="addScene()">Add</button>
-        <button ng-click="removeScene()">Remove</button>
+        <div class="form-group">
+            <div class="col-md-2">
+                <select class="form-control" ng-change="load()"  ng-model="cameleon.currentScene" ng-options="c.name for c in cameleon.scenesList"></select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-success" ng-click="addScene()">Add</button>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-success"  ng-click="removeScene()">Remove</button>
+            </div>
+        </div>
+        <br/><br/>
+        <div class="form-group">
+            <div class="col-md-2">
+                <select class="form-control" ng-model="cameleon.currentSound" ng-options="c.id for c in cameleon.soundslist"></select>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-success" ng-click="addSound()">Add</button>
+            </div>
+            <div class="col-md-1">
+                <button class="btn btn-success" ng-click="removeSound()">Remove</button>
+            </div>
+        </div>
     </div>
+    <br/><br/>
+
     <div>
-        <b>Sounds</b>
-        <br/>
-        <select  ng-model="cameleon.currentSound" ng-options="c.id for c in cameleon.soundslist"></select>
-        <button ng-click="addSound()">Add</button>
-        <button ng-click="removeSound()">Remove</button>
-    </div>
-    <br/>
     <b>List of buttons to generate:</b>
-    <button ng-click="editMode = !editMode">Edit mode</button>
+    <button class="btn btn-warning" ng-click="editMode = !editMode">Edit mode</button>
     <br/><br/>
     <widgets edit="editMode" things="cameleon.picturesStuff"></widgets>
 </div>
