@@ -131,6 +131,16 @@ app.factory 'AlertUtils', ($modal)->
 
   return alert
 
+app.factory 'CameleonUtils', () ->
+  utils = {}
+
+  utils.sortedKeys = (o)->
+    r = []
+    for k of o
+      r.push(k)
+    return r.sort()
+
+  return utils
 # Let's centralize all the communication to the server.
 app.factory 'CameleonServer', ($resource) ->
   datas = {}
@@ -619,10 +629,10 @@ app.filter 'faderFilter', ->
     $modalInstance.dismiss('cancel')
 
 # This controller defines the fixtures
-@FixturesCtrl = ($scope, CameleonServer, MenuUtils,$modal,AlertUtils)->
+@FixturesCtrl = ($scope, CameleonServer, MenuUtils,$modal,AlertUtils,CameleonUtils)->
   $scope.selected = (fixture)->
     list = []
-    for k of fixture.v.defs
+    for k in CameleonUtils.sortedKeys(fixture.v.defs)
       list.push({'k': k, 'v': fixture.v.defs[k]})
     $scope.fixtureInfo = list
 

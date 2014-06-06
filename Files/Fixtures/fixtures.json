@@ -19,8 +19,11 @@
     }, 
     "EuroLite": {
         "defs": {
+            "Alphonse": "7", 
+            "Bertraind": "11", 
             "Blue": "3", 
             "Dimmer": "4", 
+            "Eric": "", 
             "Green": "2", 
             "Red": "1", 
             "Strobe": "5"

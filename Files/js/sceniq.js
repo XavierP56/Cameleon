@@ -174,6 +174,20 @@
     return alert;
   });
 
+  app.factory('CameleonUtils', function() {
+    var utils;
+    utils = {};
+    utils.sortedKeys = function(o) {
+      var k, r;
+      r = [];
+      for (k in o) {
+        r.push(k);
+      }
+      return r.sort();
+    };
+    return utils;
+  });
+
   app.factory('CameleonServer', function($resource) {
     var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSceneState, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _Reboot, _RecordPicture, _RecordScene, _RecordSetting, _SaveDebugDatas, _SetFader, _SettingList, _SlidersList, _TurnOff, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
     datas = {};
@@ -869,11 +883,13 @@
     };
   };
 
-  this.FixturesCtrl = function($scope, CameleonServer, MenuUtils, $modal, AlertUtils) {
+  this.FixturesCtrl = function($scope, CameleonServer, MenuUtils, $modal, AlertUtils, CameleonUtils) {
     $scope.selected = function(fixture) {
-      var k, list;
+      var k, list, _i, _len, _ref;
       list = [];
-      for (k in fixture.v.defs) {
+      _ref = CameleonUtils.sortedKeys(fixture.v.defs);
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        k = _ref[_i];
         list.push({
           'k': k,
           'v': fixture.v.defs[k]
