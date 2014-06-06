@@ -908,6 +908,14 @@ app.filter 'faderFilter', ->
           $scope.cameleon.scenesList = res.list
           $scope.showCreate = false
 
+  $scope.checkRecord = ()->
+    v = 'id' of $scope.cameleon.currentScene
+    if v == false
+      return true
+    for m in $scope.cameleon.machines
+      return true if m.setting == ''
+    return false
+
   $scope.record = () ->
     CameleonServer.RecordScene($scope.cameleon.currentScene.id, $scope.cameleon.machines).$promise.then (evt)->
       AlertUtils.showMsg 'Scene recorded !'

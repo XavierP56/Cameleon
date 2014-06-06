@@ -1237,6 +1237,21 @@
         });
       });
     };
+    $scope.checkRecord = function() {
+      var m, v, _i, _len, _ref;
+      v = 'id' in $scope.cameleon.currentScene;
+      if (v === false) {
+        return true;
+      }
+      _ref = $scope.cameleon.machines;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        m = _ref[_i];
+        if (m.setting === '') {
+          return true;
+        }
+      }
+      return false;
+    };
     $scope.record = function() {
       return CameleonServer.RecordScene($scope.cameleon.currentScene.id, $scope.cameleon.machines).$promise.then(function(evt) {
         return AlertUtils.showMsg('Scene recorded !');
