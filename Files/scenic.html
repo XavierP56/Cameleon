@@ -5,8 +5,8 @@
     <div ng-controller="MainCtrl">
         <img src="images/cameleon.png" ng-init="showOffOptions=false" ng-dblclick="showOffOptions=!showOffOptions">
         <div ng-show="showOffOptions">
-            <button ng-click="turnoff()">Turn Off</button>
-            <button ng-click="reboot()">Reboot</button>
+            <button class="btn btn-danger btn-sm" ng-click="turnoff()">Turn Off</button>
+            <button class="btn btn-danger btn-sm" ng-click="reboot()">Reboot</button>
             <br/><br/>
         </div>
         <!---
@@ -17,8 +17,8 @@
                 <li ng-repeat="e in entries" class="menuli">
                     <a ui-sref="{{e.link}}">{{e.name}}</a>
                 </li>
-                <button ng-click="soundPanic()">Sound Panic !</button>
-                <button ng-click="dmxPanic()">Dmx Panic !</button>
+                <button class="btn btn-danger btn-sm" ng-click="soundPanic()">Sound Panic !</button>
+                <button class="btn btn-danger btn-sm" ng-click="dmxPanic()">Dmx Panic !</button>
             </ul>
             <div ui-view></div>
             </div>
