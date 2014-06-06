@@ -662,6 +662,7 @@ app.filter 'faderFilter', ->
     CameleonServer.UpdateFixtures($scope.fixtures).$promise.then (evt)->
       $scope.getfixtures().promise.then ()->
         $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList,name)
+        $scope.selected($scope.fixtureEntry)
 
   $scope.addKey = (stuff,id)->
     obj = JSON.parse(stuff)
@@ -707,6 +708,7 @@ app.filter 'faderFilter', ->
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
       $scope.getdevices().promise.then ()->
         $scope.cameleon.currentMachine = MenuUtils.UpdateMenu($scope.cameleon.machinesList, name)
+        $scope.selected($scope.cameleon.currentMachine)
 
   $scope.updateDevices = () ->
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->

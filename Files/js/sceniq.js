@@ -933,7 +933,8 @@
       };
       return CameleonServer.UpdateFixtures($scope.fixtures).$promise.then(function(evt) {
         return $scope.getfixtures().promise.then(function() {
-          return $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name);
+          $scope.fixtureEntry = MenuUtils.UpdateMenu($scope.cameleon.fixtureList, name);
+          return $scope.selected($scope.fixtureEntry);
         });
       });
     };
@@ -993,7 +994,8 @@
       };
       return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
         return $scope.getdevices().promise.then(function() {
-          return $scope.cameleon.currentMachine = MenuUtils.UpdateMenu($scope.cameleon.machinesList, name);
+          $scope.cameleon.currentMachine = MenuUtils.UpdateMenu($scope.cameleon.machinesList, name);
+          return $scope.selected($scope.cameleon.currentMachine);
         });
       });
     };

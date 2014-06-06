@@ -1,45 +1,10 @@
 {
-    "": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "2Yamaha": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "3Yamaha": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "<enter name>": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "Antoine": {
+    "LedPar": {
         "defs": {
-            "Red": "1"
-        }, 
-        "knobs": {
-            "Red": {
-                "fgColor": "red"
-            }
-        }
-    }, 
-    "Boo": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "EuroLite": {
-        "defs": {
-            "Alphonse": "7", 
-            "Bertraind": "11", 
-            "Blue": "3", 
-            "Dimmer": "4", 
-            "Eric": "", 
-            "Flame": "", 
-            "Green": "2", 
-            "Red": "1", 
-            "Strobe": "5"
+            "Blue": "4", 
+            "Dimmer": "1", 
+            "Green": "3", 
+            "Red": "5"
         }, 
         "knobs": {
             "Blue": {
@@ -53,119 +18,16 @@
             }, 
             "Red": {
                 "fgColor": "red"
-            }, 
-            "Strobe": {
-                "fgColor": "orange"
             }
         }
     }, 
-    "Feu": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "LeMonde": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "NEwFix": {
+    "MachineGun": {
         "defs": {
-            "Blue": "", 
-            "Dimmer": "3"
+            "GunTrigger": "1"
         }, 
-        "knobs": {
-            "Blue": {
-                "fgColor": "blue"
-            }, 
-            "Dimmer": {
-                "fgColor": "yellow"
-            }
-        }
-    }, 
-    "T1": {
-        "defs": {}, 
         "knobs": {}
     }, 
-    "T2": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "ThomasLapin": {
-        "defs": {
-            "Blue": "", 
-            "Dimmer": ""
-        }, 
-        "knobs": {
-            "Blue": {
-                "fgColor": "blue"
-            }, 
-            "Dimmer": {
-                "fgColor": "yellow"
-            }
-        }
-    }, 
-    "Xavier": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "XplFixture": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "Yamaha": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "Z1": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "Z2": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "Z44": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "Z55": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "ZZZZ": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "ZZZZZ": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "ZZZZZZ": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "ZZZZZZZZZ": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "fsdfsfsff": {
-        "defs": {
-            "Blue": "", 
-            "Dimmer": "", 
-            "Red": ""
-        }, 
-        "knobs": {
-            "Blue": {
-                "fgColor": "blue"
-            }, 
-            "Dimmer": {
-                "fgColor": "yellow"
-            }, 
-            "Red": {
-                "fgColor": "red"
-            }
-        }
-    }, 
-    "fsfsfs": {
+    "SexMachine": {
         "defs": {
             "Green": ""
         }, 
@@ -175,8 +37,32 @@
             }
         }
     }, 
-    "undefined": {
+    "Smake": {
         "defs": {}, 
         "knobs": {}
+    }, 
+    "Smoke": {
+        "defs": {
+            "Red": ""
+        }, 
+        "knobs": {
+            "Red": {
+                "fgColor": "red"
+            }
+        }
+    }, 
+    "Xavier": {
+        "defs": {
+            "Green": "", 
+            "Red": ""
+        }, 
+        "knobs": {
+            "Green": {
+                "fgColor": "green"
+            }, 
+            "Red": {
+                "fgColor": "red"
+            }
+        }
     }
 }
