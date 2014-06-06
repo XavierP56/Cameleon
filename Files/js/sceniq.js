@@ -514,7 +514,7 @@
     };
   });
 
-  app.directive("dmxFader", function(CameleonServer, $resource, $parse, $modal) {
+  app.directive("dmxFader", function(CameleonServer, $resource, $parse, $modal, AlertUtils) {
     return {
       restrict: 'E',
       scope: true,
@@ -539,7 +539,7 @@
         };
         scope.record = function(fader, name) {
           if ((name === void 0) || (name === '')) {
-            return alert('You must enter a setting name !');
+            return AlertUtils.showMsg('You must enter a setting name !');
           } else {
             return CameleonServer.RecordFaderSetting(scope.id, name).$promise.then(function(evt) {
               return CameleonServer.GetSettingList().$promise.then(function(res) {
@@ -752,7 +752,7 @@
     };
   });
 
-  this.ConfigCtrl = function($scope, CameleonServer, $resource) {
+  this.ConfigCtrl = function($scope, CameleonServer, $resource, AlertUtils) {
     $scope.update = function() {
       var cmd;
       cmd = {
@@ -764,7 +764,7 @@
         'campictures': $scope.campictures
       };
       return CameleonServer.UpdateDebugDatas(cmd).$promise.then(function(evt) {
-        return alert('Settings updated !');
+        return AlertUtils.showMsg('Settings updated !');
       });
     };
     $scope.save = function() {
@@ -779,7 +779,7 @@
       };
       return CameleonServer.UpdateDebugDatas(cmd).$promise.then(function() {
         return CameleonServer.SaveDebugDatas().$promise.then(function() {
-          return alert('Settings saved !');
+          return AlertUtils.showMsg('Settings saved !');
         });
       });
     };
@@ -927,7 +927,7 @@
     };
   };
 
-  this.DevicesCtrl = function($scope, CameleonServer, MenuUtils, $modal) {
+  this.DevicesCtrl = function($scope, CameleonServer, MenuUtils, $modal, AlertUtils) {
     $scope.updateFixture = function(machine) {
       return machine.v.fixture = $scope.fixtureEntry.id;
     };
@@ -961,7 +961,7 @@
     };
     $scope.updateDevices = function() {
       return CameleonServer.UpdateDevices($scope.devices).$promise.then(function(evt) {
-        return alert('Update done !');
+        return AlertUtils.showMsg('Update done !');
       });
     };
     return $scope.fixtureEntry = {};
@@ -1005,7 +1005,7 @@
     return $scope.getfixtures(function() {});
   };
 
-  this.SoundsCtrl = function($scope, CameleonServer, $upload, $modal) {
+  this.SoundsCtrl = function($scope, CameleonServer, $upload, $modal, AlertUtils) {
     $scope.getsounds = function() {
       return CameleonServer.GetSounds().$promise.then(function(res) {
         var k, list, v, _ref;
@@ -1024,7 +1024,7 @@
     };
     $scope.updateSounds = function(id, soundinfo) {
       return CameleonServer.UpdateSounds($scope.sounds).$promise.then(function(res) {
-        return alert('Updated !');
+        return AlertUtils.showMsg('Updated !');
       });
     };
     $scope.createSound = function() {
@@ -1138,7 +1138,7 @@
     };
   };
 
-  this.SceneCtrl = function($scope, CameleonServer, MenuUtils, $modal) {
+  this.SceneCtrl = function($scope, CameleonServer, MenuUtils, $modal, AlertUtils) {
     $scope.showCreate = false;
     $scope.$watch('cameleon.scenesList', function(n, o) {
       if ($scope.cameleon.currentScene === null) {
@@ -1175,7 +1175,7 @@
     };
     $scope.record = function() {
       return CameleonServer.RecordScene($scope.cameleon.currentScene.id, $scope.cameleon.machines).$promise.then(function(evt) {
-        return alert('Scene recorded !');
+        return AlertUtils.showMsg('Scene recorded !');
       });
     };
     return $scope.load = function() {
@@ -1187,7 +1187,7 @@
       if (r === true) {
         return $scope.LoadScene();
       } else {
-        return alert('Beware !');
+        return AlertUtils.showMsg('Beware you are updating an existing scene !');
       }
     };
   };
@@ -1254,7 +1254,7 @@
     };
   };
 
-  this.PicturesMngrCtrl = function($scope, CameleonServer, MenuUtils, $modal) {
+  this.PicturesMngrCtrl = function($scope, CameleonServer, MenuUtils, $modal, AlertUtils) {
     $scope.$watch('cameleon.picturesList', function(n, o) {
       if ($scope.cameleon.currentPicture === null) {
         return;
@@ -1290,7 +1290,7 @@
     };
     $scope.record = function() {
       return CameleonServer.RecordPicture($scope.cameleon.currentPicture.id, $scope.cameleon.picturesStuff).$promise.then(function(evt) {
-        return alert('Picture recorded !');
+        return AlertUtils.showMsg('Picture recorded !');
       });
     };
     return $scope.load = function() {
@@ -1302,7 +1302,7 @@
       if (r === true) {
         return $scope.LoadPicture();
       } else {
-        return alert('Beware !');
+        return AlertUtils.showMsg('Beware you are editing an existing picture !');
       }
     };
   };
@@ -1354,7 +1354,7 @@
     return $scope.LoadAllCameleon();
   };
 
-  this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr, CameleonServer) {
+  this.MainCtrl = function($scope, $http, $q, $resource, sessionMngr, CameleonServer, AlertUtils) {
     var CreateSession, DmxCancel, DmxEvents, DmxPanic, Events, Query, ReloadProfile, SndCancel, SndPanic, dmxpromise, sndpromise;
     SndPanic = $resource('/sounds/panic');
     DmxPanic = $resource('/dmx/panic');
@@ -1384,17 +1384,17 @@
     dmxpromise.then(function() {});
     $scope.turnoff = function() {
       return CameleonServer.TurnOff().$promise.then(function(evt) {
-        return alert("You can turn off power safely in about 1 minute");
+        return AlertUtils.showMsg("You can turn off power safely in about 1 minute");
       });
     };
     $scope.reboot = function() {
       return CameleonServer.Reboot().$promise.then(function(evt) {
-        return alert("You can refresh in a few minutes");
+        return AlertUtils.showMsg("You can refresh in a few minutes");
       });
     };
     $scope.reloadProfile = function() {
       return ReloadProfile.get({}, function() {
-        return alert('Profiles loaded !');
+        return AlertUtils.showMsg('Profiles loaded !');
       });
     };
     Events = $resource('/sounds/events', {}, {

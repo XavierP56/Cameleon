@@ -331,7 +331,7 @@ app.directive "dmxScene", ->
 
     return
 
-app.directive "dmxFader", (CameleonServer, $resource, $parse,$modal) ->
+app.directive "dmxFader", (CameleonServer, $resource, $parse,$modal,AlertUtils) ->
   restrict: 'E'
   scope : true
   templateUrl: '/sceniq/templates/dmxfader.html'
@@ -353,8 +353,7 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse,$modal) ->
 
     scope.record = (fader, name) ->
       if (name is undefined) or (name == '')
-        #RecordSetting.get {fader: fader, setname: ''}
-        alert ('You must enter a setting name !')
+        AlertUtils.showMsg ('You must enter a setting name !')
       else
         CameleonServer.RecordFaderSetting(scope.id, name).$promise.then (evt)->
             CameleonServer.GetSettingList().$promise.then (res)->
@@ -523,7 +522,7 @@ app.directive "soundButton", ($resource)  ->
     scope.started()
 
 
-@ConfigCtrl = ($scope, CameleonServer, $resource)->
+@ConfigCtrl = ($scope, CameleonServer, $resource,AlertUtils)->
   # DMX Stuff.
   $scope.update = () ->
     cmd =
@@ -535,7 +534,7 @@ app.directive "soundButton", ($resource)  ->
       'campictures': $scope.campictures
 
     CameleonServer.UpdateDebugDatas(cmd).$promise.then (evt)->
-      alert('Settings updated !')
+      AlertUtils.showMsg('Settings updated !')
 
   $scope.save = () ->
     cmd =
@@ -548,7 +547,7 @@ app.directive "soundButton", ($resource)  ->
 
     CameleonServer.UpdateDebugDatas(cmd).$promise.then ()->
       CameleonServer.SaveDebugDatas().$promise.then ()->
-        alert('Settings saved !')
+        AlertUtils.showMsg('Settings saved !')
 
   CameleonServer.GetDebugDatas().$promise.then (res)->
     $scope.sndSetting = res.snd_setting
@@ -660,7 +659,7 @@ app.filter 'faderFilter', ->
       )
 
 # This controller creates new devices.
-@DevicesCtrl = ($scope, CameleonServer, MenuUtils,$modal) ->
+@DevicesCtrl = ($scope, CameleonServer, MenuUtils,$modal,AlertUtils) ->
   $scope.updateFixture = (machine)->
     machine.v.fixture = $scope.fixtureEntry.id
 
@@ -688,7 +687,7 @@ app.filter 'faderFilter', ->
 
   $scope.updateDevices = () ->
     CameleonServer.UpdateDevices($scope.devices).$promise.then (evt)->
-      alert 'Update done !'
+      AlertUtils.showMsg 'Update done !'
 
   $scope.fixtureEntry = {}
 
@@ -715,7 +714,7 @@ app.filter 'faderFilter', ->
   $scope.getfixtures(()->)
 
 # This controller adds sounds
-@SoundsCtrl = ($scope, CameleonServer,$upload,$modal) ->
+@SoundsCtrl = ($scope, CameleonServer,$upload,$modal,AlertUtils) ->
 
   $scope.getsounds = ()->
     CameleonServer.GetSounds().$promise.then (res)->
@@ -730,7 +729,7 @@ app.filter 'faderFilter', ->
     #for e in soundinfo
     #  $scope.sounds[id][e.k] = e.v
     CameleonServer.UpdateSounds($scope.sounds).$promise.then (res)->
-      alert ('Updated !')
+      AlertUtils.showMsg 'Updated !'
 
   $scope.createSound = ()->
      modalInstance = $modal.open(
@@ -837,7 +836,7 @@ app.filter 'faderFilter', ->
         m.setting = newSetting
 
 # TODO: RenameMe as SceneMngrCtrl
-@SceneCtrl = ($scope, CameleonServer, MenuUtils,$modal)->
+@SceneCtrl = ($scope, CameleonServer, MenuUtils,$modal,AlertUtils)->
 
   $scope.showCreate = false
 
@@ -869,7 +868,7 @@ app.filter 'faderFilter', ->
 
   $scope.record = () ->
     CameleonServer.RecordScene($scope.cameleon.currentScene.id, $scope.cameleon.machines).$promise.then (evt)->
-      alert ('Scene recorded !')
+      AlertUtils.showMsg 'Scene recorded !'
 
   $scope.load = () ->
     return if $scope.cameleon.currentScene.id == null
@@ -877,7 +876,7 @@ app.filter 'faderFilter', ->
     if r == true
       $scope.LoadScene()
     else
-      alert ('Beware !')
+      AlertUtils.showMsg 'Beware you are updating an existing scene !'
 
 @PicturesCtrl = ($scope, CameleonServer)->
   # Init
@@ -920,7 +919,7 @@ app.filter 'faderFilter', ->
     $scope.cameleon.picturesStuff.splice(index,1)
 
 # This controller handles the picture (Tableaux) creations.
-@PicturesMngrCtrl = ($scope, CameleonServer, MenuUtils,$modal)->
+@PicturesMngrCtrl = ($scope, CameleonServer, MenuUtils,$modal,AlertUtils)->
 
     # As soon as the scope.settings changes, update the drop box menu.
   $scope.$watch 'cameleon.picturesList', (n,o) ->
@@ -950,7 +949,7 @@ app.filter 'faderFilter', ->
 
   $scope.record = () ->
     CameleonServer.RecordPicture($scope.cameleon.currentPicture.id, $scope.cameleon.picturesStuff).$promise.then (evt)->
-      alert ('Picture recorded !')
+      AlertUtils.showMsg 'Picture recorded !'
 
   $scope.load = () ->
     return if $scope.cameleon.currentPicture.id == null
@@ -958,7 +957,7 @@ app.filter 'faderFilter', ->
     if r == true
       $scope.LoadPicture()
     else
-      alert ('Beware !')
+      AlertUtils.showMsg 'Beware you are editing an existing picture !'
 
 @CameleonCtrl = ($scope, CameleonServer)->
   # Init
@@ -1002,7 +1001,7 @@ app.filter 'faderFilter', ->
   # Init
   $scope.LoadAllCameleon()
 
-@MainCtrl = ($scope, $http, $q, $resource, sessionMngr,CameleonServer)->
+@MainCtrl = ($scope, $http, $q, $resource, sessionMngr,CameleonServer,AlertUtils)->
   SndPanic = $resource('/sounds/panic')
   DmxPanic = $resource('/dmx/panic')
   Query = $resource('/models/scenes')
@@ -1037,15 +1036,15 @@ app.filter 'faderFilter', ->
 
   $scope.turnoff = ()->
     CameleonServer.TurnOff().$promise.then (evt)->
-      alert ("You can turn off power safely in about 1 minute")
+      AlertUtils.showMsg "You can turn off power safely in about 1 minute"
 
   $scope.reboot = ()->
     CameleonServer.Reboot().$promise.then (evt)->
-      alert("You can refresh in a few minutes")
+      AlertUtils.showMsg "You can refresh in a few minutes"
 
   $scope.reloadProfile = () ->
     ReloadProfile.get {}, () ->
-      alert ('Profiles loaded !')
+      AlertUtils.showMsg 'Profiles loaded !'
 
   # POST request to send cookies (sessionId)
   Events = $resource('/sounds/events', {}, {'get': {method: 'POST', timeout: sndpromise}})
