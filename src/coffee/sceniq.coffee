@@ -833,7 +833,7 @@ app.filter 'faderFilter', ->
        templateUrl: 'partials/ModalName.html'
        controller : NameCtrl,
        resolve :
-          headerName : () -> 'Pleaser enter fixture name'
+          headerName : () -> 'Pleaser enter scene name'
      )
      modalInstance.result.then (name)->
        $scope.addScene(name)
@@ -899,7 +899,7 @@ app.filter 'faderFilter', ->
     $scope.cameleon.picturesStuff.splice(index,1)
 
 # This controller handles the picture (Tableaux) creations.
-@PicturesMngrCtrl = ($scope, CameleonServer, MenuUtils)->
+@PicturesMngrCtrl = ($scope, CameleonServer, MenuUtils,$modal)->
 
     # As soon as the scope.settings changes, update the drop box menu.
   $scope.$watch 'cameleon.picturesList', (n,o) ->
@@ -908,6 +908,17 @@ app.filter 'faderFilter', ->
 
   $scope.showNew = ()->
     $scope.showCreate = true
+
+  $scope.createPicture =()->
+     modalInstance = $modal.open(
+       templateUrl: 'partials/ModalName.html'
+       controller : NameCtrl,
+       resolve :
+          headerName : () -> 'Pleaser enter picture name'
+     )
+     modalInstance.result.then (name)->
+       $scope.addPicture(name)
+     , (name)->
 
   $scope.addPicture = (picture)->
     CameleonServer.CreatePicture(picture).$promise.then (evt)->

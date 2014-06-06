@@ -1128,7 +1128,7 @@
         controller: NameCtrl,
         resolve: {
           headerName: function() {
-            return 'Pleaser enter fixture name';
+            return 'Pleaser enter scene name';
           }
         }
       });
@@ -1226,7 +1226,7 @@
     };
   };
 
-  this.PicturesMngrCtrl = function($scope, CameleonServer, MenuUtils) {
+  this.PicturesMngrCtrl = function($scope, CameleonServer, MenuUtils, $modal) {
     $scope.$watch('cameleon.picturesList', function(n, o) {
       if ($scope.cameleon.currentPicture === null) {
         return;
@@ -1235,6 +1235,21 @@
     });
     $scope.showNew = function() {
       return $scope.showCreate = true;
+    };
+    $scope.createPicture = function() {
+      var modalInstance;
+      modalInstance = $modal.open({
+        templateUrl: 'partials/ModalName.html',
+        controller: NameCtrl,
+        resolve: {
+          headerName: function() {
+            return 'Pleaser enter picture name';
+          }
+        }
+      });
+      return modalInstance.result.then(function(name) {
+        return $scope.addPicture(name);
+      }, function(name) {});
     };
     $scope.addPicture = function(picture) {
       return CameleonServer.CreatePicture(picture).$promise.then(function(evt) {
