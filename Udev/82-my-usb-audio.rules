@@ -1,0 +1,5 @@
+KERNEL=="controlC[0-9]*", DRIVERS=="usb", PROGRAM="/home/xavier/Udev/alsa_name.pl %k %b", SYMLINK+="snd/%c{1}"
+KERNEL=="hwC[D0-9]*", DRIVERS=="usb", PROGRAM="/home/xavier/Udev/alsa_name.pl %k %b", SYMLINK+="snd/%c{1}"
+KERNEL=="midiC[D0-9]*", DRIVERS=="usb", PROGRAM="/home/xavier/Udev/alsa_name.pl %k %b", SYMLINK+="snd/%c{1}"
+KERNEL=="pcmC[D0-9cp]*", DRIVERS=="usb", PROGRAM="/home/xavier/Udev/alsa_name.pl %k %b", SYMLINK+="snd/%c{1}"
+
