@@ -742,8 +742,8 @@ app.filter 'faderFilter', ->
     CameleonServer.GetDevices().$promise.then (res)->
       $scope.devices = res.devices
       list = []
-      for k,v of res.devices
-        list.push {'id': k, 'v':v}
+      for k in CameleonUtils.sortedKeys(res.devices)
+        list.push {'id': k, 'v':res.devices[k]}
       $scope.cameleon.machinesList = list
       promise.resolve()
     return promise

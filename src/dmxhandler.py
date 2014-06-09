@@ -430,9 +430,8 @@ class DmxHandler(object):
 
     def dmx_faders_list(self):
         lst = []
-        for i in models.dmx_devices:
+        for i in sorted(models.dmx_devices):
             lst.append({'id': i})
-        lst.sort()
         return {'list':lst}
 
     def dmx_recordsetting(self,fader,setname):

@@ -1044,15 +1044,15 @@
       var promise;
       promise = $q.defer();
       CameleonServer.GetDevices().$promise.then(function(res) {
-        var k, list, v, _ref;
+        var k, list, _i, _len, _ref;
         $scope.devices = res.devices;
         list = [];
-        _ref = res.devices;
-        for (k in _ref) {
-          v = _ref[k];
+        _ref = CameleonUtils.sortedKeys(res.devices);
+        for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+          k = _ref[_i];
           list.push({
             'id': k,
-            'v': v
+            'v': res.devices[k]
           });
         }
         $scope.cameleon.machinesList = list;

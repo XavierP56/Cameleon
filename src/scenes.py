@@ -47,7 +47,7 @@ class Scenes:
     # /cameleon/getscenelist
     def getscenelist(self):
         res = []
-        for k in self.scenes:
+        for k in sorted(self.scenes):
             res.append( {'id':k, 'name':k})
         return {'list' : res}
 
@@ -77,7 +77,7 @@ class Scenes:
     # /cameleon/getpictureslist
     def cameleon_getpictureslist(self):
         res = []
-        for k in self.pictures:
+        for k in sorted(self.pictures):
             res.append( {'id':k, 'name':k})
         return {'list' : res}
 
