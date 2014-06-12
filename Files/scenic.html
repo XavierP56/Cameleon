@@ -3,7 +3,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <body>
     <div ng-controller="MainCtrl">
-        <img src="images/cameleon.png" ng-init="showOffOptions=false" ng-dblclick="showOffOptions=!showOffOptions">
+        <img src="images/cameleon.png" ng-init="showOffOptions=false" ng-click="showOffOptions=!showOffOptions">
         <div ng-show="showOffOptions">
             <button class="btn btn-danger btn-sm" ng-click="turnoff()">Turn Off</button>
             <button class="btn btn-danger btn-sm" ng-click="reboot()">Reboot</button>
