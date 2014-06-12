@@ -880,15 +880,10 @@ app.filter 'faderFilter', ->
 # TODO: RenameMe as SceneMngrCtrl
 @SceneCtrl = ($scope, CameleonServer, MenuUtils,$modal,AlertUtils)->
 
-  $scope.showCreate = false
-
     # As soon as the scope.settings changes, update the drop box menu.
   $scope.$watch 'cameleon.scenesList', (n,o) ->
       return if $scope.cameleon.currentScene == null
       $scope.cameleon.currentScene = MenuUtils.UpdateMenu($scope.cameleon.scenesList, $scope.cameleon.currentScene.id)
-
-  $scope.showNew = ()->
-    $scope.showCreate = true
 
   $scope.createScene =()->
      modalInstance = $modal.open(
@@ -906,7 +901,7 @@ app.filter 'faderFilter', ->
         CameleonServer.GetSceneList().$promise.then (res)->
           $scope.cameleon.currentScene.id = scene
           $scope.cameleon.scenesList = res.list
-          $scope.showCreate = false
+          $scope.record()
 
   $scope.checkRecord = ()->
     v = 'id' of $scope.cameleon.currentScene
@@ -975,9 +970,6 @@ app.filter 'faderFilter', ->
       return if $scope.cameleon.currentPicture == null
       $scope.cameleon.currentPicture = MenuUtils.UpdateMenu($scope.cameleon.picturesList, $scope.cameleon.currentPicture.id)
 
-  $scope.showNew = ()->
-    $scope.showCreate = true
-
   $scope.createPicture =()->
      modalInstance = $modal.open(
        templateUrl: 'partials/ModalName.html'
@@ -994,7 +986,7 @@ app.filter 'faderFilter', ->
         CameleonServer.GetPicturesList().$promise.then (res)->
           $scope.cameleon.currentPicture.id = picture
           $scope.cameleon.picturesList = res.list
-          $scope.showCreate = false
+          $scope.record()
 
   $scope.checkRecord = ()->
     v = 'id' of $scope.cameleon.currentPicture

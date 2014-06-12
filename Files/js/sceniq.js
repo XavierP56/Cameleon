@@ -1203,16 +1203,12 @@
   };
 
   this.SceneCtrl = function($scope, CameleonServer, MenuUtils, $modal, AlertUtils) {
-    $scope.showCreate = false;
     $scope.$watch('cameleon.scenesList', function(n, o) {
       if ($scope.cameleon.currentScene === null) {
         return;
       }
       return $scope.cameleon.currentScene = MenuUtils.UpdateMenu($scope.cameleon.scenesList, $scope.cameleon.currentScene.id);
     });
-    $scope.showNew = function() {
-      return $scope.showCreate = true;
-    };
     $scope.createScene = function() {
       var modalInstance;
       modalInstance = $modal.open({
@@ -1233,7 +1229,7 @@
         return CameleonServer.GetSceneList().$promise.then(function(res) {
           $scope.cameleon.currentScene.id = scene;
           $scope.cameleon.scenesList = res.list;
-          return $scope.showCreate = false;
+          return $scope.record();
         });
       });
     };
@@ -1338,9 +1334,6 @@
       }
       return $scope.cameleon.currentPicture = MenuUtils.UpdateMenu($scope.cameleon.picturesList, $scope.cameleon.currentPicture.id);
     });
-    $scope.showNew = function() {
-      return $scope.showCreate = true;
-    };
     $scope.createPicture = function() {
       var modalInstance;
       modalInstance = $modal.open({
@@ -1361,7 +1354,7 @@
         return CameleonServer.GetPicturesList().$promise.then(function(res) {
           $scope.cameleon.currentPicture.id = picture;
           $scope.cameleon.picturesList = res.list;
-          return $scope.showCreate = false;
+          return $scope.record();
         });
       });
     };
