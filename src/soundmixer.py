@@ -578,8 +578,6 @@ def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_
         gmic = True
 
     for output_device_index in output_device_indexes:
-        output_device_index = 7.8
-        print output_device_index
         outport = int(output_device_index)
         channels = int(round((output_device_index - outport) * 10.0))
         if channels == 0:
