@@ -9,6 +9,7 @@ Modified  by Xavier Pouyollon to
  - give the ability to put on song on a left, right channel
  - remove unneeded classes for our usage
  - handle several sound cards
+ - handle soundcard with multiple io (eg: 7.8 meaning card 7, 8 channels)
 
 This module implements an advanced realtime sound mixer suitable for
 use in games or other audio applications.  It supports loading sounds
@@ -505,12 +506,15 @@ def tick(extra=None):
                 continue
             s = sndevt._get_samples(sz)
             if s is not None:
-                if subcard > 0:
-					i = 2 * (subcard-1)
-					# Card subcard
-					b[i::channels] += s[::2]
-					b[i+1::channels] += s[1::2]
-                else:
+                try:
+                    if subcard > 0:
+                        i = 2 * (subcard-1)
+                        # Card subcard
+                        b[i::channels] += s[::2]
+                        b[i+1::channels] += s[1::2]
+                    else:
+                        b += s
+                except:
                     b += s
                     
             if sndevt.done:
