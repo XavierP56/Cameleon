@@ -270,7 +270,7 @@ def cameleon_turnoff():
 # Start swmixer
 parser = argparse.ArgumentParser()
 parser.add_argument("-w", "--waves",help="Path to waves", default="./../Files/waves")
-parser.add_argument("-s", "--snd", help="Sound card index", default=None, nargs='+',type=int)
+parser.add_argument("-s", "--snd", help="Sound card index", default=None, nargs='+',type=float)
 parser.add_argument('-d', '--dmx', help="Output to dmx device like /dev/dmx0", default=None)
 parser.add_argument('-p', '--profile', help="Profile subdirectory", default="demo")
 # /dev/tty.usbmodemfa121

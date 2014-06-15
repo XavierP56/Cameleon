@@ -490,16 +490,29 @@ def tick(extra=None):
         gstream = gstreams[ix]
 
         sz = gchunksize * gchannels
-        b = numpy.zeros(sz, numpy.float)
+        # Retrieve the max channels
+        channels = gstream._channels
+        szf = gchunksize * channels
+        b = numpy.zeros(szf, numpy.float)
         if glock is None: return # this can happen if main thread quit first
         glock.acquire()
         for sndevt in gmixer_srcs:
-            card = sndevt.src.streamingsound.card
+            cardid = sndevt.src.streamingsound.card
+            card = int(cardid)
+            subcard = int(round((cardid - card) * 10))
+            
             if (card != ix):
                 continue
             s = sndevt._get_samples(sz)
             if s is not None:
-                b += s
+                if subcard > 0:
+					i = 2 * (subcard-1)
+					# Card subcard
+					b[i::channels] += s[::2]
+					b[i+1::channels] += s[1::2]
+                else:
+                    b += s
+                    
             if sndevt.done:
                 rmlist.append(sndevt)
         if extra is not None:
@@ -565,11 +578,18 @@ def init(samplerate=44100, chunksize=1024, stereo=True, microphone=False, input_
         gmic = True
 
     for output_device_index in output_device_indexes:
+        output_device_index = 7.8
+        print output_device_index
+        outport = int(output_device_index)
+        channels = int(round((output_device_index - outport) * 10.0))
+        if channels == 0:
+            channels = 2
+        print 'Opening card ' + str(outport) + ' with ' + str(channels) + ' channels'
         gstreams.append (gpyaudio.open(
             format = pyaudio.paInt16,
-            channels = gchannels,
+            channels = channels,
             rate = gsamplerate,
-            output_device_index = output_device_index,
+            output_device_index = outport,
             output = True))
     ginit = True
 
