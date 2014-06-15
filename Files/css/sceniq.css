@@ -56,6 +56,12 @@ body
     color: darkgrey;
 }
 
+input
+{
+    color: black;
+    font-weight: bold;
+}
+
 div.lrback
 {
     background-color: darkgray;
