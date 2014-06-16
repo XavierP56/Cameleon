@@ -523,7 +523,8 @@ def tick(extra=None):
             b += extra
         b = b.clip(-32767.0, 32767.0)
         for e in rmlist:
-            card = e.src.streamingsound.card
+            cardid = e.src.streamingsound.card
+            card = int(cardid)
             if (card != ix):
                 continue
             gmixer_srcs.remove(e)
