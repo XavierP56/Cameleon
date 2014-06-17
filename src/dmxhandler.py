@@ -485,6 +485,8 @@ class DmxHandler(object):
             request.json['id'] = light['id']
             if state is True:
                 request.json['setting'] = light['setting']
+                request.json['transition'] = "True"
+                request.json['delay'] = 2
                 self.dmx_setfader(request)
             else:
                 # Generate cmd to reset all the fixtures keys.
