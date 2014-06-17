@@ -879,6 +879,15 @@ app.filter 'faderFilter', ->
       if m == $scope.cameleon.curMachine
         m.setting = newSetting
 
+  $scope.generateSettings = () ->
+    for m in $scope.cameleon.machines
+      CameleonServer.RecordFaderSetting(m.id, '')
+
+  $scope.$on 'recordDone', (sender, evt) ->
+    for m in $scope.cameleon.machines
+      if m.id == evt.fader
+        m.setting = evt.name
+
 # TODO: RenameMe as SceneMngrCtrl
 @SceneCtrl = ($scope, CameleonServer, MenuUtils,$modal,AlertUtils)->
 

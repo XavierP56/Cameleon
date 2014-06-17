@@ -1189,7 +1189,7 @@
       $scope.cameleon.curMachine = machine;
       return CameleonServer.SetFaderSetting(machine.id, machine.setting);
     };
-    return $scope.update_setting = function(newSetting) {
+    $scope.update_setting = function(newSetting) {
       var m, _i, _len, _ref, _results;
       _ref = $scope.cameleon.machines;
       _results = [];
@@ -1203,6 +1203,30 @@
       }
       return _results;
     };
+    $scope.generateSettings = function() {
+      var m, _i, _len, _ref, _results;
+      _ref = $scope.cameleon.machines;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        m = _ref[_i];
+        _results.push(CameleonServer.RecordFaderSetting(m.id, ''));
+      }
+      return _results;
+    };
+    return $scope.$on('recordDone', function(sender, evt) {
+      var m, _i, _len, _ref, _results;
+      _ref = $scope.cameleon.machines;
+      _results = [];
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        m = _ref[_i];
+        if (m.id === evt.fader) {
+          _results.push(m.setting = evt.name);
+        } else {
+          _results.push(void 0);
+        }
+      }
+      return _results;
+    });
   };
 
   this.SceneCtrl = function($scope, CameleonServer, MenuUtils, $modal, AlertUtils) {
