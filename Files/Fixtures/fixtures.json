@@ -1,10 +1,11 @@
 {
-    "LedPar": {
+    "FullKolor": {
         "defs": {
             "Blue": "4", 
             "Dimmer": "1", 
             "Green": "3", 
-            "Red": "5"
+            "Red": "2", 
+            "Strobe": "5"
         }, 
         "knobs": {
             "Blue": {
@@ -18,51 +19,30 @@
             }, 
             "Red": {
                 "fgColor": "red"
-            }
-        }
-    }, 
-    "MachineGun": {
-        "defs": {
-            "GunTrigger": "1"
-        }, 
-        "knobs": {}
-    }, 
-    "SexMachine": {
-        "defs": {
-            "Green": ""
-        }, 
-        "knobs": {
-            "Green": {
-                "fgColor": "green"
-            }
-        }
-    }, 
-    "Smake": {
-        "defs": {}, 
-        "knobs": {}
-    }, 
-    "Smoke": {
-        "defs": {
-            "Red": ""
-        }, 
-        "knobs": {
-            "Red": {
-                "fgColor": "red"
-            }
-        }
-    }, 
-    "Xavier": {
-        "defs": {
-            "Green": "", 
-            "Red": ""
-        }, 
-        "knobs": {
-            "Green": {
-                "fgColor": "green"
             }, 
-            "Red": {
-                "fgColor": "red"
+            "Strobe": {
+                "fgColor": "orange"
             }
         }
+    }, 
+    "NicolsPar": {
+        "defs": {
+            "Dimmer": "1", 
+            "Strobe": "2"
+        }, 
+        "knobs": {
+            "Dimmer": {
+                "fgColor": "yellow"
+            }, 
+            "Strobe": {
+                "fgColor": "orange"
+            }
+        }
+    }, 
+    "Relay8DMX": {
+        "defs": {
+            "Power": "1"
+        }, 
+        "knobs": {}
     }
 }

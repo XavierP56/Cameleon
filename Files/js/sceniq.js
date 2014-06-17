@@ -659,6 +659,9 @@
           if (evt.id !== scope.id) {
             return;
           }
+          if (evt.setting === '') {
+            scope.setting.menu = null;
+          }
           if (evt.setting !== scope.currentSetting) {
             scope.currentSetting = evt.setting;
             return scope.RefreshDropBox();

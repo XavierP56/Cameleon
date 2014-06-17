@@ -445,6 +445,8 @@ app.directive "dmxFader", (CameleonServer, $resource, $parse,$modal,AlertUtils) 
     scope.$on 'setFaderSetting', (sender, evt) ->
       if (evt.id != scope.id)
         return
+      if evt.setting == ''
+        scope.setting.menu = null
       if evt.setting != scope.currentSetting
         scope.currentSetting = evt.setting
         scope.RefreshDropBox()
