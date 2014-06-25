@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload']);
+  app = angular.module('myApp', ['ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer']);
 
   app.config(function($stateProvider) {
     var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, camsounds, config, drooms, faders;
@@ -852,13 +852,28 @@
 
   this.ConfigRoomCtrl = function($scope, CameleonServer) {
     $scope.cameleon = {};
+    $scope.timerRunning = false;
     CameleonServer.GetPicturesList().$promise.then(function(res) {
       return $scope.cameleon.picturesList = res.list;
     });
-    return $scope.load = function() {
+    $scope.load = function() {
       return CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then(function(res) {
         return $scope.cameleon.picturesStuff = res.load.list;
       });
+    };
+    $scope.startTimer = function() {
+      if ($scope.timerRunning === true) {
+        return;
+      }
+      $scope.$broadcast('timer-start');
+      return $scope.timerRunning = true;
+    };
+    return $scope.stopTimer = function() {
+      if ($scope.timerRunning === false) {
+        return;
+      }
+      $scope.$broadcast('timer-stop');
+      return $scope.timerRunning = false;
     };
   };
 

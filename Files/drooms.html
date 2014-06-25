@@ -1,13 +1,31 @@
 <div class="container" style="text-align: center;">
     <div>
-        <div class="form-group">
-            <div class="col-md-2">
-                <label>Select the picture</label>
+
+            <div class="form-group">
+                <div class="col-md-2">
+                    <label>Select the picture</label>
+                </div>
+                <div class="col-md-2">
+                    <select  class="form-control" ng-change="load()" ng-model="cameleon.currentPicture" ng-options="c.name for c in cameleon.picturesList"></select>
+                </div>
             </div>
-            <div class="col-md-2">
-                <select  class="form-control" ng-change="load()" ng-model="cameleon.currentPicture" ng-options="c.name for c in cameleon.picturesList"></select>
+
+
+
+            <div class="form-group">
+                <div class="col-md-2">
+                    <b>
+                    <timer  autostart="false" interval="1000">{{hours}}:{{minutes}}:{{seconds}}</timer>
+                    </b>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-danger" ng-click="startTimer()">Start Timer</button>
+                </div>
+                <div class="col-md-2">
+                    <button class="btn btn-danger" ng-click="stopTimer()">Stop Timer</button>
+                </div>
             </div>
-        </div>
+
     </div>
     <br/><br/>
     <div>

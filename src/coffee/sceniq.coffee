@@ -1,7 +1,7 @@
 # Copyright Xavier Pouyollon 2014
 # GPL v3 License
 
-app = angular.module 'myApp', ['ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload' ]
+app = angular.module 'myApp', ['ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer' ]
 
 app.config ($stateProvider) ->
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
@@ -603,12 +603,24 @@ app.filter 'faderFilter', ->
 
 @ConfigRoomCtrl = ($scope, CameleonServer)->
   $scope.cameleon = {}
+  $scope.timerRunning = false
+
   CameleonServer.GetPicturesList().$promise.then (res)->
     $scope.cameleon.picturesList = res.list
 
   $scope.load = ()->
       CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then (res)->
         $scope.cameleon.picturesStuff = res.load.list
+
+  $scope.startTimer =  ()->
+      return if $scope.timerRunning == true
+      $scope.$broadcast('timer-start')
+      $scope.timerRunning = true;
+
+  $scope.stopTimer =  ()->
+      return if $scope.timerRunning == false
+      $scope.$broadcast('timer-stop')
+      $scope.timerRunning = false
 
 # Defines the confirm controller.
 @ConfirmCtrl = ($scope, $modal, $modalInstance, bodyText, onlyOK)->
