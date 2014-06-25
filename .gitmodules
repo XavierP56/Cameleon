@@ -17,3 +17,6 @@
 [submodule "Files/local_components/pySimpleDMX"]
 	path = Files/local_components/pySimpleDMX
 	url = https://github.com/XavierP56/pySimpleDMX.git
+[submodule "Files/local_components/angular-timer"]
+	path = Files/local_components/angular-timer
+	url = https://github.com/siddii/angular-timer.git
