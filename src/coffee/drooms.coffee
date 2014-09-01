@@ -2,7 +2,9 @@
 # Controller for "Pictures"
 # Display the list of widgets.
 
-@DRoomsCtrl = ($scope, CameleonServer)->
+app = angular.module 'dRooms', ['myApp.Server']
+
+app.controller 'DRoomsCtrl', ($scope, CameleonServer) ->
   $scope.cameleon = {}
   $scope.timerRunning = false
 

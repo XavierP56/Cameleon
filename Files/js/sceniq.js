@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['myApp.Server', 'ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer']);
+  app = angular.module('myApp', ['myApp.Server', 'dRooms', 'faders', 'ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer']);
 
   app.config(function($stateProvider) {
     var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, camsounds, config, drooms, faders;
@@ -14,12 +14,12 @@
     faders = {
       url: "/Fader",
       templateUrl: "/sceniq/fadercfg.html",
-      controller: FaderCtrl
+      controller: 'FaderCtrl'
     };
     drooms = {
       url: "/DRooms",
       templateUrl: "/sceniq/drooms.html",
-      controller: DRoomsCtrl
+      controller: 'DRoomsCtrl'
     };
     cameleon = {
       url: '/Cameleon',

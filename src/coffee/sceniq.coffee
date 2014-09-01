@@ -1,12 +1,13 @@
 # Copyright Xavier Pouyollon 2014
 # GPL v3 License
 
-app = angular.module 'myApp', ['myApp.Server', 'ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer' ]
+app = angular.module 'myApp', ['myApp.Server', 'dRooms', 'faders',
+                               'ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer' ]
 
 app.config ($stateProvider) ->
   config = {url: "/Config", templateUrl: "/sceniq/config.html", controller: ConfigCtrl}
-  faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html", controller: FaderCtrl}
-  drooms = {url: "/DRooms", templateUrl: "/sceniq/drooms.html", controller:DRoomsCtrl}
+  faders = {url: "/Fader", templateUrl: "/sceniq/fadercfg.html", controller: 'FaderCtrl'}
+  drooms = {url: "/DRooms", templateUrl: "/sceniq/drooms.html", controller: 'DRoomsCtrl'}
 
   # Cameleon
   cameleon =
