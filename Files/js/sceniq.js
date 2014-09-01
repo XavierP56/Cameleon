@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['myApp.Server', 'dRooms', 'faders', 'ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer']);
+  app = angular.module('myApp', ['myApp.Server', 'dRooms', 'faders', 'utils', 'ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer']);
 
   app.config(function($stateProvider) {
     var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, camsounds, config, drooms, faders;
@@ -93,104 +93,6 @@
     $stateProvider.state('cameleon.associate', camscenes);
     return $stateProvider.state('cameleon.pictures', campictures);
   });
-
-  app.factory('sessionMngr', function() {
-    var mngr;
-    mngr = {
-      'connected': false
-    };
-    mngr.IsConnected = function() {
-      return mngr.connected;
-    };
-    mngr.SetConnected = function(sessionId) {
-      mngr.connected = true;
-      return mngr.sessionId = sessionId;
-    };
-    return mngr;
-  });
-
-  app.factory('MenuUtils', function() {
-    var menus;
-    menus = {};
-    menus.UpdateMenu = function(list, what) {
-      var found, ix, n, _i, _len;
-      ix = 0;
-      found = false;
-      for (_i = 0, _len = list.length; _i < _len; _i++) {
-        n = list[_i];
-        if (n.id === what) {
-          found = true;
-          break;
-        } else {
-          ix++;
-        }
-      }
-      if (found) {
-        return list[ix];
-      } else {
-        return {};
-      }
-    };
-    return menus;
-  });
-
-  app.factory('AlertUtils', function($modal) {
-    var alert;
-    alert = {};
-    alert.showMsg = function(msg) {
-      return $modal.open({
-        templateUrl: 'partials/Confirm.html',
-        controller: ConfirmCtrl,
-        resolve: {
-          bodyText: function() {
-            return msg;
-          },
-          onlyOK: function() {
-            return true;
-          }
-        }
-      });
-    };
-    alert.showConfirm = function(msg, ok, notok) {
-      var modalInstance;
-      modalInstance = $modal.open({
-        templateUrl: 'partials/Confirm.html',
-        controller: ConfirmCtrl,
-        resolve: {
-          bodyText: function() {
-            return msg;
-          },
-          onlyOK: function() {
-            return false;
-          }
-        }
-      });
-      modalInstance.result.then(function(name) {
-        return ok();
-      }, function(name) {
-        return notok();
-      });
-    };
-    return alert;
-  });
-
-  app.factory('CameleonUtils', function() {
-    var utils;
-    utils = {};
-    utils.sortedKeys = function(o) {
-      var k, r;
-      r = [];
-      for (k in o) {
-        r.push(k);
-      }
-      return r.sort();
-    };
-    return utils;
-  });
-
-  Array.prototype.move = function(old_index, new_index) {
-    return this.splice(new_index, 0, this.splice(old_index, 1)[0]);
-  };
 
   app.directive("widgets", function(MenuUtils) {
     return {
