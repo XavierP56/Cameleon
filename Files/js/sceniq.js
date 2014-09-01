@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer']);
+  app = angular.module('myApp', ['myApp.Server', 'ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer']);
 
   app.config(function($stateProvider) {
     var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, camsounds, config, drooms, faders;
@@ -19,7 +19,7 @@
     drooms = {
       url: "/DRooms",
       templateUrl: "/sceniq/drooms.html",
-      controller: ConfigRoomCtrl
+      controller: DRoomsCtrl
     };
     cameleon = {
       url: '/Cameleon',
@@ -186,208 +186,6 @@
       return r.sort();
     };
     return utils;
-  });
-
-  app.factory('CameleonServer', function($resource) {
-    var datas, _CreatePicture, _CreateScene, _DmxScene, _DmxSet, _FaderList, _GetDebugDatas, _GetDevices, _GetFixtures, _GetPicturesList, _GetSceneList, _GetSceneState, _GetSoundList, _GetSounds, _LoadPicture, _LoadScene, _QuerySlider, _Reboot, _RecordPicture, _RecordScene, _RecordSetting, _SaveDebugDatas, _SetFader, _SettingList, _SlidersList, _TurnOff, _UpdateDebugDatas, _UpdateDevices, _UpdateFixtures, _UpdateSounds;
-    datas = {};
-    _SettingList = $resource('/cfg/getsettinglist');
-    _FaderList = $resource('/dmx/getfaderlist');
-    _SlidersList = $resource('/dmx/faders/:id');
-    _SetFader = $resource('/dmx/setfader', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
-    _QuerySlider = $resource('/dmx/query/:id/:key');
-    _DmxSet = $resource('/dmx/set', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
-    _RecordSetting = $resource('/dmx/recordsetting/:fader/:setname');
-    _GetSceneList = $resource('/cameleon/getscenelist');
-    _CreateScene = $resource('/cameleon/createscene/:scene');
-    _RecordScene = $resource('/cameleon/recordscene', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
-    _LoadScene = $resource('/cameleon/loadscene/:scene');
-    _GetPicturesList = $resource('/cameleon/getpictureslist');
-    _CreatePicture = $resource('/cameleon/createpicture/:picture');
-    _RecordPicture = $resource('/cameleon/recordpicture', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
-    _LoadPicture = $resource('/cameleon/loadpicture/:picture');
-    _GetSoundList = $resource('/cameleon/getsoundlist/:empty');
-    _DmxScene = $resource('/cameleon/dmxscene', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
-    _GetSceneState = $resource('/cameleon/getscenestate/:scene');
-    _GetDevices = $resource('/cameleon/getdevices');
-    _GetFixtures = $resource('/cameleon/getfixtures');
-    _UpdateDevices = $resource('/cameleon/updatedevices', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
-    _UpdateFixtures = $resource('/cameleon/updatefixtures', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
-    _GetSounds = $resource('/cameleon/getsounds');
-    _UpdateSounds = $resource('/cameleon/updatesounds', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
-    _GetDebugDatas = $resource('/models/getdefs');
-    _UpdateDebugDatas = $resource('/models/setdefs', {}, {
-      set: {
-        method: 'POST'
-      }
-    });
-    _SaveDebugDatas = $resource('/models/save');
-    _TurnOff = $resource('/cameleon/turnoff');
-    _Reboot = $resource('/cameleon/reboot');
-    datas.GetMachinesList = function() {
-      return _FaderList.get({});
-    };
-    datas.GetSettingList = function() {
-      return _SettingList.get({});
-    };
-    datas.GetSliderList = function(id) {
-      return _SlidersList.get({
-        id: id
-      });
-    };
-    datas.SetFaderSetting = function(fader, setting) {
-      return _SetFader.set({
-        id: fader,
-        setting: setting
-      });
-    };
-    datas.QuerySlider = function(id, key) {
-      return _QuerySlider.get({
-        id: id,
-        key: key
-      });
-    };
-    datas.SetSliderCmd = function(id, cmds) {
-      return _DmxSet.set({
-        id: id,
-        cmds: cmds
-      });
-    };
-    datas.RecordFaderSetting = function(fader, setname) {
-      return _RecordSetting.get({
-        fader: fader,
-        setname: setname
-      });
-    };
-    datas.GetSceneList = function() {
-      return _GetSceneList.get({});
-    };
-    datas.CreateScene = function(scene) {
-      return _CreateScene.get({
-        scene: scene
-      });
-    };
-    datas.RecordScene = function(scene, machines) {
-      return _RecordScene.set({
-        scene: scene,
-        machines: machines
-      });
-    };
-    datas.LoadScene = function(scene) {
-      return _LoadScene.get({
-        scene: scene
-      });
-    };
-    datas.GetPicturesList = function() {
-      return _GetPicturesList.get({});
-    };
-    datas.CreatePicture = function(picture) {
-      return _CreatePicture.get({
-        picture: picture
-      });
-    };
-    datas.RecordPicture = function(picture, stuff) {
-      return _RecordPicture.set({
-        picture: picture,
-        stuff: stuff
-      });
-    };
-    datas.LoadPicture = function(picture) {
-      return _LoadPicture.get({
-        picture: picture
-      });
-    };
-    datas.GetSoundList = function(empty) {
-      if (empty == null) {
-        empty = false;
-      }
-      return _GetSoundList.get({
-        empty: empty
-      });
-    };
-    datas.DmxScene = function(scene, opts) {
-      return _DmxScene.set({
-        scene: scene,
-        opts: opts
-      });
-    };
-    datas.GetDevices = function() {
-      return _GetDevices.get({});
-    };
-    datas.GetFixtures = function() {
-      return _GetFixtures.get({});
-    };
-    datas.UpdateDevices = function(devices) {
-      return _UpdateDevices.set({
-        devices: devices
-      });
-    };
-    datas.UpdateFixtures = function(fixtures) {
-      return _UpdateFixtures.set({
-        fixtures: fixtures
-      });
-    };
-    datas.GetSounds = function() {
-      return _GetSounds.get({});
-    };
-    datas.UpdateSounds = function(sounds) {
-      return _UpdateSounds.set({
-        sounds: sounds
-      });
-    };
-    datas.GetDebugDatas = function() {
-      return _GetDebugDatas.get({});
-    };
-    datas.UpdateDebugDatas = function(cmd) {
-      return _UpdateDebugDatas.set(cmd);
-    };
-    datas.SaveDebugDatas = function() {
-      return _SaveDebugDatas.get({});
-    };
-    datas.GetSceneState = function(scene) {
-      return _GetSceneState.get({
-        scene: scene
-      });
-    };
-    datas.TurnOff = function() {
-      return _TurnOff.get({});
-    };
-    datas.Reboot = function() {
-      return _Reboot.get({});
-    };
-    return datas;
   });
 
   Array.prototype.move = function(old_index, new_index) {
@@ -843,39 +641,6 @@
       }
     };
   });
-
-  this.FaderCtrl = function($scope, CameleonServer) {
-    return CameleonServer.GetMachinesList().$promise.then(function(res) {
-      return $scope.faderlist = res.list;
-    });
-  };
-
-  this.ConfigRoomCtrl = function($scope, CameleonServer) {
-    $scope.cameleon = {};
-    $scope.timerRunning = false;
-    CameleonServer.GetPicturesList().$promise.then(function(res) {
-      return $scope.cameleon.picturesList = res.list;
-    });
-    $scope.load = function() {
-      return CameleonServer.LoadPicture($scope.cameleon.currentPicture.id).$promise.then(function(res) {
-        return $scope.cameleon.picturesStuff = res.load.list;
-      });
-    };
-    $scope.startTimer = function() {
-      if ($scope.timerRunning === true) {
-        return;
-      }
-      $scope.$broadcast('timer-start');
-      return $scope.timerRunning = true;
-    };
-    return $scope.stopTimer = function() {
-      if ($scope.timerRunning === false) {
-        return;
-      }
-      $scope.$broadcast('timer-stop');
-      return $scope.timerRunning = false;
-    };
-  };
 
   this.ConfirmCtrl = function($scope, $modal, $modalInstance, bodyText, onlyOK) {
     $scope.bodyText = {};
