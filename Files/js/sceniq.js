@@ -2,7 +2,7 @@
 (function() {
   var app;
 
-  app = angular.module('myApp', ['myApp.Server', 'dRooms', 'faders', 'utils', 'ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer']);
+  app = angular.module('myApp', ['myApp.Server', 'dRooms', 'faders', 'utils', 'widgets', 'ui.bootstrap', 'ngResource', 'ui.router', 'JSONedit', 'ui.knob', 'angularFileUpload', 'timer']);
 
   app.config(function($stateProvider) {
     var camdevices, cameleon, camfixtures, campictures, camscenes, camsettings, camsounds, config, drooms, faders;
@@ -92,54 +92,6 @@
     $stateProvider.state('cameleon.config', config);
     $stateProvider.state('cameleon.associate', camscenes);
     return $stateProvider.state('cameleon.pictures', campictures);
-  });
-
-  app.directive("widgets", function(MenuUtils) {
-    return {
-      restrict: 'E',
-      templateUrl: '/sceniq/templates/widgets.html',
-      scope: true,
-      link: function(scope, elemt, attrs) {
-        scope.forward = function(index) {
-          return scope.stuff.move(index, index + 1);
-        };
-        scope.backward = function(index) {
-          if (index > 0) {
-            return scope.stuff.move(index, index - 1);
-          }
-        };
-        scope.separator = function(index) {
-          return scope.stuff.splice(index, 0, {
-            'msg': '',
-            'type': 'line'
-          });
-        };
-        scope.remove = function(index) {
-          return scope.stuff.splice(index, 1);
-        };
-        scope.setStart = function(stuff, wrapper) {
-          return stuff.startSong = wrapper.entry.id;
-        };
-        scope.getStartSound = function(stuff, wrapper) {
-          if (scope.edit === false) {
-            return;
-          }
-          if ('startSong' in stuff) {
-            return wrapper.entry = MenuUtils.UpdateMenu(scope.cameleon.associatesoundslist, stuff.startSong);
-          }
-        };
-        scope.$watch(attrs.things, function(n, o) {
-          return scope.stuff = n;
-        });
-        if ('edit' in attrs) {
-          scope.$watch(attrs.edit, function(n, o) {
-            return scope.edit = n;
-          });
-        } else {
-          scope.edit = false;
-        }
-      }
-    };
   });
 
   app.directive("fold", function() {
