@@ -4,7 +4,7 @@
             <sound-button  height=60 id="{{s.id}}"></sound-button>
         </span>
         <span ng-switch-when="scene">
-            <dmx-scene  id="{{s.id}}" startsong="{{s.startSong}}"></dmx-light>
+            <dmx-scene  id="{{s.id}}" startsong="{{s.startSong}}"></dmx-scene>
         </span>
         <div ng-switch-when="line">
             <b>{{s.msg}}</b>
@@ -12,7 +12,7 @@
         </div>
         <span ng-switch-when="Fold">
             <fold >
-                <span ng-repeat="s in s.what" ng-include="'widget_renderer'">
+                <span ng-repeat="s in s.what" ng-include="'widget_renderer'"/>
             </fold>
         </span>
         <span ng-switch-when="Fader">
@@ -21,13 +21,13 @@
     </span>
 
     <span ng-show="edit==true">
-       <button ng-init="showMe=false" ng-click="showMe = !showMe">E</button>
-       <div ng-show="showMe" style="margin:5px;">
+       <button ng-init="init($index)" ng-click="toggleEdit($index)">E</button>
+       <div ng-show="showMe($index)" style="margin:5px;">
            <button class="btn btn-info btn-sm" ng-click="backward($index)">Move to left</button>
            <button class="btn btn btn-success btn-sm" ng-click="separator($index)">Insert Line</button>
            <button class="btn btn-info btn-sm" ng-click="forward($index)">Move to right</button>
            <button class="btn btn-danger btn-sm" ng-click="remove($index)">Remove this</button>
-           <ng-switch="s.tye">
+
            <div ng-switch="s.type">
                <div ng-switch-when="line">
                    <input ng-model="s.msg">
